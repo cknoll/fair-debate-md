@@ -2,7 +2,7 @@
 
 Ut _quiquia **eius** dolorem_ voluptatem. **Adipisci sit adipisci non est**. Dolor etincidunt neque sed tempora porro quiquia. Porro velit non consectetur numquam velit.
 
-- Ipsum velit velit adipisci
+- Ipsum velit adipisci
 - Adipisci est magnam etincidunt sed:
     - `some code ` Sed etincidunt etincidunt
     - sit aliquam eius quiquia.

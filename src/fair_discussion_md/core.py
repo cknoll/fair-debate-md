@@ -81,23 +81,28 @@ class HTMLProcessor:
                continue
             assert isinstance(child, element.NavigableString)
             parts = self.sentence_splitter_re.split(child)
-            part_without_delimiter = None
+            content_part = None
             for part in parts:
                 if not part:
                     continue
                 if part not in self.sentence_splitters:
-                    part_without_delimiter = f"{optional_space}{proto_key} {part.strip()}"
-                elif part_without_delimiter is not None:
-                    new_children.append(f"{part_without_delimiter}{part}")
+                    content_part = f"{optional_space}{proto_key} {part.strip()}"
+                    continue
+                elif content_part is not None:
+                    # part is a delimiter and we also have content-part
+                    new_children.append(f"{content_part}{part}")
+                    content_part = None
                 else:
-                    # part is a delimiter but there is no preceding "content-part"
+                    # part is a delimiter but there is no preceding content-part
+                    # add it anyway
                     new_children.append(part)
 
             # handle the case, when final substring is no delimiter
-            if part_without_delimiter is not None:
-                        new_children.append(f"{part_without_delimiter}{part}")
+            if content_part is not None:
+                        new_children.append(f"{content_part}{part}")
             # end of for child in original_children
         tag.extend(new_children)
+        IPS(original_children[0] == "Ut ")
 
         for tag in self.blockified_tags:
             self.unblockify_tag(tag)
