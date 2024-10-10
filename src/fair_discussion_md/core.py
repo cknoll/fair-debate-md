@@ -76,10 +76,16 @@ class HTMLProcessor:
             else:
                 optional_space = ""
             if isinstance(child, element.Tag):
-               self.blockify_tag(tag)
-               new_children.append(child)
-               continue
+                if not new_children:
+                    # it is the first subtag
+                    new_children.append(f"{proto_key} ")
+                else:
+                    new_children.append(" ")
+                self.blockify_tag(tag)
+                new_children.append(child)
+                continue
             assert isinstance(child, element.NavigableString)
+
             parts = self.sentence_splitter_re.split(child)
             content_part = None
             for part in parts:
@@ -99,10 +105,10 @@ class HTMLProcessor:
 
             # handle the case, when final substring is no delimiter
             if content_part is not None:
-                        new_children.append(f"{content_part}{part}")
+                new_children.append(f"{content_part}")
             # end of for child in original_children
         tag.extend(new_children)
-        IPS(original_children[0] == "Ut ")
+        # IPS(original_children[0] == "Ut ")
 
         for tag in self.blockified_tags:
             self.unblockify_tag(tag)
@@ -111,7 +117,7 @@ class HTMLProcessor:
 
 
 
-def add_keys_to_md(md_src, prefix="a"):
+def add_keys_to_md(md_src, prefix="k"):
     md = markdown.Markdown()
     html_src = md.convert(md_src)
     hp = HTMLProcessor(html_src)
