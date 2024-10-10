@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fair_discussion_md"
+readme = "README.md"
+requires-python = ">=3.11"
+dynamic = ["dependencies", "version"]
+
+# [project.package]
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+version = {attr = "fair_discussion_md.__version__"}
+
+# this siginificantly speeds up pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
