@@ -149,13 +149,53 @@ class SpanAdder:
         self.html_src = html_src
         self.key_prefix = key_prefix
         self.soup = BeautifulSoup(html_src, 'html.parser')
+        self.pattern = r'(XXX\d+)'.replace("XXX", self.key_prefix)
 
-    def add_spans_for_keys(self):
-        pattern = r'(XXX\d+)'.replace("XXX", self.key_prefix)
-        children = list(self.soup.children)
-        for child in children:
-            matches = re.findall(pattern, child.text)
-            IPS()
+        # compiled regex
+        self.cre = re.compile(self.pattern)
+
+    def add_spans_for_keys(self) -> str:
+        root = self.soup
+        self.process_children(root=root)
+        return str(root)
+
+    def process_children(self, root: element.Tag):
+        original_children = list(root.children)
+        root.clear()
+        for child in original_children:
+            new_child_list = self.process_child(child)
+            root.extend(new_child_list)
+
+        return root
+
+    def process_child(self, child: element.PageElement):
+        if isinstance(child, element.Tag):
+            return [self.process_children(root=child)]
+
+        assert isinstance(child, element.NavigableString)
+        matches = list(self.cre.finditer(child.text))
+        res = []
+        start_idcs = []
+        end_idcs = []
+        keys = []
+        for match in matches:
+            start_idcs.append(match.start())
+            end_idcs.append(match.end())
+            delimiter_key = match.group(1)  # something like "::a1"
+            key = delimiter_key.replace("::", "")  # a1
+            keys.append(key)
+
+        # add final index at the end of the string
+        start_idcs.append(len(child.text))
+
+        # iterate over contents
+        for i0, i1, key in zip(end_idcs, start_idcs[1:], keys):
+            new_tag = element.Tag(name="span", attrs={"class": "segment", "id": key})
+            content = child.text[i0:i1]
+            new_tag.append(content)
+            res.append(new_tag)
+
+        return res
 
 
 def get_html_with_segments(md_src, proto_key: str, prefix="a"):
@@ -169,7 +209,8 @@ def get_html_with_segments(md_src, proto_key: str, prefix="a"):
     md = markdown.Markdown()
     html_src = md.convert(md_src3)
     sa = SpanAdder(html_src, key_prefix=f"::{prefix}")
-    sa.add_spans_for_keys()
+    res = sa.add_spans_for_keys()
+    return res
 
 
 

@@ -16,15 +16,18 @@ class TestCases1(unittest.TestCase):
             self.txt1 = fp.read()
         return
 
+    def save_debug_result(self, result, suffix=".md"):
+        # useful if result changes or for debugging
+        debug_fpath = TESTDATA1.replace(".md", f"_debug{suffix}")
+        with open(debug_fpath, "w") as fp:
+            fp.write(result)
+
     def test_010__add_keys_to_md(self):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
         expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md")
 
         if 0:
-            # useful if result changes or for debugging
-            debug_fpath = TESTDATA1.replace(".md", "_debug.md")
-            with open(debug_fpath, "w") as fp:
-                fp.write(md2)
+            self.save_debug_result(md2)
             return
 
         with open(expected_result_fpath, "r") as fp:
@@ -35,3 +38,6 @@ class TestCases1(unittest.TestCase):
     def test_020__get_html_with_segments(self):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
         res = fdmd.get_html_with_segments(md2, proto_key="::k")
+
+        if 1:
+            self.save_debug_result(res, suffix=".html")
