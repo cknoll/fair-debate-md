@@ -15,7 +15,11 @@ class TestCases1(unittest.TestCase):
         with open(TESTDATA1) as fp:
             self.txt1 = fp.read()
 
+
         return
     def test_010__core(self):
-        res = fdmd.parse_markdown(self.txt1)
+        md2 = fdmd.add_keys_to_md(self.txt1, prefix="a")
+        with open(TESTDATA1.replace(".md", "_tmp.md"), "w") as fp:
+            fp.write(md2)
+
         IPS()

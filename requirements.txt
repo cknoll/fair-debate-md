@@ -1,1 +1,4 @@
 ipydex
+markdown
+markdownify
+bs4
