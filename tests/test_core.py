@@ -22,7 +22,8 @@ class TestCases1(unittest.TestCase):
 
         if 0:
             # useful if result changes or for debugging
-            with open(expected_result_fpath, "w") as fp:
+            debug_fpath = TESTDATA1.replace(".md", "_debug.md")
+            with open(debug_fpath, "w") as fp:
                 fp.write(md2)
             return
 

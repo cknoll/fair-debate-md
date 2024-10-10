@@ -1,4 +1,4 @@
 ipydex
 markdown
-markdownify
+markdownify >= 0.13
 bs4
