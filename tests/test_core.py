@@ -21,5 +21,3 @@ class TestCases1(unittest.TestCase):
         md2 = fdmd.add_keys_to_md(self.txt1, prefix="a")
         with open(TESTDATA1.replace(".md", "_tmp.md"), "w") as fp:
             fp.write(md2)
-
-        IPS()

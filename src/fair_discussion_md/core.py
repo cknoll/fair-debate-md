@@ -1,7 +1,7 @@
 import re
 import markdown
 import markdownify as mdf
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, element
 
 from ipydex import IPS
 
@@ -11,11 +11,24 @@ def add_keys_to_html(html_src: str, prefix: str):
     soup = BeautifulSoup(html_src, 'html.parser')
     counter = 1
 
+    def will_be_processed_later(child):
+        if isinstance(child, element.Tag) and child.name in ("p"):
+            return True
+        return False
+
+
     # Prepend 'XYZ' to headings, paragraphs, list items, and code blocks
     for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'li', 'pre']):
-        if not tag.text.strip():
+        children_list = list(tag.children)
+        if not children_list:
             continue
-        tag.insert(0, f"`{prefix}{counter}` ")
+        elif will_be_processed_later(children_list[0]):
+            continue
+        elif children_list == ["\n"]:
+            continue
+        elif children_list[0] == "\n" and will_be_processed_later(children_list[1]):
+            continue
+        tag.insert(0, f"::{prefix}{counter};; ")
         counter += 1
     return str(soup)
 
