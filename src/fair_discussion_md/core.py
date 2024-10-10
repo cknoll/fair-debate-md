@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup, element
 from ipydex import IPS
 
 
-class HTMLProcessor:
+class ProtoKeyAdder:
     def __init__(self, html_src: str):
         self.html_src = html_src
         self.soup = BeautifulSoup(html_src, 'html.parser')
@@ -55,20 +55,12 @@ class HTMLProcessor:
 
 
     def add_proto_keys_to_tag(self, tag: element.Tag, prefix: str):
-
-        # get full source of inner_html (without surrounding <x attr="foo">...</x>)
-        full_source = str(tag)
-        idx1 = full_source.index(">")
-        idx2 = full_source.rindex("<")
-        inner_source = full_source[idx1 + 1:idx2]
-
         proto_key = f"::{prefix} "
 
         # convert all inner tags to monolithic blocks such that they are ignored
         # by the sentence splitter
         original_children = list(tag.children)
         tag.clear()
-        part_counter = 0
         new_children = []
         for child in original_children:
             if new_children:
@@ -115,12 +107,10 @@ class HTMLProcessor:
         self.blockified_tags.clear()
 
 
-
-
-def add_keys_to_md(md_src, prefix="k"):
+def add_proto_keys_to_md(md_src, prefix="k"):
     md = markdown.Markdown()
     html_src = md.convert(md_src)
-    hp = HTMLProcessor(html_src)
+    hp = ProtoKeyAdder(html_src)
     html_src2 = hp.add_proto_keys_to_html(prefix=prefix)
     md_src2 = mdf.markdownify(html_src2, heading_style="ATX", bullets="-")
 
@@ -137,6 +127,50 @@ def convert_tabs_to_spaces(input_string):
         return ' ' * (leading_tabs * 4) + line.lstrip('\t')
     converted_lines = [replace_tabs(line) for line in lines]
     return '\n'.join(converted_lines)
+
+
+class KeyAdder:
+    def __init__(self, md_src: str):
+        self.md_src = md_src
+
+    def replace_proto_key_by_numbered_key(self, proto_key: str, prefix: str):
+        res = []
+        parts = self.md_src.split(proto_key)
+        for i, part in enumerate(parts[:-1], start=1):
+            res.append(part)
+            new_key = f'{proto_key.replace("k", prefix)}{i}'
+            res.append(new_key)
+        res.append(parts[-1])
+
+        return "".join(res)
+
+class SpanAdder:
+    def __init__(self, html_src: str, key_prefix: str):
+        self.html_src = html_src
+        self.key_prefix = key_prefix
+        self.soup = BeautifulSoup(html_src, 'html.parser')
+
+    def add_spans_for_keys(self):
+        pattern = r'(XXX\d+)'.replace("XXX", self.key_prefix)
+        children = list(self.soup.children)
+        for child in children:
+            matches = re.findall(pattern, child.text)
+            IPS()
+
+
+def get_html_with_segments(md_src, proto_key: str, prefix="a"):
+    """
+    Replace proto_keys by real numbered keys
+    Convert markdown to html
+    insert spans related to keys
+    """
+
+    md_src3 = KeyAdder(md_src).replace_proto_key_by_numbered_key(proto_key, prefix)
+    md = markdown.Markdown()
+    html_src = md.convert(md_src3)
+    sa = SpanAdder(html_src, key_prefix=f"::{prefix}")
+    sa.add_spans_for_keys()
+
 
 
 def main():

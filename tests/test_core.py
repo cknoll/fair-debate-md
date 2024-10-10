@@ -16,8 +16,8 @@ class TestCases1(unittest.TestCase):
             self.txt1 = fp.read()
         return
 
-    def test_010__core(self):
-        md2 = fdmd.add_keys_to_md(self.txt1, prefix="k")
+    def test_010__add_keys_to_md(self):
+        md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
         expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md")
 
         if 0:
@@ -30,3 +30,7 @@ class TestCases1(unittest.TestCase):
             md2_expected = fp.read()
 
         self.assertEqual(md2, md2_expected)
+
+    def test_020__get_html_with_segments(self):
+        md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
+        res = fdmd.get_html_with_segments(md2, proto_key="::k")
