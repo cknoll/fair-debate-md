@@ -11,6 +11,7 @@ class ProtoKeyAdder:
     def __init__(self, html_src: str, prefix: str):
         self.html_src = html_src
         self.prefix = prefix
+        self.proto_key = f" ::{self.prefix} "
         self.soup = BeautifulSoup(html_src, 'html.parser')
         self.blockified_tags = []
 
@@ -50,34 +51,92 @@ class ProtoKeyAdder:
         tag.attrs.clear()
         self.blockified_tags.append(tag)
 
-    def unblockify_tag(self, tag: element.Tag):
-        tag.extend(tag.original_children)
-        tag.attrs.update(tag.original_attrs)
+    def unblockify_all_tags(self):
+        for tag in self.blockified_tags:
+            tag.extend(tag.original_children)
+            tag.attrs.update(tag.original_attrs)
+        self.blockified_tags.clear()
 
-    def add_proto_keys_to_tag(self, tag: element.Tag):
+    def insert_proto_keys(self, child: element.NavigableString):
+        child.added_keys = 0
+        matches = list(self.sentence_splitter_re.finditer(child))
+        if not matches:
+            # nothing changed
+            return child
+
+        old_txt = str(child)
+        start_idcs = [0]
+        for match in matches:
+            i0, i1 = match.span()
+            start_idcs.append(i0 + 1)
+        start_idcs.append(len(old_txt))
+
+        parts = []
+        for counter, (i0, i1) in enumerate(zip(start_idcs[:-1], start_idcs[1:])):
+            # add the content until the delimiter
+            content = old_txt[i0:i1]
+            parts.append(content)
+            # TODO: handle space after delimiter (or as part of delimiter)
+            if counter == len(start_idcs) - 2:
+                if len(content.rstrip())< 4:
+                    # do not add extra key for short strings after last sentence
+                    continue
+            parts.append(self.proto_key)
+            child.added_keys += 1
+
+        res = element.NavigableString("".join(parts))
+        res.added_keys = child.added_keys
+        return res
+
+
+    def add_proto_keys_to_tag(self, tag: element.Tag, level=0):
         # convert all inner tags to monolithic blocks such that they are ignored
         # by the sentence splitter
         original_children = list(tag.children)
+
+        tag.clear()
+        new_children = [self.proto_key]
+        for child in original_children:
+            if isinstance(child, element.Tag):
+                # self.blockify_tag(child)
+                new_children.append(child)
+            else:
+                assert isinstance(child, element.NavigableString)
+                new_str = self.insert_proto_keys(child)
+                new_children.append(new_str)
+
+        if level == 0:
+            if isinstance(new_children[-1], element.NavigableString):
+                if new_children[-1].rstrip().endswith(self.proto_key.strip()):
+                    idx = new_children[-1].rindex(self.proto_key)
+                    tmp1 = new_children[-1][:idx]
+                    tmp2 = new_children[-1][idx+len(self.proto_key):]
+                    new_children[-1] = element.NavigableString(f"{tmp1}{tmp2}")
+
+        tag.extend(new_children)
+        return
+
+
+        IPS()
         tag.clear()
         self.new_children = []
-        for child in original_children:
-            self.process_child_of_top_level_tag(child)
 
+            # self.process1_child_of_top_level_tag(child)
 
         tag.extend(self.new_children)
 
-        for tag in self.blockified_tags:
-            self.unblockify_tag(tag)
-
         # prepare data structures for the next run
-        self.blockified_tags.clear()
+        self.unblockify_all_tags()
         self.new_children.clear()
 
-    def process_child_of_top_level_tag(self, child: element.PageElement):
+    def process1_child_of_top_level_tag(self, child: element.PageElement):
+        pass
+
+    def process2_child_of_top_level_tag(self, child: element.PageElement):
         """
         This method writes to self.new_children
         """
-        proto_key = f"::{self.prefix} "
+
 
         if self.new_children:
             # this is not the first subtag
@@ -133,8 +192,8 @@ def markdownify(html_src):
 def add_proto_keys_to_md(md_src, prefix="k"):
     md = markdown.Markdown()
     html_src = md.convert(md_src)
-    hp = ProtoKeyAdder(html_src, prefix=prefix)
-    html_src2 = hp.add_proto_keys_to_html()
+    pka = ProtoKeyAdder(html_src, prefix=prefix)
+    html_src2 = pka.add_proto_keys_to_html()
     md_src2 = markdownify(html_src2)
 
     res = convert_tabs_to_spaces(md_src2)

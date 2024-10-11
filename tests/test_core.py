@@ -26,7 +26,7 @@ class TestCases1(unittest.TestCase):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
         expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md")
 
-        if 1:
+        if 0:
             self.save_debug_result(md2)
             return
 
@@ -35,6 +35,13 @@ class TestCases1(unittest.TestCase):
 
         md2 = remove_trailing_spaces(md2)
         self.assertEqual(md2, md2_expected)
+
+    def test_011__process_p_tag(self):
+        html_src = "<p>Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem. Adipisci sit adipisci non est.</p>"
+        pka = fdmd.ProtoKeyAdder(html_src, prefix="k")
+        pka.add_proto_keys_to_html()
+        IPS()
+
 
     def test_020__get_html_with_segments(self):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
