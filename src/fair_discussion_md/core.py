@@ -8,8 +8,9 @@ from ipydex import IPS
 
 
 class ProtoKeyAdder:
-    def __init__(self, html_src: str):
+    def __init__(self, html_src: str, prefix: str):
         self.html_src = html_src
+        self.prefix = prefix
         self.soup = BeautifulSoup(html_src, 'html.parser')
         self.blockified_tags = []
 
@@ -22,7 +23,7 @@ class ProtoKeyAdder:
             return True
         return False
 
-    def add_proto_keys_to_html(self, prefix: str):
+    def add_proto_keys_to_html(self):
 
         for tag in self.soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'li', 'pre']):
             children_list = list(tag.children)
@@ -34,9 +35,8 @@ class ProtoKeyAdder:
                 continue
             elif children_list[0] == "\n" and self.will_be_processed_later(children_list[1]):
                 continue
-            self.add_proto_keys_to_tag(tag, prefix)
+            self.add_proto_keys_to_tag(tag)
         return str(self.soup)
-
 
     def split_into_sentences(self, txt: str):
         sentences = re.split(r'(?<=[.!?]) +', txt)
@@ -55,57 +55,64 @@ class ProtoKeyAdder:
         tag.attrs.update(tag.original_attrs)
 
 
-    def add_proto_keys_to_tag(self, tag: element.Tag, prefix: str):
-        proto_key = f"::{prefix} "
-
+    def add_proto_keys_to_tag(self, tag: element.Tag):
         # convert all inner tags to monolithic blocks such that they are ignored
         # by the sentence splitter
         original_children = list(tag.children)
         tag.clear()
         new_children = []
         for child in original_children:
-            if new_children:
-                optional_space = " "
-            else:
-                optional_space = ""
-            if isinstance(child, element.Tag):
-                if not new_children:
-                    # it is the first subtag
-                    new_children.append(f"{proto_key} ")
-                else:
-                    new_children.append(" ")
-                self.blockify_tag(tag)
-                new_children.append(child)
-                continue
-            assert isinstance(child, element.NavigableString)
+            res = self.process_child_of_top_level_tag(child)
+            new_children.extend(res)
 
-            parts = self.sentence_splitter_re.split(child)
-            content_part = None
-            for part in parts:
-                if not part:
-                    continue
-                if part not in self.sentence_splitters:
-                    content_part = f"{optional_space}{proto_key} {part.strip()}"
-                    continue
-                elif content_part is not None:
-                    # part is a delimiter and we also have content-part
-                    new_children.append(f"{content_part}{part}")
-                    content_part = None
-                else:
-                    # part is a delimiter but there is no preceding content-part
-                    # add it anyway
-                    new_children.append(part)
-
-            # handle the case, when final substring is no delimiter
-            if content_part is not None:
-                new_children.append(f"{content_part}")
-            # end of for child in original_children
         tag.extend(new_children)
-        # IPS(original_children[0] == "Ut ")
 
         for tag in self.blockified_tags:
             self.unblockify_tag(tag)
         self.blockified_tags.clear()
+
+    def process_child_of_top_level_tag(self, child: element.PageElement) -> list:
+        proto_key = f"::{self.prefix} "
+        new_children = []
+
+        if new_children:
+            # this is not the first subtag
+            optional_space = " "
+        else:
+            optional_space = ""
+        if isinstance(child, element.Tag):
+            if not new_children:
+                # if the first child is a subtag -> add a key
+                new_children.append(f"{proto_key} ")
+            else:
+                new_children.append(" ")
+            self.blockify_tag(child)
+            new_children.append(child)
+            return new_children
+        assert isinstance(child, element.NavigableString)
+        # IPS()
+
+        parts = self.sentence_splitter_re.split(child)
+        content_part = None
+        for part in parts:
+            if not part:
+                continue
+            if part not in self.sentence_splitters:
+                content_part = f"{optional_space}{proto_key} {part.strip()}"
+                continue
+            elif content_part is not None:
+                # part is a delimiter and we also have content-part
+                new_children.append(f"{content_part}{part}")
+                content_part = None
+            else:
+                # part is a delimiter but there is no preceding content-part
+                # add it anyway
+                new_children.append(part)
+
+        # handle the case, when final substring is no delimiter
+        if content_part is not None:
+            new_children.append(f"{content_part}")
+        return new_children
 
 
 def markdownify(html_src):
@@ -123,8 +130,8 @@ def markdownify(html_src):
 def add_proto_keys_to_md(md_src, prefix="k"):
     md = markdown.Markdown()
     html_src = md.convert(md_src)
-    hp = ProtoKeyAdder(html_src)
-    html_src2 = hp.add_proto_keys_to_html(prefix=prefix)
+    hp = ProtoKeyAdder(html_src, prefix=prefix)
+    html_src2 = hp.add_proto_keys_to_html()
     md_src2 = markdownify(html_src2)
 
     res = convert_tabs_to_spaces(md_src2)
@@ -143,6 +150,9 @@ def convert_tabs_to_spaces(input_string):
 
 
 class KeyAdder:
+    """
+    Convert proto-keys to numbered keys
+    """
     def __init__(self, md_src: str):
         self.md_src = md_src
 
@@ -170,7 +180,7 @@ class SpanAdder:
     def add_spans_for_keys(self) -> str:
         root = self.soup
         self.process_children(root=root)
-        return str(root)
+        return str(root.prettify())
 
     def process_children(self, root: element.Tag):
         original_children = list(root.children)
@@ -187,6 +197,8 @@ class SpanAdder:
 
         assert isinstance(child, element.NavigableString)
         matches = list(self.cre.finditer(child.text))
+        if not matches:
+            return [child]
         res = []
         start_idcs = []
         end_idcs = []
@@ -223,7 +235,7 @@ def get_html_with_segments(md_src, proto_key: str, prefix="a"):
     html_src = md.convert(md_src3)
     sa = SpanAdder(html_src, key_prefix=f"::{prefix}")
     res = sa.add_spans_for_keys()
-    return res
+    return html_src
 
 
 

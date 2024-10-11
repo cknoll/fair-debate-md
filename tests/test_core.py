@@ -26,7 +26,7 @@ class TestCases1(unittest.TestCase):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
         expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md")
 
-        if 0:
+        if 1:
             self.save_debug_result(md2)
             return
 

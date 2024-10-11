@@ -1,7 +1,7 @@
 # ::k Ipsum non ut est.
 
 
-::k Ut _quiquia **eius** dolorem_ ::k voluptatem. ::k **Adipisci sit adipisci non est**. ::k Dolor etincidunt neque sed tempora porro quiquia. ::k Porro velit non consectetur numquam velit.
+::k Ut _quiquia **eius** dolorem_ voluptatem. ::k **Adipisci sit adipisci non est**. ::k Dolor etincidunt neque sed tempora porro quiquia. ::k Porro velit non consectetur numquam velit.
 
 
 - ::k Ipsum velit adipisci
