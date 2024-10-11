@@ -40,8 +40,12 @@ class TestCases1(unittest.TestCase):
         html_src = "<p>Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem. Adipisci sit adipisci non est.</p>"
         pka = fdmd.ProtoKeyAdder(html_src, prefix="k")
         pka.add_proto_keys_to_html()
-        IPS()
-
+        res = str(pka.soup)
+        expected_res = (
+            "<p>::k Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem."
+            " ::k  Adipisci sit adipisci non est.</p>"
+        )
+        self.assertEqual(res, expected_res)
 
     def test_020__get_html_with_segments(self):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")

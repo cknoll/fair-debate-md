@@ -13,7 +13,6 @@ class ProtoKeyAdder:
         self.prefix = prefix
         self.proto_key = f" ::{self.prefix} "
         self.soup = BeautifulSoup(html_src, 'html.parser')
-        self.blockified_tags = []
 
         self.sentence_splitters = [".", "!", "?", ":"]
         self.sentence_splitter_re = re.compile("([.?!:])")
@@ -38,24 +37,6 @@ class ProtoKeyAdder:
                 continue
             self.add_proto_keys_to_tag(tag)
         return str(self.soup)
-
-    def split_into_sentences(self, txt: str):
-        sentences = re.split(r'(?<=[.!?]) +', txt)
-        return sentences
-
-    def blockify_tag(self, tag: element.Tag):
-        tag.original_children = list(tag.children)
-        tag.original_attrs = tag.attrs.copy()
-
-        tag.clear()
-        tag.attrs.clear()
-        self.blockified_tags.append(tag)
-
-    def unblockify_all_tags(self):
-        for tag in self.blockified_tags:
-            tag.extend(tag.original_children)
-            tag.attrs.update(tag.original_attrs)
-        self.blockified_tags.clear()
 
     def insert_proto_keys(self, child: element.NavigableString):
         child.added_keys = 0
@@ -88,17 +69,14 @@ class ProtoKeyAdder:
         res.added_keys = child.added_keys
         return res
 
-
     def add_proto_keys_to_tag(self, tag: element.Tag, level=0):
-        # convert all inner tags to monolithic blocks such that they are ignored
-        # by the sentence splitter
         original_children = list(tag.children)
 
         tag.clear()
-        new_children = [self.proto_key]
+        new_children = [self.proto_key.lstrip()]
         for child in original_children:
             if isinstance(child, element.Tag):
-                # self.blockify_tag(child)
+                # TODO: handle nested tags (e.g.  sentence delimiter within em-tags)
                 new_children.append(child)
             else:
                 assert isinstance(child, element.NavigableString)
@@ -116,68 +94,7 @@ class ProtoKeyAdder:
         tag.extend(new_children)
         return
 
-
-        IPS()
-        tag.clear()
-        self.new_children = []
-
-            # self.process1_child_of_top_level_tag(child)
-
-        tag.extend(self.new_children)
-
-        # prepare data structures for the next run
-        self.unblockify_all_tags()
-        self.new_children.clear()
-
-    def process1_child_of_top_level_tag(self, child: element.PageElement):
-        pass
-
-    def process2_child_of_top_level_tag(self, child: element.PageElement):
-        """
-        This method writes to self.new_children
-        """
-
-
-        if self.new_children:
-            # this is not the first subtag
-            optional_space = " "
-        else:
-            optional_space = ""
-        if isinstance(child, element.Tag):
-            if not self.new_children:
-                # if the first child is a subtag -> add a key
-                self.new_children.append(f"{proto_key} ")
-            else:
-                self.new_children.append(" ")
-            self.blockify_tag(child)
-            self.new_children.append(child)
-            return
-        assert isinstance(child, element.NavigableString)
-
-        parts = self.sentence_splitter_re.split(child)
-        content_part = None
-        for part in parts:
-            if not part:
-                continue
-            if part not in self.sentence_splitters:
-                content_part = f"{optional_space}{proto_key} {part.strip()}"
-                continue
-            elif content_part is not None:
-                # part is a delimiter and we also have content-part
-                self.new_children.append(f"{content_part}{part}")
-                content_part = None
-            else:
-                # part is a delimiter but there is no preceding content-part
-                # add it anyway
-                self.new_children.append(part)
-
-        # handle the case, when final substring is no delimiter
-        if content_part is not None:
-            self.new_children.append(f"{content_part}")
-        return self.new_children
-
-
-def markdownify(html_src):
+def markdownify_and_postprocess(html_src):
     """
     employ customized MarkdownConverter
     """
@@ -186,7 +103,11 @@ def markdownify(html_src):
     # explicitly define conversion for strong and emphasized text
     mdc.convert_b = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "**"), mdc)
     mdc.convert_em = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "_"), mdc)
-    return mdc.convert(html_src)
+
+    res0 = mdc.convert(html_src)
+    res1 = convert_tabs_to_spaces(res0)
+
+    return res1
 
 
 def add_proto_keys_to_md(md_src, prefix="k"):
@@ -194,10 +115,7 @@ def add_proto_keys_to_md(md_src, prefix="k"):
     html_src = md.convert(md_src)
     pka = ProtoKeyAdder(html_src, prefix=prefix)
     html_src2 = pka.add_proto_keys_to_html()
-    md_src2 = markdownify(html_src2)
-
-    res = convert_tabs_to_spaces(md_src2)
-
+    res = markdownify_and_postprocess(html_src2)
     return res
 
 
