@@ -54,43 +54,46 @@ class ProtoKeyAdder:
         tag.extend(tag.original_children)
         tag.attrs.update(tag.original_attrs)
 
-
     def add_proto_keys_to_tag(self, tag: element.Tag):
         # convert all inner tags to monolithic blocks such that they are ignored
         # by the sentence splitter
         original_children = list(tag.children)
         tag.clear()
-        new_children = []
+        self.new_children = []
         for child in original_children:
-            res = self.process_child_of_top_level_tag(child)
-            new_children.extend(res)
+            self.process_child_of_top_level_tag(child)
 
-        tag.extend(new_children)
+
+        tag.extend(self.new_children)
 
         for tag in self.blockified_tags:
             self.unblockify_tag(tag)
+
+        # prepare data structures for the next run
         self.blockified_tags.clear()
+        self.new_children.clear()
 
-    def process_child_of_top_level_tag(self, child: element.PageElement) -> list:
+    def process_child_of_top_level_tag(self, child: element.PageElement):
+        """
+        This method writes to self.new_children
+        """
         proto_key = f"::{self.prefix} "
-        new_children = []
 
-        if new_children:
+        if self.new_children:
             # this is not the first subtag
             optional_space = " "
         else:
             optional_space = ""
         if isinstance(child, element.Tag):
-            if not new_children:
+            if not self.new_children:
                 # if the first child is a subtag -> add a key
-                new_children.append(f"{proto_key} ")
+                self.new_children.append(f"{proto_key} ")
             else:
-                new_children.append(" ")
+                self.new_children.append(" ")
             self.blockify_tag(child)
-            new_children.append(child)
-            return new_children
+            self.new_children.append(child)
+            return
         assert isinstance(child, element.NavigableString)
-        # IPS()
 
         parts = self.sentence_splitter_re.split(child)
         content_part = None
@@ -102,17 +105,17 @@ class ProtoKeyAdder:
                 continue
             elif content_part is not None:
                 # part is a delimiter and we also have content-part
-                new_children.append(f"{content_part}{part}")
+                self.new_children.append(f"{content_part}{part}")
                 content_part = None
             else:
                 # part is a delimiter but there is no preceding content-part
                 # add it anyway
-                new_children.append(part)
+                self.new_children.append(part)
 
         # handle the case, when final substring is no delimiter
         if content_part is not None:
-            new_children.append(f"{content_part}")
-        return new_children
+            self.new_children.append(f"{content_part}")
+        return self.new_children
 
 
 def markdownify(html_src):
