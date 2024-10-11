@@ -54,6 +54,52 @@ class TestCases1(unittest.TestCase):
         if 1:
             self.save_debug_result(res, suffix=".html")
 
+    def test_021__add_spans(self):
+        tag1 = "<h1>::a1 Ipsum non ut est.</h1>"
+
+        key_prefix = "::a"
+        sa = fdmd.SpanAdder(tag1, key_prefix=key_prefix)
+        res = sa.add_spans_for_keys()
+        res_expected = '<h1><span class="segment" id="a1"> Ipsum non ut est.</span></h1>'
+        self.assertEqual(res, res_expected)
+
+        tag2 = (
+            "<p>::a2 Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem."
+            " ::a3 <strong>Adipisci sit adipisci non est</strong>.</p>"
+        )
+
+        sa = fdmd.SpanAdder(tag2, key_prefix=key_prefix)
+        res = sa.add_spans_for_keys()
+
+        res_expected = (
+            '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
+            ' dolorem</em> voluptatem.</span>'
+            '<span class="segment" id="a3"><strong>Adipisci sit adipisci non est</strong></span></p>'
+        )
+
+        IPS()
+        self.assertEqual(res, res_expected)
+
+        return
+
+        tag3 = (
+            "<p>::a2 Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem."
+            " ::a3 <strong>Adipisci sit adipisci non est</strong>."
+            " ::a4 Dolor etincidunt neque sed tempora porro quiquia."
+            " ::a5 Porro velit non consectetur numquam velit.</p>"
+        )
+
+        sa = fdmd.SpanAdder(tag3, key_prefix=key_prefix)
+        res = sa.add_spans_for_keys()
+        res_expected = (
+            '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
+            ' dolorem</em> voluptatem.</span>'
+            '<span class="segment" id="a3"><strong>Adipisci sit adipisci non est</strong></span>'
+            '<span class="segment" id="a4"> Dolor etincidunt neque sed tempora porro quiquia. </span>'
+            '<span class="segment" id="a5"> Porro velit non consectetur numquam velit.</span></p>'
+        )
+        # self.assertEqual(res, res_expected)
+
 
 def remove_trailing_spaces(txt):
     return "\n".join([line.rstrip(" ") for line in txt.split("\n")])

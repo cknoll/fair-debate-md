@@ -157,10 +157,14 @@ class SpanAdder:
         # compiled regex
         self.cre = re.compile(self.pattern)
 
-    def add_spans_for_keys(self) -> str:
+    def add_spans_for_keys(self, prettify: bool = False) -> str:
         root = self.soup
         self.process_children(root=root)
-        return str(root.prettify())
+        if prettify:
+            res = str(root.prettify())
+        else:
+            res = str(root)
+        return res
 
     def process_children(self, root: element.Tag):
         original_children = list(root.children)
@@ -215,7 +219,7 @@ def get_html_with_segments(md_src, proto_key: str, prefix="a"):
     html_src = md.convert(md_src3)
     sa = SpanAdder(html_src, key_prefix=f"::{prefix}")
     res = sa.add_spans_for_keys()
-    return html_src
+    return res
 
 
 
