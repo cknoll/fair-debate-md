@@ -1,4 +1,5 @@
 import re
+import types
 import markdown
 import markdownify as mdf
 from bs4 import BeautifulSoup, element
@@ -107,12 +108,24 @@ class ProtoKeyAdder:
         self.blockified_tags.clear()
 
 
+def markdownify(html_src):
+    """
+    employ customized MarkdownConverter
+    """
+    mdc = mdf.MarkdownConverter(heading_style="ATX", bullets="-")
+
+    # explicitly define conversion for strong and emphasized text
+    mdc.convert_b = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "**"), mdc)
+    mdc.convert_em = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "_"), mdc)
+    return mdc.convert(html_src)
+
+
 def add_proto_keys_to_md(md_src, prefix="k"):
     md = markdown.Markdown()
     html_src = md.convert(md_src)
     hp = ProtoKeyAdder(html_src)
     html_src2 = hp.add_proto_keys_to_html(prefix=prefix)
-    md_src2 = mdf.markdownify(html_src2, heading_style="ATX", bullets="-")
+    md_src2 = markdownify(html_src2)
 
     res = convert_tabs_to_spaces(md_src2)
 

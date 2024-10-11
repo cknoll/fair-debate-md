@@ -33,6 +33,7 @@ class TestCases1(unittest.TestCase):
         with open(expected_result_fpath, "r") as fp:
             md2_expected = fp.read()
 
+        md2 = remove_trailing_spaces(md2)
         self.assertEqual(md2, md2_expected)
 
     def test_020__get_html_with_segments(self):
@@ -41,3 +42,7 @@ class TestCases1(unittest.TestCase):
 
         if 1:
             self.save_debug_result(res, suffix=".html")
+
+
+def remove_trailing_spaces(txt):
+    return "\n".join([line.rstrip(" ") for line in txt.split("\n")])

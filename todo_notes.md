@@ -1,4 +1,4 @@
-- [ ] improve markdownify of nested em/strong
+- [x] improve markdownify of nested em/strong
 - [ ] make spanAdder work
 - [ ] add mouseover effect
 - [ ] add menu
