@@ -2,9 +2,9 @@ import unittest
 import os
 from ipydex import IPS, activate_ips_on_exception
 
-import fair_discussion_md as fdmd
+import fair_debate_md as fdmd
 
-from fair_discussion_md.utils import compare_strings
+from fair_debate_md.utils import compare_strings
 
 activate_ips_on_exception()
 pjoin = os.path.join

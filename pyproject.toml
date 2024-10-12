@@ -3,7 +3,7 @@ requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fair_discussion_md"
+name = "fair_debate_md"
 readme = "README.md"
 requires-python = ">=3.11"
 dynamic = ["dependencies", "version"]
@@ -14,7 +14,7 @@ where = ["src"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
-version = {attr = "fair_discussion_md.__version__"}
+version = {attr = "fair_debate_md.__version__"}
 
 # this siginificantly speeds up pytest
 [tool.pytest.ini_options]

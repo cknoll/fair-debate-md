@@ -1,4 +1,4 @@
-# Markdown Support Code for Fair Discussion
+# Markdown Support Code for Fair Debate
 
 
 Current main purpose: insert keys into markdown code.
