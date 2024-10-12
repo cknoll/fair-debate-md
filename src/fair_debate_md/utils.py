@@ -1,3 +1,19 @@
+from colorama import Style, Back, Fore
+
+def hl(txt, k="g"):
+    colors = {
+        "g": Back.GREEN,
+        "y": Back.YELLOW,
+        "r": Back.RED,
+    }
+
+    start = colors[k]
+    end = Style.RESET_ALL
+    txt2 = txt.replace("\n", f"{end}\n{start}")
+
+    return f"{start}{txt2}{end}"
+
+
 def compare_strings(str1, str2, n=25):
     # Find the index of the first difference
     idx = next((i for i in range(min(len(str1), len(str2))) if str1[i] != str2[i]), None)
@@ -14,6 +30,5 @@ def compare_strings(str1, str2, n=25):
 
     # Print the context
     print(f"First difference at index {idx}:")
-    print(f"{str1[start:end]}")
-    print(f"{str2[start:end]}")
-    print(" " * (idx - start) + "^")
+    print(f"{str1[start:idx]}{hl(str1[idx:end], 'g')}")
+    print(f"{str2[start:idx]}{hl(str2[idx:end], 'y')}")
