@@ -12,6 +12,9 @@ dynamic = ["dependencies", "version"]
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"fair_debate_md.fixtures" = ["*.md"]
+
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 version = {attr = "fair_debate_md.__version__"}

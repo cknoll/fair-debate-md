@@ -10,7 +10,8 @@ activate_ips_on_exception()
 pjoin = os.path.join
 
 TESTDATA_DIR = pjoin(os.path.abspath(os.path.dirname(__file__)), "testdata")
-TESTDATA1 = pjoin(TESTDATA_DIR, "txt1.md")
+FIXTURE_DIR = fdmd.fixtures.path
+TESTDATA1 = pjoin(FIXTURE_DIR, "txt1.md")
 
 
 class TestCases1(unittest.TestCase):
@@ -28,7 +29,9 @@ class TestCases1(unittest.TestCase):
 
     def test_010__add_keys_to_md(self):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
-        expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md")
+        expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(
+            FIXTURE_DIR, TESTDATA_DIR
+        )
 
         if 0:
             self.save_debug_result(md2)

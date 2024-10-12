@@ -1,5 +1,7 @@
 .vscode
 __pycache__
 src/*.egg-info
+build/*
 
-tests/testdata/*debug*
+tests/**/*debug*
+src/**/*debug*
