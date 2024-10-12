@@ -153,37 +153,45 @@ class SpanAdder:
         self.key_prefix = key_prefix
         self.soup = BeautifulSoup(html_src, 'html.parser')
         self.pattern = r'(XXX\d+)'.replace("XXX", self.key_prefix)
+        self.span_tag_is_open = False
+        self.encoded_left_delimiter = "_[_"
+        self.encoded_right_delimiter = "_]_"
 
         # compiled regex
         self.cre = re.compile(self.pattern)
 
     def add_spans_for_keys(self, prettify: bool = False) -> str:
         root = self.soup
-        self.process_children(root=root)
+        self.process_children(root=root, level=0)
         if prettify:
             res = str(root.prettify())
         else:
             res = str(root)
-        return res
 
-    def process_children(self, root: element.Tag):
+        res2 = self.insert_encoded_delimiters(res)
+        return res2
+
+    def process_children(self, root: element.Tag, level: int):
         original_children = list(root.children)
         root.clear()
         for child in original_children:
-            new_child_list = self.process_child(child)
+            new_child_list = self.process_child(child, level=level+1)
             root.extend(new_child_list)
+
+        if level == 1 and self.span_tag_is_open:
+            root.append(self.encode_tags("</span>"))
+            self.span_tag_is_open = False
 
         return root
 
-    def process_child(self, child: element.PageElement):
+    def process_child(self, child: element.PageElement, level: int):
         if isinstance(child, element.Tag):
-            return [self.process_children(root=child)]
+            return [self.process_children(root=child, level=level)]
 
         assert isinstance(child, element.NavigableString)
         matches = list(self.cre.finditer(child.text))
         if not matches:
             return [child]
-        res = []
         start_idcs = []
         end_idcs = []
         keys = []
@@ -195,16 +203,32 @@ class SpanAdder:
             keys.append(key)
 
         # add final index at the end of the string
-        start_idcs.append(len(child.text))
+        # start_idcs.append(len(child.text))
 
-        # iterate over contents
-        for i0, i1, key in zip(end_idcs, start_idcs[1:], keys):
-            new_tag = element.Tag(name="span", attrs={"class": "segment", "id": key})
-            content = child.text[i0:i1]
-            new_tag.append(content)
-            res.append(new_tag)
+        new_str_parts = []
 
+        content_index = 0
+
+        for i0, i1, key in zip(start_idcs, end_idcs, keys):
+            content = child.text[content_index:i0]
+            content_index = i1
+            new_str_parts.append(content)
+
+            if self.span_tag_is_open:
+                new_str_parts.append(self.encode_tags("</span>"))
+            new_str_parts.append(self.encode_tags(f'<span class="segment" id="{key}">'))
+            self.span_tag_is_open = True
+
+        new_str_parts.append(child.text[content_index:])  # add final content
+
+        res = element.NavigableString("".join(new_str_parts))
         return res
+
+    def encode_tags(self, txt):
+        return txt.replace("<", self.encoded_left_delimiter).replace(">", self.encoded_right_delimiter)
+
+    def insert_encoded_delimiters(self, txt):
+        return txt.replace(self.encoded_left_delimiter, "<").replace(self.encoded_right_delimiter, ">")
 
 
 def get_html_with_segments(md_src, proto_key: str, prefix="a"):

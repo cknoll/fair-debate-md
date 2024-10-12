@@ -4,6 +4,8 @@ from ipydex import IPS, activate_ips_on_exception
 
 import fair_discussion_md as fdmd
 
+from fair_discussion_md.utils import compare_strings
+
 activate_ips_on_exception()
 pjoin = os.path.join
 
@@ -12,6 +14,7 @@ TESTDATA1 = pjoin(TESTDATA_DIR, "txt1.md")
 
 class TestCases1(unittest.TestCase):
     def setUp(self):
+        self.key_prefix = "::a"
         with open(TESTDATA1) as fp:
             self.txt1 = fp.read()
         return
@@ -57,24 +60,24 @@ class TestCases1(unittest.TestCase):
     def test_021__add_spans(self):
         tag1 = "<h1>::a1 Ipsum non ut est.</h1>"
 
-        key_prefix = "::a"
-        sa = fdmd.SpanAdder(tag1, key_prefix=key_prefix)
+        sa = fdmd.SpanAdder(tag1, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
         res_expected = '<h1><span class="segment" id="a1"> Ipsum non ut est.</span></h1>'
         self.assertEqual(res, res_expected)
 
+    def test_022__add_spans(self):
         tag2 = (
             "<p>::a2 Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem."
             " ::a3 <strong>Adipisci sit adipisci non est</strong>.</p>"
         )
 
-        sa = fdmd.SpanAdder(tag2, key_prefix=key_prefix)
+        sa = fdmd.SpanAdder(tag2, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
 
         res_expected = (
             '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
             ' dolorem</em> voluptatem.</span>'
-            '<span class="segment" id="a3"><strong>Adipisci sit adipisci non est</strong></span></p>'
+            '<span class="segment" id="a3"><strong>Adipisci sit adipisci non est</strong>.</span></p>'
         )
 
         IPS()
