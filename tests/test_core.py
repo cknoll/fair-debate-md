@@ -134,7 +134,7 @@ class TestCases1(unittest.TestCase):
         <ul>
         <li><span class="segment" id="a10"> Ut etincidunt magnam ut etincidunt <code>some code</code></span></li>
         <li><span class="segment" id="a11"> quiquia quisquam porro.</span><ul>
-        <li><span class="segment" id="12"> Ut modi dolor est labore velit non.</span></li>
+        <li><span class="segment" id="a12"> Ut modi dolor est labore velit non.</span></li>
         </ul>
         </li>
         </ul>
@@ -146,7 +146,6 @@ class TestCases1(unittest.TestCase):
 
         sa = fdmd.SpanAdder(html_src, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
-        IPS()
         self.assertEqual(res, res_expected)
 
     def test_030__get_html_with_segments(self):

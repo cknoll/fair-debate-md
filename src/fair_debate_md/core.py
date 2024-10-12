@@ -176,17 +176,26 @@ class SpanAdder:
         res2 = self.insert_encoded_delimiters(res)
         return res2
 
+    def is_new_paragraph_tag(self, elt: element.PageElement):
+        return getattr(elt, "name", None) in ("ul", "ol", "p")
+
+    def close_tag(self, parent_tag: element.Tag, tag_name: str = "span"):
+        parent_tag.append(self.encode_tags(f"</{tag_name}>"))
+        self.active_tag_stack[-1].span_tag_is_open = False
+        self.span_tag_is_open = False
+
     def process_children(self, root: element.Tag, level: int):
         original_children = list(root.children)
+        next_children = [*original_children[1:], element.NavigableString("")]
         root.clear()
-        for child in original_children:
-            new_child_list = self.process_child(child, level=level + 1)
+        for current_child, next_child in zip(original_children, next_children):
+            new_child_list = self.process_child(current_child, level=level + 1)
             root.extend(new_child_list)
+            if self.is_new_paragraph_tag(next_child) and root.span_tag_is_open:
+                self.close_tag(root, "span")
 
         if self.active_tag_stack and self.active_tag_stack[-1].span_tag_is_open:
-            root.append(self.encode_tags("</span>"))
-            self.active_tag_stack[-1].span_tag_is_open = False
-            self.span_tag_is_open = False
+            self.close_tag(root, "span")
 
         return root
 
