@@ -124,17 +124,17 @@ class TestCases1(unittest.TestCase):
 
         res_expected = twdd("""
         <ul>
-        <li><span class="segment" id="a6">Ipsum velit adipisci</span></li>
+        <li><span class="segment" id="a6"> Ipsum velit adipisci</span></li>
         <li>
-        <p>::a7 Adipisci est magnam etincidunt sed:</p>
+        <p><span class="segment" id="a7"> Adipisci est magnam etincidunt sed:</span></p>
         <ul>
-        <li>::a8 <code>some code</code> Sed etincidunt etincidunt</li>
+        <li><span class="segment" id="a8"> <code>some code</code> Sed etincidunt etincidunt</span></li>
         <li>
-        <p>::a9 sit aliquam eius quiquia.</p>
+        <p><span class="segment" id="a9"> sit aliquam eius quiquia.</span></p>
         <ul>
-        <li>::a10 Ut etincidunt magnam ut etincidunt <code>some code</code></li>
-        <li>::a11 quiquia quisquam porro.<ul>
-        <li>::a12 Ut modi dolor est labore velit non.</li>
+        <li><span class="segment" id="a10"> Ut etincidunt magnam ut etincidunt <code>some code</code></span></li>
+        <li><span class="segment" id="a11"> quiquia quisquam porro.</span><ul>
+        <li><span class="segment" id="12"> Ut modi dolor est labore velit non.</span></li>
         </ul>
         </li>
         </ul>
@@ -146,6 +146,7 @@ class TestCases1(unittest.TestCase):
 
         sa = fdmd.SpanAdder(html_src, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
+        IPS()
         self.assertEqual(res, res_expected)
 
     def test_030__get_html_with_segments(self):

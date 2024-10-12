@@ -160,6 +160,8 @@ class SpanAdder:
         self.encoded_left_delimiter = "_[_"
         self.encoded_right_delimiter = "_]_"
 
+        self.active_tag_stack = []
+
         # compiled regex
         self.cre = re.compile(self.pattern)
 
@@ -181,15 +183,20 @@ class SpanAdder:
             new_child_list = self.process_child(child, level=level + 1)
             root.extend(new_child_list)
 
-        if level == 1 and self.span_tag_is_open:
+        if self.active_tag_stack and self.active_tag_stack[-1].span_tag_is_open:
             root.append(self.encode_tags("</span>"))
+            self.active_tag_stack[-1].span_tag_is_open = False
             self.span_tag_is_open = False
 
         return root
 
     def process_child(self, child: element.PageElement, level: int):
         if isinstance(child, element.Tag):
-            return [self.process_children(root=child, level=level)]
+            self.active_tag_stack.append(child)
+            child.span_tag_is_open = None
+            res = [self.process_children(root=child, level=level)]
+            self.active_tag_stack.pop()
+            return res
 
         assert isinstance(child, element.NavigableString)
         matches = list(self.cre.finditer(child.text))
@@ -220,6 +227,7 @@ class SpanAdder:
             if self.span_tag_is_open:
                 new_str_parts.append(self.encode_tags("</span>"))
             new_str_parts.append(self.encode_tags(f'<span class="segment" id="{key}">'))
+            self.active_tag_stack[-1].span_tag_is_open = True
             self.span_tag_is_open = True
 
         new_str_parts.append(child.text[content_index:])  # add final content
