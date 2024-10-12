@@ -12,7 +12,7 @@ class ProtoKeyAdder:
         self.html_src = html_src
         self.prefix = prefix
         self.proto_key = f" ::{self.prefix} "
-        self.soup = BeautifulSoup(html_src, 'html.parser')
+        self.soup = BeautifulSoup(html_src, "html.parser")
 
         self.sentence_splitters = [".", "!", "?", ":"]
         self.sentence_splitter_re = re.compile("([.?!:])")
@@ -24,8 +24,7 @@ class ProtoKeyAdder:
         return False
 
     def add_proto_keys_to_html(self):
-
-        for tag in self.soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'li', 'pre']):
+        for tag in self.soup.find_all(["h1", "h2", "h3", "h4", "h5", "p", "li", "pre"]):
             children_list = list(tag.children)
             if not children_list:
                 continue
@@ -59,7 +58,7 @@ class ProtoKeyAdder:
             parts.append(content)
             # TODO: handle space after delimiter (or as part of delimiter)
             if counter == len(start_idcs) - 2:
-                if len(content.rstrip())< 4:
+                if len(content.rstrip()) < 4:
                     # do not add extra key for short strings after last sentence
                     continue
             parts.append(self.proto_key)
@@ -88,11 +87,12 @@ class ProtoKeyAdder:
                 if new_children[-1].rstrip().endswith(self.proto_key.strip()):
                     idx = new_children[-1].rindex(self.proto_key)
                     tmp1 = new_children[-1][:idx]
-                    tmp2 = new_children[-1][idx+len(self.proto_key):]
+                    tmp2 = new_children[-1][idx + len(self.proto_key) :]
                     new_children[-1] = element.NavigableString(f"{tmp1}{tmp2}")
 
         tag.extend(new_children)
         return
+
 
 def markdownify_and_postprocess(html_src):
     """
@@ -123,16 +123,18 @@ def convert_tabs_to_spaces(input_string):
     lines = input_string.splitlines()
 
     def replace_tabs(line):
-        leading_tabs = len(re.match(r'^\t*', line).group(0))
-        return ' ' * (leading_tabs * 4) + line.lstrip('\t')
+        leading_tabs = len(re.match(r"^\t*", line).group(0))
+        return " " * (leading_tabs * 4) + line.lstrip("\t")
+
     converted_lines = [replace_tabs(line) for line in lines]
-    return '\n'.join(converted_lines)
+    return "\n".join(converted_lines)
 
 
 class KeyAdder:
     """
     Convert proto-keys to numbered keys
     """
+
     def __init__(self, md_src: str):
         self.md_src = md_src
 
@@ -147,12 +149,13 @@ class KeyAdder:
 
         return "".join(res)
 
+
 class SpanAdder:
     def __init__(self, html_src: str, key_prefix: str):
         self.html_src = html_src
         self.key_prefix = key_prefix
-        self.soup = BeautifulSoup(html_src, 'html.parser')
-        self.pattern = r' ?(XXX\d+)'.replace("XXX", self.key_prefix)
+        self.soup = BeautifulSoup(html_src, "html.parser")
+        self.pattern = r" ?(XXX\d+)".replace("XXX", self.key_prefix)
         self.span_tag_is_open = False
         self.encoded_left_delimiter = "_[_"
         self.encoded_right_delimiter = "_]_"
@@ -175,7 +178,7 @@ class SpanAdder:
         original_children = list(root.children)
         root.clear()
         for child in original_children:
-            new_child_list = self.process_child(child, level=level+1)
+            new_child_list = self.process_child(child, level=level + 1)
             root.extend(new_child_list)
 
         if level == 1 and self.span_tag_is_open:
@@ -243,7 +246,6 @@ def get_html_with_segments(md_src, proto_key: str, prefix="a"):
     sa = SpanAdder(html_src, key_prefix=f"::{prefix}")
     res = sa.add_spans_for_keys()
     return res
-
 
 
 def main():

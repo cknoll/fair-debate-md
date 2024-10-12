@@ -12,6 +12,7 @@ pjoin = os.path.join
 TESTDATA_DIR = pjoin(os.path.abspath(os.path.dirname(__file__)), "testdata")
 TESTDATA1 = pjoin(TESTDATA_DIR, "txt1.md")
 
+
 class TestCases1(unittest.TestCase):
     def setUp(self):
         self.key_prefix = "::a"
@@ -76,14 +77,13 @@ class TestCases1(unittest.TestCase):
 
         res_expected = (
             '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
-            ' dolorem</em> voluptatem.</span>'
+            " dolorem</em> voluptatem.</span>"
             '<span class="segment" id="a3"> <strong>Adipisci sit adipisci non est</strong>.</span></p>'
         )
 
         self.assertEqual(res, res_expected)
 
     def test_023__add_spans(self):
-
         tag3 = (
             "<p>::a2 Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem."
             " ::a3 <strong>Adipisci sit adipisci non est</strong>."
@@ -95,7 +95,7 @@ class TestCases1(unittest.TestCase):
         res = sa.add_spans_for_keys()
         res_expected = (
             '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
-            ' dolorem</em> voluptatem.</span>'
+            " dolorem</em> voluptatem.</span>"
             '<span class="segment" id="a3"> <strong>Adipisci sit adipisci non est</strong>.</span>'
             '<span class="segment" id="a4"> Dolor etincidunt neque sed tempora porro quiquia.</span>'
             '<span class="segment" id="a5"> Porro velit non consectetur numquam velit.</span></p>'
