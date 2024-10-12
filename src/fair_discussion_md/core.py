@@ -152,7 +152,7 @@ class SpanAdder:
         self.html_src = html_src
         self.key_prefix = key_prefix
         self.soup = BeautifulSoup(html_src, 'html.parser')
-        self.pattern = r'(XXX\d+)'.replace("XXX", self.key_prefix)
+        self.pattern = r' ?(XXX\d+)'.replace("XXX", self.key_prefix)
         self.span_tag_is_open = False
         self.encoded_left_delimiter = "_[_"
         self.encoded_right_delimiter = "_]_"
@@ -198,8 +198,8 @@ class SpanAdder:
         for match in matches:
             start_idcs.append(match.start())
             end_idcs.append(match.end())
-            delimiter_key = match.group(1)  # something like "::a1"
-            key = delimiter_key.replace("::", "")  # a1
+            delimiter_key = match.group(1)  # something like " ::a1"
+            key = delimiter_key.replace("::", "").lstrip()  # a1
             keys.append(key)
 
         # add final index at the end of the string
@@ -220,7 +220,6 @@ class SpanAdder:
             self.span_tag_is_open = True
 
         new_str_parts.append(child.text[content_index:])  # add final content
-
         res = element.NavigableString("".join(new_str_parts))
         return res
 
