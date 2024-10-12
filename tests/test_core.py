@@ -1,5 +1,6 @@
 import unittest
 import os
+from textwrap import dedent as twdd
 from ipydex import IPS, activate_ips_on_exception
 
 import fair_debate_md as fdmd
@@ -54,13 +55,6 @@ class TestCases1(unittest.TestCase):
         )
         self.assertEqual(res, expected_res)
 
-    def test_020__get_html_with_segments(self):
-        md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
-        res = fdmd.get_html_with_segments(md2, proto_key="::k")
-
-        if 1:
-            self.save_debug_result(res, suffix=".html")
-
     def test_021__add_spans(self):
         tag1 = "<h1>::a1 Ipsum non ut est.</h1>"
 
@@ -104,6 +98,62 @@ class TestCases1(unittest.TestCase):
             '<span class="segment" id="a5"> Porro velit non consectetur numquam velit.</span></p>'
         )
         self.assertEqual(res, res_expected)
+
+    def test_024__add_spans(self):
+        html_src = twdd("""
+        <ul>
+        <li>::a6 Ipsum velit adipisci</li>
+        <li>
+        <p>::a7 Adipisci est magnam etincidunt sed:</p>
+        <ul>
+        <li>::a8 <code>some code</code> Sed etincidunt etincidunt</li>
+        <li>
+        <p>::a9 sit aliquam eius quiquia.</p>
+        <ul>
+        <li>::a10 Ut etincidunt magnam ut etincidunt <code>some code</code></li>
+        <li>::a11 quiquia quisquam porro.<ul>
+        <li>::a12 Ut modi dolor est labore velit non.</li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        </ul>
+        """)
+
+        res_expected = twdd("""
+        <ul>
+        <li><span class="segment" id="a6">Ipsum velit adipisci</span></li>
+        <li>
+        <p>::a7 Adipisci est magnam etincidunt sed:</p>
+        <ul>
+        <li>::a8 <code>some code</code> Sed etincidunt etincidunt</li>
+        <li>
+        <p>::a9 sit aliquam eius quiquia.</p>
+        <ul>
+        <li>::a10 Ut etincidunt magnam ut etincidunt <code>some code</code></li>
+        <li>::a11 quiquia quisquam porro.<ul>
+        <li>::a12 Ut modi dolor est labore velit non.</li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        </ul>
+        """)
+
+        sa = fdmd.SpanAdder(html_src, key_prefix=self.key_prefix)
+        res = sa.add_spans_for_keys()
+        self.assertEqual(res, res_expected)
+
+    def test_030__get_html_with_segments(self):
+        res = fdmd.convert_plain_md_to_segmented_html(self.txt1)
+
+        if 1:
+            self.save_debug_result(res, suffix=".html")
+
 
 
 def remove_trailing_spaces(txt):

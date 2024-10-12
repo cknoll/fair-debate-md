@@ -248,5 +248,11 @@ def get_html_with_segments(md_src, proto_key: str, prefix="a"):
     return res
 
 
+def convert_plain_md_to_segmented_html(md_src: str) -> str:
+    md2 = add_proto_keys_to_md(md_src, prefix="k")
+    res = get_html_with_segments(md2, proto_key="::k")
+    return res
+
+
 def main():
     pass
