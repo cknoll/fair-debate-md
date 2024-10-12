@@ -149,10 +149,28 @@ class TestCases1(unittest.TestCase):
         self.assertEqual(res, res_expected)
 
     def test_030__get_html_with_segments(self):
+
+        # test empty string
+        res = fdmd.convert_plain_md_to_segmented_html("")
+        self.assertEqual(res, "")
+
+        # test simple string
+        res = fdmd.convert_plain_md_to_segmented_html("foo bar")
+        res_expected = '<p><span class="segment" id="a1"> foo bar</span></p>'
+        self.assertEqual(res, res_expected)
+
+        # test full file
         res = fdmd.convert_plain_md_to_segmented_html(self.txt1)
 
-        if 1:
+        if 0:
             self.save_debug_result(res, suffix=".html")
+
+        expected_result_fpath = pjoin(TESTDATA_DIR, "txt1_segmented_html.html")
+        with open(expected_result_fpath, "r") as fp:
+            res_expected = fp.read()
+
+        self.assertEqual(res, res_expected)
+
 
 
 
