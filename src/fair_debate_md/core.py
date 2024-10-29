@@ -265,10 +265,15 @@ def get_html_with_segments(md_src, proto_key: str, prefix="a"):
     return res
 
 
-def convert_plain_md_to_segmented_html(md_src: str) -> str:
-    md2 = add_proto_keys_to_md(md_src, prefix="k")
-    res = get_html_with_segments(md2, proto_key="::k")
-    return res
+def convert_plain_md_to_md_with_keys(md_src: str, key_prefix="k") -> str:
+    md_with_proto_keys = add_proto_keys_to_md(md_src, prefix=key_prefix)
+    proto_key=f"::{key_prefix}"
+    md_src3 = KeyAdder(md_src).replace_proto_key_by_numbered_key(proto_key, prefix)
+
+
+def convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
+    html_res = get_html_with_segments(md_with_protokeys, proto_key=f"::{key_prefix}")
+    return md_with_protokeys, html_res
 
 
 def main():
