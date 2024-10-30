@@ -250,30 +250,51 @@ class SpanAdder:
         return txt.replace(self.encoded_left_delimiter, "<").replace(self.encoded_right_delimiter, ">")
 
 
-def get_html_with_segments(md_src, proto_key: str, prefix="a"):
-    """
-    Replace proto_keys by real numbered keys
-    Convert markdown to html
-    insert spans related to keys
-    """
+class MDProcessor:
 
-    md_src3 = KeyAdder(md_src).replace_proto_key_by_numbered_key(proto_key, prefix)
-    md = markdown.Markdown()
-    html_src = md.convert(md_src3)
-    sa = SpanAdder(html_src, key_prefix=f"::{prefix}")
-    res = sa.add_spans_for_keys()
-    return res
+    def __init__(self, plain_md: str, proto_key_prefix="k", key_prefix="a"):
+        self.plain_md_src = plain_md
 
+        self.proto_key_prefix = proto_key_prefix
+        self.key_prefix = key_prefix
 
-def convert_plain_md_to_md_with_keys(md_src: str, key_prefix="k") -> str:
-    md_with_proto_keys = add_proto_keys_to_md(md_src, prefix=key_prefix)
-    proto_key=f"::{key_prefix}"
-    md_src3 = KeyAdder(md_src).replace_proto_key_by_numbered_key(proto_key, prefix)
+        self.md_with_proto_keys: str = None
+        self.md_with_real_keys: str = None
+        self.segmented_html: str = None
+
+    def convert(self):
+        self.convert_plain_md_to_md_with_proto_keys()
+        self.convert_md_with_proto_keys_to_md_with_real_keys()
+        self.get_html_with_segments()
+
+    def convert_plain_md_to_md_with_proto_keys(self) -> str:
+        self.md_with_proto_keys = add_proto_keys_to_md(self.plain_md_src, prefix=self.proto_key_prefix)
+
+    def convert_md_with_proto_keys_to_md_with_real_keys(self) -> str:
+        proto_key=f"::{self.proto_key_prefix}"
+        self.md_with_real_keys = KeyAdder(self.md_with_proto_keys).replace_proto_key_by_numbered_key(proto_key, self.key_prefix)
+        return self.md_with_real_keys
+
+    def get_html_with_segments(self):
+        """
+        Convert markdown to html
+        insert spans related to keys
+        """
+
+        md = markdown.Markdown()
+        html_src = md.convert(self.md_with_real_keys)
+        sa = SpanAdder(html_src, key_prefix=f"::{self.key_prefix}")
+        res = sa.add_spans_for_keys()
+
+        self.segmented_html = res
+        return self.segmented_html
 
 
 def convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
-    html_res = get_html_with_segments(md_with_protokeys, proto_key=f"::{key_prefix}")
-    return md_with_protokeys, html_res
+    mdp = MDProcessor(md_src)
+    mdp.convert()
+
+    return mdp.md_with_real_keys, mdp.segmented_html
 
 
 def main():
