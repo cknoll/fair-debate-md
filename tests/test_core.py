@@ -160,10 +160,10 @@ class TestCases1(unittest.TestCase):
         self.assertEqual(res, res_expected)
 
         # test full file
-        _, res = fdmd.convert_plain_md_to_segmented_html(self.txt1)
+        md_with_real_keys, res = fdmd.convert_plain_md_to_segmented_html(self.txt1)
 
         if 0:
-            self.save_debug_result(res, suffix=".html")
+            self.save_debug_result(md_with_real_keys, suffix="_rk.md")
 
         expected_result_fpath = pjoin(TESTDATA_DIR, "txt1_segmented_html.html")
         with open(expected_result_fpath, "r") as fp:

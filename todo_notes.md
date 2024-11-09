@@ -1,4 +1,5 @@
 - [x] improve markdownify of nested em/strong
-- [ ] make spanAdder work
-- [ ] add mouseover effect
+- [x] make spanAdder work
+- [x] add mouseover effect
 - [ ] add menu
+- [ ] load answer tree structure from directory structure
