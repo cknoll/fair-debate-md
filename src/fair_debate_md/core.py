@@ -279,6 +279,14 @@ class MDProcessor:
         self.md_with_real_keys = KeyAdder(self.md_with_proto_keys).replace_proto_key_by_numbered_key(proto_key, self.key_prefix)
         return self.md_with_real_keys
 
+    def get_keys(self) -> list[str]:
+        assert self.md_with_real_keys
+
+        cre = re.compile(r"::XXX\d+".replace("XXX", self.key_prefix))
+        # matches = list(cre.finditer(self.md_with_real_keys))
+        matches = list(cre.findall(self.md_with_real_keys))
+        return matches
+
     def get_html_with_segments(self):
         """
         Convert markdown to html
@@ -368,10 +376,32 @@ class DebateDirLoader:
             # TODO: necessary?
             self.mdp_list.append(mdp)
 
+    def add_html(self, parent_mdp: MDProcessor):
+
+        # TODO: should be dynamic
+        next_turn_key = "b"
+        key_str_list = parent_mdp.get_keys()
+
+        for key_str in key_str_list:
+            key = key_str.lstrip("::")
+
+            answer_key = f"{key}{next_turn_key}"
+            if answer_key in self.tree:
+                self._add_answer_html(parent_mdp, answer_key)
+
+
+    def _add_answer_html(self, parent_mdp: MDProcessor, answer_key: str):
+
+        # TODO: Use bs24 to insert html of child into parent
+        # IPS()
+        print(answer_key)
+
 
 def load_dir(dirpath):
     ddl = DebateDirLoader(dirpath=dirpath)
     ddl.load_dir()
+    root_mdp = ddl.tree["a"]
+    ddl.add_html(parent_mdp=root_mdp)
     return ddl
 
 
