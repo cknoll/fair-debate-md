@@ -13,6 +13,7 @@ pjoin = os.path.join
 TESTDATA_DIR = pjoin(os.path.abspath(os.path.dirname(__file__)), "testdata")
 FIXTURE_DIR = fdmd.fixtures.path
 TESTDATA1 = pjoin(FIXTURE_DIR, "txt1.md")
+TEST_DEBATE_DIR1 = pjoin(FIXTURE_DIR, "debate1")
 
 
 class TestCases1(unittest.TestCase):
@@ -171,7 +172,8 @@ class TestCases1(unittest.TestCase):
 
         self.assertEqual(res, res_expected)
 
-
+    def test_040__load_debate_dir(self):
+        ddl = fdmd.load_dir(TEST_DEBATE_DIR1)
 
 
 def remove_trailing_spaces(txt):

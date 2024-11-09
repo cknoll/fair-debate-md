@@ -1,10 +1,14 @@
 import re
+import os
+import glob
 import types
 import markdown
 import markdownify as mdf
 from bs4 import BeautifulSoup, element
 
 from ipydex import IPS
+
+pjoin  = os.path.join
 
 
 class ProtoKeyAdder:
@@ -252,14 +256,14 @@ class SpanAdder:
 
 class MDProcessor:
 
-    def __init__(self, plain_md: str, proto_key_prefix="k", key_prefix="a"):
+    def __init__(self, plain_md: str = None, proto_key_prefix="k", key_prefix="a", md_with_real_keys: str = None):
         self.plain_md_src = plain_md
 
         self.proto_key_prefix = proto_key_prefix
         self.key_prefix = key_prefix
 
         self.md_with_proto_keys: str = None
-        self.md_with_real_keys: str = None
+        self.md_with_real_keys = md_with_real_keys
         self.segmented_html: str = None
 
     def convert(self):
@@ -295,6 +299,84 @@ def convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
     mdp.convert()
 
     return mdp.md_with_real_keys, mdp.segmented_html
+
+
+
+key_regex = re.compile(r"[ab]\d+")
+
+
+def decompose_key(key):
+    """
+    :param key:     str like "a4b12a2b"
+    """
+    # to match the parts with an easy regex we append a digit and remove it later
+    parts = key_regex.findall(f"{key}0")
+
+    if parts:
+        # remove the trailing 0 from last part
+        assert parts[-1][-1] == "0"
+        parts[-1] = parts[-1][:-1]
+
+    return parts
+
+
+def is_valid_key(key):
+    parts = decompose_key(key)
+    return "".join(parts) == key
+
+
+def get_base_name(fpath):
+    fname = os.path.split(fpath)[1]
+    base_name = os.path.splitext(fname)[0]
+    return base_name
+
+
+def is_valid_fpath(fpath):
+    return is_valid_key(get_base_name(fpath))
+
+
+class DebateDirLoader:
+
+    def __init__(self, dirpath):
+        self.dirpath=dirpath
+        self.dir_a = pjoin(self.dirpath, "a")
+        self.dir_b = pjoin(self.dirpath, "b")
+        self.root_file = pjoin(self.dir_a, "a.md")
+
+        self.mdp_list: list[MDProcessor] = []
+
+        self.tree: dict[str, MDProcessor] = {}
+
+    def load_dir(self):
+
+        a_files = glob.glob(pjoin(self.dir_a, "*.md"))
+        b_files = glob.glob(pjoin(self.dir_b, "*.md"))
+
+        all_files = [fpath for fpath in a_files + b_files if is_valid_fpath(fpath)]
+        all_files.sort()
+
+        self.mdp_list = []
+
+        for fpath in all_files:
+            base_name = get_base_name(fpath)
+
+            with open(fpath, "r") as fp:
+                md_with_real_keys = fp.read()
+            mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys)
+            self.tree[base_name] = mdp
+
+            # TODO: necessary?
+            self.mdp_list.append(mdp)
+
+
+def load_dir(dirpath):
+    ddl = DebateDirLoader(dirpath=dirpath)
+    ddl.load_dir()
+    return ddl
+
+
+
+
 
 
 def main():
