@@ -188,9 +188,34 @@ class SpanAdder:
 
     def add_answers(self, html_src: str):
         """
+        Add div tags for answers (if they exist).
+
         :param html_src:    html source without answer divs
         """
-        return html_src
+
+        if not self.answer_childs:
+            return html_src
+
+        soup = BeautifulSoup(html_src, "html.parser")
+        all_segments = soup.find_all("span", class_="segment")
+        segment_dict: dict[str, element.Tag] = dict([(s.attrs["id"], s) for s in all_segments])
+
+        level = None
+
+        for key, mdp in self.answer_childs.items():
+            if level is None:
+                level = len(decompose_key(key))
+            answer_content = mdp.get_html_with_segments()
+            answer_soup = BeautifulSoup(answer_content, "html.parser")
+            answer_div = soup.new_tag("div")
+            answer_div.extend(answer_soup)
+            answer_div.attrs["class"] = f"answer level{level}"
+            answer_div.attrs["id"] = f"answer_{mdp.key_prefix}"
+            referenced_segment = segment_dict[key]
+            referenced_segment.insert_after(answer_div)
+
+        # convert to flat string
+        return str(soup)
 
     def is_new_paragraph_tag(self, elt: element.PageElement):
         return getattr(elt, "name", None) in ("ul", "ol", "p")
@@ -391,8 +416,6 @@ class DebateDirLoader:
 
     def add_html(self, parent_mdp: MDProcessor):
 
-        print(f"processing mdp {parent_mdp.key_prefix}")
-
         # given a key like a1b3a4 determine with which letter the next key-part starts
         key_parts = decompose_key(parent_mdp.key_prefix)
         last_part_letter = key_parts[-1][0]
@@ -418,6 +441,7 @@ def load_dir(dirpath):
     ddl.load_dir()
     root_mdp = ddl.tree["a"]
     ddl.add_html(parent_mdp=root_mdp)
+    final_html = root_mdp.get_html_with_segments()
     return ddl
 
 
