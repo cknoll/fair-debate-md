@@ -441,11 +441,10 @@ def load_dir(dirpath):
     ddl = DebateDirLoader(dirpath=dirpath)
     ddl.load_dir()
     ddl.generate_html_with_answers()
+
+    # ddl.root_mdp.answer_childs.clear()
+    # ddl.final_html = ddl.root_mdp.get_html_with_segments()
     return ddl
-
-
-
-
 
 
 def main():
