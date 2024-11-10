@@ -155,7 +155,7 @@ class KeyAdder:
 
 
 class SpanAdder:
-    def __init__(self, html_src: str, key_prefix: str):
+    def __init__(self, html_src: str, key_prefix: str, answer_childs: dict[str, "MDProcessor"] = None):
         self.html_src = html_src
         self.key_prefix = key_prefix
         self.soup = BeautifulSoup(html_src, "html.parser")
@@ -163,6 +163,11 @@ class SpanAdder:
         self.span_tag_is_open = False
         self.encoded_left_delimiter = "_[_"
         self.encoded_right_delimiter = "_]_"
+
+        # this dict serves to add divs after the spans which contain answers
+        if answer_childs is None:
+            answer_childs = {}
+        self.answer_childs = answer_childs
 
         self.active_tag_stack = []
 
@@ -178,7 +183,14 @@ class SpanAdder:
             res = str(root)
 
         res2 = self.insert_encoded_delimiters(res)
-        return res2
+        res3 = self.add_answers(res2)
+        return res3
+
+    def add_answers(self, html_src: str):
+        """
+        :param html_src:    html source without answer divs
+        """
+        return html_src
 
     def is_new_paragraph_tag(self, elt: element.PageElement):
         return getattr(elt, "name", None) in ("ul", "ol", "p")
@@ -265,6 +277,7 @@ class MDProcessor:
         self.md_with_proto_keys: str = None
         self.md_with_real_keys = md_with_real_keys
         self.segmented_html: str = None
+        self.answer_childs: dict[str, MDProcessor] = {}
 
     def convert(self):
         self.convert_plain_md_to_md_with_proto_keys()
@@ -295,7 +308,7 @@ class MDProcessor:
 
         md = markdown.Markdown()
         html_src = md.convert(self.md_with_real_keys)
-        sa = SpanAdder(html_src, key_prefix=f"::{self.key_prefix}")
+        sa = SpanAdder(html_src, key_prefix=f"::{self.key_prefix}", answer_childs=self.answer_childs)
         res = sa.add_spans_for_keys()
 
         self.segmented_html = res
@@ -378,23 +391,26 @@ class DebateDirLoader:
 
     def add_html(self, parent_mdp: MDProcessor):
 
-        # TODO: should be dynamic
-        next_turn_key = "b"
+        print(f"processing mdp {parent_mdp.key_prefix}")
+
+        # given a key like a1b3a4 determine with which letter the next key-part starts
+        key_parts = decompose_key(parent_mdp.key_prefix)
+        last_part_letter = key_parts[-1][0]
+        assert last_part_letter in ("a", "b")
+        next_turn_key = {"a": "b", "b": "a"}[last_part_letter]
+
+        # get all keys which are used in this statement block (without answers)
         key_str_list = parent_mdp.get_keys()
 
+        # recursively process elements
         for key_str in key_str_list:
             key = key_str.lstrip("::")
 
             answer_key = f"{key}{next_turn_key}"
             if answer_key in self.tree:
-                self._add_answer_html(parent_mdp, answer_key)
-
-
-    def _add_answer_html(self, parent_mdp: MDProcessor, answer_key: str):
-
-        # TODO: Use bs24 to insert html of child into parent
-        # IPS()
-        print(answer_key)
+                child_mdp = self.tree.get(answer_key)
+                self.add_html(parent_mdp=child_mdp)
+                parent_mdp.answer_childs[key] = child_mdp
 
 
 def load_dir(dirpath):
