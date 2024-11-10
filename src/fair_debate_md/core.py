@@ -389,9 +389,9 @@ class DebateDirLoader:
         self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
 
-        self.mdp_list: list[MDProcessor] = []
-
+        self.root_mdp: MDProcessor = None
         self.tree: dict[str, MDProcessor] = {}
+        self.final_html: str = None
 
     def load_dir(self):
 
@@ -401,8 +401,6 @@ class DebateDirLoader:
         all_files = [fpath for fpath in a_files + b_files if is_valid_fpath(fpath)]
         all_files.sort()
 
-        self.mdp_list = []
-
         for fpath in all_files:
             base_name = get_base_name(fpath)
 
@@ -411,10 +409,11 @@ class DebateDirLoader:
             mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys)
             self.tree[base_name] = mdp
 
-            # TODO: necessary?
-            self.mdp_list.append(mdp)
+        self.root_mdp = self.tree["a"]
 
-    def add_html(self, parent_mdp: MDProcessor):
+    def generate_html_with_answers(self, parent_mdp: MDProcessor = None):
+        if parent_mdp is None:
+            parent_mdp = self.root_mdp
 
         # given a key like a1b3a4 determine with which letter the next key-part starts
         key_parts = decompose_key(parent_mdp.key_prefix)
@@ -432,16 +431,16 @@ class DebateDirLoader:
             answer_key = f"{key}{next_turn_key}"
             if answer_key in self.tree:
                 child_mdp = self.tree.get(answer_key)
-                self.add_html(parent_mdp=child_mdp)
+                self.generate_html_with_answers(parent_mdp=child_mdp)
                 parent_mdp.answer_childs[key] = child_mdp
+
+        self.final_html = self.root_mdp.get_html_with_segments()
 
 
 def load_dir(dirpath):
     ddl = DebateDirLoader(dirpath=dirpath)
     ddl.load_dir()
-    root_mdp = ddl.tree["a"]
-    ddl.add_html(parent_mdp=root_mdp)
-    final_html = root_mdp.get_html_with_segments()
+    ddl.generate_html_with_answers()
     return ddl
 
 

@@ -174,6 +174,7 @@ class TestCases1(unittest.TestCase):
 
     def test_040__load_debate_dir(self):
         ddl = fdmd.load_dir(TEST_DEBATE_DIR1)
+        self.assertIsNotNone(ddl.final_html)
 
 
 def remove_trailing_spaces(txt):
