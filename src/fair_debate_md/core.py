@@ -186,11 +186,11 @@ class SpanAdder:
         res3 = self.add_answers(res2)
         return res3
 
-    def add_answers(self, html_src: str):
+    def add_answers(self, html_src: str) -> str:
         """
         Add div tags for answers (if they exist).
 
-        :param html_src:    html source without answer divs
+        :param html_src:    html source with segment-spans but without answer-divs
         """
 
         if not self.answer_childs:
@@ -207,15 +207,39 @@ class SpanAdder:
                 level = len(decompose_key(key))
             answer_content = mdp.get_html_with_segments()
             answer_soup = BeautifulSoup(answer_content, "html.parser")
-            answer_div = soup.new_tag("div")
+            self._replace_p_with_div(answer_soup, level)
+            answer_div = soup.new_tag(
+                "div",
+                attrs={"class": f"answer level{level}", "id": f"answer_{mdp.key_prefix}"}
+            )
             answer_div.extend(answer_soup)
-            answer_div.attrs["class"] = f"answer level{level}"
-            answer_div.attrs["id"] = f"answer_{mdp.key_prefix}"
             referenced_segment = segment_dict[key]
             referenced_segment.insert_after(answer_div)
 
+        # replace the p-tags in the original (outermost) text
+        if level == 1:
+            self._replace_p_with_div(soup, level=0)
+
         # convert to flat string
-        return str(soup)
+        return str(soup.prettify())
+
+
+    def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
+        """
+        It seems like nested p tags get "corrected" by some downstream processing.
+        To prevent this, we convert p tags into special div-tags
+        """
+        p_tags: list[element.Tag] = part_soup.find_all('p')
+        for p_tag in p_tags:
+            new_div = part_soup.new_tag('div', attrs={"class": f"p_level{level}"})
+
+            saved_contents = list(p_tag.contents)
+
+            # Copy the contents of the <p> tag to the new <div> tag
+            new_div.extend(saved_contents)
+
+            # Replace the <p> tag with the new <div> tag
+            p_tag.replace_with(new_div)
 
     def is_new_paragraph_tag(self, elt: element.PageElement):
         return getattr(elt, "name", None) in ("ul", "ol", "p")
@@ -325,7 +349,7 @@ class MDProcessor:
         matches = list(cre.findall(self.md_with_real_keys))
         return matches
 
-    def get_html_with_segments(self):
+    def get_html_with_segments(self) -> str:
         """
         Convert markdown to html
         insert spans related to keys
@@ -334,7 +358,7 @@ class MDProcessor:
         md = markdown.Markdown()
         html_src = md.convert(self.md_with_real_keys)
         sa = SpanAdder(html_src, key_prefix=f"::{self.key_prefix}", answer_childs=self.answer_childs)
-        res = sa.add_spans_for_keys()
+        res: str = sa.add_spans_for_keys()
 
         self.segmented_html = res
         return self.segmented_html
@@ -431,10 +455,16 @@ class DebateDirLoader:
             answer_key = f"{key}{next_turn_key}"
             if answer_key in self.tree:
                 child_mdp = self.tree.get(answer_key)
+
+                # this recursively creates the .segmented_html
+                # attributes of the child_mdp objects
                 self.generate_html_with_answers(parent_mdp=child_mdp)
                 parent_mdp.answer_childs[key] = child_mdp
 
-        self.final_html = self.root_mdp.get_html_with_segments()
+        # this calls SpanAdder.add_spans_for_keys()
+        res_segmented_html: str = parent_mdp.get_html_with_segments()
+        if parent_mdp == self.root_mdp:
+            self.final_html = res_segmented_html
 
 
 def load_dir(dirpath):
