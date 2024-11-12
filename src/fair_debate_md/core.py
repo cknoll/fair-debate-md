@@ -439,11 +439,7 @@ class DebateDirLoader:
         if parent_mdp is None:
             parent_mdp = self.root_mdp
 
-        # given a key like a1b3a4 determine with which letter the next key-part starts
-        key_parts = decompose_key(parent_mdp.key_prefix)
-        last_part_letter = key_parts[-1][0]
-        assert last_part_letter in ("a", "b")
-        next_turn_key = {"a": "b", "b": "a"}[last_part_letter]
+        next_turn_key = get_next_turn_key(parent_mdp.key_prefix)
 
         # get all keys which are used in this statement block (without answers)
         key_str_list = parent_mdp.get_keys()
@@ -465,6 +461,26 @@ class DebateDirLoader:
         res_segmented_html: str = parent_mdp.get_html_with_segments()
         if parent_mdp == self.root_mdp:
             self.final_html = res_segmented_html
+
+
+def get_answer_contribution_key(segment_key):
+    """
+    For a keys like "a5", "a304b1" generate "a3b" or "a304b1a"
+    """
+    next_turn_key = get_next_turn_key(segment_key)
+    return f"{segment_key}{next_turn_key}"
+
+
+def get_next_turn_key(segment_key):
+    """
+    For a keys like "a5", "a304b1" generate "b" or "a"
+    (opposite of the letter of the last part)
+    """
+    key_parts = decompose_key(segment_key)
+    last_part_letter = key_parts[-1][0]
+    assert last_part_letter in ("a", "b")
+    next_turn_key = {"a": "b", "b": "a"}[last_part_letter]
+    return next_turn_key
 
 
 def load_dir(dirpath):
