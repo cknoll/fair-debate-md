@@ -1,5 +1,2 @@
-- [x] improve markdownify of nested em/strong
-- [x] make spanAdder work
-- [x] add mouseover effect
-- [ ] add menu
-- [ ] load answer tree structure from directory structure
+- [] load metadata from `metadata.toml`
+- [] store debate_key in final-html

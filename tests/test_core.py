@@ -1,6 +1,8 @@
 import unittest
 import os
 from textwrap import dedent as twdd
+from bs4 import BeautifulSoup
+
 from ipydex import IPS, activate_ips_on_exception
 
 import fair_debate_md as fdmd
@@ -59,7 +61,7 @@ class TestCases1(unittest.TestCase):
     def test_021__add_spans(self):
         tag1 = "<h1>::a1 Ipsum non ut est.</h1>"
 
-        sa = fdmd.SpanAdder(tag1, key_prefix=self.key_prefix)
+        sa = fdmd.SpanAdder(fdmd.MDProcessor(), tag1, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
         res_expected = '<h1><span class="segment" id="a1"> Ipsum non ut est.</span></h1>'
         self.assertEqual(res, res_expected)
@@ -70,7 +72,7 @@ class TestCases1(unittest.TestCase):
             " ::a3 <strong>Adipisci sit adipisci non est</strong>.</p>"
         )
 
-        sa = fdmd.SpanAdder(tag2, key_prefix=self.key_prefix)
+        sa = fdmd.SpanAdder(fdmd.MDProcessor(), tag2, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
 
         res_expected = (
@@ -89,7 +91,7 @@ class TestCases1(unittest.TestCase):
             " ::a5 Porro velit non consectetur numquam velit.</p>"
         )
 
-        sa = fdmd.SpanAdder(tag3, key_prefix=self.key_prefix)
+        sa = fdmd.SpanAdder(fdmd.MDProcessor(), tag3, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
         res_expected = (
             '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
@@ -145,7 +147,7 @@ class TestCases1(unittest.TestCase):
         </ul>
         """)
 
-        sa = fdmd.SpanAdder(html_src, key_prefix=self.key_prefix)
+        sa = fdmd.SpanAdder(fdmd.MDProcessor(), html_src, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
         self.assertEqual(res, res_expected)
 
@@ -158,13 +160,14 @@ class TestCases1(unittest.TestCase):
         # test simple string
         _, res = fdmd.convert_plain_md_to_segmented_html("foo bar")
         res_expected = '<p><span class="segment" id="a1"> foo bar</span></p>'
+        res_expected = str(BeautifulSoup(res_expected, "html.parser").prettify())
         self.assertEqual(res, res_expected)
 
         # test full file
         md_with_real_keys, res = fdmd.convert_plain_md_to_segmented_html(self.txt1)
 
         if 0:
-            self.save_debug_result(md_with_real_keys, suffix="_rk.md")
+            self.save_debug_result(res, suffix="_pretty.md")
 
         expected_result_fpath = pjoin(TESTDATA_DIR, "txt1_segmented_html.html")
         with open(expected_result_fpath, "r") as fp:

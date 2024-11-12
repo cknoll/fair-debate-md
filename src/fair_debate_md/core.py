@@ -10,6 +10,8 @@ from ipydex import IPS
 
 pjoin  = os.path.join
 
+TEST_DEBATE_KEY = "d1-lorem_ipsum"
+
 
 class ProtoKeyAdder:
     def __init__(self, html_src: str, prefix: str):
@@ -155,7 +157,8 @@ class KeyAdder:
 
 
 class SpanAdder:
-    def __init__(self, html_src: str, key_prefix: str, answer_childs: dict[str, "MDProcessor"] = None):
+    def __init__(self, parent_mdp, html_src: str, key_prefix: str, answer_childs: dict[str, "MDProcessor"] = None):
+        self.parent_mdp: MDProcessor = parent_mdp
         self.html_src = html_src
         self.key_prefix = key_prefix
         self.soup = BeautifulSoup(html_src, "html.parser")
@@ -177,27 +180,36 @@ class SpanAdder:
     def add_spans_for_keys(self, prettify: bool = False) -> str:
         root = self.soup
         self.process_children(root=root, level=0)
-        if prettify:
-            res = str(root.prettify())
-        else:
-            res = str(root)
 
+        # we have to convert the soup to a flat string because of our handling of encoded delimiters
+        res = str(root)
         res2 = self.insert_encoded_delimiters(res)
-        res3 = self.add_answers(res2)
+
+        self.add_answers(res2)
+        res3 = self.convert_soup_to_final_html(prettify=prettify)
         return res3
 
-    def add_answers(self, html_src: str) -> str:
+    def convert_soup_to_final_html(self, prettify:bool = False):
+        # convert to flat string
+        if prettify:
+            return str(self.soup.prettify())
+        else:
+            return str(self.soup)
+
+    def add_answers(self, html_src: str) -> None:
         """
         Add div tags for answers (if they exist).
 
         :param html_src:    html source with segment-spans but without answer-divs
         """
 
-        if not self.answer_childs:
-            return html_src
+        # TODO: probably we could use the existing soup here?
+        self.soup = BeautifulSoup(html_src, "html.parser")
 
-        soup = BeautifulSoup(html_src, "html.parser")
-        all_segments = soup.find_all("span", class_="segment")
+        if not self.answer_childs:
+            return
+
+        all_segments = self.soup.find_all("span", class_="segment")
         segment_dict: dict[str, element.Tag] = dict([(s.attrs["id"], s) for s in all_segments])
 
         level = None
@@ -208,7 +220,7 @@ class SpanAdder:
             answer_content = mdp.get_html_with_segments()
             answer_soup = BeautifulSoup(answer_content, "html.parser")
             self._replace_p_with_div(answer_soup, level)
-            answer_div = soup.new_tag(
+            answer_div = self.soup.new_tag(
                 "div",
                 attrs={"class": f"answer level{level}", "id": f"answer_{mdp.key_prefix}"}
             )
@@ -218,10 +230,7 @@ class SpanAdder:
 
         # replace the p-tags in the original (outermost) text
         if level == 1:
-            self._replace_p_with_div(soup, level=0)
-
-        # convert to flat string
-        return str(soup.prettify())
+            self._replace_p_with_div(self.soup, level=0)
 
 
     def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
@@ -327,6 +336,7 @@ class MDProcessor:
         self.md_with_real_keys = md_with_real_keys
         self.segmented_html: str = None
         self.answer_childs: dict[str, MDProcessor] = {}
+        self.is_root_mdp: bool = False
 
     def convert(self):
         self.convert_plain_md_to_md_with_proto_keys()
@@ -357,8 +367,10 @@ class MDProcessor:
 
         md = markdown.Markdown()
         html_src = md.convert(self.md_with_real_keys)
-        sa = SpanAdder(html_src, key_prefix=f"::{self.key_prefix}", answer_childs=self.answer_childs)
-        res: str = sa.add_spans_for_keys()
+        sa = SpanAdder(
+            parent_mdp=self, html_src=html_src, key_prefix=f"::{self.key_prefix}", answer_childs=self.answer_childs
+        )
+        res: str = sa.add_spans_for_keys(prettify=True)
 
         self.segmented_html = res
         return self.segmented_html
@@ -417,6 +429,9 @@ class DebateDirLoader:
         self.tree: dict[str, MDProcessor] = {}
         self.final_html: str = None
 
+        # TODO: read this from metadata.toml
+        self.debate_key: str = TEST_DEBATE_KEY
+
     def load_dir(self):
 
         a_files = glob.glob(pjoin(self.dir_a, "*.md"))
@@ -434,6 +449,7 @@ class DebateDirLoader:
             self.tree[base_name] = mdp
 
         self.root_mdp = self.tree["a"]
+        self.root_mdp.is_root_mdp = True
 
     def generate_html_with_answers(self, parent_mdp: MDProcessor = None):
         if parent_mdp is None:
