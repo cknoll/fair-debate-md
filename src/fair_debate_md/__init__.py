@@ -9,6 +9,8 @@ from .release import __version__
 
 try:
     from . import core
+    from . import utils
+    from . import repo_handling
     from . import fixtures
     from .core import *
 except ImportError:

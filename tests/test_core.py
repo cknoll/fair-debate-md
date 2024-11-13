@@ -1,5 +1,6 @@
 import unittest
 import os
+import shutil
 from textwrap import dedent as twdd
 from bs4 import BeautifulSoup
 
@@ -17,13 +18,25 @@ FIXTURE_DIR = fdmd.fixtures.path
 TESTDATA1 = pjoin(FIXTURE_DIR, "txt1.md")
 TEST_DEBATE_DIR1 = pjoin(FIXTURE_DIR, "debate1")
 
+TEST_REPO1_DIR = pjoin(FIXTURE_DIR, "repos", "d1-lorem_ipsum")
+
+
+
 
 class TestCases1(unittest.TestCase):
     def setUp(self):
         self.key_prefix = "::a"
+        self.dirs_to_remove = []
         with open(TESTDATA1) as fp:
             self.txt1 = fp.read()
         return
+
+    def tearDown(self) -> None:
+        for dirpath in self.dirs_to_remove:
+            dirpath = os.path.abspath(dirpath)
+            assert "testdata" in dirpath or "fixtures" in dirpath
+            fdmd.utils.tolerant_rmtree(dirpath)
+        return super().tearDown()
 
     def save_debug_result(self, result, suffix=".md"):
         # useful if result changes or for debugging
@@ -181,6 +194,33 @@ class TestCases1(unittest.TestCase):
         soup = BeautifulSoup(ddl.final_html, "html.parser")
         wrapper_div = soup.find(id="debate_wrapper")
         self.assertGreater(len(wrapper_div.attrs["data-debate-key"]), 0)
+
+    def test_050__rollout_patches1(self):
+        patch_dir = pjoin(TEST_REPO1_DIR, "patches_01")
+        test_repo1_workdir = f"{TEST_REPO1_DIR}_workdir"
+        self.dirs_to_remove.append(test_repo1_workdir)
+        fdmd.repo_handling.rollout_patches(repo_dir=test_repo1_workdir, patch_dir=patch_dir)
+
+        expected_result = twdd("""
+        .
+        ├── a
+        │   ├── a2b1a.md
+        │   └── a.md
+        └── b
+            ├── a2b1a3b.md
+            ├── a2b.md
+            ├── a4b.md
+            ├── a6b.md
+            └── a7b.md
+
+        3 directories, 7 files
+        """).lstrip("\n")
+
+        # generate tree output (requires probably unix)
+        res = fdmd.utils.get_cmd_output(
+            f"tree {test_repo1_workdir}"
+        ).replace(test_repo1_workdir, ".").replace("\xa0", " ")  # replace strange space
+        self.assertEqual(res, expected_result)
 
 
 def remove_trailing_spaces(txt):
