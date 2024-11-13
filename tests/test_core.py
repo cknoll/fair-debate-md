@@ -178,7 +178,9 @@ class TestCases1(unittest.TestCase):
     def test_040__load_debate_dir(self):
         ddl = fdmd.load_dir(TEST_DEBATE_DIR1)
         self.assertIsNotNone(ddl.final_html)
-        # IPS()
+        soup = BeautifulSoup(ddl.final_html, "html.parser")
+        wrapper_div = soup.find(id="debate_wrapper")
+        self.assertGreater(len(wrapper_div.attrs["data-debate-key"]), 0)
 
 
 def remove_trailing_spaces(txt):

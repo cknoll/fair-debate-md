@@ -189,7 +189,14 @@ class SpanAdder:
         res3 = self.convert_soup_to_final_html(prettify=prettify)
         return res3
 
-    def convert_soup_to_final_html(self, prettify:bool = False):
+    def convert_soup_to_final_html(self, prettify: bool = False):
+
+        if self.parent_mdp.is_root_mdp:
+            # wrap with div to add metadata (debate-key)
+            wrapper_tag = self.soup.new_tag("div", id="debate_wrapper")
+            wrapper_tag.attrs["data-debate-key"] = self.parent_mdp.debate_key
+            wrapper_tag.extend(self.soup)
+            self.soup = wrapper_tag
         # convert to flat string
         if prettify:
             return str(self.soup.prettify())
@@ -337,6 +344,7 @@ class MDProcessor:
         self.segmented_html: str = None
         self.answer_childs: dict[str, MDProcessor] = {}
         self.is_root_mdp: bool = False
+        self.debate_key: str = None
 
     def convert(self):
         self.convert_plain_md_to_md_with_proto_keys()
@@ -450,6 +458,7 @@ class DebateDirLoader:
 
         self.root_mdp = self.tree["a"]
         self.root_mdp.is_root_mdp = True
+        self.root_mdp.debate_key = self.debate_key
 
     def generate_html_with_answers(self, parent_mdp: MDProcessor = None):
         if parent_mdp is None:
