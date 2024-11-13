@@ -425,6 +425,15 @@ def is_valid_fpath(fpath):
     return is_valid_key(get_base_name(fpath))
 
 
+class DBContribution:
+    """
+    Represents a contribution wich is not yet stored in a file but comes from the database
+    of the web app.
+    """
+    def __init__(self, ctb_key: str, body: str):
+        self.ctb_key = ctb_key
+        self.body = body
+
 class DebateDirLoader:
 
     def __init__(self, dirpath):
@@ -440,7 +449,12 @@ class DebateDirLoader:
         # TODO: read this from metadata.toml
         self.debate_key: str = TEST_DEBATE_KEY
 
-    def load_dir(self):
+    def load_dir(self, ctb_list: list[DBContribution] = None):
+        """
+
+        :param ctb_list:    list of contributions from the database (not repo)
+                            background: temporary contributions, not yet committed
+        """
 
         a_files = glob.glob(pjoin(self.dir_a, "*.md"))
         b_files = glob.glob(pjoin(self.dir_b, "*.md"))
@@ -456,9 +470,24 @@ class DebateDirLoader:
             mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys)
             self.tree[base_name] = mdp
 
+        self.process_ctb_list(ctb_list)
+
         self.root_mdp = self.tree["a"]
         self.root_mdp.is_root_mdp = True
         self.root_mdp.debate_key = self.debate_key
+
+    def process_ctb_list(self, ctb_list: list[DBContribution]):
+        """
+        Insert those contents which come from the database of the web app (not from repo)
+        """
+        if ctb_list is None:
+            return
+
+        for ctb in ctb_list:
+            mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
+            mdp.convert_plain_md_to_md_with_proto_keys()
+            mdp.convert_md_with_proto_keys_to_md_with_real_keys()
+            self.tree[ctb.ctb_key] = mdp
 
     def generate_html_with_answers(self, parent_mdp: MDProcessor = None):
         if parent_mdp is None:
@@ -508,9 +537,9 @@ def get_next_turn_key(segment_key):
     return next_turn_key
 
 
-def load_dir(dirpath):
+def load_dir(dirpath, ctb_list: list[DBContribution] = None):
     ddl = DebateDirLoader(dirpath=dirpath)
-    ddl.load_dir()
+    ddl.load_dir(ctb_list=ctb_list)
     ddl.generate_html_with_answers()
 
     # ddl.root_mdp.answer_childs.clear()
