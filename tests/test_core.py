@@ -1,7 +1,7 @@
 import unittest
 import os
-import shutil
 from textwrap import dedent as twdd
+import tempfile
 from bs4 import BeautifulSoup
 
 from ipydex import IPS, activate_ips_on_exception
@@ -18,9 +18,23 @@ FIXTURE_DIR = fdmd.fixtures.path
 TESTDATA1 = pjoin(FIXTURE_DIR, "txt1.md")
 TEST_DEBATE_DIR1 = pjoin(FIXTURE_DIR, "debate1")
 
-TEST_REPO1_DIR = pjoin(FIXTURE_DIR, "repos", "d1-lorem_ipsum")
+TEST_REPO1_DIR = fdmd.fixtures.TEST_REPO1_DIR
 
 
+TEST_REPO1_EXPECTED_TREE = twdd("""
+    .
+    ├── a
+    │   ├── a2b1a.md
+    │   └── a.md
+    └── b
+        ├── a2b1a3b.md
+        ├── a2b.md
+        ├── a4b.md
+        ├── a6b.md
+        └── a7b.md
+
+    3 directories, 7 files
+    """).lstrip("\n")
 
 
 class TestCases1(unittest.TestCase):
@@ -34,7 +48,8 @@ class TestCases1(unittest.TestCase):
     def tearDown(self) -> None:
         for dirpath in self.dirs_to_remove:
             dirpath = os.path.abspath(dirpath)
-            assert "testdata" in dirpath or "fixtures" in dirpath
+            # try to prevent the accidental deletion of important dir
+            assert "testdata" in dirpath or "fixtures" in dirpath or "/tmp" in dirpath
             fdmd.utils.tolerant_rmtree(dirpath)
         return super().tearDown()
 
@@ -201,26 +216,31 @@ class TestCases1(unittest.TestCase):
         self.dirs_to_remove.append(test_repo1_workdir)
         fdmd.repo_handling.rollout_patches(repo_dir=test_repo1_workdir, patch_dir=patch_dir)
 
-        expected_result = twdd("""
-        .
-        ├── a
-        │   ├── a2b1a.md
-        │   └── a.md
-        └── b
-            ├── a2b1a3b.md
-            ├── a2b.md
-            ├── a4b.md
-            ├── a6b.md
-            └── a7b.md
-
-        3 directories, 7 files
-        """).lstrip("\n")
+        expected_result = TEST_REPO1_EXPECTED_TREE
 
         # generate tree output (requires probably unix)
         res = fdmd.utils.get_cmd_output(
             f"tree {test_repo1_workdir}"
         ).replace(test_repo1_workdir, ".").replace("\xa0", " ")  # replace strange space
         self.assertEqual(res, expected_result)
+
+    def test_060__cli_unpack_repos(self):
+
+        tempdir_path  = tempfile.mkdtemp()
+        self.dirs_to_remove.append(tempdir_path)
+
+        cmd = f"fdmd unpack-repos {tempdir_path}"
+        os.system(cmd)
+
+        repo_path = pjoin(tempdir_path, fdmd.TEST_DEBATE_KEY)
+
+        res = fdmd.utils.get_cmd_output(
+            f"tree {repo_path}"
+        ).replace(repo_path, ".").replace("\xa0", " ")  # replace strange space
+
+        expected_result = TEST_REPO1_EXPECTED_TREE
+        self.assertEqual(res, expected_result)
+
 
 
 def remove_trailing_spaces(txt):

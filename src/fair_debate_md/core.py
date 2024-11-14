@@ -8,6 +8,8 @@ from bs4 import BeautifulSoup, element
 
 from ipydex import IPS
 
+from . import utils
+
 pjoin  = os.path.join
 
 TEST_DEBATE_KEY = "d1-lorem_ipsum"
@@ -549,7 +551,14 @@ def load_dir(dirpath, ctb_list: list[DBContribution] = None):
 
 def unpack_repos(target_dir):
     target_dir = os.path.abspath(target_dir)
-    print(f"{target_dir=}")
+    from . import repo_handling, fixtures
+
+    repo_name = os.path.split(fixtures.TEST_REPO1_DIR)[1]
+    test_repo1_workdir = pjoin(target_dir, repo_name)
+    utils.tolerant_rmtree(test_repo1_workdir)
+    patch_dir = pjoin(fixtures.TEST_REPO1_DIR, "patches_01")
+
+    repo_handling.rollout_patches(repo_dir=test_repo1_workdir, patch_dir=patch_dir)
 
 
 def main():
