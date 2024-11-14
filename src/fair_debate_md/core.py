@@ -547,5 +547,10 @@ def load_dir(dirpath, ctb_list: list[DBContribution] = None):
     return ddl
 
 
+def unpack_repos(target_dir):
+    target_dir = os.path.abspath(target_dir)
+    print(f"{target_dir=}")
+
+
 def main():
     pass

@@ -1,14 +1,18 @@
 # Markdown Support Code for Fair Debate
 
 
-Current main purpose: insert keys into markdown code.
+Current main serve as backend support library for fair-debate-web
 
 
 
 ## Installation
 
-```python
-# needs to be done once:
-import nltk
-nltk.download('punkt_tab')
-```
+- clone repo
+- `pip install -e .`
+
+
+## Usage
+
+Convenient helper to get workdir of web app to defined state:
+
+`fdmd unpack-repos ./content_repos`
