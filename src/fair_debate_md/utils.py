@@ -3,6 +3,7 @@ import errno
 import subprocess
 import shutil
 import functools
+from contextlib import contextmanager
 from colorama import Style, Back, Fore
 
 
@@ -54,6 +55,15 @@ def preserve_cwd(function):
             os.chdir(cwd)
 
     return decorator
+
+
+@contextmanager
+def preserve_cwd_cm():
+    original_cwd = os.getcwd()
+    try:
+        yield
+    finally:
+        os.chdir(original_cwd)
 
 
 def tolerant_rmtree(target_path):
