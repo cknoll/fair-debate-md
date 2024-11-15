@@ -551,8 +551,10 @@ def load_repo(
     ) -> DebateDirLoader:
     repo_dir = pjoin(repo_host_dir, debate_key)
 
-    assert os.path.isdir(repo_dir)
-    assert os.path.isdir(pjoin(repo_dir, ".git"))
+    if not os.path.isdir(repo_dir):
+        raise FileNotFoundError(f"directory: {repo_dir}")
+    if not os.path.isdir(pjoin(repo_dir, ".git")):
+        raise FileNotFoundError(f"directory: {repo_dir}/.git")
 
     return load_dir(repo_dir, ctb_list)
 
