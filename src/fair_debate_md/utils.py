@@ -5,6 +5,7 @@ import shutil
 import functools
 from colorama import Style, Back, Fore
 
+
 def hl(txt, k="g"):
     colors = {
         "g": Back.GREEN,
@@ -60,12 +61,14 @@ def tolerant_rmtree(target_path):
 
     try:
         shutil.rmtree(target_path)
-    except OSError as exc: # python >2.5
+    except OSError as exc:  # python >2.5
         if exc.errno == errno.ENOENT:
             pass
-        else: raise
+        else:
+            raise
 
-def get_cmd_output(cmd: str|list[str]) -> str:
+
+def get_cmd_output(cmd: str | list[str]) -> str:
 
     if isinstance(cmd, str):
         cmd_list = cmd.split(" ")

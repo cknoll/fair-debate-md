@@ -10,7 +10,7 @@ from ipydex import IPS
 
 from . import utils
 
-pjoin  = os.path.join
+pjoin = os.path.join
 
 TEST_DEBATE_KEY = "d1-lorem_ipsum"
 
@@ -230,8 +230,7 @@ class SpanAdder:
             answer_soup = BeautifulSoup(answer_content, "html.parser")
             self._replace_p_with_div(answer_soup, level)
             answer_div = self.soup.new_tag(
-                "div",
-                attrs={"class": f"answer level{level}", "id": f"answer_{mdp.key_prefix}"}
+                "div", attrs={"class": f"answer level{level}", "id": f"answer_{mdp.key_prefix}"}
             )
             answer_div.extend(answer_soup)
             referenced_segment = segment_dict[key]
@@ -241,15 +240,14 @@ class SpanAdder:
         if level == 1:
             self._replace_p_with_div(self.soup, level=0)
 
-
     def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
         """
         It seems like nested p tags get "corrected" by some downstream processing.
         To prevent this, we convert p tags into special div-tags
         """
-        p_tags: list[element.Tag] = part_soup.find_all('p')
+        p_tags: list[element.Tag] = part_soup.find_all("p")
         for p_tag in p_tags:
-            new_div = part_soup.new_tag('div', attrs={"class": f"p_level{level}"})
+            new_div = part_soup.new_tag("div", attrs={"class": f"p_level{level}"})
 
             saved_contents = list(p_tag.contents)
 
@@ -357,8 +355,10 @@ class MDProcessor:
         self.md_with_proto_keys = add_proto_keys_to_md(self.plain_md_src, prefix=self.proto_key_prefix)
 
     def convert_md_with_proto_keys_to_md_with_real_keys(self) -> str:
-        proto_key=f"::{self.proto_key_prefix}"
-        self.md_with_real_keys = KeyAdder(self.md_with_proto_keys).replace_proto_key_by_numbered_key(proto_key, self.key_prefix)
+        proto_key = f"::{self.proto_key_prefix}"
+        self.md_with_real_keys = KeyAdder(self.md_with_proto_keys).replace_proto_key_by_numbered_key(
+            proto_key, self.key_prefix
+        )
         return self.md_with_real_keys
 
     def get_keys(self) -> list[str]:
@@ -391,7 +391,6 @@ def convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
     mdp.convert()
 
     return mdp.md_with_real_keys, mdp.segmented_html
-
 
 
 key_regex = re.compile(r"[ab]\d+")
@@ -432,14 +431,16 @@ class DBContribution:
     Represents a contribution wich is not yet stored in a file but comes from the database
     of the web app.
     """
+
     def __init__(self, ctb_key: str, body: str):
         self.ctb_key = ctb_key
         self.body = body
 
+
 class DebateDirLoader:
 
     def __init__(self, dirpath):
-        self.dirpath=dirpath
+        self.dirpath = dirpath
         self.dir_a = pjoin(self.dirpath, "a")
         self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
@@ -546,9 +547,8 @@ def load_dir(dirpath, ctb_list: list[DBContribution] = None) -> DebateDirLoader:
 
     return ddl
 
-def load_repo(
-        repo_host_dir:str, debate_key:str, ctb_list: list[DBContribution] = None
-    ) -> DebateDirLoader:
+
+def load_repo(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution] = None) -> DebateDirLoader:
     repo_dir = pjoin(repo_host_dir, debate_key)
 
     if not os.path.isdir(repo_dir):
@@ -557,7 +557,6 @@ def load_repo(
         raise FileNotFoundError(f"directory: {repo_dir}/.git")
 
     return load_dir(repo_dir, ctb_list)
-
 
 
 def unpack_repos(target_dir):

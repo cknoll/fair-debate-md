@@ -21,7 +21,8 @@ TEST_DEBATE_DIR1 = pjoin(FIXTURE_DIR, "debate1")
 TEST_REPO1_DIR = fdmd.fixtures.TEST_REPO1_DIR
 
 
-TEST_REPO1_EXPECTED_TREE = twdd("""
+TEST_REPO1_EXPECTED_TREE = twdd(
+    """
     .
     ├── a
     │   ├── a2b1a.md
@@ -34,7 +35,8 @@ TEST_REPO1_EXPECTED_TREE = twdd("""
         └── a7b.md
 
     3 directories, 7 files
-    """).lstrip("\n")
+    """
+).lstrip("\n")
 
 
 class TestCases1(unittest.TestCase):
@@ -61,9 +63,7 @@ class TestCases1(unittest.TestCase):
 
     def test_010__add_keys_to_md(self):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
-        expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(
-            FIXTURE_DIR, TESTDATA_DIR
-        )
+        expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(FIXTURE_DIR, TESTDATA_DIR)
 
         if 0:
             self.save_debug_result(md2)
@@ -131,7 +131,8 @@ class TestCases1(unittest.TestCase):
         self.assertEqual(res, res_expected)
 
     def test_024__add_spans(self):
-        html_src = twdd("""
+        html_src = twdd(
+            """
         <ul>
         <li>::a6 Ipsum velit adipisci</li>
         <li>
@@ -151,9 +152,11 @@ class TestCases1(unittest.TestCase):
         </ul>
         </li>
         </ul>
-        """)
+        """
+        )
 
-        res_expected = twdd("""
+        res_expected = twdd(
+            """
         <ul>
         <li><span class="segment" id="a6"> Ipsum velit adipisci</span></li>
         <li>
@@ -173,7 +176,8 @@ class TestCases1(unittest.TestCase):
         </ul>
         </li>
         </ul>
-        """)
+        """
+        )
 
         sa = fdmd.SpanAdder(fdmd.MDProcessor(), html_src, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
@@ -219,14 +223,16 @@ class TestCases1(unittest.TestCase):
         expected_result = TEST_REPO1_EXPECTED_TREE
 
         # generate tree output (requires probably unix)
-        res = fdmd.utils.get_cmd_output(
-            f"tree {test_repo1_workdir}"
-        ).replace(test_repo1_workdir, ".").replace("\xa0", " ")  # replace strange space
+        res = (
+            fdmd.utils.get_cmd_output(f"tree {test_repo1_workdir}")
+            .replace(test_repo1_workdir, ".")
+            .replace("\xa0", " ")
+        )  # replace strange space
         self.assertEqual(res, expected_result)
 
     def test_060__cli_unpack_repos(self):
 
-        tempdir_path  = tempfile.mkdtemp()
+        tempdir_path = tempfile.mkdtemp()
         self.dirs_to_remove.append(tempdir_path)
 
         cmd = f"fdmd unpack-repos {tempdir_path}"
@@ -234,13 +240,12 @@ class TestCases1(unittest.TestCase):
 
         repo_path = pjoin(tempdir_path, fdmd.TEST_DEBATE_KEY)
 
-        res = fdmd.utils.get_cmd_output(
-            f"tree {repo_path}"
-        ).replace(repo_path, ".").replace("\xa0", " ")  # replace strange space
+        res = (
+            fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
+        )  # replace strange space
 
         expected_result = TEST_REPO1_EXPECTED_TREE
         self.assertEqual(res, expected_result)
-
 
 
 def remove_trailing_spaces(txt):
