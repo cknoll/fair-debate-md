@@ -560,6 +560,9 @@ def load_repo(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution
 
 
 def unpack_repos(target_dir):
+    """
+    Unpack predefined fixture repos
+    """
     target_dir = os.path.abspath(target_dir)
     from . import repo_handling, fixtures
 

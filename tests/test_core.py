@@ -16,7 +16,6 @@ pjoin = os.path.join
 TESTDATA_DIR = pjoin(os.path.abspath(os.path.dirname(__file__)), "testdata")
 FIXTURE_DIR = fdmd.fixtures.path
 TESTDATA1 = pjoin(FIXTURE_DIR, "txt1.md")
-TEST_DEBATE_DIR1 = pjoin(FIXTURE_DIR, "debate1")
 
 TEST_REPO1_DIR = fdmd.fixtures.TEST_REPO1_DIR
 
@@ -54,6 +53,20 @@ class TestCases1(unittest.TestCase):
             assert "testdata" in dirpath or "fixtures" in dirpath or "/tmp" in dirpath
             fdmd.utils.tolerant_rmtree(dirpath)
         return super().tearDown()
+
+    def _mk_temp_dir(self, remove_in_tear_down=True):
+        tempdir_path = tempfile.mkdtemp(prefix="fdmd_")
+        if remove_in_tear_down:
+            self.dirs_to_remove.append(tempdir_path)
+
+        return tempdir_path
+
+    def _setup_test_repo1(self, remove_in_tear_down=True):
+        tempdir_path = self._mk_temp_dir(remove_in_tear_down=remove_in_tear_down)
+        fdmd.unpack_repos(tempdir_path)
+        repo1_path = pjoin(tempdir_path, fdmd.TEST_DEBATE_KEY)
+
+        return repo1_path
 
     def save_debug_result(self, result, suffix=".md"):
         # useful if result changes or for debugging
@@ -208,7 +221,8 @@ class TestCases1(unittest.TestCase):
         self.assertEqual(res, res_expected)
 
     def test_040__load_debate_dir(self):
-        ddl = fdmd.load_dir(TEST_DEBATE_DIR1)
+        test_debate_dir = self._setup_test_repo1()
+        ddl = fdmd.load_dir(test_debate_dir)
         self.assertIsNotNone(ddl.final_html)
         soup = BeautifulSoup(ddl.final_html, "html.parser")
         wrapper_div = soup.find(id="debate_wrapper")
@@ -232,8 +246,7 @@ class TestCases1(unittest.TestCase):
 
     def test_060__cli_unpack_repos(self):
 
-        tempdir_path = tempfile.mkdtemp()
-        self.dirs_to_remove.append(tempdir_path)
+        tempdir_path = self._mk_temp_dir()
 
         cmd = f"fdmd unpack-repos {tempdir_path}"
         os.system(cmd)
