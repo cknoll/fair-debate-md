@@ -539,14 +539,23 @@ def get_next_turn_key(segment_key):
     return next_turn_key
 
 
-def load_dir(dirpath, ctb_list: list[DBContribution] = None):
+def load_dir(dirpath, ctb_list: list[DBContribution] = None) -> DebateDirLoader:
     ddl = DebateDirLoader(dirpath=dirpath)
     ddl.load_dir(ctb_list=ctb_list)
     ddl.generate_html_with_answers()
 
-    # ddl.root_mdp.answer_childs.clear()
-    # ddl.final_html = ddl.root_mdp.get_html_with_segments()
     return ddl
+
+def load_repo(
+        repo_host_dir:str, debate_key:str, ctb_list: list[DBContribution] = None
+    ) -> DebateDirLoader:
+    repo_dir = pjoin(repo_host_dir, debate_key)
+
+    assert os.path.isdir(repo_dir)
+    assert os.path.isdir(pjoin(repo_dir, ".git"))
+
+    return load_dir(repo_dir, ctb_list)
+
 
 
 def unpack_repos(target_dir):
