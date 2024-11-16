@@ -229,8 +229,10 @@ class SpanAdder:
             answer_content = mdp.get_html_with_segments()
             answer_soup = BeautifulSoup(answer_content, "html.parser")
             self._replace_p_with_div(answer_soup, level)
+            additional_class_str = " ".join(mdp.additional_css_classes)
+            class_str = f"answer level{level} {additional_class_str}".strip()
             answer_div = self.soup.new_tag(
-                "div", attrs={"class": f"answer level{level}", "id": f"answer_{mdp.key_prefix}"}
+                "div", attrs={"class": class_str, "id": f"answer_{mdp.key_prefix}"}
             )
             answer_div.extend(answer_soup)
             referenced_segment = segment_dict[key]
@@ -335,6 +337,7 @@ class MDProcessor:
 
     def __init__(self, plain_md: str = None, proto_key_prefix="k", key_prefix="a", md_with_real_keys: str = None):
         self.plain_md_src = plain_md
+        self.additional_css_classes = []
 
         self.proto_key_prefix = proto_key_prefix
         self.key_prefix = key_prefix
@@ -488,6 +491,7 @@ class DebateDirLoader:
 
         for ctb in ctb_list:
             mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
+            mdp.additional_css_classes.append("db_ctb")
             mdp.convert_plain_md_to_md_with_proto_keys()
             mdp.convert_md_with_proto_keys_to_md_with_real_keys()
             self.tree[ctb.ctb_key] = mdp

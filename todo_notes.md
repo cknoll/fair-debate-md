@@ -1,2 +1,4 @@
 - [] load metadata from `metadata.toml`
-- [] store debate_key in final-html
+- [] prevent AssertionError if contribution is empty (only generate warning or ignore contribution)
+- [x] add separate css class to DBContribution divs
+- [x] store debate_key in final-html
