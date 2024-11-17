@@ -2,6 +2,7 @@ import re
 import os
 import glob
 import types
+import json
 import markdown
 import markdownify as mdf
 from bs4 import BeautifulSoup, element
@@ -231,9 +232,13 @@ class SpanAdder:
             self._replace_p_with_div(answer_soup, level)
             additional_class_str = " ".join(mdp.additional_css_classes)
             class_str = f"answer level{level} {additional_class_str}".strip()
-            answer_div = self.soup.new_tag(
-                "div", attrs={"class": class_str, "id": f"answer_{mdp.key_prefix}"}
-            )
+
+            attribute_dict = {"class": class_str, "id": f"answer_{mdp.key_prefix}"}
+            if mdp.add_plain_md_as_data:
+                # Note this attribute must be allowed by bleach (in settings.py of the web app)
+                attribute_dict["data-plain_md_src"] = json.dumps(mdp.plain_md_src)
+
+            answer_div = self.soup.new_tag("div", attrs=attribute_dict)
             answer_div.extend(answer_soup)
             referenced_segment = segment_dict[key]
             referenced_segment.insert_after(answer_div)
@@ -338,6 +343,7 @@ class MDProcessor:
     def __init__(self, plain_md: str = None, proto_key_prefix="k", key_prefix="a", md_with_real_keys: str = None):
         self.plain_md_src = plain_md
         self.additional_css_classes = []
+        self.add_plain_md_as_data = False
 
         self.proto_key_prefix = proto_key_prefix
         self.key_prefix = key_prefix
@@ -492,6 +498,7 @@ class DebateDirLoader:
         for ctb in ctb_list:
             mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
             mdp.additional_css_classes.append("db_ctb")
+            mdp.add_plain_md_as_data = True
             mdp.convert_plain_md_to_md_with_proto_keys()
             mdp.convert_md_with_proto_keys_to_md_with_real_keys()
             self.tree[ctb.ctb_key] = mdp
