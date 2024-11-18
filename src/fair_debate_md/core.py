@@ -446,6 +446,10 @@ class DBContribution:
         self.ctb_key = ctb_key
         self.body = body
 
+        # will be set during commit process
+        self.fpath: str = None
+        self.author_role: str = None
+
 
 class DebateDirLoader:
 
@@ -571,37 +575,56 @@ def load_repo(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution
     return load_dir(repo_dir, ctb_list)
 
 
-def commit_ctb(repo_host_dir: str, debate_key: str, ctb: DBContribution):
+def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution]):
+
     repo_dir = pjoin(repo_host_dir, debate_key)
+    repo = git.Repo(repo_dir)
 
     if not os.path.isdir(repo_dir):
         msg = f"Directory could not be found: {repo_dir}"
         raise FileNotFoundError(msg)
 
-    author_role = ctb.ctb_key[-1]
-    assert author_role in ["a", "b"]
+    rel_paths = []
+    for ctb in ctb_list:
+        write_ctb_to_file(repo_dir, ctb)
 
-    dir_path = pjoin(repo_dir, author_role)
-    os.makedirs(dir_path, exist_ok=True)
-    fpath = pjoin(dir_path, f"{ctb.ctb_key}.md")
+        repo.index.add(ctb.fpath)
+        rel_paths.append(ctb.fpath.replace(repo_dir, "")[1:])
 
-    if os.path.exists(fpath):
-        msg = f"File unexpectedly already exists: {fpath}"
-        raise FileExistsError(msg)
+    if len(ctb_list) == 1:
+        msg = f"add contribution {rel_paths[0]}"
+    else:
+        contributions = '\n'.join(rel_paths)
+        msg = f"add contributions:\n{contributions}"
 
-    with open(fpath, "w") as fp:
-        fp.write(ctb.body)
-
-    repo = git.Repo(repo_dir)
-    repo.index.add(fpath)
-
-    rel_path = fpath.replace(repo_dir, "")[1:]
-    msg = f"add contribution {rel_path}"
     author = git.Actor(
-        name=f"fair debate user {debate_key} {author_role}",
-        email=f" {debate_key}_{author_role}@fair-debate-users.org"
+        name=f"fair debate user {debate_key} {ctb.author_role}",
+        email=f" {debate_key}_{ctb.author_role}@fair-debate-users.org"
     )
     repo.index.commit(message=msg, author=author)
+
+
+def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
+
+    ctb.author_role = ctb.ctb_key[-1]
+    assert ctb.author_role in ["a", "b"]
+
+    dir_path = pjoin(repo_dir, ctb.author_role)
+    os.makedirs(dir_path, exist_ok=True)
+    ctb.fpath = pjoin(dir_path, f"{ctb.ctb_key}.md")
+
+    if os.path.exists(ctb.fpath):
+        msg = f"File unexpectedly already exists: {ctb.fpath}"
+        raise FileExistsError(msg)
+
+    with open(ctb.fpath, "w") as fp:
+        fp.write(ctb.body)
+
+
+def commit_ctb(repo_host_dir: str, debate_key: str, ctb: DBContribution):
+
+    ctb_list = [ctb]
+    commit_ctb_list(repo_host_dir, debate_key, ctb_list)
 
 
 def unpack_repos(target_dir):
