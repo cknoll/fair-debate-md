@@ -5,6 +5,9 @@ import shutil
 import functools
 from contextlib import contextmanager
 from colorama import Style, Back, Fore
+import git
+
+from ipydex import IPS
 
 
 def hl(txt, k="g"):
@@ -91,3 +94,9 @@ def get_cmd_output(cmd: str | list[str]) -> str:
     res.stderr = res.stderr.decode("utf8")
 
     return res.stdout
+
+
+def get_number_of_commits(repo_dir):
+    repo = git.Repo(repo_dir)
+    assert not repo.is_dirty(), f"Repo is dirty: {repo_dir}"
+    return len(list(repo.iter_commits()))
