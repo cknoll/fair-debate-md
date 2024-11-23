@@ -3,6 +3,8 @@ import os
 import glob
 import types
 import json
+import logging
+
 import markdown
 import markdownify as mdf
 from bs4 import BeautifulSoup, element
@@ -15,6 +17,10 @@ from . import utils
 pjoin = os.path.join
 
 TEST_DEBATE_KEY = "d1-lorem_ipsum"
+
+# this should be the same as in the web-application
+logger = logging.getLogger("fair-debate")
+logger.debug("fair_debate_md.core loaded")
 
 
 class ProtoKeyAdder:
@@ -501,6 +507,13 @@ class DebateDirLoader:
             return
 
         for ctb in ctb_list:
+            if ctb.body == "":
+                msg = (
+                    f"Unexpectedly received empty body for contribution {ctb.ctb_key}. "
+                    "-> Contribution ignored."
+                )
+                logger.warning(msg)
+                continue
             mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
             mdp.additional_css_classes.append("db_ctb")
             mdp.add_plain_md_as_data = True
