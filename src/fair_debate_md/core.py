@@ -251,7 +251,20 @@ class SpanAdder:
             referenced_segment = segment_dict[key]
             segment_parent = referenced_segment.parent
             if segment_parent.name in ("h1", "h2", "h3", "h4", "h5", "h6"):
+                # special treatment of answers to headings (styling reasons)
+                wrapper_div = self.soup.new_tag("div", attrs={"class": "answered_heading"})
+
+                # insert empty wrapper
+                segment_parent.insert_after(wrapper_div)
+
+                # remove segment_parent (h2, etc)
+                segment_parent.extract()
+
+                wrapper_div.append(segment_parent)
                 segment_parent.insert_after(answer_div)
+                class_list = segment_parent.attrs.get("class", "").split(" ")
+                class_list.append("heading")
+                segment_parent.attrs["class"] = " ".join(class_list).strip()
             else:
                 referenced_segment.insert_after(answer_div)
 
