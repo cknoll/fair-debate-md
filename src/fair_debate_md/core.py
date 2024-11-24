@@ -464,6 +464,7 @@ class DebateDirLoader:
         self.dir_a = pjoin(self.dirpath, "a")
         self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
+        self.num_answers = None
 
         self.root_mdp: MDProcessor = None
         self.tree: dict[str, MDProcessor] = {}
@@ -498,6 +499,7 @@ class DebateDirLoader:
         self.root_mdp = self.tree["a"]
         self.root_mdp.is_root_mdp = True
         self.root_mdp.debate_key = self.debate_key
+        self.num_answers = len(self.tree) - 1  # don't count root contribution als answer
 
     def process_ctb_list(self, ctb_list: list[DBContribution]):
         """
