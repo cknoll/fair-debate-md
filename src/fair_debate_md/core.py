@@ -249,9 +249,15 @@ class SpanAdder:
             answer_div = self.soup.new_tag("div", attrs=attribute_dict)
             answer_div.extend(answer_soup)
             referenced_segment = segment_dict[key]
-            referenced_segment.insert_after(answer_div)
+            segment_parent = referenced_segment.parent
+            if segment_parent.name in ("h1", "h2", "h3", "h4", "h5", "h6"):
+                segment_parent.insert_after(answer_div)
+            else:
+                referenced_segment.insert_after(answer_div)
 
         # replace the p-tags in the original (outermost) text
+        # (for deeper levels this has already been done)
+        # TODO: unify level-definition with web application
         if level == 1:
             self._replace_p_with_div(self.soup, level=0)
 
