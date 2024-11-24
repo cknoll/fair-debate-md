@@ -4,6 +4,7 @@ import glob
 import types
 import json
 import logging
+import collections
 
 import markdown
 import markdownify as mdf
@@ -468,6 +469,11 @@ class DebateDirLoader:
 
         self.root_mdp: MDProcessor = None
         self.tree: dict[str, MDProcessor] = {}
+
+        # store something like {0: ["a"], 1: ["a1b", "a5b"], 2: ["a5b3a"]}
+        self.level_tree: dict[str, list[str]] = None
+        # -> deepest_level = len(level_tree) - 1 (deepest_level == 2 for above example)
+
         self.final_html: str = None
 
         # TODO: read this from metadata.toml
@@ -500,6 +506,17 @@ class DebateDirLoader:
         self.root_mdp.is_root_mdp = True
         self.root_mdp.debate_key = self.debate_key
         self.num_answers = len(self.tree) - 1  # don't count root contribution als answer
+        self.set_level_tree()
+
+    # TODO unit-test
+    def set_level_tree(self):
+        level_tree = collections.defaultdict(list)
+
+        for key in self.tree.keys():
+            level = len(decompose_key(key)) - 1
+            level_tree[level].append(key)
+
+        self.level_tree = dict(level_tree)
 
     def process_ctb_list(self, ctb_list: list[DBContribution]):
         """
