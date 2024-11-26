@@ -367,7 +367,14 @@ class SpanAdder:
 
 class MDProcessor:
 
-    def __init__(self, plain_md: str = None, proto_key_prefix="k", key_prefix="a", md_with_real_keys: str = None):
+    def __init__(
+        self,
+        plain_md: str = None,
+        proto_key_prefix="k",
+        key_prefix="a",
+        md_with_real_keys: str = None,
+        convert_now=False,
+    ):
         self.plain_md_src = plain_md
         self.additional_css_classes = []
         self.add_plain_md_as_data = False
@@ -381,6 +388,10 @@ class MDProcessor:
         self.answer_childs: dict[str, MDProcessor] = {}
         self.is_root_mdp: bool = False
         self.debate_key: str = None
+
+        # convenience: save one line in the caller
+        if convert_now:
+            self.convert()
 
     def convert(self):
         self.convert_plain_md_to_md_with_proto_keys()
