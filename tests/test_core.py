@@ -199,17 +199,17 @@ class TestCases1(unittest.TestCase):
     def test_030__get_html_with_segments(self):
 
         # test empty string
-        _, res = fdmd.convert_plain_md_to_segmented_html("")
+        _, res = fdmd.core._convert_plain_md_to_segmented_html("")
         self.assertEqual(res, "")
 
         # test simple string
-        _, res = fdmd.convert_plain_md_to_segmented_html("foo bar")
+        _, res = fdmd.core._convert_plain_md_to_segmented_html("foo bar")
         res_expected = '<p><span class="segment" id="a1"> foo bar</span></p>'
         res_expected = str(BeautifulSoup(res_expected, "html.parser").prettify())
         self.assertEqual(res, res_expected)
 
         # test full file
-        md_with_real_keys, res = fdmd.convert_plain_md_to_segmented_html(self.txt1)
+        md_with_real_keys, res = fdmd.core._convert_plain_md_to_segmented_html(self.txt1)
 
         if 0:
             self.save_debug_result(res, suffix="_pretty.md")

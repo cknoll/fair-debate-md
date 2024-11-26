@@ -433,7 +433,11 @@ class MDProcessor:
         return self.segmented_html
 
 
-def convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
+def _convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
+    """
+    convenience function for unittests not meant (anymore as public interface function)
+    """
+
     mdp = MDProcessor(md_src)
     mdp.convert()
 
