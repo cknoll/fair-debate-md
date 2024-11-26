@@ -494,8 +494,9 @@ class DBContribution:
 
 class DebateDirLoader:
 
-    def __init__(self, dirpath):
+    def __init__(self, dirpath, new_debate: bool = False):
         self.dirpath = dirpath
+        self.new_debate = new_debate
         self.dir_a = pjoin(self.dirpath, "a")
         self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
@@ -622,16 +623,25 @@ def get_next_turn_key(segment_key):
     return next_turn_key
 
 
-def load_dir(dirpath, ctb_list: list[DBContribution] = None) -> DebateDirLoader:
-    ddl = DebateDirLoader(dirpath=dirpath)
+def load_dir(dirpath, ctb_list: list[DBContribution] = None, new_debate: bool = False) -> DebateDirLoader:
+    ddl = DebateDirLoader(dirpath=dirpath, new_debate=new_debate)
     ddl.load_dir(ctb_list=ctb_list)
     ddl.generate_html_with_answers()
 
     return ddl
 
 
-def load_repo(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution] = None) -> DebateDirLoader:
+def load_repo(
+        repo_host_dir: str,
+        debate_key: str,
+        ctb_list: list[DBContribution] = None,
+        new_debate: bool = True
+    ) -> DebateDirLoader:
+
     repo_dir = pjoin(repo_host_dir, debate_key)
+
+    if new_debate:
+        return load_dir(repo_dir, ctb_list, new_debate)
 
     if not os.path.isdir(repo_dir):
         raise FileNotFoundError(f"directory: {repo_dir}")
