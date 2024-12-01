@@ -494,7 +494,7 @@ class DBContribution:
 
 class DebateDirLoader:
 
-    def __init__(self, dirpath, new_debate: bool = False):
+    def __init__(self, dirpath, new_debate: bool = False, debate_key: str = None):
         self.dirpath = dirpath
         self.new_debate = new_debate
         self.dir_a = pjoin(self.dirpath, "a")
@@ -511,8 +511,10 @@ class DebateDirLoader:
 
         self.final_html: str = None
 
-        # TODO: read this from metadata.toml
-        self.debate_key: str = TEST_DEBATE_KEY
+        if debate_key is None:
+            raise NotImplementedError
+        # TODO: read this from metadata.toml or ensure consistency
+        self.debate_key = debate_key
 
     def load_dir(self, ctb_list: list[DBContribution] = None):
         """
@@ -623,8 +625,11 @@ def get_next_turn_key(segment_key):
     return next_turn_key
 
 
-def load_dir(dirpath, ctb_list: list[DBContribution] = None, new_debate: bool = False) -> DebateDirLoader:
-    ddl = DebateDirLoader(dirpath=dirpath, new_debate=new_debate)
+def load_dir(
+    dirpath, ctb_list: list[DBContribution] = None, new_debate: bool = False, debate_key: str = None
+) -> DebateDirLoader:
+
+    ddl = DebateDirLoader(dirpath=dirpath, new_debate=new_debate, debate_key=debate_key)
     ddl.load_dir(ctb_list=ctb_list)
     ddl.generate_html_with_answers()
 
@@ -641,14 +646,14 @@ def load_repo(
     repo_dir = pjoin(repo_host_dir, debate_key)
 
     if new_debate:
-        return load_dir(repo_dir, ctb_list, new_debate)
+        return load_dir(repo_dir, ctb_list, new_debate, debate_key=debate_key)
 
     if not os.path.isdir(repo_dir):
         raise FileNotFoundError(f"directory: {repo_dir}")
     if not os.path.isdir(pjoin(repo_dir, ".git")):
         raise FileNotFoundError(f"directory: {repo_dir}/.git")
 
-    return load_dir(repo_dir, ctb_list)
+    return load_dir(repo_dir, ctb_list, debate_key=debate_key)
 
 
 def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution]):
