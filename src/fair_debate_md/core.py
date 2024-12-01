@@ -178,6 +178,11 @@ class SpanAdder:
         self.encoded_left_delimiter = "_[_"
         self.encoded_right_delimiter = "_]_"
 
+        # TODO: for historical reasons this level is 1 based
+        # calculated by level = len(decompose_key(key)), where key is an arbitrary segment key of this html src
+        # in the web app we use 0-based level
+        self.level: int = None
+
         # this dict serves to add divs after the spans which contain answers
         if answer_childs is None:
             answer_childs = {}
@@ -224,22 +229,37 @@ class SpanAdder:
         # TODO: probably we could use the existing soup here?
         self.soup = BeautifulSoup(html_src, "html.parser")
 
-        if not self.answer_childs:
-            return
-
         all_segments = self.soup.find_all("span", class_="segment")
+        assert all_segments, "The must be at least one segment"
         segment_dict: dict[str, element.Tag] = dict([(s.attrs["id"], s) for s in all_segments])
 
-        level = None
+        first_key = all_segments[0].attrs["id"]
+        self.level = len(decompose_key(first_key))
 
+        self._process_answer_childs(segment_dict)
+
+        # replace the p-tags in the original (outermost) text
+        # (for deeper levels this has already been done)
+        # TODO: unify level-definition with web application
+        if self.level == 1:
+            self._replace_p_with_div(self.soup, level=0)
+
+    def _process_answer_childs(self, segment_dict):
+        """
+
+        :param segment_dict:    dict of segment elements in the parent
+                                (will be referenced by the answers)
+
+        """
         for key, mdp in self.answer_childs.items():
-            if level is None:
-                level = len(decompose_key(key))
+
             answer_content = mdp.get_html_with_segments()
             answer_soup = BeautifulSoup(answer_content, "html.parser")
-            self._replace_p_with_div(answer_soup, level)
+            # here the use of `level` is consistent with the web app:
+            # current level (e.g. 1 (= number of key-parts) is applied to answer_soup)
+            self._replace_p_with_div(answer_soup, self.level)
             additional_class_str = " ".join(mdp.additional_css_classes)
-            class_str = f"answer level{level} {additional_class_str}".strip()
+            class_str = f"answer level{self.level} {additional_class_str}".strip()
 
             attribute_dict = {"class": class_str, "id": f"answer_{mdp.key_prefix}"}
             if mdp.add_plain_md_as_data:
@@ -267,12 +287,6 @@ class SpanAdder:
                 segment_parent.attrs["class"] = " ".join(class_list).strip()
             else:
                 referenced_segment.insert_after(answer_div)
-
-        # replace the p-tags in the original (outermost) text
-        # (for deeper levels this has already been done)
-        # TODO: unify level-definition with web application
-        if level == 1:
-            self._replace_p_with_div(self.soup, level=0)
 
     def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
         """
