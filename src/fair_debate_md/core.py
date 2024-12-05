@@ -209,10 +209,14 @@ class SpanAdder:
 
         if self.parent_mdp.is_root_mdp:
             # wrap with div to add metadata (debate-key)
-            wrapper_tag = self.soup.new_tag("div", id="debate_wrapper")
-            wrapper_tag.attrs["data-debate-key"] = self.parent_mdp.debate_key
-            wrapper_tag.extend(self.soup)
-            self.soup = wrapper_tag
+            container_tag = self.soup.new_tag("div", id="debate_container")
+            container_tag.attrs["data-debate-key"] = self.parent_mdp.debate_key
+            # this tag intentionally has no content.
+            # purpose: it allows the js-logic of the web app to treat the a-contribution as "answer"
+            root_segment_tag = self.soup.new_tag("div", id="root_segment")
+            container_tag.append(root_segment_tag)
+            container_tag.extend(self.soup)
+            self.soup = container_tag
         # convert to flat string
         if prettify:
             return str(self.soup.prettify())
