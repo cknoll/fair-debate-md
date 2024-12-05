@@ -438,10 +438,14 @@ class MDProcessor:
 
         md = markdown.Markdown()
         html_src = md.convert(self.md_with_real_keys)
-        sa = SpanAdder(
-            parent_mdp=self, html_src=html_src, key_prefix=f"::{self.key_prefix}", answer_childs=self.answer_childs
-        )
-        res: str = sa.add_spans_for_keys(prettify=True)
+
+        if len(html_src) > 0:
+            sa = SpanAdder(
+                parent_mdp=self, html_src=html_src, key_prefix=f"::{self.key_prefix}", answer_childs=self.answer_childs
+            )
+            res: str = sa.add_spans_for_keys(prettify=True)
+        else:
+            res = ""
 
         self.segmented_html = res
         return self.segmented_html

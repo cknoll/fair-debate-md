@@ -204,7 +204,7 @@ class TestCases1(unittest.TestCase):
 
         # test simple string
         _, res = fdmd.core._convert_plain_md_to_segmented_html("foo bar")
-        res_expected = '<p><span class="segment" id="a1"> foo bar</span></p>'
+        res_expected = '<div class="p_level0"><span class="segment" id="a1"> foo bar</span></div>'
         res_expected = str(BeautifulSoup(res_expected, "html.parser").prettify())
         self.assertEqual(res, res_expected)
 
@@ -222,7 +222,7 @@ class TestCases1(unittest.TestCase):
 
     def test_040__load_debate_dir(self):
         test_debate_dir = self._setup_test_repo1()
-        ddl = fdmd.load_dir(test_debate_dir)
+        ddl = fdmd.load_dir(test_debate_dir, debate_key=fdmd.TEST_DEBATE_KEY)
         self.assertIsNotNone(ddl.final_html)
         soup = BeautifulSoup(ddl.final_html, "html.parser")
         wrapper_div = soup.find(id="debate_container")
