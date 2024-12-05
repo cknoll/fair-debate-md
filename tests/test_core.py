@@ -117,9 +117,9 @@ class TestCases1(unittest.TestCase):
         res = sa.add_spans_for_keys()
 
         res_expected = (
-            '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
+            '<div class="p_level0"><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
             " dolorem</em> voluptatem.</span>"
-            '<span class="segment" id="a3"> <strong>Adipisci sit adipisci non est</strong>.</span></p>'
+            '<span class="segment" id="a3"> <strong>Adipisci sit adipisci non est</strong>.</span></div>'
         )
 
         self.assertEqual(res, res_expected)
@@ -135,11 +135,11 @@ class TestCases1(unittest.TestCase):
         sa = fdmd.SpanAdder(fdmd.MDProcessor(), tag3, key_prefix=self.key_prefix)
         res = sa.add_spans_for_keys()
         res_expected = (
-            '<p><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
+            '<div class="p_level0"><span class="segment" id="a2"> Ut <em>quiquia <strong>eius</strong>'
             " dolorem</em> voluptatem.</span>"
             '<span class="segment" id="a3"> <strong>Adipisci sit adipisci non est</strong>.</span>'
             '<span class="segment" id="a4"> Dolor etincidunt neque sed tempora porro quiquia.</span>'
-            '<span class="segment" id="a5"> Porro velit non consectetur numquam velit.</span></p>'
+            '<span class="segment" id="a5"> Porro velit non consectetur numquam velit.</span></div>'
         )
         self.assertEqual(res, res_expected)
 
@@ -173,11 +173,11 @@ class TestCases1(unittest.TestCase):
         <ul>
         <li><span class="segment" id="a6"> Ipsum velit adipisci</span></li>
         <li>
-        <p><span class="segment" id="a7"> Adipisci est magnam etincidunt sed:</span></p>
+        <div class="p_level0"><span class="segment" id="a7"> Adipisci est magnam etincidunt sed:</span></div>
         <ul>
         <li><span class="segment" id="a8"> <code>some code</code> Sed etincidunt etincidunt</span></li>
         <li>
-        <p><span class="segment" id="a9"> sit aliquam eius quiquia.</span></p>
+        <div class="p_level0"><span class="segment" id="a9"> sit aliquam eius quiquia.</span></div>
         <ul>
         <li><span class="segment" id="a10"> Ut etincidunt magnam ut etincidunt <code>some code</code></span></li>
         <li><span class="segment" id="a11"> quiquia quisquam porro.</span><ul>
@@ -225,7 +225,7 @@ class TestCases1(unittest.TestCase):
         ddl = fdmd.load_dir(test_debate_dir)
         self.assertIsNotNone(ddl.final_html)
         soup = BeautifulSoup(ddl.final_html, "html.parser")
-        wrapper_div = soup.find(id="debate_wrapper")
+        wrapper_div = soup.find(id="debate_container")
         self.assertGreater(len(wrapper_div.attrs["data-debate-key"]), 0)
 
     def test_050__rollout_patches1(self):
