@@ -217,6 +217,12 @@ class SpanAdder:
             container_tag.append(root_segment_tag)
             container_tag.extend(self.soup)
             self.soup = container_tag
+
+            if self.parent_mdp.is_root_mdp and self.parent_mdp.additional_css_classes:
+                additional_class_str = " ".join(self.parent_mdp.additional_css_classes)
+                self.soup.attrs["class"] = additional_class_str
+                self.soup.attrs["data-plain_md_src"] = json.dumps(self.parent_mdp.plain_md_src)
+
         # convert to flat string
         if prettify:
             return str(self.soup.prettify())
@@ -560,12 +566,17 @@ class DebateDirLoader:
             self.tree[base_name] = mdp
 
         self.process_ctb_list(ctb_list)
+        self.handle_root_mdp()
+        self.set_level_tree()
 
+    def handle_root_mdp(self):
         self.root_mdp = self.tree["a"]
         self.root_mdp.is_root_mdp = True
         self.root_mdp.debate_key = self.debate_key
         self.num_answers = len(self.tree) - 1  # don't count root contribution als answer
-        self.set_level_tree()
+
+        if self.root_mdp.additional_css_classes:
+            additional_class_str = " ".join(self.root_mdp.additional_css_classes)
 
     # TODO unit-test
     def set_level_tree(self):
