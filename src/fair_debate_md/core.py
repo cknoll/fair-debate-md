@@ -749,8 +749,10 @@ def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
         msg = f"File unexpectedly already exists: {ctb.fpath}"
         raise FileExistsError(msg)
 
+    mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
+    md_with_real_keys = mdp.convert_plain_md_to_md_with_real_keys()
     with open(ctb.fpath, "w") as fp:
-        fp.write(ctb.body)
+        fp.write(md_with_real_keys)
 
 
 def commit_ctb(repo_host_dir: str, debate_key: str, ctb: DBContribution):
