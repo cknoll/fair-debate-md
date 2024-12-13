@@ -169,7 +169,7 @@ class KeyAdder:
 
 
 class SpanAdder:
-    def __init__(self, parent_mdp, html_src: str, key_prefix: str, answer_childs: dict[str, "MDProcessor"] = None):
+    def __init__(self, parent_mdp, html_src: str, key_prefix: str, contribution_childs: dict[str, "MDProcessor"] = None):
         self.parent_mdp: MDProcessor = parent_mdp
         self.html_src = html_src
         self.key_prefix = key_prefix
@@ -184,10 +184,10 @@ class SpanAdder:
         # in the web app we use 0-based level
         self.level: int = None
 
-        # this dict serves to add divs after the spans which contain answers
-        if answer_childs is None:
-            answer_childs = {}
-        self.answer_childs = answer_childs
+        # this dict serves to add divs after the spans which contain contributions
+        if contribution_childs is None:
+            contribution_childs = {}
+        self.contribution_childs = contribution_childs
 
         self.active_tag_stack = []
 
@@ -202,7 +202,7 @@ class SpanAdder:
         res = str(root)
         res2 = self.insert_encoded_delimiters(res)
 
-        self.add_answers(res2)
+        self.add_contributions(res2)
         res3 = self.convert_soup_to_final_html(prettify=prettify)
         return res3
 
@@ -213,7 +213,7 @@ class SpanAdder:
             container_tag = self.soup.new_tag("div", id="debate_container")
             container_tag.attrs["data-debate-key"] = self.parent_mdp.debate_key
             # this tag intentionally has no content.
-            # purpose: it allows the js-logic of the web app to treat the a-contribution as "answer"
+            # purpose: it allows the js-logic of the web app to treat the a-contribution as "contribution"
             root_segment_tag = self.soup.new_tag("div", id="root_segment")
             container_tag.append(root_segment_tag)
             container_tag.extend(self.soup)
@@ -230,11 +230,11 @@ class SpanAdder:
         else:
             return str(self.soup)
 
-    def add_answers(self, html_src: str) -> None:
+    def add_contributions(self, html_src: str) -> None:
         """
-        Add div tags for answers (if they exist).
+        Add div tags for contributions (if they exist).
 
-        :param html_src:    html source with segment-spans but without answer-divs
+        :param html_src:    html source with segment-spans but without contribution-divs
         """
 
         # TODO: probably we could use the existing soup here?
@@ -247,7 +247,7 @@ class SpanAdder:
         first_key = all_segments[0].attrs["id"]
         self.level = len(decompose_key(first_key))
 
-        self._process_answer_childs(segment_dict)
+        self._process_contribution_childs(segment_dict)
 
         # replace the p-tags in the original (outermost) text
         # (for deeper levels this has already been done)
@@ -255,34 +255,34 @@ class SpanAdder:
         if self.level == 1:
             self._replace_p_with_div(self.soup, level=0)
 
-    def _process_answer_childs(self, segment_dict):
+    def _process_contribution_childs(self, segment_dict):
         """
 
         :param segment_dict:    dict of segment elements in the parent
-                                (will be referenced by the answers)
+                                (will be referenced by the contributions)
 
         """
-        for key, mdp in self.answer_childs.items():
+        for key, mdp in self.contribution_childs.items():
 
-            answer_content = mdp.get_html_with_segments()
-            answer_soup = BeautifulSoup(answer_content, "html.parser")
+            contribution_content = mdp.get_html_with_segments()
+            contribution_soup = BeautifulSoup(contribution_content, "html.parser")
             # here the use of `level` is consistent with the web app:
-            # current level (e.g. 1 (= number of key-parts) is applied to answer_soup)
-            self._replace_p_with_div(answer_soup, self.level)
+            # current level (e.g. 1 (= number of key-parts) is applied to contribution_soup)
+            self._replace_p_with_div(contribution_soup, self.level)
             additional_class_str = " ".join(mdp.additional_css_classes)
-            class_str = f"answer level{self.level} {additional_class_str}".strip()
+            class_str = f"contribution level{self.level} {additional_class_str}".strip()
 
-            attribute_dict = {"class": class_str, "id": f"answer_{mdp.key_prefix}"}
+            attribute_dict = {"class": class_str, "id": f"contribution_{mdp.key_prefix}"}
             if mdp.add_plain_md_as_data:
                 # Note this attribute must be allowed by bleach (in settings.py of the web app)
                 attribute_dict["data-plain_md_src"] = json.dumps(mdp.plain_md_src)
 
-            answer_div = self.soup.new_tag("div", attrs=attribute_dict)
-            answer_div.extend(answer_soup)
+            contribution_div = self.soup.new_tag("div", attrs=attribute_dict)
+            contribution_div.extend(contribution_soup)
             referenced_segment = segment_dict[key]
             segment_parent = referenced_segment.parent
             if segment_parent.name in ("h1", "h2", "h3", "h4", "h5", "h6"):
-                # special treatment of answers to headings (styling reasons)
+                # special treatment of answer-contributions to headings (styling reasons)
                 wrapper_div = self.soup.new_tag("div", attrs={"class": "answered_heading"})
 
                 # insert empty wrapper
@@ -292,12 +292,12 @@ class SpanAdder:
                 segment_parent.extract()
 
                 wrapper_div.append(segment_parent)
-                segment_parent.insert_after(answer_div)
+                segment_parent.insert_after(contribution_div)
                 class_list = segment_parent.attrs.get("class", "").split(" ")
                 class_list.append("heading")
                 segment_parent.attrs["class"] = " ".join(class_list).strip()
             else:
-                referenced_segment.insert_after(answer_div)
+                referenced_segment.insert_after(contribution_div)
 
     def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
         """
@@ -410,7 +410,7 @@ class MDProcessor:
         self.md_with_proto_keys: str = None
         self.md_with_real_keys = md_with_real_keys
         self.segmented_html: str = None
-        self.answer_childs: dict[str, MDProcessor] = {}
+        self.contribution_childs: dict[str, MDProcessor] = {}
         self.is_root_mdp: bool = False
         self.debate_key: str = None
         self.cached_keys: list = None
@@ -464,7 +464,7 @@ class MDProcessor:
 
         if len(html_src) > 0:
             sa = SpanAdder(
-                parent_mdp=self, html_src=html_src, key_prefix=f"::{self.key_prefix}", answer_childs=self.answer_childs
+                parent_mdp=self, html_src=html_src, key_prefix=f"::{self.key_prefix}", contribution_childs=self.contribution_childs
             )
             res: str = sa.add_spans_for_keys(prettify=True)
         else:
@@ -541,7 +541,7 @@ class DebateDirLoader:
         self.dir_a = pjoin(self.dirpath, "a")
         self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
-        self.num_answers = None
+        self.num_contributions = None
         self.all_files: list = None
 
         self.root_mdp: MDProcessor = None
@@ -631,27 +631,27 @@ class DebateDirLoader:
             mdp.convert_plain_md_to_md_with_real_keys()
             self.tree[ctb.ctb_key] = mdp
 
-    def generate_html_with_answers(self, parent_mdp: MDProcessor = None):
+    def generate_html_with_contributions(self, parent_mdp: MDProcessor = None):
         if parent_mdp is None:
             parent_mdp = self.root_mdp
 
         next_turn_key = get_next_turn_key(parent_mdp.key_prefix)
 
-        # get all keys which are used in this statement block (without answers)
+        # get all keys which are used in this statement block (without contributions)
         key_str_list = parent_mdp.get_keys()
 
         # recursively process elements
         for key_str in key_str_list:
             key = key_str.lstrip("::")
 
-            answer_key = f"{key}{next_turn_key}"
-            if answer_key in self.tree:
-                child_mdp = self.tree.get(answer_key)
+            contribution_key = f"{key}{next_turn_key}"
+            if contribution_key in self.tree:
+                child_mdp = self.tree.get(contribution_key)
 
                 # this recursively creates the .segmented_html
                 # attributes of the child_mdp objects
-                self.generate_html_with_answers(parent_mdp=child_mdp)
-                parent_mdp.answer_childs[key] = child_mdp
+                self.generate_html_with_contributions(parent_mdp=child_mdp)
+                parent_mdp.contribution_childs[key] = child_mdp
 
         # this calls SpanAdder.add_spans_for_keys()
         res_segmented_html: str = parent_mdp.get_html_with_segments()
@@ -659,7 +659,7 @@ class DebateDirLoader:
             self.final_html = res_segmented_html
 
 
-def get_answer_contribution_key(segment_key):
+def get_contribution_key(segment_key):
     """
     For a keys like "a5", "a304b1" generate "a3b" or "a304b1a"
     """
@@ -685,7 +685,7 @@ def load_dir(
 
     ddl = DebateDirLoader(dirpath=dirpath, new_debate=new_debate, debate_key=debate_key)
     ddl.load_dir(ctb_list=ctb_list)
-    ddl.generate_html_with_answers()
+    ddl.generate_html_with_contributions()
 
     return ddl
 
