@@ -413,6 +413,7 @@ class MDProcessor:
         self.answer_childs: dict[str, MDProcessor] = {}
         self.is_root_mdp: bool = False
         self.debate_key: str = None
+        self.cached_keys: list = None
 
         # convenience: save one line in the caller
         if convert_now:
@@ -433,12 +434,23 @@ class MDProcessor:
         )
         return self.md_with_real_keys
 
+    def convert_plain_md_to_md_with_real_keys(self):
+        self.convert_plain_md_to_md_with_proto_keys()
+        return self.convert_md_with_proto_keys_to_md_with_real_keys()
+
     def get_keys(self) -> list[str]:
+
+        # use caching because we need this several times in one run
+        if self.cached_keys is not None:
+            return self.cached_keys
+
         assert self.md_with_real_keys
 
         cre = re.compile(r"::XXX\d+".replace("XXX", self.key_prefix))
         # matches = list(cre.finditer(self.md_with_real_keys))
         matches = list(cre.findall(self.md_with_real_keys))
+
+        self.cached_keys = matches
         return matches
 
     def get_html_with_segments(self) -> str:
@@ -530,6 +542,7 @@ class DebateDirLoader:
         self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
         self.num_answers = None
+        self.all_files: list = None
 
         self.root_mdp: MDProcessor = None
         self.tree: dict[str, MDProcessor] = {}
@@ -555,15 +568,23 @@ class DebateDirLoader:
         a_files = glob.glob(pjoin(self.dir_a, "*.md"))
         b_files = glob.glob(pjoin(self.dir_b, "*.md"))
 
-        all_files = [fpath for fpath in a_files + b_files if is_valid_fpath(fpath)]
-        all_files.sort()
+        self.all_files = [fpath for fpath in a_files + b_files if is_valid_fpath(fpath)]
+        self.all_files.sort()
 
-        for fpath in all_files:
+        for fpath in self.all_files:
             base_name = get_base_name(fpath)
 
             with open(fpath, "r") as fp:
                 md_with_real_keys = fp.read()
             mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys)
+            if len(mdp.get_keys()) == 0:
+                fname = os.path.split(fpath)[1]
+                msg = (
+                    f"Unexpectedly the file '{fname}' of debate '{self.debate_key}' does not contain "
+                    "a single key"
+                )
+                raise ValueError(msg)
+
             self.tree[base_name] = mdp
 
         self.process_ctb_list(ctb_list)
@@ -607,8 +628,7 @@ class DebateDirLoader:
             mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
             mdp.additional_css_classes.append("db_ctb")
             mdp.add_plain_md_as_data = True
-            mdp.convert_plain_md_to_md_with_proto_keys()
-            mdp.convert_md_with_proto_keys_to_md_with_real_keys()
+            mdp.convert_plain_md_to_md_with_real_keys()
             self.tree[ctb.ctb_key] = mdp
 
     def generate_html_with_answers(self, parent_mdp: MDProcessor = None):
