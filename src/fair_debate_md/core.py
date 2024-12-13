@@ -14,6 +14,7 @@ import git
 from ipydex import IPS
 
 from . import utils
+from . import repo_handling
 
 pjoin = os.path.join
 
@@ -711,10 +712,7 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
         contributions = '\n'.join(rel_paths)
         msg = f"add contributions:\n{contributions}"
 
-    author = git.Actor(
-        name=f"fair debate user {debate_key} {ctb.author_role}",
-        email=f" {debate_key}_{ctb.author_role}@fair-debate-users.org"
-    )
+    author = repo_handling.get_author(debate_key, ctb.author_role)
     repo.index.commit(message=msg, author=author)
 
 
