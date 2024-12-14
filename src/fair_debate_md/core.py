@@ -210,7 +210,7 @@ class SpanAdder:
 
         if self.parent_mdp.is_root_mdp:
             # wrap with div to add metadata (debate-key)
-            container_tag = self.soup.new_tag("div", id="debate_container")
+            container_tag = self.soup.new_tag("div", id="contribution_a")
             container_tag.attrs["data-debate-key"] = self.parent_mdp.debate_key
             # this tag intentionally has no content.
             # purpose: it allows the js-logic of the web app to treat the a-contribution as "contribution"

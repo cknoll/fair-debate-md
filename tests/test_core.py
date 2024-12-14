@@ -225,7 +225,7 @@ class TestCases1(unittest.TestCase):
         ddl = fdmd.load_dir(test_debate_dir, debate_key=fdmd.TEST_DEBATE_KEY)
         self.assertIsNotNone(ddl.final_html)
         soup = BeautifulSoup(ddl.final_html, "html.parser")
-        wrapper_div = soup.find(id="debate_container")
+        wrapper_div = soup.find(id="contribution_a")
         self.assertGreater(len(wrapper_div.attrs["data-debate-key"]), 0)
 
     def test_050__rollout_patches1(self):
