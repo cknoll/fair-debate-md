@@ -17,8 +17,8 @@ def main():
 
     parser_a = subparsers.add_parser("unpack-repos", help="unpack repos from fixtures")
     parser_a.add_argument("target_dir", type=str, help="target dir to unpack repos to")
-    parser_b = subparsers.add_parser("unused-subcommand", help="")
-    parser_b.add_argument("target_dir2", type=str, help="target dir to unpack repos to")
+    # parser_b = subparsers.add_parser("unused-subcommand", help="")
+    # parser_b.add_argument("target_dir2", type=str, help="target dir to unpack repos to")
 
     args = parser.parse_args()
 

@@ -10,7 +10,7 @@ pjoin = os.path.join
 
 @utils.preserve_cwd
 def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None):
-    patch_dir = patch_dir = os.path.abspath(patch_dir)
+    patch_dir = os.path.abspath(patch_dir)
     os.makedirs(repo_dir, exist_ok=True)
     os.chdir(repo_dir)
 
