@@ -76,7 +76,9 @@ class TestCases1(unittest.TestCase):
 
     def test_010__add_keys_to_md(self):
         md2 = fdmd.add_proto_keys_to_md(self.txt1, prefix="k")
-        expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(FIXTURE_DIR, TESTDATA_DIR)
+        expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(
+            FIXTURE_DIR, TESTDATA_DIR
+        )
 
         if 0:
             self.save_debug_result(md2)

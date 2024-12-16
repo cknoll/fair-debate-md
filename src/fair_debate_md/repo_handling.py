@@ -59,7 +59,7 @@ def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, st
 def get_author(debate_key: str = None, author_role: str = None, name: str = None):
 
     if name is None:
-        name = f"fair debate user {debate_key} {author_role}",
+        name = f"fair debate user {debate_key} {author_role}"
         email = f"{debate_key}_{author_role}@fair-debate-users.org"
     else:
         email = f'{name.replace(" ", "_")}@fair-debate-users.org'

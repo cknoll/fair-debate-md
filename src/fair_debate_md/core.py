@@ -169,7 +169,9 @@ class KeyAdder:
 
 
 class SpanAdder:
-    def __init__(self, parent_mdp, html_src: str, key_prefix: str, contribution_childs: dict[str, "MDProcessor"] = None):
+    def __init__(
+        self, parent_mdp, html_src: str, key_prefix: str, contribution_childs: dict[str, "MDProcessor"] = None
+    ):
         self.parent_mdp: MDProcessor = parent_mdp
         self.html_src = html_src
         self.key_prefix = key_prefix
@@ -467,7 +469,10 @@ class MDProcessor:
 
         if len(html_src) > 0:
             sa = SpanAdder(
-                parent_mdp=self, html_src=html_src, key_prefix=f"::{self.key_prefix}", contribution_childs=self.contribution_childs
+                parent_mdp=self,
+                html_src=html_src,
+                key_prefix=f"::{self.key_prefix}",
+                contribution_childs=self.contribution_childs,
             )
             res: str = sa.add_spans_for_keys(prettify=True)
         else:
@@ -694,11 +699,8 @@ def load_dir(
 
 
 def load_repo(
-        repo_host_dir: str,
-        debate_key: str,
-        ctb_list: list[DBContribution] = None,
-        new_debate: bool = True
-    ) -> DebateDirLoader:
+    repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution] = None, new_debate: bool = True
+) -> DebateDirLoader:
 
     repo_dir = pjoin(repo_host_dir, debate_key)
 
@@ -732,7 +734,7 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
     if len(ctb_list) == 1:
         msg = f"add contribution {rel_paths[0]}"
     else:
-        contributions = '\n'.join(rel_paths)
+        contributions = "\n".join(rel_paths)
         msg = f"add contributions:\n{contributions}"
 
     author = repo_handling.get_author(debate_key, ctb.author_role)

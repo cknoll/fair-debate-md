@@ -22,4 +22,4 @@ Convenient helper to get workdir of web app to defined state:
 
 # Coding style
 
-We use `black -l 120 ./` to ensure coding style consistency.
+We use `black -l 110 ./` to ensure coding style consistency. For commit messages we (now) try to follow the [conventional commits specification](https://www.conventionalcommits.org/en/).
