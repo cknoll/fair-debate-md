@@ -398,6 +398,8 @@ class MDProcessor:
         proto_key_prefix="k",
         key_prefix="a",
         md_with_real_keys: str = None,
+        # store whether this is a data-base contribution (i.e. not yet committed)
+        db_ctb: bool = None,
         convert_now=False,
     ):
         self.plain_md_src = plain_md
@@ -409,6 +411,7 @@ class MDProcessor:
 
         self.md_with_proto_keys: str = None
         self.md_with_real_keys = md_with_real_keys
+        self.db_ctb: bool = db_ctb
         self.segmented_html: str = None
         self.contribution_childs: dict[str, MDProcessor] = {}
         self.is_root_mdp: bool = False
@@ -576,7 +579,7 @@ class DebateDirLoader:
 
             with open(fpath, "r") as fp:
                 md_with_real_keys = fp.read()
-            mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys)
+            mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys, db_ctb=False)
             if len(mdp.get_keys()) == 0:
                 fname = os.path.split(fpath)[1]
                 msg = (
@@ -625,7 +628,7 @@ class DebateDirLoader:
                 )
                 logger.warning(msg)
                 continue
-            mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
+            mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body, db_ctb=True)
             mdp.additional_css_classes.append("db_ctb")
             mdp.add_plain_md_as_data = True
             mdp.convert_plain_md_to_md_with_real_keys()
