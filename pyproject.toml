@@ -8,6 +8,9 @@ readme = "README.md"
 requires-python = ">=3.11"
 dynamic = ["dependencies", "version"]
 
+[project.scripts]
+fdmd = "fair_debate_md.cli:main"
+
 # [project.package]
 [tool.setuptools.packages.find]
 where = ["src"]
