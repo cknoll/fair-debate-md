@@ -15,8 +15,9 @@ fdmd = "fair_debate_md.cli:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.setuptools.package-data]
-"fair_debate_md.fixtures" = ["*.md"]
+# this is obsolete since we have a recursive-include in MANIFEST.in
+# [tool.setuptools.package-data]
+# "fair_debate_md.fixtures" = ["*.md"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
