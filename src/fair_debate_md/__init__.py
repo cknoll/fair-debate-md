@@ -18,6 +18,11 @@ except ImportError:
 
     if "PIP_BUILD_TRACKER" in os.environ:
         pass
+    elif "PEP517_BUILD_BACKEND" in os.environ:
+        # this key-value-pair is in os.environ during `python3 -m build`:
+        # 'PEP517_BUILD_BACKEND': 'setuptools.build_meta'
+        pass
     else:
+        # print("\n"*5, os.environ, "\n"*5)
         # raise the original exception
         raise
