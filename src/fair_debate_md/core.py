@@ -130,13 +130,34 @@ def markdownify_and_postprocess(html_src):
 
 def add_proto_keys_to_md(md_src, prefix="k"):
 
-    # TODO-AIDER: if possible convert blocks fenced by triple backticks to <code class="triple_backticks">-blocks
+    # Convert triple backtick code blocks to HTML before markdown processing
+    md_src_processed = convert_triple_backticks_to_html(md_src)
+    
     md = markdown.Markdown()
-    html_src = md.convert(md_src)
+    html_src = md.convert(md_src_processed)
     pka = ProtoKeyAdder(html_src, prefix=prefix)
     html_src2 = pka.add_proto_keys_to_html()
     res = markdownify_and_postprocess(html_src2)
     return res
+
+
+def convert_triple_backticks_to_html(md_src):
+    """
+    Convert triple backtick code blocks to HTML code blocks with class="triple_backticks"
+    """
+    # Pattern to match triple backtick code blocks (with optional language)
+    pattern = r'```(?:\w+)?\n(.*?)\n```'
+    
+    def replace_code_block(match):
+        code_content = match.group(1)
+        # Escape HTML entities in the code content
+        import html
+        escaped_content = html.escape(code_content)
+        return f'<code class="triple_backticks">{escaped_content}</code>'
+    
+    # Use DOTALL flag to match newlines within the code blocks
+    result = re.sub(pattern, replace_code_block, md_src, flags=re.DOTALL)
+    return result
 
 
 def convert_tabs_to_spaces(input_string):
