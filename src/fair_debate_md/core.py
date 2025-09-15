@@ -129,6 +129,8 @@ def markdownify_and_postprocess(html_src):
 
 
 def add_proto_keys_to_md(md_src, prefix="k"):
+
+    # TODO-AIDER: if possible convert blocks fenced by triple backticks to <code class="triple_backticks">-blocks
     md = markdown.Markdown()
     html_src = md.convert(md_src)
     pka = ProtoKeyAdder(html_src, prefix=prefix)
