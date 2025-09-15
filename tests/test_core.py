@@ -88,6 +88,8 @@ class TestCases1(unittest.TestCase):
             md2_expected = fp.read()
 
         md2 = remove_trailing_spaces(md2)
+
+        # IPS()
         self.assertEqual(md2, md2_expected)
 
     def test_011__process_p_tag(self):
@@ -229,6 +231,7 @@ class TestCases1(unittest.TestCase):
         soup = BeautifulSoup(ddl.final_html, "html.parser")
         wrapper_div = soup.find(id="contribution_a")
         self.assertGreater(len(wrapper_div.attrs["data-debate-key"]), 0)
+        # IPS(-1)
 
     def test_050__rollout_patches1(self):
         patch_dir = pjoin(TEST_REPO1_DIR, "patches_01")
