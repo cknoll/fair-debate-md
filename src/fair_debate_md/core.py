@@ -122,16 +122,16 @@ def markdownify_and_postprocess(html_src):
     # explicitly define conversion for strong and emphasized text
     mdc.convert_b = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "**"), mdc)
     mdc.convert_em = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "_"), mdc)
-    
+
     # custom conversion for triple backtick code blocks
     def convert_code_triple_backticks(self, el, text, convert_as_inline):
         if el.get('class') and 'triple_backticks' in el.get('class'):
             # Convert to triple backtick fenced code block
-            return f"\n```\n{text}\n```\n"
+            return f"\n```\n{text}\n```"
         else:
             # Use default inline code conversion
             return f"`{text}`"
-    
+
     mdc.convert_code = types.MethodType(convert_code_triple_backticks, mdc)
 
     res0 = mdc.convert(html_src)
