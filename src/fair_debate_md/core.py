@@ -116,6 +116,11 @@ def markdownify_and_postprocess(html_src):
     """
     employ customized MarkdownConverter
     """
+
+    # TODO-AIDER: currently this converts <code>...</code> blocks to `...` even if it contains multiple lines
+    # I want <code class="triple_backticks">...</code> blocks to be converted to blocks fenced with triple backticks
+
+
     mdc = mdf.MarkdownConverter(heading_style="ATX", bullets="-")
 
     # explicitly define conversion for strong and emphasized text
@@ -132,7 +137,7 @@ def add_proto_keys_to_md(md_src, prefix="k"):
 
     # Convert triple backtick code blocks to HTML before markdown processing
     md_src_processed = convert_triple_backticks_to_html(md_src)
-    
+
     md = markdown.Markdown()
     html_src = md.convert(md_src_processed)
     pka = ProtoKeyAdder(html_src, prefix=prefix)
@@ -147,14 +152,14 @@ def convert_triple_backticks_to_html(md_src):
     """
     # Pattern to match triple backtick code blocks (with optional language)
     pattern = r'```(?:\w+)?\n(.*?)\n```'
-    
+
     def replace_code_block(match):
         code_content = match.group(1)
         # Escape HTML entities in the code content
         import html
         escaped_content = html.escape(code_content)
         return f'<code class="triple_backticks">{escaped_content}</code>'
-    
+
     # Use DOTALL flag to match newlines within the code blocks
     result = re.sub(pattern, replace_code_block, md_src, flags=re.DOTALL)
     return result
