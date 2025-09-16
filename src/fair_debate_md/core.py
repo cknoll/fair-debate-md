@@ -201,11 +201,21 @@ class SpanAdder:
                 self.soup.attrs["class"] = additional_class_str
                 self.soup.attrs["data-plain_md_src"] = json.dumps(self.parent_mdp.plain_md_src)
 
+        self.convert_code_placeholders()
+
         # convert to flat string
         if prettify:
             return str(self.soup.prettify())
         else:
             return str(self.soup)
+
+    def convert_code_placeholders(self):
+        for code_block in self.soup.find_all(name="code"):
+
+            # `.text` is like "::code_placeholder_0::"
+            key = code_block.text
+            if rplmt := self.parent_mdp._code_element_contents.get(key):
+                code_block.string.replace_with(rplmt)
 
     def add_contributions(self, html_src: str) -> None:
         """
@@ -411,13 +421,18 @@ class MDProcessor:
 
     def add_proto_keys_to_md(self, md_src, prefix="k"):
 
+        # first conversion from md to html (to add proto keys), will be converted back later
+
         # Convert triple backtick code blocks to HTML before markdown processing
+        # also replace its content by placeholder-strings
         md_src_processed = self.convert_triple_backticks_to_html(md_src)
 
         md = markdown.Markdown()
         html_src = md.convert(md_src_processed)
         pka = ProtoKeyAdder(html_src, prefix=prefix)
         html_src2 = pka.add_proto_keys_to_html()
+
+        # now convert back to html
         res = self.markdownify_and_postprocess(html_src2)
         return res
 
@@ -436,9 +451,11 @@ class MDProcessor:
         def convert_code_triple_backticks(unused_mdc_self, el, text, convert_as_inline):
             if el.get('class') and 'triple_backticks' in el.get('class'):
                 # Convert to triple backtick fenced code block
-                # `.text` is like "__code_placeholder_0__"
-                code_content = self._code_element_contents.get(text, text)
-                return f"\n```{code_content}```"
+
+                # placeholder-replacements will be performed later in span-Adder
+                # code_content = self._code_element_contents.get(text, text)
+                # return f"\n```{code_content}```"
+                return f"\n```{text}```"
             else:
                 # Use default inline code conversion
                 return f"`{text}`"
@@ -510,7 +527,10 @@ class MDProcessor:
         insert spans related to keys
         """
 
+        # this is the second (and final) conversion from md to html
         md = markdown.Markdown()
+
+        # only here we should resolve placeholders
         html_src = md.convert(self.md_with_real_keys)
 
         if len(html_src) > 0:

@@ -90,6 +90,7 @@ class TestCases1(unittest.TestCase):
 
         md2 = remove_trailing_spaces(md2)
 
+        IPS()
         self.assertEqual(md2, md2_expected)
 
     def test_011__process_p_tag(self):
