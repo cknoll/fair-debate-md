@@ -275,7 +275,7 @@ class SpanAdder:
         """
 
         # TODO: probably we could use the existing soup here?
-        self.soup = BeautifulSoup(html_src, "html.parser")
+        self.soup = BeautifulSoup(html_src, "html.parser", preserve_whitespace_tags=["code"])
 
         all_segments = self.soup.find_all("span", class_="segment")
         assert all_segments, "The must be at least one segment"
