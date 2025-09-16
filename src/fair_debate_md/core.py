@@ -112,34 +112,6 @@ class ProtoKeyAdder:
         return
 
 
-def markdownify_and_postprocess(html_src):
-    """
-    employ customized MarkdownConverter
-    """
-
-    mdc = mdf.MarkdownConverter(heading_style="ATX", bullets="-")
-
-    # explicitly define conversion for strong and emphasized text
-    mdc.convert_b = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "**"), mdc)
-    mdc.convert_em = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "_"), mdc)
-
-    # custom conversion for triple backtick code blocks
-    def convert_code_triple_backticks(self, el, text, convert_as_inline):
-        if el.get('class') and 'triple_backticks' in el.get('class'):
-            # Convert to triple backtick fenced code block
-            return f"\n```\n{text}\n```"
-        else:
-            # Use default inline code conversion
-            return f"`{text}`"
-
-    mdc.convert_code = types.MethodType(convert_code_triple_backticks, mdc)
-
-    res0 = mdc.convert(html_src)
-    res1 = convert_tabs_to_spaces(res0)
-
-    return res1
-
-
 def convert_tabs_to_spaces(input_string):
     lines = input_string.splitlines()
 
@@ -423,6 +395,8 @@ class MDProcessor:
         self.debate_key: str = None
         self.cached_keys: list = None
 
+        self._code_element_contents = {}
+
         # convenience: save one line in the caller
         if convert_now:
             self.convert()
@@ -444,9 +418,37 @@ class MDProcessor:
         html_src = md.convert(md_src_processed)
         pka = ProtoKeyAdder(html_src, prefix=prefix)
         html_src2 = pka.add_proto_keys_to_html()
-        res = markdownify_and_postprocess(html_src2)
-        # IPS(-1)
+        res = self.markdownify_and_postprocess(html_src2)
         return res
+
+    def markdownify_and_postprocess(self, html_src):
+        """
+        employ customized MarkdownConverter
+        """
+
+        mdc = mdf.MarkdownConverter(heading_style="ATX", bullets="-")
+
+        # explicitly define conversion for strong and emphasized text
+        mdc.convert_b = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "**"), mdc)
+        mdc.convert_em = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "_"), mdc)
+
+        # custom conversion for triple backtick code blocks
+        def convert_code_triple_backticks(unused_mdc_self, el, text, convert_as_inline):
+            if el.get('class') and 'triple_backticks' in el.get('class'):
+                # Convert to triple backtick fenced code block
+                # `.text` is like "__code_placeholder_0__"
+                code_content = self._code_element_contents.get(text, text)
+                return f"\n```{code_content}```"
+            else:
+                # Use default inline code conversion
+                return f"`{text}`"
+
+        mdc.convert_code = types.MethodType(convert_code_triple_backticks, mdc)
+
+        res0 = mdc.convert(html_src)
+        res1 = convert_tabs_to_spaces(res0)
+
+        return res1
 
 
     def convert_triple_backticks_to_html(self, md_src):
@@ -459,13 +461,22 @@ class MDProcessor:
         def replace_code_block(match):
             code_content = match.group(1)
             # Escape HTML entities in the code content
-            import html
-            escaped_content = html.escape(code_content)
-            return f'<code class="triple_backticks" data="{escaped_content}">placeholder</code>'
+            # import html
+            # escaped_content = html.escape(code_content)
+
+            idx = len(self._code_element_contents)
+
+            key = self._code_placeholder(idx)
+            self._code_element_contents[key] = code_content
+
+            return f'<code class="triple_backticks">{key}</code>'
 
         # Use DOTALL flag to match newlines within the code blocks
         result = re.sub(pattern, replace_code_block, md_src, flags=re.DOTALL)
         return result
+
+    def _code_placeholder(self, idx: int):
+        return f"::code_placeholder_{idx}::"
 
     def convert_md_with_proto_keys_to_md_with_real_keys(self) -> str:
         proto_key = f"::{self.proto_key_prefix}"
@@ -510,7 +521,6 @@ class MDProcessor:
                 contribution_childs=self.contribution_childs,
             )
             res: str = sa.add_spans_for_keys(prettify=True)
-            # IPS(-1)
         else:
             res = ""
 
