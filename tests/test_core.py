@@ -76,7 +76,7 @@ class TestCases1(unittest.TestCase):
 
     def test_010__add_keys_to_md(self):
         mdp = fdmd.MDProcessor(self.txt1)
-        md2 = mdp.add_proto_keys_to_md(self.txt1, prefix="k")
+        md2 = mdp.add_proto_keys_to_md(self.txt1, prefix="k", early_placeholder_replacement=True)
         expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(
             FIXTURE_DIR, TESTDATA_DIR
         )
@@ -90,7 +90,6 @@ class TestCases1(unittest.TestCase):
 
         md2 = remove_trailing_spaces(md2)
 
-        IPS()
         self.assertEqual(md2, md2_expected)
 
     def test_011__process_p_tag(self):

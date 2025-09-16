@@ -406,6 +406,7 @@ class MDProcessor:
         self.cached_keys: list = None
 
         self._code_element_contents = {}
+        self._early_placeholder_replacement = False
 
         # convenience: save one line in the caller
         if convert_now:
@@ -419,9 +420,19 @@ class MDProcessor:
     def convert_plain_md_to_md_with_proto_keys(self) -> str:
         self.md_with_proto_keys = self.add_proto_keys_to_md(self.plain_md_src, prefix=self.proto_key_prefix)
 
-    def add_proto_keys_to_md(self, md_src, prefix="k"):
+    def add_proto_keys_to_md(
+        self, md_src: str, prefix: str = "k", early_placeholder_replacement: bool = False
+    ):
+        """
 
-        # first conversion from md to html (to add proto keys), will be converted back later
+        :param md_src:      original markdown source
+        :param prefix:      prefix for the inserted proto-keys (like "k"→"::k")
+        :param early_placeholder_replacement:
+                            default: False; if True code-block-placeholders are replaced by the associated
+                            content
+        """
+
+        # first conversion from md to html (to add proto keys); will be converted back later
 
         # Convert triple backtick code blocks to HTML before markdown processing
         # also replace its content by placeholder-strings
@@ -432,7 +443,9 @@ class MDProcessor:
         pka = ProtoKeyAdder(html_src, prefix=prefix)
         html_src2 = pka.add_proto_keys_to_html()
 
-        # now convert back to html
+        # now convert back from html to markdown
+        if early_placeholder_replacement:
+            self._early_placeholder_replacement = True
         res = self.markdownify_and_postprocess(html_src2)
         return res
 
@@ -453,9 +466,13 @@ class MDProcessor:
                 # Convert to triple backtick fenced code block
 
                 # placeholder-replacements will be performed later in span-Adder
-                # code_content = self._code_element_contents.get(text, text)
-                # return f"\n```{code_content}```"
-                return f"\n```{text}```"
+
+                if self._early_placeholder_replacement:
+                    # used in some unittests only
+                    code_content = self._code_element_contents.get(text, text)
+                    return f"\n```{code_content}```"
+                else:
+                    return f"\n```{text}```"
             else:
                 # Use default inline code conversion
                 return f"`{text}`"
@@ -466,7 +483,6 @@ class MDProcessor:
         res1 = convert_tabs_to_spaces(res0)
 
         return res1
-
 
     def convert_triple_backticks_to_html(self, md_src):
         """
