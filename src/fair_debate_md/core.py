@@ -837,6 +837,7 @@ def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
         raise FileExistsError(msg)
 
     mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
+    mdp._early_placeholder_replacement = True
     md_with_real_keys = mdp.convert_plain_md_to_md_with_real_keys()
     with open(ctb.fpath, "w") as fp:
         fp.write(md_with_real_keys)
