@@ -1,0 +1,20 @@
+From e50af62ad508e7f397f1d7be464798398cc97892 Mon Sep 17 00:00:00 2001
+From: user_b <user_b@example.org>
+Date: Wed, 24 Sep 2025 23:13:50 +0200
+Subject: [PATCH 2/2] my contribution
+
+---
+ b/a14b.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 b/a14b.md
+
+diff --git a/b/a14b.md b/b/a14b.md
+new file mode 100644
+index 0000000..3d1b09a
+--- /dev/null
++++ b/b/a14b.md
+@@ -0,0 +1 @@
++::a14b1 Do consectetur officia laboris eiusmod sed commodo, occaecat sit occaecat et ullamco magna nulla enim.
+-- 
+2.39.5
+
