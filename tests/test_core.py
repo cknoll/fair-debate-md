@@ -274,7 +274,8 @@ class TestCases1(unittest.TestCase):
         content_path = pjoin("__FIXTURES_RP__", f"{repo_key}__plain")
         target_dir_path = pjoin(tempdir_path, repo_key)
         cmd = f"fdmd process-content-dir {content_path} {target_dir_path}"
-        os.system(cmd)
+        return_value = os.system(cmd)
+        self.assertEqual(return_value, 0)  # check that command exited without error
 
         repo_path = pjoin(tempdir_path, repo_key)
 
@@ -288,6 +289,30 @@ class TestCases1(unittest.TestCase):
         )
 
         self.assertEqual(res, expected_tree)
+
+        import shutil
+        shutil.rmtree(target_dir_path)
+
+        cmd = f"fdmd process-content-dir {content_path} {target_dir_path} --patches"
+        os.system(cmd)
+        self.assertEqual(return_value, 0)  # check that command exited without error
+
+
+        res = (
+            fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
+        )  # replace strange space
+
+        expected_tree = (
+            ".\n├── a\n│   ├── a5b2a.md\n│   └── a.md\n├── b\n│   ├── a12b.md\n│   "
+            "└── a5b.md\n└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
+            "├── 0002-automatic-contribution.patch\n    "
+            "└── 0003-automatic-contribution.patch\n\n4 directories, 7 files\n"
+        )
+
+        self.assertEqual(res, expected_tree)
+
+
+
 
 
 def remove_trailing_spaces(txt):

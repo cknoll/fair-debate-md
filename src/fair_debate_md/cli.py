@@ -22,12 +22,15 @@ def main():
     )
     parser_b.add_argument("content_dir", type=str, help="dir of content to process")
     parser_b.add_argument("target_dir", type=str, help="target dir (where to create the repo)")
+    parser_b.add_argument(
+        "--patches", help="flag whether or not to create patches", action="store_true"
+    )
 
     args = parser.parse_args()
 
     if args.cmd == "unpack-repos":
         core.unpack_repos(args.target_dir)
     elif args.cmd == "process-content-dir":
-        core.process_content_dir(args.content_dir, args.target_dir)
+        core.process_content_dir(args.content_dir, args.target_dir, convert_to_patches=args.patches)
     else:
         print("nothing to do, see option `--help` for more info")

@@ -866,15 +866,13 @@ def unpack_repos(target_dir):
         repo_handling.rollout_patches(repo_dir=repo_workdir, patch_dir=patch_dir)
 
 
-def process_content_dir(content_dir:str, target_dir:str):
+def process_content_dir(content_dir:str, target_dir:str, convert_to_patches=False):
 
     from . import fixtures
     content_dir1 = content_dir.replace("__FIXTURES_RP__", fixtures.rp_path)
 
     content_dir1 = os.path.abspath(content_dir1)
     target_dir = os.path.abspath(target_dir)
-
-    import glob
 
     fpaths = glob.glob(pjoin(content_dir1, "*", "*.md"))
     fpaths.sort()
@@ -891,6 +889,9 @@ def process_content_dir(content_dir:str, target_dir:str):
         result_files.append(target_fpath)
         print(f"File written: {target_fpath}")
 
+    if convert_to_patches:
+        convert_dir_to_collection_of_patches(target_dir=target_dir)
+
     return result_files
 
 
@@ -906,6 +907,41 @@ def add_keys_to_plain_md_file(src_fpath: str, target_fpath: str, key_prefix: str
 
     with open(target_fpath, "w") as fp:
         fp.write(mdp.md_with_real_keys)
+
+
+def get_basename(fpath):
+    dir_path, fname = os.path.split(fpath)
+    basename, ext = os.path.splitext(fname)
+    return basename
+
+@utils.preserve_cwd
+def convert_dir_to_collection_of_patches(target_dir):
+
+    os.chdir(target_dir)
+    commits = collections.defaultdict(list)
+
+    fpaths = glob.glob("*/*.md")
+    fpaths.sort()
+
+    for fpath in fpaths:
+        key = get_base_name(fpath)
+        level = len(decompose_key(key)) - 1
+        commits[level].append(fpath)
+
+    commits = dict(sorted(commits.items()))
+
+    utils.tolerant_rmtree("./git")
+    os.system("git init")
+
+    users = ["user_a <user_a@example.org>", "user_b <user_b@example.org>"]
+
+    for level, files in commits.items():
+        for fpath in files:
+            os.system(f"git add {fpath}")
+        user = users[level % 2]
+        os.system(f'git commit --author="{user}" -m "automatic contribution"')
+
+    os.system("git format-patch --root -o patches_01")
 
 
 def main():
