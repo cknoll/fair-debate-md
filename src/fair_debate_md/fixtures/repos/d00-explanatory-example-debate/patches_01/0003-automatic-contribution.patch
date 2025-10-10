@@ -1,0 +1,20 @@
+From 9a489c3ee877f7435dac1972f9d3d85e4100de67 Mon Sep 17 00:00:00 2001
+From: user_a <user_a@example.org>
+Date: Fri, 10 Oct 2025 19:15:14 +0200
+Subject: [PATCH 3/3] automatic contribution
+
+---
+ a/a5b2a.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 a/a5b2a.md
+
+diff --git a/a/a5b2a.md b/a/a5b2a.md
+new file mode 100644
+index 0000000..2328502
+--- /dev/null
++++ b/a/a5b2a.md
+@@ -0,0 +1 @@
++::a5b2a1 We will see. ::a5b2a2 I am sceptical.
+-- 
+2.39.5
+

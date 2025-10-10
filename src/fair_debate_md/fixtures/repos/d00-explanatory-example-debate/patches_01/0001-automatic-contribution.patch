@@ -1,0 +1,56 @@
+From 2b82b31fdce8d86ebfabf73fa1c70841da61283d Mon Sep 17 00:00:00 2001
+From: user_a <user_a@example.org>
+Date: Fri, 10 Oct 2025 19:15:14 +0200
+Subject: [PATCH 1/3] automatic contribution
+
+---
+ a/a.md | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 a/a.md
+
+diff --git a/a/a.md b/a/a.md
+new file mode 100644
+index 0000000..f7a0959
+--- /dev/null
++++ b/a/a.md
+@@ -0,0 +1,37 @@
++# ::a1 Explanatory Example Debate
++
++
++::a2 This document contains an example debate to describe the platform _fair\-debate_ and demonstrate its the two main features:
++
++
++1. ::a3 Persistent in\-context\-answers
++2. ::a4 Provable integrity of content data
++
++
++## ::a5 Persistent In\-Context\-Answers
++
++
++::a6 In general, every debate on the platform consists of several _contributions_. ::a7 A contribution is a sequence of ::a8 _statements_. ::a9 Users enter a contribution as ordinary text, which optionally can be stylized using Markdown syntax. ::a10 This is a simple language to influence text formatting by adding some special characters, e. ::a11 g. ::a12 `**bold**` results in **bold** face etc. ::a13 For more information on Markdown see ::a14 <https://en.wikipedia.org/wiki/Markdown>.
++
++
++::a15 After submitting a contribution its full text is processed in the following way: ::a16 Each sentence, each heading, each bullet point or other structure element is considered to be a separate statement and is labeled with its own ::a17 _statement key_. ::a18 This makes each statement ::a19 **referenceable**: ::a20 You can click/tap on each statement and then copy its URL. ::a21 Futhermore, each statement can be answered by a new contribution (which again consists of referenceable and answerable statements).
++
++
++::a22 This allows the following hypothetical debate:
++
++
++- ::a23 Party P1 starts with an inital contribution (with contribution key `a`). ::a24 The respective statements are labeled ::a25 `a1`, `a2`, etc.
++- ::a26 Party P2 does not agree with several points. ::a27 They answer the seventh statement with a contribution (→ key ::a28 `a7b`) and the tenth statement with another contribution `a10b`. ::a29 The statements of these contributions then have the keys: ::a30 `a7b1`, . ::a31 . ::a32 . ::a33 and ::a34 `a10b1`, . ::a35 . ::a36 . ::a37 , respectively. ::a38 Note that contribution keys end with a letter while statement keys end with a number.
++- ::a39 Now, party P1 wants to point out a misunderstanding and creates contribution `a7b4a`: ::a40 This contribution is associated to statement 4 of ::a41 `a7b`.
++
++
++::a42 Each answer\-contribution is displayed directly below the statement to which it refers. ::a43 To improve oversight and clearness different answer\-levels can be hidden or unhidden by users.
++
++
++::a44 This approach allows for a very granular discussions where specific points can be addressed very precisely. ::a45 If necessary a deep back\-and\-forth discussions can evolve which allows to advance to the root causes of disagreement and potentially generate new insights. ::a46 At the same time the ::a47 **overall context is always maintained**. ::a48 Thus, ripping quotes out of context is impossible and shifting the topic . ::a49 In addition, due to the availability of the statement keys it is much more feasible to give precise references than in classical online\-discussions.
++
++
++## ::a50 Provable integrity of content data
++
++
++::a51 As all kinds of infrastructure a discussion platform is operated and controlled by humans. ::a52 In truly controversial discussions about a polarizing topic there might be the risk that the operator of the discussion platform interferes in the content, e. ::a53 g. ::a54 by deletion or manipulation. ::a55 Another risk is that, e. ::a56 g. ::a57 after an argument turned out to be wrong, the platform is falsely accused of manipulation. ::a58 The approach of ::a59 _Fair Debate_ counters both risks by outsourcing the storage of the content to public git hosting services such as GitHub: ::a60 Each contribution is stored in a plain text file and committed to a repo. ::a61 When displaying the current state of the debate the platform does not load the content from a local database. ::a62 This would be intransparent and allow for undetectable manipulation. ::a63 Instead the displayed contents are loaded from the public git repos of the participants. ::a64 Those repos contain the whole change\-history and their consistency is ensured by cryptographic hashes. ::a65 Thus, any manipulation but also any false accusation of manipulation is easily detectable.
+-- 
+2.39.5
+
