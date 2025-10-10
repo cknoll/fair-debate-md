@@ -265,6 +265,14 @@ class TestCases1(unittest.TestCase):
         expected_result = TEST_REPO1_EXPECTED_TREE
         self.assertEqual(res, expected_result)
 
+    def test_070__cli_unpack_repos(self):
+
+        tempdir_path = self._mk_temp_dir()
+        content_path = pjoin(FIXTURE_DIR, "repo-preparation", "./d00-explanatory-example-debate__plain")
+        cmd = f"fdmd process-content-dir {content_path} {tempdir_path}"
+        os.system(cmd)
+
+
 
 def remove_trailing_spaces(txt):
     return "\n".join([line.rstrip(" ") for line in txt.split("\n")])

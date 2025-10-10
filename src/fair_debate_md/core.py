@@ -866,5 +866,10 @@ def unpack_repos(target_dir):
         repo_handling.rollout_patches(repo_dir=repo_workdir, patch_dir=patch_dir)
 
 
+def process_content_dir(content_dir:str, target_dir:str):
+    content_dir = os.path.abspath(content_dir)
+    target_dir = os.path.abspath(target_dir)
+    IPS()
+
 def main():
     pass
