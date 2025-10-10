@@ -17,7 +17,13 @@ Current main serve as backend support library for fair-debate-web
 
 Convenient helper to get workdir of web app to defined state:
 
-`fdmd unpack-repos ./content_repos`
+- `fdmd unpack-repos ./content_repos`
+
+
+Convenient helper to transform plain dir markdown files into a repo with keys:
+
+- `fdmd process-content-dir __FIXTURES_RP__/d00-explanatory-example-debate__plain ./d00-explanatory-example-debate`
+
 
 
 # Coding style

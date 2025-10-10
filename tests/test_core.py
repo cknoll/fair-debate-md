@@ -267,11 +267,27 @@ class TestCases1(unittest.TestCase):
 
     def test_070__cli_unpack_repos(self):
 
+        repo_key = "d00-explanatory-example-debate"
+
         tempdir_path = self._mk_temp_dir()
-        content_path = pjoin(FIXTURE_DIR, "repo-preparation", "./d00-explanatory-example-debate__plain")
-        cmd = f"fdmd process-content-dir {content_path} {tempdir_path}"
+        # content_path = pjoin(FIXTURE_DIR, "repo-preparation", f"{repo_key}__plain")
+        content_path = pjoin("__FIXTURES_RP__", f"{repo_key}__plain")
+        target_dir_path = pjoin(tempdir_path, repo_key)
+        cmd = f"fdmd process-content-dir {content_path} {target_dir_path}"
         os.system(cmd)
 
+        repo_path = pjoin(tempdir_path, repo_key)
+
+        res = (
+            fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
+        )  # replace strange space
+
+        expected_tree = (
+            ".\n├── a\n│   ├── a5b2a.md\n│   └── a.md\n└── b\n"
+            "    ├── a12b.md\n    └── a5b.md\n\n3 directories, 4 files\n"
+        )
+
+        self.assertEqual(res, expected_tree)
 
 
 def remove_trailing_spaces(txt):

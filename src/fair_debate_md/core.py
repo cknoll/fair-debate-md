@@ -867,9 +867,46 @@ def unpack_repos(target_dir):
 
 
 def process_content_dir(content_dir:str, target_dir:str):
-    content_dir = os.path.abspath(content_dir)
+
+    from . import fixtures
+    content_dir1 = content_dir.replace("__FIXTURES_RP__", fixtures.rp_path)
+
+    content_dir1 = os.path.abspath(content_dir1)
     target_dir = os.path.abspath(target_dir)
-    IPS()
+
+    import glob
+
+    fpaths = glob.glob(pjoin(content_dir1, "*", "*.md"))
+    fpaths.sort()
+
+    result_files = []
+
+    for src_fpath in fpaths:
+        _, fname = os.path.split(src_fpath)
+        target_fpath = src_fpath.replace(content_dir1, target_dir)
+        target_dirpath, _ = os.path.split(target_fpath)
+        os.makedirs(target_dirpath, exist_ok=True)
+        basename, _  = os.path.splitext(fname)
+        add_keys_to_plain_md_file(src_fpath=src_fpath, target_fpath=target_fpath, key_prefix=basename)
+        result_files.append(target_fpath)
+        print(f"File written: {target_fpath}")
+
+    return result_files
+
+
+def add_keys_to_plain_md_file(src_fpath: str, target_fpath: str, key_prefix: str):
+
+    with open(src_fpath) as fp:
+        md_src = fp.read()
+
+    mdp = MDProcessor(plain_md=md_src, key_prefix=key_prefix)
+
+    mdp.convert_plain_md_to_md_with_proto_keys()
+    mdp.convert_md_with_proto_keys_to_md_with_real_keys()
+
+    with open(target_fpath, "w") as fp:
+        fp.write(mdp.md_with_real_keys)
+
 
 def main():
     pass
