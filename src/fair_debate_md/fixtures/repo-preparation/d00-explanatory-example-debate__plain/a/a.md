@@ -1,9 +1,11 @@
 # Explanatory Example Debate
 
-This document contains an example debate to describe the platform *fair-debate* and demonstrate its the two main features:
+This document contains an example "debate" to describe the platform *fair-debate* and demonstrate its main features. It will be
 
 1. Persistent in-context-answers
 2. Provable integrity of content data
+
+In order to describe the
 
 ## Persistent In-Context-Answers
 
