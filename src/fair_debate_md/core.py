@@ -208,12 +208,16 @@ class SpanAdder:
             flat_html = str(self.soup.prettify())
             return self.decode_strip_me_tags(flat_html)
         else:
-            return str(self.soup)
+            return self.decode_strip_me_tags()
 
-    def decode_strip_me_tags(self, flat_html):
+    def decode_strip_me_tags(self, flat_html=None):
         # TODO: this only needs to be done for the top level (currently self.level == 1)
         # IPS(self.key_prefix == "::a")
-        new_soup = BeautifulSoup(flat_html, "html.parser")
+
+        if flat_html is not None:
+            new_soup = BeautifulSoup(flat_html, "html.parser")
+        else:
+            new_soup = self.soup
         for code_block in new_soup.find_all(name="code"):
             if code_block.get("_strip_me_") == "True":
                 code_block.string.replace_with(code_block.string.strip())

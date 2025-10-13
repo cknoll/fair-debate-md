@@ -218,7 +218,11 @@ class TestCases1(unittest.TestCase):
         # test simple string
         _, res = fdmd.core._convert_plain_md_to_segmented_html("foo bar")
         res_expected = '<div class="p_level0"><span class="segment" id="a1"> foo bar</span></div>'
+
+        # we do conversion twice because the backend currently does so
+        # (to handle inline code-tags with _strip_me_ attribute)
         res_expected = str(BeautifulSoup(res_expected, "html.parser").prettify())
+        res_expected = str(BeautifulSoup(res_expected, "html.parser"))
         self.assertEqual(res, res_expected)
 
         # test full file
