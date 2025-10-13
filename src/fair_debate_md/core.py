@@ -340,6 +340,7 @@ class SpanAdder:
         for current_child, next_child in zip(original_children, next_children):
             new_child_list = self.process_child(current_child, level=level + 1)
             root.extend(new_child_list)
+
             if self.is_new_paragraph_tag(next_child) and root.span_tag_is_open:
                 self.close_tag(root, "span")
 
@@ -348,7 +349,7 @@ class SpanAdder:
 
         return root
 
-    def process_child(self, child: element.PageElement, level: int):
+    def process_child(self, child: element.PageElement, level: int) -> list:
         if isinstance(child, element.Tag):
             self.active_tag_stack.append(child)
             child.span_tag_is_open = None
@@ -390,7 +391,7 @@ class SpanAdder:
 
         new_str_parts.append(child.text[content_index:])  # add final content
         res = element.NavigableString("".join(new_str_parts))
-        return res
+        return [res]
 
     def encode_tags(self, txt):
         return txt.replace("<", self.encoded_left_delimiter).replace(">", self.encoded_right_delimiter)
