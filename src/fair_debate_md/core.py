@@ -181,7 +181,6 @@ class SpanAdder:
 
         self.add_contributions(res2)
         res3 = self.convert_soup_to_final_html(prettify=prettify)
-        # IPS(self.contribution_childs, -1)
         return res3
 
     def convert_soup_to_final_html(self, prettify: bool = False):
@@ -206,17 +205,35 @@ class SpanAdder:
 
         # convert to flat string
         if prettify:
-            return str(self.soup.prettify())
+            flat_html = str(self.soup.prettify())
+            return self.decode_strip_me_tags(flat_html)
         else:
             return str(self.soup)
 
+    def decode_strip_me_tags(self, flat_html):
+        # TODO: this only needs to be done for the top level (currently self.level == 1)
+        # IPS(self.key_prefix == "::a")
+        new_soup = BeautifulSoup(flat_html, "html.parser")
+        for code_block in new_soup.find_all(name="code"):
+            if code_block.get("_strip_me_") == "True":
+                code_block.string.replace_with(code_block.string.strip())
+                del code_block["_strip_me_"]
+
+        return str(new_soup)
+
     def convert_code_placeholders(self):
+        """
+        insert back the original content of the replaced code blocks
+        """
         for code_block in self.soup.find_all(name="code"):
 
             # `.text` is like "::code_placeholder_0::"
             key = code_block.text
             if rplmt := self.parent_mdp._code_element_contents.get(key):
                 code_block.string.replace_with(rplmt)
+
+            if code_block.string == code_block.string.strip():
+                code_block["_strip_me_"] = "True"
 
     def add_contributions(self, html_src: str) -> None:
         """
@@ -558,11 +575,7 @@ class MDProcessor:
                 contribution_childs=self.contribution_childs,
             )
 
-            # !!prettify!!
-            # We actually want prettification but not inside of <code>-blocks
-            # alternatively we could solve this by css (only use whitespace: pre in multiline code-blocks (but feels wrong))
-            # res: str = sa.add_spans_for_keys(prettify=True)
-            res: str = sa.add_spans_for_keys(prettify=False)
+            res: str = sa.add_spans_for_keys(prettify=True)
         else:
             res = ""
 
@@ -572,7 +585,7 @@ class MDProcessor:
 
 def _convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
     """
-    convenience function for unittests not meant (anymore as public interface function)
+    convenience function for unittests not meant (anymore) as public interface function
     """
 
     mdp = MDProcessor(md_src)

@@ -101,25 +101,6 @@ class TestCases1(unittest.TestCase):
         # This currently works but breaks prettification, see !!prettify!!
         self.assertIn("<code>a13</code>", ddl.final_html)
 
-
-    # vermutlich obsolet
-    def test_0x11__add_keys_to_md(self):
-
-        md_src = (
-            "This is an answer to statement `a13` (first entry in the list). "
-            "It itself is also a contribution. "
-            "Because it refers to statement `a13` its contribution key is `a13b`."
-        )
-        mdp = fdmd.MDProcessor(md_src)
-        mdp.convert_plain_md_to_md_with_proto_keys()
-        # md2 = mdp.add_proto_keys_to_md(md_src, prefix="k", early_placeholder_replacement=True)
-        mdp.convert_md_with_proto_keys_to_md_with_real_keys()
-
-        html_res = mdp.get_html_with_segments()
-        # expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md")
-
-        IPS()
-
     def test_011__process_p_tag(self):
         html_src = "<p>Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem. Adipisci sit adipisci non est.</p>"
         pka = fdmd.ProtoKeyAdder(html_src, prefix="k")
