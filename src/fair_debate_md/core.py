@@ -779,6 +779,9 @@ def load_dir(
 
     return ddl
 
+class RepoNotFoundError(Exception):
+    pass
+
 
 def load_repo(
     repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution] = None, new_debate: bool = True
@@ -792,7 +795,10 @@ def load_repo(
     if not os.path.isdir(repo_dir):
         raise FileNotFoundError(f"directory: {repo_dir}")
     if not os.path.isdir(pjoin(repo_dir, ".git")):
-        raise FileNotFoundError(f"directory: {repo_dir}/.git")
+
+        part_list = repo_dir.split(os.path.sep)
+        display_dir = os.path.sep.join(part_list[-3:])
+        raise RepoNotFoundError(f"directory: {display_dir}/.git")
 
     return load_dir(repo_dir, ctb_list, debate_key=debate_key)
 
