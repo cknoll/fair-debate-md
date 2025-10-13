@@ -1,11 +1,19 @@
 # Explanatory Example Debate
 
-This document contains an example "debate" to describe the platform *fair-debate* and demonstrate its main features. It will be
+This document contains an example "debate" to describe the platform *fair-debate* and demonstrate its main features. Hence it is formulated in form of a dialogue.
+
+Currently you are reading the initial *contribution* of this debate. It has the *contribution key*: `a`.
+Each contribution consists of one or more statements (sentences, list entries etc.). Each statement has its own key and thus is uniquely referenceable. Now the main features of *fair-debate* are:
 
 1. Persistent in-context-answers
 2. Provable integrity of content data
 
-In order to describe the
+To learn more about them, click on the highlighted statements of the text. Explanation: A highlighted text-part means: this statement has been answered and answers can be unfolded.
+
+
+---
+
+The following text will be moved to higher level answers in the future.
 
 ## Persistent In-Context-Answers
 

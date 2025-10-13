@@ -22,7 +22,7 @@ Convenient helper to get workdir of web app to defined state:
 
 Convenient helper to transform plain dir markdown files into a repo with keys:
 
-- `fdmd process-content-dir __FIXTURES_RP__/d00-explanatory-example-debate__plain ./d00-explanatory-example-debate`
+- `fdmd process-content-dir __FIXTURES_RP__/d00-explanatory-example-debate__plain ./d00-explanatory-example-debate --patches`
 
 
 
