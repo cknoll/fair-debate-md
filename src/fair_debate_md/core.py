@@ -181,6 +181,7 @@ class SpanAdder:
 
         self.add_contributions(res2)
         res3 = self.convert_soup_to_final_html(prettify=prettify)
+        # IPS(self.contribution_childs, -1)
         return res3
 
     def convert_soup_to_final_html(self, prettify: bool = False):
@@ -556,7 +557,12 @@ class MDProcessor:
                 key_prefix=f"::{self.key_prefix}",
                 contribution_childs=self.contribution_childs,
             )
-            res: str = sa.add_spans_for_keys(prettify=True)
+
+            # !!prettify!!
+            # We actually want prettification but not inside of <code>-blocks
+            # alternatively we could solve this by css (only use whitespace: pre in multiline code-blocks (but feels wrong))
+            # res: str = sa.add_spans_for_keys(prettify=True)
+            res: str = sa.add_spans_for_keys(prettify=False)
         else:
             res = ""
 

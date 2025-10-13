@@ -92,6 +92,34 @@ class TestCases1(unittest.TestCase):
 
         self.assertEqual(md2, md2_expected)
 
+    def test_011__add_keys_to_md(self):
+
+        repo_path = "/home/ck/z_workstick_backup/projekte/fair-debate/fair-debate-web/content_repos"
+        ddl = fdmd.load_repo(repo_path, debate_key="d00-explanatory-example-debate", new_debate=False)
+        self.assertIn("This is an answer to statement", ddl.final_html)
+
+        # This currently works but breaks prettification, see !!prettify!!
+        self.assertIn("<code>a13</code>", ddl.final_html)
+
+
+    # vermutlich obsolet
+    def test_0x11__add_keys_to_md(self):
+
+        md_src = (
+            "This is an answer to statement `a13` (first entry in the list). "
+            "It itself is also a contribution. "
+            "Because it refers to statement `a13` its contribution key is `a13b`."
+        )
+        mdp = fdmd.MDProcessor(md_src)
+        mdp.convert_plain_md_to_md_with_proto_keys()
+        # md2 = mdp.add_proto_keys_to_md(md_src, prefix="k", early_placeholder_replacement=True)
+        mdp.convert_md_with_proto_keys_to_md_with_real_keys()
+
+        html_res = mdp.get_html_with_segments()
+        # expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md")
+
+        IPS()
+
     def test_011__process_p_tag(self):
         html_src = "<p>Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem. Adipisci sit adipisci non est.</p>"
         pka = fdmd.ProtoKeyAdder(html_src, prefix="k")
@@ -297,7 +325,6 @@ class TestCases1(unittest.TestCase):
         os.system(cmd)
         self.assertEqual(return_value, 0)  # check that command exited without error
 
-
         res = (
             fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
         )  # replace strange space
@@ -310,9 +337,6 @@ class TestCases1(unittest.TestCase):
         )
 
         self.assertEqual(res, expected_tree)
-
-
-
 
 
 def remove_trailing_spaces(txt):
