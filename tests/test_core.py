@@ -2,6 +2,7 @@ import unittest
 import os
 from textwrap import dedent as twdd
 import tempfile
+
 from bs4 import BeautifulSoup
 
 from ipydex import IPS, activate_ips_on_exception
@@ -115,13 +116,33 @@ class TestCases1(unittest.TestCase):
         md2 = remove_trailing_spaces(md2)
         self.assertEqual(md2, md2_expected)
 
+    def _unpack_d00_explanatory_example_debate_repo(self, patches=False):
+        import shutil
+
+        repo_key = "d00-explanatory-example-debate"
+        tempdir_path = self._mk_temp_dir()
+        # content_path = pjoin(FIXTURE_DIR, "repo-preparation", f"{repo_key}__plain")
+        self.content_path = pjoin("__FIXTURES_RP__", f"{repo_key}__plain")
+        target_dir_path = pjoin(tempdir_path, repo_key)
+        shutil.rmtree(target_dir_path, ignore_errors=True)
+
+        if patches:
+            flag = " --patches"
+        else:
+            flag = ""
+        cmd = f"fdmd process-content-dir {self.content_path} {target_dir_path}{flag}"
+        return_value = os.system(cmd)
+        self.assertEqual(return_value, 0)  # check that command exited without error
+
+        return target_dir_path
+
     def test_011__add_keys_to_md(self):
 
-        repo_path = "/home/ck/z_workstick_backup/projekte/fair-debate/fair-debate-web/content_repos"
-        ddl = fdmd.load_repo(repo_path, debate_key="d00-explanatory-example-debate", new_debate=False)
+        repo_path = self._unpack_d00_explanatory_example_debate_repo(patches=True)
+        repo_parent_path = os.path.dirname(repo_path)
+        ddl = fdmd.load_repo(repo_parent_path, debate_key="d00-explanatory-example-debate", new_debate=False)
         self.assertIn("This is an answer to statement", ddl.final_html)
 
-        # This currently works but breaks prettification, see !!prettify!!
         self.assertIn("<code>a13</code>", ddl.final_html)
 
     def test_013__handle_abbreviations(self):
@@ -313,46 +334,29 @@ class TestCases1(unittest.TestCase):
         self.assertEqual(res, expected_result)
 
     def test_070__cli_unpack_repos(self):
-
-        repo_key = "d00-explanatory-example-debate"
-
-        tempdir_path = self._mk_temp_dir()
-        # content_path = pjoin(FIXTURE_DIR, "repo-preparation", f"{repo_key}__plain")
-        content_path = pjoin("__FIXTURES_RP__", f"{repo_key}__plain")
-        target_dir_path = pjoin(tempdir_path, repo_key)
-        cmd = f"fdmd process-content-dir {content_path} {target_dir_path}"
-        return_value = os.system(cmd)
-        self.assertEqual(return_value, 0)  # check that command exited without error
-
-        repo_path = pjoin(tempdir_path, repo_key)
+        repo_path = self._unpack_d00_explanatory_example_debate_repo()
 
         res = (
             fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a5b2a.md\n│   └── a.md\n└── b\n"
-            "    ├── a13b.md\n    └── a14b.md\n\n3 directories, 4 files\n"
+            ".\n├── a\n│   ├── a13b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n└── b\n"
+            "    ├── a13b.md\n    └── a14b.md\n\n3 directories, 5 files\n"
         )
 
         self.assertEqual(res, expected_tree)
 
-        import shutil
-        shutil.rmtree(target_dir_path)
-
-        cmd = f"fdmd process-content-dir {content_path} {target_dir_path} --patches"
-        os.system(cmd)
-        self.assertEqual(return_value, 0)  # check that command exited without error
-
+        repo_path = self._unpack_d00_explanatory_example_debate_repo(patches=True)
         res = (
             fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a5b2a.md\n│   └── a.md\n├── b\n│   ├── a13b.md\n│   "
+            ".\n├── a\n│   ├── a13b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n├── b\n│   ├── a13b.md\n│   "
             "└── a14b.md\n└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
             "├── 0002-automatic-contribution.patch\n    "
-            "└── 0003-automatic-contribution.patch\n\n4 directories, 7 files\n"
+            "└── 0003-automatic-contribution.patch\n\n4 directories, 8 files\n"
         )
 
         self.assertEqual(res, expected_tree)
