@@ -101,7 +101,18 @@ class TestCases1(unittest.TestCase):
         # This currently works but breaks prettification, see !!prettify!!
         self.assertIn("<code>a13</code>", ddl.final_html)
 
-    def test_011__process_p_tag(self):
+    def test_013__handle_abbreviations(self):
+
+        md_src = (
+            "Some text including some abbreviations, i.e. strings like "
+            "e.g. 'w.r.t. something' or 'bspw.' etc."
+        )
+        mdp = fdmd.MDProcessor(md_src)
+        segmented_html = mdp.convert()
+        # IPS(-1)
+        # self.assertEqual(segmented_html.count("<span"), 1)
+
+    def test_013__process_p_tag(self):
         html_src = "<p>Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem. Adipisci sit adipisci non est.</p>"
         pka = fdmd.ProtoKeyAdder(html_src, prefix="k")
         pka.add_proto_keys_to_html()
