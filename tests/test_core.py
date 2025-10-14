@@ -143,7 +143,7 @@ class TestCases1(unittest.TestCase):
         ddl = fdmd.load_repo(repo_parent_path, debate_key="d00-explanatory-example-debate", new_debate=False)
         self.assertIn("This is an answer to statement", ddl.final_html)
 
-        self.assertIn("<code>a13</code>", ddl.final_html)
+        self.assertIn("<code>a14</code>", ddl.final_html)
 
     def test_013__handle_abbreviations(self):
 
