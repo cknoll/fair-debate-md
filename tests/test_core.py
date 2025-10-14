@@ -341,8 +341,8 @@ class TestCases1(unittest.TestCase):
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a13b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n└── b\n"
-            "    ├── a13b.md\n    └── a14b.md\n\n3 directories, 5 files\n"
+            ".\n├── a\n│   ├── a14b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n└── b\n"
+            "    ├── a14b.md\n    └── a15b.md\n\n3 directories, 5 files\n"
         )
 
         self.assertEqual(res, expected_tree)
@@ -353,8 +353,8 @@ class TestCases1(unittest.TestCase):
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a13b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n├── b\n│   ├── a13b.md\n│   "
-            "└── a14b.md\n└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
+            ".\n├── a\n│   ├── a14b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n├── b\n│   ├── a14b.md\n│   "
+            "└── a15b.md\n└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
             "├── 0002-automatic-contribution.patch\n    "
             "└── 0003-automatic-contribution.patch\n\n4 directories, 8 files\n"
         )
