@@ -146,6 +146,13 @@ class ProtoKeyAdder:
         if p1.endswith("w.") and p2 == "r." and p3 == "t.":
             return (idx, idx + 1, idx + 2)
 
+        # version numbers
+        # TODO: improve logic and add tests
+        # maybe even require a whitespace after the dot to qualify as statement splitter
+        self.version_number_pattern1 = re.compile(".*v[0-9]+")
+        self.version_number_pattern2 = re.compile("[0-9]+")
+        if self.version_number_pattern1.match(p1) and self.version_number_pattern2.match(p2):
+            return (idx, idx + 1)
         return None
 
     def add_proto_keys_to_tag(self, tag: element.Tag, level=0):
