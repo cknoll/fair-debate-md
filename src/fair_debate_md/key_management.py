@@ -67,7 +67,7 @@ class ProtoKeyAdder:
 
             self.parts.append(content)
             # TODO: handle space after delimiter (or as part of delimiter)
-            if counter == len_raw_parts - 2:
+            if counter == len_raw_parts - 1:
                 if len(content.rstrip()) < 4:
                     # do not add extra key for short strings after last sentence
                     continue
@@ -117,10 +117,18 @@ class ProtoKeyAdder:
             last_tup = tup
             idx = tup[-1] + 1
 
+        # also ensure that all indices of self.original_parts are included
+        for i in range(idx, len(original_parts) - self.MAX_LOOK_AHEAD):
+            parts_to_join_s2.append((i,))
+
         res_parts = []
         for tup in parts_to_join_s2:
             res_part_list = [self.original_parts[idx] for idx in tup]
             res_parts.append("".join(res_part_list))
+
+        # drop empty strings at the end
+        while res_parts and res_parts[-1].strip() == "":
+            res_parts.pop()
 
         return res_parts
 

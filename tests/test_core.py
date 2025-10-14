@@ -83,7 +83,7 @@ class TestCases1(unittest.TestCase):
         txt1 = self.txt1[:N]
 
         mdp = fdmd.MDProcessor(txt1)
-        md2 = mdp.add_proto_keys_to_md(txt1, prefix="k", early_placeholder_replacement=True)
+        md2 = mdp.add_proto_keys_to_md(txt1, prefix="k", early_placeholder_replacement=True).rstrip()
 
         expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(
             FIXTURE_DIR, TESTDATA_DIR
@@ -95,7 +95,6 @@ class TestCases1(unittest.TestCase):
         N2 = 164
         md2_ex = md2_expected[:N2]
 
-        IPS(-1)
         self.assertEqual(md2, md2_ex)
 
 
@@ -114,8 +113,6 @@ class TestCases1(unittest.TestCase):
             md2_expected = fp.read()
 
         md2 = remove_trailing_spaces(md2)
-
-        IPS()
         self.assertEqual(md2, md2_expected)
 
     def test_011__add_keys_to_md(self):
