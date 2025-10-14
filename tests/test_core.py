@@ -75,6 +75,31 @@ class TestCases1(unittest.TestCase):
             fp.write(result)
 
     def test_010__add_keys_to_md(self):
+
+        # small part for easier debugging:
+
+        N = 148
+
+        txt1 = self.txt1[:N]
+
+        mdp = fdmd.MDProcessor(txt1)
+        md2 = mdp.add_proto_keys_to_md(txt1, prefix="k", early_placeholder_replacement=True)
+
+        expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(
+            FIXTURE_DIR, TESTDATA_DIR
+        )
+
+        with open(expected_result_fpath, "r") as fp:
+            md2_expected = fp.read()
+
+        N2 = 164
+        md2_ex = md2_expected[:N2]
+
+        IPS(-1)
+        self.assertEqual(md2, md2_ex)
+
+
+        # now the full content
         mdp = fdmd.MDProcessor(self.txt1)
         md2 = mdp.add_proto_keys_to_md(self.txt1, prefix="k", early_placeholder_replacement=True)
         expected_result_fpath = TESTDATA1.replace(".md", "_with_proto_keys.md").replace(
@@ -90,6 +115,7 @@ class TestCases1(unittest.TestCase):
 
         md2 = remove_trailing_spaces(md2)
 
+        IPS()
         self.assertEqual(md2, md2_expected)
 
     def test_011__add_keys_to_md(self):
@@ -105,14 +131,14 @@ class TestCases1(unittest.TestCase):
 
         md_src = (
             "Some text including some abbreviations, i.e. strings like "
-            "e.g. 'w.r.t. something' or 'bspw.' etc."
+            "e.g. 'w.r.t. something' or 'bspw.' etc. Now this is a new sentence. "
+            "This also, w.r.t. something different."
         )
         mdp = fdmd.MDProcessor(md_src)
         segmented_html = mdp.convert()
-        # IPS(-1)
-        # self.assertEqual(segmented_html.count("<span"), 1)
+        self.assertEqual(segmented_html.count("<span"), 3)
 
-    def test_013__process_p_tag(self):
+    def test_014__process_p_tag(self):
         html_src = "<p>Ut <em>quiquia <strong>eius</strong> dolorem</em> voluptatem. Adipisci sit adipisci non est.</p>"
         pka = fdmd.ProtoKeyAdder(html_src, prefix="k")
         pka.add_proto_keys_to_html()
