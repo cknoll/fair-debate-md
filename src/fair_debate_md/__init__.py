@@ -13,7 +13,7 @@ try:
     from . import repo_handling
     from . import fixtures
     from .core import *
-except ImportError:
+except ImportError as ex:
     import os
 
     if "PIP_BUILD_TRACKER" in os.environ:
@@ -21,6 +21,8 @@ except ImportError:
     elif "PEP517_BUILD_BACKEND" in os.environ:
         # this key-value-pair is in os.environ during `python3 -m build`:
         # 'PEP517_BUILD_BACKEND': 'setuptools.build_meta'
+        pass
+    elif "_PYPROJECT_HOOKS_BUILD_BACKEND" in os.environ:
         pass
     else:
         # print("\n"*5, os.environ, "\n"*5)

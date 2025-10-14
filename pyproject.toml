@@ -23,6 +23,6 @@ where = ["src"]
 dependencies = {file = ["requirements.txt"]}
 version = {attr = "fair_debate_md.__version__"}
 
-# this siginificantly speeds up pytest
+# this significantly speeds up pytest
 [tool.pytest.ini_options]
 testpaths = ["tests"]
