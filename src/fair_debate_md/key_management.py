@@ -69,8 +69,14 @@ class ProtoKeyAdder:
             self.parts.append(self.proto_key)
             child.added_keys += 1
 
-        # having a key at the end caused problems -> remove
-        if self and self.parts[-1] == self.proto_key:
+        # We only want a key at the end if a sentence ends -> remove otherwise
+        self.parts: list[str]
+        if (
+            len(self.parts)
+            and self.parts[-1] == self.proto_key
+            # the following means: the last real part is the end of a sentence
+            and not self.parts[-2].strip()[-1] in (".", ":")
+        ):
             self.parts.pop()
 
         res = element.NavigableString("".join(self.parts))
@@ -99,7 +105,7 @@ class ProtoKeyAdder:
 
         parts_to_join_s1 = []
         for tup in self.parts_to_join:
-                parts_to_join_s1.append(tuple([*tup, tup[-1] + 1]))
+            parts_to_join_s1.append(tuple([*tup, tup[-1] + 1]))
 
         # step2: convert to [ (0,), (1, 2), (3,), (4, 5, 6), (7,), (8,)]
         # also: convert [ (0, 1), (1, 2)] to [(0, 1, 2)]
@@ -130,10 +136,6 @@ class ProtoKeyAdder:
             res_parts.pop()
 
         return res_parts
-
-
-
-
 
     def classify_abbreviations(self, p1: str, p2: str, p3: str, idx: int) -> tuple[int] | None:
         if p1.endswith("bspw."):
