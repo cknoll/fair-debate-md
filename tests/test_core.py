@@ -136,6 +136,15 @@ class TestCases1(unittest.TestCase):
 
         return target_dir_path
 
+    def test_012__add_keys_to_md(self):
+
+        md_src = (
+            "This is the *first* sentence. Then `comes` another *sentence*. Finally the **last** one."
+        )
+        mdp = fdmd.MDProcessor(md_src)
+        segmented_html = mdp.convert()
+        self.assertEqual(segmented_html.count("<span"), 3)
+
     def test_011__add_keys_to_md(self):
 
         repo_path = self._unpack_d00_explanatory_example_debate_repo(patches=True)

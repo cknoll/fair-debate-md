@@ -42,11 +42,6 @@ class ProtoKeyAdder:
             # nothing changed
             return child
 
-        # Problem: the current approach splits the incoming text not only at sentence delimiters but also
-        # at abbreviations like "e.g.", "i.e.", "w.r.t." etc.
-        #
-        # TODO-AIDER: this should be prevented
-
         old_txt = str(child)
         start_idcs = [0]
         for match in matches:
@@ -73,6 +68,10 @@ class ProtoKeyAdder:
                     continue
             self.parts.append(self.proto_key)
             child.added_keys += 1
+
+        # having a key at the end caused problems -> remove
+        if self and self.parts[-1] == self.proto_key:
+            self.parts.pop()
 
         res = element.NavigableString("".join(self.parts))
         res.added_keys = child.added_keys
