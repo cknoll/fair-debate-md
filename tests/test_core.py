@@ -343,6 +343,7 @@ class TestCases1(unittest.TestCase):
         self.assertEqual(res, expected_result)
 
     def test_070__cli_unpack_repos(self):
+        # TODO: improve this test such that its adaption to content updates is easier (or unnecessary)
         repo_path = self._unpack_d00_explanatory_example_debate_repo()
 
         res = (
@@ -350,8 +351,8 @@ class TestCases1(unittest.TestCase):
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a14b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n└── b\n"
-            "    ├── a14b.md\n    └── a15b.md\n\n3 directories, 5 files\n"
+            ".\n├── a\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n│   ├── a14b6a.md\n"
+            "│   └── a.md\n└── b\n    ├── a14b.md\n    ├── a15b.md\n    └── a20b.md\n\n3 directories, 7 files\n"
         )
 
         self.assertEqual(res, expected_tree)
@@ -362,10 +363,11 @@ class TestCases1(unittest.TestCase):
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a14b6a.md\n│   ├── a5b2a.md\n│   └── a.md\n├── b\n│   ├── a14b.md\n│   "
-            "└── a15b.md\n└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
+            ".\n├── a\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n│   ├── a14b6a.md\n│   └── a.md\n├── b\n"
+            "│   ├── a14b.md\n│   ├── a15b.md\n│   └── a20b.md\n"
+            "└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
             "├── 0002-automatic-contribution.patch\n    "
-            "└── 0003-automatic-contribution.patch\n\n4 directories, 8 files\n"
+            "└── 0003-automatic-contribution.patch\n\n4 directories, 10 files\n"
         )
 
         self.assertEqual(res, expected_tree)
