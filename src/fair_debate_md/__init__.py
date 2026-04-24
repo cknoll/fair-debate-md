@@ -15,16 +15,16 @@ try:
     from .core import *
 except ImportError as ex:
     import os
+    import sys
 
-    if "PIP_BUILD_TRACKER" in os.environ:
-        pass
-    elif "PEP517_BUILD_BACKEND" in os.environ:
-        # this key-value-pair is in os.environ during `python3 -m build`:
-        # 'PEP517_BUILD_BACKEND': 'setuptools.build_meta'
-        pass
-    elif "_PYPROJECT_HOOKS_BUILD_BACKEND" in os.environ:
+    # detect whether installation is running
+    cond1 = "PIP_BUILD_TRACKER" in os.environ  # triggered by pip
+    cond2 = os.path.join("uv", "builds-v") in sys.executable
+    cond3 = "_PYPROJECT_HOOKS_BUILD_BACKEND" in os.environ  # triggered by uv pip install
+    cond4 = "PEP517_BUILD_BACKEND" in os.environ  # triggered during `python3 -m build`
+
+    if  any((cond1, cond2, cond3, cond4)):
         pass
     else:
-        # print("\n"*5, os.environ, "\n"*5)
         # raise the original exception
         raise
