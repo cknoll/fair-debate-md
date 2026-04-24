@@ -58,6 +58,10 @@ def detect_list_indent(md_src: str, default: int = 2) -> int:
     - If no indented list items are found, return `default`.
     - The result is snapped to the nearest of {2, 4}.
     """
+
+    if md_src is None:
+        return default
+
     import re
     # Regex for list item markers (unordered and ordered) at the start of a line,
     # allowing for arbitrary leading whitespace.

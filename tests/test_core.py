@@ -273,6 +273,49 @@ class TestCases1(unittest.TestCase):
         res = sa.add_spans_for_keys()
         self.assertEqual(res, res_expected)
 
+    def test_031__get_html_with_segments_bug(self):
+
+        md_src1_a = twdd("""
+        - level 0
+            - level 1
+        """)
+
+        md_src1_b = twdd("""
+        - level 0
+          - level 1
+        """)
+
+        r1_a = fdmd.MDProcessor(md_src1_a).add_proto_keys_to_md()
+        r1_b = fdmd.MDProcessor(md_src1_b).add_proto_keys_to_md()
+
+        self.assertEqual(r1_a, r1_b)
+
+        md_src1_a = twdd("""
+        text
+
+        - level 0
+            - level 1
+                - level 2
+            - level 1
+        - level 0
+        """)
+
+        md_src1_b = twdd("""
+        text
+
+        - level 0
+          - level 1
+            - level 2
+          - level 1
+        - level 0
+        """)
+
+        r1_a = fdmd.MDProcessor(md_src1_a).add_proto_keys_to_md()
+        r1_b = fdmd.MDProcessor(md_src1_b).add_proto_keys_to_md()
+
+        self.assertEqual(r1_a, r1_b)
+
+
     def test_030__get_html_with_segments(self):
 
         # test empty string
@@ -299,6 +342,7 @@ class TestCases1(unittest.TestCase):
         with open(expected_result_fpath, "r") as fp:
             res_expected = fp.read()
 
+        # IPS(-1) # TODO: fixme
         self.assertEqual(res, res_expected)
 
     def test_040__load_debate_dir(self):

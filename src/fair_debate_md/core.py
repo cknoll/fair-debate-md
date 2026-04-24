@@ -361,8 +361,17 @@ class MDProcessor:
     def convert_plain_md_to_md_with_proto_keys(self) -> str:
         self.md_with_proto_keys = self.add_proto_keys_to_md(self.plain_md_src, prefix=self.proto_key_prefix)
 
+    def _convert_md_to_html(self, md_src) -> str:
+        indent_width = utils.detect_list_indent(md_src)
+        extensions=["mdx_truly_sane_lists"]
+        extension_configs={"mdx_truly_sane_lists": {"nested_indent": indent_width}}
+        md = markdown.Markdown(extensions=extensions, extension_configs=extension_configs,)
+
+        html_src = md.convert(md_src)
+        return html_src
+
     def add_proto_keys_to_md(
-        self, md_src: str, prefix: str = "k", early_placeholder_replacement: bool = False
+        self, md_src: str = None, prefix: str = "k", early_placeholder_replacement: bool = False
     ):
         """
 
@@ -373,14 +382,15 @@ class MDProcessor:
                             content
         """
 
+        if md_src is None:
+            md_src = self.plain_md_src
+
         # first conversion from md to html (to add proto keys); will be converted back later
 
         # Convert triple backtick code blocks to HTML before markdown processing
         # also replace its content by placeholder-strings
         md_src_processed = self.convert_triple_backticks_to_html(md_src)
-
-        md = markdown.Markdown()
-        html_src = md.convert(md_src_processed)
+        html_src = self._convert_md_to_html(md_src_processed)
         self.html_results.append(html_src)
 
         pka = ProtoKeyAdder(html_src, prefix=prefix)
@@ -488,10 +498,8 @@ class MDProcessor:
         """
 
         # this is the second (and final) conversion from md to html
-        md = markdown.Markdown()
-
         # only here we should resolve placeholders
-        html_src = md.convert(self.md_with_real_keys)
+        html_src = self._convert_md_to_html(self.md_with_real_keys)
 
         if len(html_src) > 0:
             sa = SpanAdder(
