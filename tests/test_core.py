@@ -372,6 +372,76 @@ class TestCases1(unittest.TestCase):
 
         self.assertEqual(res, expected_tree)
 
+    def test_080_a(self):
+        _TEST_CASES = [
+            # (label, markdown_source, expected_indent)
+            (
+                "4-space simple",
+                "- level 0\n    - level 1\n",
+                4,
+            ),
+            (
+                "2-space simple",
+                "- level 0\n  - level 1\n",
+                2,
+            ),
+            (
+                "4-space ordered",
+                "1. first\n    1. nested\n",
+                4,
+            ),
+            (
+                "2-space ordered",
+                "1. first\n  1. nested\n",
+                2,
+            ),
+            (
+                "no nesting -> default",
+                "- a\n- b\n- c\n",
+                4,
+            ),
+            (
+                "4-space with fenced code block containing fake list",
+                "- item\n    - nested\n\n```\n  - not a list\n    - also not\n```\n",
+                4,
+            ),
+            (
+                "2-space with fenced code block containing fake list",
+                "- item\n  - nested\n\n```\n    - not a list\n```\n",
+                2,
+            ),
+            (
+                "4-space with tilde fenced code block",
+                "- item\n    - nested\n\n~~~\n  - code\n~~~\n",
+                4,
+            ),
+            (
+                "2-space deeply nested",
+                "- a\n  - b\n    - c\n      - d\n",
+                2,
+            ),
+            (
+                "4-space deeply nested",
+                "- a\n    - b\n        - c\n",
+                4,
+            ),
+            (
+                "tabs get expanded (tab = 4 spaces)",
+                "- a\n\t- b\n",
+                4,
+            ),
+        ]
+
+
+        def _run_detect_tests() -> None:
+            for label, src, expected in _TEST_CASES:
+                got = fdmd.utils.detect_list_indent(src)
+                status = "OK" if got == expected else "FAIL"
+                print(f"[{status}] {label}: expected={expected}, got={got}")
+                assert got == expected, f"{label}: expected {expected}, got {got}"
+
+
+
 
 def remove_trailing_spaces(txt):
     return "\n".join([line.rstrip(" ") for line in txt.split("\n")])
