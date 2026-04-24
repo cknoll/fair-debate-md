@@ -6,3 +6,6 @@ dist
 
 tests/**/*debug*
 src/**/*debug*
+
+
+src/fair_debate_md/fixtures/repo-preparation/d00-explanatory-example-debate
