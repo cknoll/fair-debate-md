@@ -4,6 +4,7 @@ Command line interface for fair_debate_md
 
 import argparse
 from . import core
+from .release import __version__
 
 from ipydex import IPS, activate_ips_on_exception
 
@@ -12,6 +13,7 @@ def main():
 
     # docs: https://docs.python.org/3/library/argparse.html
     parser = argparse.ArgumentParser()
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     # parser.add_argument("cmd", help=f"main command")
     subparsers = parser.add_subparsers(dest="cmd", help="")
 
