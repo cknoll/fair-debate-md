@@ -349,6 +349,9 @@ class MDProcessor:
         if convert_now:
             self.convert()
 
+        # for debugging we save intermediate html-results
+        self.html_results = []
+
     def convert(self) -> str:
         self.convert_plain_md_to_md_with_proto_keys()
         self.convert_md_with_proto_keys_to_md_with_real_keys()
@@ -378,8 +381,11 @@ class MDProcessor:
 
         md = markdown.Markdown()
         html_src = md.convert(md_src_processed)
+        self.html_results.append(html_src)
+
         pka = ProtoKeyAdder(html_src, prefix=prefix)
         html_src2 = pka.add_proto_keys_to_html()
+        self.html_results.append(html_src2)
 
         # now convert back from html to markdown
         if early_placeholder_replacement:
