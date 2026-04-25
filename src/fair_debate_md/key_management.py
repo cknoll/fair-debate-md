@@ -2,6 +2,93 @@ import re
 from bs4 import BeautifulSoup, element
 
 
+# characters which end a sentence / segment
+SENTENCE_SPLITTERS = (".", "!", "?", ":")
+
+# known abbreviations: after matching the abbreviation (case-sensitive,
+# at a word boundary) we must NOT split, even if it ends with `.`.
+# Each entry is matched against the text ending just before the splitter.
+_ABBREVIATIONS = (
+    "i.e.",
+    "e.g.",
+    "w.r.t.",
+    "bspw.",
+)
+
+# version-number pattern: something like "v1." followed by a digit
+# means the dot is part of a version number, not a sentence splitter.
+_VERSION_RE = re.compile(r"v\d+\.$")
+
+
+def _is_abbreviation_dot(text_so_far: str, text_rest: str) -> bool:
+    """
+    Decide whether a `.` at position `len(text_so_far)` (exclusive, i.e. the
+    dot itself is the last char of `text_so_far`) belongs to an abbreviation
+    and should therefore NOT be treated as a sentence splitter.
+
+    :param text_so_far:  the text up to *and including* the candidate splitter
+    :param text_rest:    the text after the candidate splitter (may start with
+                         whitespace and then another abbreviation fragment)
+    """
+    # known fixed abbreviations ending at this dot
+    for abbr in _ABBREVIATIONS:
+        if text_so_far.endswith(abbr):
+            return True
+
+    # partial abbreviations like "i." (followed by "e." etc.)
+    # we look at the short tail before the dot and check whether together
+    # with the next non-space characters it forms a known abbreviation.
+    stripped_rest = text_rest.lstrip()
+    # consider up to 6 chars of tail before the dot (covers "w.r.t." etc.)
+    for tail_len in range(2, 7):
+        tail = text_so_far[-tail_len:]
+        for abbr in _ABBREVIATIONS:
+            if abbr.startswith(tail) and (tail + stripped_rest).startswith(abbr):
+                return True
+
+    # version number like "...v12." followed by a digit
+    if _VERSION_RE.search(text_so_far) and stripped_rest[:1].isdigit():
+        return True
+
+    return False
+
+
+def split_text_into_segments(text: str) -> list[str]:
+    """
+    Split `text` at sentence splitters (``.``, ``!``, ``?``, ``:``) into
+    segments. Splitters stay attached to the preceding segment. Known
+    abbreviations (``i.e.``, ``e.g.``, ``w.r.t.``, ``bspw.``) and version
+    numbers (``v12.3``) do NOT cause a split.
+
+    The concatenation of the returned segments equals the input text.
+
+    This is a pure function intended to replace the convoluted index-based
+    logic in `ProtoKeyAdder.insert_proto_keys` / `_abbreviation_handling`.
+    """
+    if not text:
+        return []
+
+    segments: list[str] = []
+    start = 0
+    for i, ch in enumerate(text):
+        if ch not in SENTENCE_SPLITTERS:
+            continue
+        if ch == ".":
+            text_so_far = text[: i + 1]
+            text_rest = text[i + 1 :]
+            if _is_abbreviation_dot(text_so_far, text_rest):
+                continue
+        # commit segment [start .. i] (inclusive of splitter)
+        segments.append(text[start : i + 1])
+        start = i + 1
+
+    # trailing text (no final splitter)
+    if start < len(text):
+        segments.append(text[start:])
+
+    return segments
+
+
 class ProtoKeyAdder:
     def __init__(self, html_src: str, prefix: str):
         self.html_src = html_src

@@ -8,6 +8,7 @@ import pytest
 from ipydex import activate_ips_on_exception
 
 import fair_debate_md as fdmd
+from fair_debate_md.key_management import split_text_into_segments
 
 activate_ips_on_exception()
 pjoin = os.path.join
@@ -208,6 +209,55 @@ class TestMDHandling(unittest.TestCase):
             res.count("::k"), 2,
             f"unexpected proto-key count\nresult: {res!r}",
         )
+
+    # -------------------------------------------------------------------------
+    # tests for the new pure segmentation function
+    # -------------------------------------------------------------------------
+
+    def test_200__split_text_empty(self):
+        self.assertEqual(split_text_into_segments(""), [])
+
+    def test_201__split_text_single_sentence(self):
+        self.assertEqual(split_text_into_segments("Hello world."), ["Hello world."])
+
+    def test_202__split_text_two_sentences(self):
+        res = split_text_into_segments("First part. Second part.")
+        self.assertEqual(res, ["First part.", " Second part."])
+
+    def test_203__split_text_all_splitters(self):
+        for splitter in [".", "!", "?", ":"]:
+            with self.subTest(splitter=splitter):
+                res = split_text_into_segments(f"a{splitter} b.")
+                self.assertEqual(res, [f"a{splitter}", " b."])
+
+    def test_204__split_text_abbreviations(self):
+        cases = [
+            "See i.e. this example.",
+            "See e.g. this example.",
+            "See w.r.t. this example.",
+            "Siehe bspw. dieses Beispiel.",
+        ]
+        for text in cases:
+            with self.subTest(text=text):
+                res = split_text_into_segments(text)
+                self.assertEqual(res, [text])
+
+    def test_205__split_text_version_numbers(self):
+        res = split_text_into_segments("Uses v12.3 here.")
+        self.assertEqual(res, ["Uses v12.3 here."])
+
+    def test_206__split_text_concatenation_is_identity(self):
+        texts = [
+            "Hello world.",
+            "First. Second. Third.",
+            "Question? Answer! Done.",
+            "See i.e. this, e.g. that.",
+            "",
+            "no terminator",
+        ]
+        for text in texts:
+            with self.subTest(text=text):
+                self.assertEqual("".join(split_text_into_segments(text)), text)
 
     def test_150__sentence_splitters(self):
         """Each of the sentence splitters `.`, `!`, `?`, `:` creates a segment boundary."""
