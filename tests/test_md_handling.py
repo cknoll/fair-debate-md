@@ -301,6 +301,18 @@ class TestMDHandling(unittest.TestCase):
         # IPS(-1) # TODO: fixme
         self.assertEqual(res, res_expected)
 
+    def test_300__md_to_html_txt1(self):
+        """Converting `txt1.md` via the md->html pipeline must yield the
+        expected HTML stored in `tests/testdata/txt1_raw_html.html`."""
+        expected_fpath = pjoin(TESTDATA_DIR, "txt1_raw_html.html")
+        with open(expected_fpath, "r") as fp:
+            expected = fp.read()
+
+        mdp = fdmd.MDProcessor(self.txt1)
+        actual = mdp._md_to_html(self.txt1)
+
+        self.assertEqual(actual, expected)
+
 
 if __name__ == "__main__":
     unittest.main()
