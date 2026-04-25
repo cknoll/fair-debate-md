@@ -8,7 +8,6 @@ Ut _quiquia **eius** dolorem_ voluptatem. **Adipisci sit adipisci non est**. Dol
     - sit aliquam eius quiquia.
         - Ut etincidunt magnam ut etincidunt `some code`
         - quiquia quisquam porro.
-
     - Ut modi dolor est labore velit non.
 
 ## `some code` Eius neque amet quisquam voluptatem quaerat dolorem modi. Adipisci dolor aliquam porro eius adipisci.
