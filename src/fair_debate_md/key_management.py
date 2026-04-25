@@ -108,6 +108,11 @@ class ProtoKeyAdder:
     # tags which are considered as containers of segmentable text
     RELEVANT_TAGS = ("h1", "h2", "h3", "h4", "h5", "p", "li", "pre")
 
+    # inline tags which, when they follow a sentence splitter, start a new
+    # sentence and therefore need a preceding proto-key. Other (block-level)
+    # child tags such as <ul>, <ol>, <p>, ... do NOT trigger a preceding key.
+    INLINE_TAGS = ("em", "strong", "code", "i", "b", "a", "span")
+
     def __init__(self, html_src: str, prefix: str):
         self.html_src = html_src
         self.prefix = prefix
@@ -116,11 +121,15 @@ class ProtoKeyAdder:
 
     def add_proto_keys_to_html(self) -> str:
         for tag in self.soup.find_all(self.RELEVANT_TAGS):
-            if not self._tag_has_direct_text(tag):
-                # e.g. <li> whose only content is a <p> (the <p> will be
-                # handled in its own iteration) -> nothing to do here
-                continue
-            self._annotate_tag(tag)
+            if self._tag_has_direct_text(tag):
+                self._annotate_tag(tag)
+            elif self._tag_is_code_block_container(tag):
+                # special case: a paragraph whose only meaningful child is a
+                # triple-backtick code block. Treat it as a single segment
+                # and prepend one proto-key.
+                self._prepend_single_proto_key(tag)
+            # else: e.g. <li> whose only content is a <p> (the <p> will be
+            # handled in its own iteration) -> nothing to do here
         return str(self.soup)
 
     @staticmethod
@@ -131,6 +140,33 @@ class ProtoKeyAdder:
             if isinstance(child, element.NavigableString) and child.strip():
                 return True
         return False
+
+    @staticmethod
+    def _tag_is_code_block_container(tag: element.Tag) -> bool:
+        """True iff `tag` contains a direct triple-backtick code child and no
+        other meaningful text/tag children.
+
+        This handles the case ``<p><code class="triple_backticks">...</code></p>``
+        which has no direct text but logically represents one segment.
+        """
+        has_code_block = False
+        for child in tag.children:
+            if isinstance(child, element.Tag):
+                classes = child.get("class") or []
+                if child.name == "code" and "triple_backticks" in classes:
+                    has_code_block = True
+                    continue
+                # any other tag disqualifies this as a pure code-block container
+                return False
+            # NavigableString: whitespace is OK, non-whitespace is not (would
+            # already have been caught by `_tag_has_direct_text`)
+            if isinstance(child, element.NavigableString) and child.strip():
+                return False
+        return has_code_block
+
+    def _prepend_single_proto_key(self, tag: element.Tag) -> None:
+        """Insert a single leading proto-key at the start of ``tag``."""
+        tag.insert(0, element.NavigableString(self.proto_key.lstrip()))
 
     def _annotate_tag(self, tag: element.Tag) -> None:
         """
@@ -162,9 +198,18 @@ class ProtoKeyAdder:
 
         for child in original_children:
             if isinstance(child, element.Tag):
-                # non-text child: keep unchanged
-                # TODO: handle inline tags (em, strong, code) where sentence
-                # splitters inside their text currently do not create a segment
+                # non-text child (inline tag like <em>, <strong>, <code>, or
+                # a nested block like <ul>): keep unchanged.
+                # If the preceding text segment ended with a sentence
+                # splitter, the inline tag starts a new sentence and we
+                # emit a separator proto-key before it. Block-level nested
+                # tags (e.g. <ul>) are handled by the trailing-key cleanup
+                # below since they are typically the last child.
+                # TODO: sentence splitters INSIDE inline tags currently do
+                # not create a segment.
+                if last_text_ends_with_splitter and child.name in self.INLINE_TAGS:
+                    new_children.append(self.proto_key)
+                    last_text_ends_with_splitter = False
                 new_children.append(child)
                 continue
 
@@ -174,6 +219,13 @@ class ProtoKeyAdder:
                 continue
 
             for i, seg in enumerate(segments):
+                if seg.strip() == "":
+                    # whitespace-only segment (e.g. trailing space after the
+                    # last sentence splitter): keep the whitespace to preserve
+                    # text identity, but do NOT emit a separator proto-key
+                    # for it.
+                    new_children.append(element.NavigableString(seg))
+                    continue
                 if i > 0:
                     # separator between segments: proto-key
                     new_children.append(self.proto_key)

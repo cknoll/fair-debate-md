@@ -10,8 +10,6 @@
 
     - ::k `some code` Sed etincidunt etincidunt
     - ::k sit aliquam eius quiquia.
-
-
         - ::k Ut etincidunt magnam ut etincidunt `some code`
         - ::k quiquia quisquam porro.
     - ::k Ut modi dolor est labore velit non.
