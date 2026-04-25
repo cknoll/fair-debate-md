@@ -22,15 +22,19 @@ TESTDATA1 = pjoin(FIXTURE_DIR, "txt1.md")
 TEST_REPO1_DIR = fdmd.fixtures.TEST_REPO1_DIR
 
 
+# Note: expected tree assumes byte-order sort (LC_ALL=C.UTF-8) for determinism
+# across locales/CI environments. `tree` is invoked with LC_ALL=C.UTF-8 in the
+# tests below (UTF-8 variant is required so `tree` still emits the Unicode
+# box-drawing characters, while collation remains byte-wise).
 TEST_REPO1_EXPECTED_TREE = twdd(
     """
     .
     ├── a
-    │   ├── a2b1a.md
-    │   └── a.md
+    │   ├── a.md
+    │   └── a2b1a.md
     └── b
-        ├── a2b1a3b.md
         ├── a2b.md
+        ├── a2b1a3b.md
         ├── a4b.md
         ├── a6b.md
         └── a7b.md
@@ -251,8 +255,12 @@ class TestCases1(unittest.TestCase):
         expected_result = TEST_REPO1_EXPECTED_TREE
 
         # generate tree output (requires probably unix)
+        # Force byte-order sorting (LC_ALL=C.UTF-8) so output is deterministic across
+        # locales (local dev vs. CI).
         res = (
-            fdmd.utils.get_cmd_output(f"tree {test_repo1_workdir}")
+            fdmd.utils.get_cmd_output(
+                f"tree {test_repo1_workdir}", extra_env={"LC_ALL": "C.UTF-8"}
+            )
             .replace(test_repo1_workdir, ".")
             .replace("\xa0", " ")
         )  # replace strange space
@@ -267,8 +275,11 @@ class TestCases1(unittest.TestCase):
 
         repo_path = pjoin(tempdir_path, fdmd.TEST_DEBATE_KEY)
 
+        # Force byte-order sorting (LC_ALL=C.UTF-8) for deterministic `tree` output.
         res = (
-            fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
+            fdmd.utils.get_cmd_output(f"tree {repo_path}", extra_env={"LC_ALL": "C.UTF-8"})
+            .replace(repo_path, ".")
+            .replace("\xa0", " ")
         )  # replace strange space
 
         expected_result = TEST_REPO1_EXPECTED_TREE
@@ -278,24 +289,29 @@ class TestCases1(unittest.TestCase):
         # TODO: improve this test such that its adaption to content updates is easier (or unnecessary)
         repo_path = self._unpack_d00_explanatory_example_debate_repo()
 
+        # Force byte-order sorting (LC_ALL=C.UTF-8) for deterministic `tree` output.
         res = (
-            fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
+            fdmd.utils.get_cmd_output(f"tree {repo_path}", extra_env={"LC_ALL": "C.UTF-8"})
+            .replace(repo_path, ".")
+            .replace("\xa0", " ")
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n│   ├── a14b6a.md\n"
-            "│   └── a.md\n└── b\n    ├── a14b.md\n    ├── a15b.md\n    └── a20b.md\n\n3 directories, 7 files\n"
+            ".\n├── a\n│   ├── a.md\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n"
+            "│   └── a14b6a.md\n└── b\n    ├── a14b.md\n    ├── a15b.md\n    └── a20b.md\n\n3 directories, 7 files\n"
         )
 
         self.assertEqual(res, expected_tree)
 
         repo_path = self._unpack_d00_explanatory_example_debate_repo(patches=True)
         res = (
-            fdmd.utils.get_cmd_output(f"tree {repo_path}").replace(repo_path, ".").replace("\xa0", " ")
+            fdmd.utils.get_cmd_output(f"tree {repo_path}", extra_env={"LC_ALL": "C.UTF-8"})
+            .replace(repo_path, ".")
+            .replace("\xa0", " ")
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n│   ├── a14b6a.md\n│   └── a.md\n├── b\n"
+            ".\n├── a\n│   ├── a.md\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n│   └── a14b6a.md\n├── b\n"
             "│   ├── a14b.md\n│   ├── a15b.md\n│   └── a20b.md\n"
             "└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
             "├── 0002-automatic-contribution.patch\n    "

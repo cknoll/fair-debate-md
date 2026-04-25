@@ -141,14 +141,21 @@ def tolerant_rmtree(target_path):
             raise
 
 
-def get_cmd_output(cmd: str | list[str]) -> str:
+def get_cmd_output(cmd: str | list[str], extra_env: dict | None = None) -> str:
 
     if isinstance(cmd, str):
         cmd_list = cmd.split(" ")
     else:
         cmd_list = cmd
     assert isinstance(cmd_list, list)
-    res = subprocess.run(cmd_list, capture_output=True)
+
+    if extra_env is not None:
+        env = os.environ.copy()
+        env.update(extra_env)
+    else:
+        env = None
+
+    res = subprocess.run(cmd_list, capture_output=True, env=env)
     res.exited = res.returncode
     res.stdout = res.stdout.decode("utf8")
     res.stderr = res.stderr.decode("utf8")
