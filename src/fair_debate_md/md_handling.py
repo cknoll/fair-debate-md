@@ -90,7 +90,7 @@ class MDHandler:
         Extensions are currently disabled on purpose. See `TODO-AIDER` below.
         """
         indent_width = utils.detect_list_indent(md_src)
-        use_extensions = False
+        use_extensions = True
         if use_extensions:
             # AIDER-Info:
             # I want to use these extensions because future markdownify versions change the handling
@@ -103,7 +103,7 @@ class MDHandler:
             #   - [x] also refactor the tests `test_010__add_keys_to_md`, `test_030__get_html_with_segments` and `test_031__get_html_with_segments_bug` into a separate module
             #   - [x] the goal is to work on this problem independently from the rest of the code
             # - [x] simplify that code and add more fine-grained tests on intermediate results (but not too many)
-            # - activate extension
+            # - [x] activate extension
             # - track down the changed behavior with the more fine-grained tests
 
             extensions = ["mdx_truly_sane_lists"]
