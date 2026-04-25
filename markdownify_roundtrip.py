@@ -71,6 +71,9 @@ def main():
     print(html1)
     print()
 
+    # the result html1 is already obviously wrong. nested list is not recognized. we can stop here for now.
+    return
+
     md2 = html_to_md(html1)
     _hr("Step 2: markdown produced from that HTML (html -> md)")
     print(md2)
