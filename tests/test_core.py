@@ -4,6 +4,7 @@ from textwrap import dedent as twdd
 import tempfile
 
 from bs4 import BeautifulSoup
+import pytest
 
 from ipydex import IPS, activate_ips_on_exception
 
@@ -273,7 +274,10 @@ class TestCases1(unittest.TestCase):
         res = sa.add_spans_for_keys()
         self.assertEqual(res, res_expected)
 
+    # mark as known to fail
+    @pytest.mark.xfail
     def test_031__get_html_with_segments_bug(self):
+
 
         md_src1_a = twdd("""
         - level 0

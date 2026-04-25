@@ -363,8 +363,16 @@ class MDProcessor:
 
     def _convert_md_to_html(self, md_src) -> str:
         indent_width = utils.detect_list_indent(md_src)
-        extensions=["mdx_truly_sane_lists"]
-        extension_configs={"mdx_truly_sane_lists": {"nested_indent": indent_width}}
+        use_extensions = False
+        if use_extensions:
+            # I want to use these extensions because future markdownify versions change the handling
+            # of nested lists and thus specifying the indent-width is necessary then
+            # however if I activate them they also change the behavior.
+            extensions = ["mdx_truly_sane_lists"]
+            extension_configs = {"mdx_truly_sane_lists": {"nested_indent": indent_width}}
+        else:
+            extensions = []
+            extension_configs = {}
         md = markdown.Markdown(extensions=extensions, extension_configs=extension_configs,)
 
         html_src = md.convert(md_src)
