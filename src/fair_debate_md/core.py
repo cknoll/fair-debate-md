@@ -325,7 +325,7 @@ class MDProcessor(MDHandler):
 
         # this is the second (and final) conversion from md to html
         # only here we should resolve placeholders
-        html_src = self._convert_md_to_html(self.md_with_real_keys)
+        html_src = self._md_to_html(self.md_with_real_keys)
 
         if len(html_src) > 0:
             sa = SpanAdder(
