@@ -192,6 +192,23 @@ class TestMDHandling(unittest.TestCase):
                     f"unexpected proto-key count for: {md_src!r}\nresult: {res!r}",
                 )
 
+    def test_160__li_with_sentence_and_nested_list(self):
+        """An <li> whose text ends with '.' directly followed by a nested <ul>
+        should get exactly one leading proto-key (no trailing one).
+
+        This reproduces the behavioral change introduced by the
+        `mdx_truly_sane_lists` extension: there the <li> contains the text
+        directly (not wrapped in <p>), followed by a nested <ul>.
+        """
+        html_src = '<li>sit aliquam eius quiquia.<ul><li>nested item.</li></ul></li>'
+        mdp = fdmd.MDProcessor("")
+        res = mdp._add_proto_keys_to_html(html_src, prefix="k")
+        # should be: one key before "sit", one key before "nested item"
+        self.assertEqual(
+            res.count("::k"), 2,
+            f"unexpected proto-key count\nresult: {res!r}",
+        )
+
     def test_150__sentence_splitters(self):
         """Each of the sentence splitters `.`, `!`, `?`, `:` creates a segment boundary."""
         # two sentences separated by each splitter -> two proto-keys
