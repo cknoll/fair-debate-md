@@ -83,8 +83,6 @@ class TestMDHandling(unittest.TestCase):
         md2 = remove_trailing_spaces(md2)
         self.assertEqual(md2, md2_expected)
 
-    # mark as known to fail
-    @pytest.mark.xfail
     def test_031__get_html_with_segments_bug(self):
 
 

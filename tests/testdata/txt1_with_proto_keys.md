@@ -6,8 +6,6 @@
 
 - ::k Ipsum velit adipisci
 - ::k Adipisci est magnam etincidunt sed:
-
-
     - ::k `some code` Sed etincidunt etincidunt
     - ::k sit aliquam eius quiquia.
         - ::k Ut etincidunt magnam ut etincidunt `some code`
