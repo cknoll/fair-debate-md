@@ -1,6 +1,7 @@
 ipydex
 markdown
-markdownify >= 0.13
+markdownify >= 1.2.2
 mdx_truly_sane_lists
+pytest
 bs4
 gitpython

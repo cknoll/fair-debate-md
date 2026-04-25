@@ -186,7 +186,7 @@ class MDHandler:
         mdc.convert_em = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "_"), mdc)
 
         # custom conversion for triple backtick code blocks
-        def convert_code_triple_backticks(unused_mdc_self, el, text, convert_as_inline):
+        def convert_code_triple_backticks(unused_self, el, text, convert_as_inline=None, parent_tags=None):
             if el.get('class') and 'triple_backticks' in el.get('class'):
                 # Convert to triple backtick fenced code block
 
