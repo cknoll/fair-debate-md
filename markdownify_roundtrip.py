@@ -27,6 +27,8 @@ import types
 import markdown
 import markdownify as mdf
 
+from fair_debate_md.utils import detect_list_indent
+
 
 ORIGINAL_MD = """\
 Ut _quiquia **eius** dolorem_ voluptatem. **Adipisci sit adipisci non est**.
@@ -42,8 +44,18 @@ Ut _quiquia **eius** dolorem_ voluptatem. **Adipisci sit adipisci non est**.
 
 
 def md_to_html(md_src: str) -> str:
-    """MD -> HTML, same configuration as used in the project."""
-    return markdown.markdown(md_src, extensions=["mdx_truly_sane_lists"])
+    """MD -> HTML, same configuration as used in the project.
+
+    The nested-list indentation width is detected from the source and
+    passed to `mdx_truly_sane_lists` as `nested_indent`, otherwise
+    4-space nested lists are not recognized (library default is 2).
+    """
+    indent_width = detect_list_indent(md_src)
+    return markdown.markdown(
+        md_src,
+        extensions=["mdx_truly_sane_lists"],
+        extension_configs={"mdx_truly_sane_lists": {"nested_indent": indent_width}},
+    )
 
 
 def html_to_md(html_src: str) -> str:
@@ -70,9 +82,6 @@ def main():
     _hr("Step 1: HTML produced from original markdown (md -> html)")
     print(html1)
     print()
-
-    # the result html1 is already obviously wrong. nested list is not recognized. we can stop here for now.
-    return
 
     md2 = html_to_md(html1)
     _hr("Step 2: markdown produced from that HTML (html -> md)")
