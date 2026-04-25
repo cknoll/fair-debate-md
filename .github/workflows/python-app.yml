@@ -19,7 +19,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DEBUG_WITH_SSH: 'true'
+      # note: 'true' only works if no error occurred.
+      # DEBUG_WITH_SSH: 'true'
+      DEBUG_WITH_SSH: false
 
     steps:
     - uses: actions/checkout@v3
