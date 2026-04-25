@@ -22,6 +22,7 @@ Run:
     /media/data2/venvs/venv_pfi_313/bin/python markdownify_roundtrip.py
 """
 
+import os
 import types
 
 import markdown
@@ -30,17 +31,12 @@ import markdownify as mdf
 from fair_debate_md.utils import detect_list_indent
 
 
-ORIGINAL_MD = """\
-Ut _quiquia **eius** dolorem_ voluptatem. **Adipisci sit adipisci non est**.
+FIXTURE_PATH = os.path.join(
+    os.path.dirname(__file__), "src", "fair_debate_md", "fixtures", "txt1.md"
+)
 
-- Ipsum velit adipisci
-- Adipisci est magnam etincidunt sed:
-    - `some code ` Sed etincidunt etincidunt
-    - sit aliquam eius quiquia.
-        - Ut etincidunt magnam ut etincidunt `some code`
-        - quiquia quisquam porro.
-    - Ut modi dolor est labore velit non.
-"""
+with open(FIXTURE_PATH, encoding="utf-8") as fp:
+    ORIGINAL_MD = fp.read()
 
 
 def md_to_html(md_src: str) -> str:
