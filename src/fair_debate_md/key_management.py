@@ -1,8 +1,6 @@
 import re
 from bs4 import BeautifulSoup, element
 
-from ipydex import IPS
-
 
 class ProtoKeyAdder:
     def __init__(self, html_src: str, prefix: str):
@@ -54,7 +52,7 @@ class ProtoKeyAdder:
         self.original_parts = [old_txt[i0:i1] for i0, i1 in zip(start_idcs[:-1], start_idcs[1:])]
         self.original_parts.extend([""]*self.MAX_LOOK_AHEAD)
 
-        self.raw_parts = self.abbreviation_handling(self.original_parts)
+        self.raw_parts = self._abbreviation_handling(self.original_parts)
         self.parts = []
         len_raw_parts = len(self.raw_parts)
 
@@ -83,7 +81,12 @@ class ProtoKeyAdder:
         res.added_keys = child.added_keys
         return res
 
-    def abbreviation_handling(self, original_parts):
+    def _abbreviation_handling(self, original_parts):
+        """
+        Merge parts that belong together because they are part of an abbreviation
+        (e.g. "i.e." was split into "i." and "e." by the sentence splitter).
+        """
+        # collect groups of indices which need to be joined
         self.parts_to_join = []
         idx = 0
         end = len(original_parts) - self.MAX_LOOK_AHEAD
@@ -92,44 +95,18 @@ class ProtoKeyAdder:
             p1 = original_parts[idx + 1]
             p2 = original_parts[idx + 2]
 
-            res_tup = self.classify_abbreviations(p0, p1, p2, idx)
+            res_tup = self._classify_abbreviations(p0, p1, p2, idx)
             if res_tup is not None:
                 self.parts_to_join.append(res_tup)
                 idx = res_tup[-1]
             idx += 1
 
-        # transform parts_to_join:
-        # currently looks like [(1, ), (4, 5)]
-        # meaning: after each in index in the tuple the following part should be joined to the previous part
-        # step1: convert to [(1, 2), (4, 5, 6)]
+        # build a full partition of indices (join-groups + singletons)
+        join_groups = self._expand_join_groups(
+            self.parts_to_join, total_len=len(original_parts) - self.MAX_LOOK_AHEAD
+        )
 
-        parts_to_join_s1 = []
-        for tup in self.parts_to_join:
-            parts_to_join_s1.append(tuple([*tup, tup[-1] + 1]))
-
-        # step2: convert to [ (0,), (1, 2), (3,), (4, 5, 6), (7,), (8,)]
-        # also: convert [ (0, 1), (1, 2)] to [(0, 1, 2)]
-        parts_to_join_s2 = []
-        idx = 0
-        last_tup = None
-        for tup in parts_to_join_s1:
-            for i in range(idx, tup[0]):
-                parts_to_join_s2.append((i,))
-            if last_tup is not None and last_tup[-1] == tup[0]:
-                parts_to_join_s2[-1] = parts_to_join_s2[-1][:-1] + tup
-            else:
-                parts_to_join_s2.append(tup)
-            last_tup = tup
-            idx = tup[-1] + 1
-
-        # also ensure that all indices of self.original_parts are included
-        for i in range(idx, len(original_parts) - self.MAX_LOOK_AHEAD):
-            parts_to_join_s2.append((i,))
-
-        res_parts = []
-        for tup in parts_to_join_s2:
-            res_part_list = [self.original_parts[idx] for idx in tup]
-            res_parts.append("".join(res_part_list))
+        res_parts = ["".join(original_parts[i] for i in tup) for tup in join_groups]
 
         # drop empty strings at the end
         while res_parts and res_parts[-1].strip() == "":
@@ -137,7 +114,41 @@ class ProtoKeyAdder:
 
         return res_parts
 
-    def classify_abbreviations(self, p1: str, p2: str, p3: str, idx: int) -> tuple[int] | None:
+    @staticmethod
+    def _expand_join_groups(parts_to_join: list[tuple], total_len: int) -> list[tuple]:
+        """
+        Transform a list of join-specifiers into a full index partition.
+
+        Input example:  [(1,), (4, 5)]  (meaning: after each index in the tuple
+                        the following part should be joined to the previous)
+        Step1 output:   [(1, 2), (4, 5, 6)]
+        Step2 output:   [(0,), (1, 2), (3,), (4, 5, 6), (7,), (8,)]
+        Overlapping groups like [(0, 1), (1, 2)] are merged into [(0, 1, 2)].
+        """
+        # step1: append the successor index to each group
+        step1 = [tuple([*tup, tup[-1] + 1]) for tup in parts_to_join]
+
+        # step2: fill in singletons and merge overlapping groups
+        step2 = []
+        idx = 0
+        last_tup = None
+        for tup in step1:
+            for i in range(idx, tup[0]):
+                step2.append((i,))
+            if last_tup is not None and last_tup[-1] == tup[0]:
+                step2[-1] = step2[-1][:-1] + tup
+            else:
+                step2.append(tup)
+            last_tup = tup
+            idx = tup[-1] + 1
+
+        # ensure all remaining indices are included as singletons
+        for i in range(idx, total_len):
+            step2.append((i,))
+
+        return step2
+
+    def _classify_abbreviations(self, p1: str, p2: str, p3: str, idx: int) -> tuple[int] | None:
         if p1.endswith("bspw."):
             return (idx, )
         if p1.endswith("i.") and p2 == "e.":

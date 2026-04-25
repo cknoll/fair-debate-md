@@ -83,7 +83,12 @@ class MDHandler:
         # for debugging we save intermediate html-results
         self.html_results = []
 
-    def _convert_md_to_html(self, md_src) -> str:
+    def _md_to_html(self, md_src: str) -> str:
+        """
+        Convert markdown to html via `python-markdown`.
+
+        Extensions are currently disabled on purpose. See `TODO-AIDER` below.
+        """
         indent_width = utils.detect_list_indent(md_src)
         use_extensions = False
         if use_extensions:
@@ -97,7 +102,7 @@ class MDHandler:
             # - [x] refactor the whole markdown-handling code (especially until proto-keys are added) into a separate module (current tests should pass)
             #   - [x] also refactor the tests `test_010__add_keys_to_md`, `test_030__get_html_with_segments` and `test_031__get_html_with_segments_bug` into a separate module
             #   - [x] the goal is to work on this problem independently from the rest of the code
-            # - simplify that code and add more fine-grained tests on intermediate results (but not too many)
+            # - [x] simplify that code and add more fine-grained tests on intermediate results (but not too many)
             # - activate extension
             # - track down the changed behavior with the more fine-grained tests
 
@@ -108,13 +113,39 @@ class MDHandler:
             extension_configs = {}
         md = markdown.Markdown(extensions=extensions, extension_configs=extension_configs,)
 
-        html_src = md.convert(md_src)
-        return html_src
+        return md.convert(md_src)
+
+    def _preprocess_code_blocks(self, md_src: str) -> str:
+        """
+        Pipeline step 1: replace triple-backtick code blocks with html
+        `<code class="triple_backticks">...</code>` tags containing a
+        placeholder. The real content is stored in `self._code_element_contents`
+        and re-inserted later (either here or in the span-adder step).
+        """
+        return self.convert_triple_backticks_to_html(md_src)
+
+    def _add_proto_keys_to_html(self, html_src: str, prefix: str) -> str:
+        """
+        Pipeline step 3: add proto-keys (e.g. `::k`) to the html source.
+        """
+        pka = ProtoKeyAdder(html_src, prefix=prefix)
+        return pka.add_proto_keys_to_html()
+
+    def _html_to_md_with_proto_keys(self, html_src: str) -> str:
+        """
+        Pipeline step 4: convert the proto-key-annotated html back to markdown.
+        """
+        return self.markdownify_and_postprocess(html_src)
 
     def add_proto_keys_to_md(
         self, md_src: str = None, prefix: str = "k", early_placeholder_replacement: bool = False
     ):
         """
+        Add proto-keys to a markdown source via a four-step pipeline:
+            1. preprocess code blocks (placeholders)
+            2. md → html
+            3. add proto-keys to html
+            4. html → md
 
         :param md_src:      original markdown source
         :param prefix:      prefix for the inserted proto-keys (like "k"→"::k")
@@ -126,23 +157,22 @@ class MDHandler:
         if md_src is None:
             md_src = self.plain_md_src
 
-        # first conversion from md to html (to add proto keys); will be converted back later
-
-        # Convert triple backtick code blocks to HTML before markdown processing
-        # also replace its content by placeholder-strings
-        md_src_processed = self.convert_triple_backticks_to_html(md_src)
-        html_src = self._convert_md_to_html(md_src_processed)
-        self.html_results.append(html_src)
-
-        pka = ProtoKeyAdder(html_src, prefix=prefix)
-        html_src2 = pka.add_proto_keys_to_html()
-        self.html_results.append(html_src2)
-
-        # now convert back from html to markdown
         if early_placeholder_replacement:
             self._early_placeholder_replacement = True
-        res = self.markdownify_and_postprocess(html_src2)
-        return res
+
+        # step 1: preprocess code blocks
+        md_src_processed = self._preprocess_code_blocks(md_src)
+
+        # step 2: md -> html
+        html_src = self._md_to_html(md_src_processed)
+        self.html_results.append(html_src)
+
+        # step 3: add proto-keys to html
+        html_src2 = self._add_proto_keys_to_html(html_src, prefix=prefix)
+        self.html_results.append(html_src2)
+
+        # step 4: html -> md (with proto-keys)
+        return self._html_to_md_with_proto_keys(html_src2)
 
     def markdownify_and_postprocess(self, html_src):
         """
