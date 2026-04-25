@@ -128,6 +128,83 @@ class TestMDHandling(unittest.TestCase):
         self.assertEqual(r1_a, r1_b)
 
 
+    # -------------------------------------------------------------------------
+    # fine-grained tests on intermediate pipeline results
+    # -------------------------------------------------------------------------
+
+    def test_100__preprocess_code_blocks(self):
+        """Triple-backtick code blocks are replaced by placeholder code tags."""
+        md_src = "some text\n```foo bar```\nmore text"
+        mdp = fdmd.MDProcessor(md_src)
+        res = mdp._preprocess_code_blocks(md_src)
+
+        # a placeholder code tag was inserted
+        self.assertIn('<code class="triple_backticks">', res)
+        self.assertIn("</code>", res)
+        # the original content is no longer in the output
+        self.assertNotIn("foo bar", res)
+        # but stored in the internal dict
+        self.assertEqual(list(mdp._code_element_contents.values()), ["foo bar"])
+
+    def test_110__md_to_html_simple_list(self):
+        """Simple markdown list is converted to <ul>/<li> html."""
+        md_src = "- item a\n- item b\n"
+        mdp = fdmd.MDProcessor(md_src)
+        html = mdp._md_to_html(md_src)
+        self.assertIn("<ul>", html)
+        self.assertIn("<li>item a</li>", html)
+        self.assertIn("<li>item b</li>", html)
+
+    def test_120__add_proto_keys_to_html_simple_sentence(self):
+        """A single sentence in a <p> tag gets exactly one proto-key prepended."""
+        html_src = "<p>Hello world.</p>"
+        mdp = fdmd.MDProcessor("")
+        res = mdp._add_proto_keys_to_html(html_src, prefix="k")
+        # proto-key appears at the start of the paragraph content
+        self.assertIn("::k", res)
+        # exactly one proto-key (single sentence, no trailing key after final period)
+        self.assertEqual(res.count("::k"), 1)
+
+    def test_130__proto_key_roundtrip_single_sentence(self):
+        """Round-trip md -> md-with-proto-keys works for a one-liner."""
+        md_src = "Hello world.\n"
+        mdp = fdmd.MDProcessor(md_src)
+        res = mdp.add_proto_keys_to_md(md_src, prefix="k")
+        self.assertIn("::k", res)
+        self.assertIn("Hello world.", res)
+        # only one proto-key for a single sentence
+        self.assertEqual(res.count("::k"), 1)
+
+    def test_140__abbreviations_are_not_split(self):
+        """Abbreviations like `i.e.`, `e.g.`, `w.r.t.`, `bspw.` must not trigger segment splits."""
+        cases = [
+            ("See i.e. this example.", 1),
+            ("See e.g. this example.", 1),
+            ("See w.r.t. this example.", 1),
+            ("Siehe bspw. dieses Beispiel.", 1),
+        ]
+        for md_src, expected_count in cases:
+            with self.subTest(md_src=md_src):
+                mdp = fdmd.MDProcessor(md_src)
+                res = mdp.add_proto_keys_to_md(md_src, prefix="k")
+                self.assertEqual(
+                    res.count("::k"), expected_count,
+                    f"unexpected proto-key count for: {md_src!r}\nresult: {res!r}",
+                )
+
+    def test_150__sentence_splitters(self):
+        """Each of the sentence splitters `.`, `!`, `?`, `:` creates a segment boundary."""
+        # two sentences separated by each splitter -> two proto-keys
+        for splitter in [".", "!", "?", ":"]:
+            md_src = f"First part{splitter} second part is long enough.\n"
+            with self.subTest(splitter=splitter):
+                mdp = fdmd.MDProcessor(md_src)
+                res = mdp.add_proto_keys_to_md(md_src, prefix="k")
+                self.assertEqual(
+                    res.count("::k"), 2,
+                    f"unexpected proto-key count for splitter {splitter!r}\nresult: {res!r}",
+                )
+
     def test_030__get_html_with_segments(self):
 
         # test empty string
