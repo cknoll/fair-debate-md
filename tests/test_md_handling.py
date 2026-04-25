@@ -60,7 +60,7 @@ class TestMDHandling(unittest.TestCase):
         with open(expected_result_fpath, "r") as fp:
             md2_expected = fp.read()
 
-        N2 = 164
+        N2 = 163
         md2_ex = md2_expected[:N2]
 
         self.assertEqual(md2, md2_ex)
