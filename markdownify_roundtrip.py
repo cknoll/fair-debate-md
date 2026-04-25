@@ -35,6 +35,10 @@ FIXTURE_PATH = os.path.join(
     os.path.dirname(__file__), "src", "fair_debate_md", "fixtures", "txt1.md"
 )
 
+OUTPUT_HTML_PATH = os.path.join(
+    os.path.dirname(__file__), "tests", "testdata", "txt1_raw_html.html"
+)
+
 with open(FIXTURE_PATH, encoding="utf-8") as fp:
     ORIGINAL_MD = fp.read()
 
@@ -77,6 +81,11 @@ def main():
     html1 = md_to_html(ORIGINAL_MD)
     _hr("Step 1: HTML produced from original markdown (md -> html)")
     print(html1)
+    print()
+
+    with open(OUTPUT_HTML_PATH, "w", encoding="utf-8") as fp:
+        fp.write(html1)
+    print(f"(written to {OUTPUT_HTML_PATH})")
     print()
 
     md2 = html_to_md(html1)
