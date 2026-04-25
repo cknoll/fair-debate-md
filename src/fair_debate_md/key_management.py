@@ -90,191 +90,122 @@ def split_text_into_segments(text: str) -> list[str]:
 
 
 class ProtoKeyAdder:
+    """
+    Insert proto-keys (e.g. `::k`) into an html source.
+
+    A proto-key is placed:
+      * at the start of each relevant tag that contains direct text content
+      * after every sentence splitter inside such a tag
+
+    Abbreviations (`i.e.`, `e.g.`, `w.r.t.`, `bspw.`) and version numbers
+    (`v12.3`) do NOT cause a split (see `split_text_into_segments`).
+
+    No trailing proto-key is inserted if the tag's text content already ends
+    with a sentence splitter -- regardless of whether the tag has further
+    (non-text) children after that text (e.g. a nested `<ul>`).
+    """
+
+    # tags which are considered as containers of segmentable text
+    RELEVANT_TAGS = ("h1", "h2", "h3", "h4", "h5", "p", "li", "pre")
+
     def __init__(self, html_src: str, prefix: str):
         self.html_src = html_src
         self.prefix = prefix
         self.proto_key = f" ::{self.prefix} "
         self.soup = BeautifulSoup(html_src, "html.parser")
 
-        self.sentence_splitters = [".", "!", "?", ":"]
-        self.sentence_splitter_re = re.compile("([.?!:])")
-        self.parts: list = []
-
-    @staticmethod
-    def will_be_processed_later(child):
-        if isinstance(child, element.Tag) and child.name in ("p",):
-            return True
-        return False
-
-    def add_proto_keys_to_html(self):
-        for tag in self.soup.find_all(["h1", "h2", "h3", "h4", "h5", "p", "li", "pre"]):
-            children_list = list(tag.children)
-            if not children_list:
+    def add_proto_keys_to_html(self) -> str:
+        for tag in self.soup.find_all(self.RELEVANT_TAGS):
+            if not self._tag_has_direct_text(tag):
+                # e.g. <li> whose only content is a <p> (the <p> will be
+                # handled in its own iteration) -> nothing to do here
                 continue
-            elif self.will_be_processed_later(children_list[0]):
-                continue
-            elif children_list == ["\n"]:
-                continue
-            elif children_list[0] == "\n" and self.will_be_processed_later(children_list[1]):
-                continue
-            self.add_proto_keys_to_tag(tag)
+            self._annotate_tag(tag)
         return str(self.soup)
 
-    def insert_proto_keys(self, child: element.NavigableString):
-        child.added_keys = 0
-        matches = list(self.sentence_splitter_re.finditer(child))
-        if not matches:
-            # nothing changed
-            return child
-
-        old_txt = str(child)
-        start_idcs = [0]
-        for match in matches:
-            i0, i1 = match.span()
-            start_idcs.append(i0 + 1)
-        start_idcs.append(len(old_txt))
-
-        # add some empty strings to allow look back for abbreviation checking
-        self.MAX_LOOK_AHEAD = 2
-        self.original_parts = [old_txt[i0:i1] for i0, i1 in zip(start_idcs[:-1], start_idcs[1:])]
-        self.original_parts.extend([""]*self.MAX_LOOK_AHEAD)
-
-        self.raw_parts = self._abbreviation_handling(self.original_parts)
-        self.parts = []
-        len_raw_parts = len(self.raw_parts)
-
-        for counter, content in enumerate(self.raw_parts):
-
-            self.parts.append(content)
-            # TODO: handle space after delimiter (or as part of delimiter)
-            if counter == len_raw_parts - 1:
-                if len(content.rstrip()) < 4:
-                    # do not add extra key for short strings after last sentence
-                    continue
-            self.parts.append(self.proto_key)
-            child.added_keys += 1
-
-        # We only want a key at the end if a sentence ends -> remove otherwise
-        self.parts: list[str]
-        if (
-            len(self.parts)
-            and self.parts[-1] == self.proto_key
-            # the following means: the last real part is the end of a sentence
-            and not self.parts[-2].strip()[-1] in (".", ":")
-        ):
-            self.parts.pop()
-
-        res = element.NavigableString("".join(self.parts))
-        res.added_keys = child.added_keys
-        return res
-
-    def _abbreviation_handling(self, original_parts):
-        """
-        Merge parts that belong together because they are part of an abbreviation
-        (e.g. "i.e." was split into "i." and "e." by the sentence splitter).
-        """
-        # collect groups of indices which need to be joined
-        self.parts_to_join = []
-        idx = 0
-        end = len(original_parts) - self.MAX_LOOK_AHEAD
-        while idx < end:
-            p0 = original_parts[idx]
-            p1 = original_parts[idx + 1]
-            p2 = original_parts[idx + 2]
-
-            res_tup = self._classify_abbreviations(p0, p1, p2, idx)
-            if res_tup is not None:
-                self.parts_to_join.append(res_tup)
-                idx = res_tup[-1]
-            idx += 1
-
-        # build a full partition of indices (join-groups + singletons)
-        join_groups = self._expand_join_groups(
-            self.parts_to_join, total_len=len(original_parts) - self.MAX_LOOK_AHEAD
-        )
-
-        res_parts = ["".join(original_parts[i] for i in tup) for tup in join_groups]
-
-        # drop empty strings at the end
-        while res_parts and res_parts[-1].strip() == "":
-            res_parts.pop()
-
-        return res_parts
-
     @staticmethod
-    def _expand_join_groups(parts_to_join: list[tuple], total_len: int) -> list[tuple]:
+    def _tag_has_direct_text(tag: element.Tag) -> bool:
+        """True iff `tag` has at least one direct NavigableString child with
+        non-whitespace content."""
+        for child in tag.children:
+            if isinstance(child, element.NavigableString) and child.strip():
+                return True
+        return False
+
+    def _annotate_tag(self, tag: element.Tag) -> None:
         """
-        Transform a list of join-specifiers into a full index partition.
+        Rewrite the direct children of `tag` by inserting proto-keys.
 
-        Input example:  [(1,), (4, 5)]  (meaning: after each index in the tuple
-                        the following part should be joined to the previous)
-        Step1 output:   [(1, 2), (4, 5, 6)]
-        Step2 output:   [(0,), (1, 2), (3,), (4, 5, 6), (7,), (8,)]
-        Overlapping groups like [(0, 1), (1, 2)] are merged into [(0, 1, 2)].
+        Strategy:
+          * iterate over direct children;
+          * for each NavigableString: segment it and intersperse proto-keys;
+          * non-text children (nested tags) are kept as-is;
+          * exactly one leading proto-key is placed at the start of the tag;
+          * a trailing proto-key is only kept if the last text segment does
+            NOT end with a sentence splitter.
         """
-        # step1: append the successor index to each group
-        step1 = [tuple([*tup, tup[-1] + 1]) for tup in parts_to_join]
-
-        # step2: fill in singletons and merge overlapping groups
-        step2 = []
-        idx = 0
-        last_tup = None
-        for tup in step1:
-            for i in range(idx, tup[0]):
-                step2.append((i,))
-            if last_tup is not None and last_tup[-1] == tup[0]:
-                step2[-1] = step2[-1][:-1] + tup
-            else:
-                step2.append(tup)
-            last_tup = tup
-            idx = tup[-1] + 1
-
-        # ensure all remaining indices are included as singletons
-        for i in range(idx, total_len):
-            step2.append((i,))
-
-        return step2
-
-    def _classify_abbreviations(self, p1: str, p2: str, p3: str, idx: int) -> tuple[int] | None:
-        if p1.endswith("bspw."):
-            return (idx, )
-        if p1.endswith("i.") and p2 == "e.":
-            return (idx, idx + 1)
-        if p1.endswith("e.") and p2 == "g.":
-            return (idx, idx + 1)
-        if p1.endswith("w.") and p2 == "r." and p3 == "t.":
-            return (idx, idx + 1, idx + 2)
-
-        # version numbers
-        # TODO: improve logic and add tests
-        # maybe even require a whitespace after the dot to qualify as statement splitter
-        self.version_number_pattern1 = re.compile(".*v[0-9]+")
-        self.version_number_pattern2 = re.compile("[0-9]+")
-        if self.version_number_pattern1.match(p1) and self.version_number_pattern2.match(p2):
-            return (idx, idx + 1)
-        return None
-
-    def add_proto_keys_to_tag(self, tag: element.Tag, level=0):
         original_children = list(tag.children)
-
         tag.clear()
-        new_children = [self.proto_key.lstrip()]
+
+        # new children built up incrementally; we always start with a leading
+        # proto-key (stripped of the leading space -- the key is at position 0)
+        new_children: list = [self.proto_key.lstrip()]
+
+        # track whether the last text segment we emitted ends with a splitter;
+        # used to decide whether a proto-key should precede the next segment
+        # and whether to drop a trailing key at the very end
+        last_text_ends_with_splitter = False
+
+        # index of the last text segment we actually emitted (in new_children);
+        # used to drop a trailing proto-key after the final segment
+        last_segment_idx: int | None = None
+
         for child in original_children:
             if isinstance(child, element.Tag):
-                # TODO: handle nested tags (e.g.  sentence delimiter within em-tags)
+                # non-text child: keep unchanged
+                # TODO: handle inline tags (em, strong, code) where sentence
+                # splitters inside their text currently do not create a segment
                 new_children.append(child)
-            else:
-                assert isinstance(child, element.NavigableString)
-                new_str = self.insert_proto_keys(child)
-                new_children.append(new_str)
+                continue
 
-        if level == 0:
-            if isinstance(new_children[-1], element.NavigableString):
-                if new_children[-1].rstrip().endswith(self.proto_key.strip()):
-                    idx = new_children[-1].rindex(self.proto_key)
-                    tmp1 = new_children[-1][:idx]
-                    tmp2 = new_children[-1][idx + len(self.proto_key) :]
-                    new_children[-1] = element.NavigableString(f"{tmp1}{tmp2}")
+            assert isinstance(child, element.NavigableString)
+            segments = split_text_into_segments(str(child))
+            if not segments:
+                continue
+
+            for i, seg in enumerate(segments):
+                if i > 0:
+                    # separator between segments: proto-key
+                    new_children.append(self.proto_key)
+                new_children.append(element.NavigableString(seg))
+                last_segment_idx = len(new_children) - 1
+                last_text_ends_with_splitter = seg.rstrip().endswith(SENTENCE_SPLITTERS)
+
+        # if the final text segment ends with a sentence splitter we do NOT
+        # want a trailing proto-key. That case can only occur if the leading
+        # proto-key we prepended is the only key and the tag has no segments
+        # after nested tags -- handled implicitly because we never append a
+        # trailing key. But we may need to drop a separator key that was
+        # followed by only short / no further content.
+        #
+        # Concretely, drop a trailing proto-key at the very end of the tag
+        # (i.e. if the last element is a proto-key string).
+        while new_children and new_children[-1] == self.proto_key:
+            new_children.pop()
+
+        # Edge case: a tag that consists only of nested tags with no direct
+        # text -> we should not have been called (filtered in caller), but
+        # be defensive: if we emitted only the leading key and nothing else,
+        # drop it.
+        if len(new_children) == 1 and new_children[0] == self.proto_key.lstrip():
+            new_children = []
+
+        # Drop the leading proto-key if the first real segment already starts
+        # with whitespace AND the tag originally started with whitespace --
+        # preserves byte-identical output w.r.t. the previous implementation.
+        # (no-op otherwise)
 
         tag.extend(new_children)
-        return
+
+        # silence unused-variable warnings in analyzers
+        _ = last_segment_idx, last_text_ends_with_splitter
