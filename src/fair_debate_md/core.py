@@ -1,13 +1,10 @@
 import re
 import os
 import glob
-import types
 import json
 import logging
 import collections
 
-import markdown
-import markdownify as mdf
 from bs4 import BeautifulSoup, element
 import git
 
@@ -16,6 +13,7 @@ from ipydex import IPS
 from . import utils
 from . import repo_handling
 from .key_management import ProtoKeyAdder
+from .md_handling import MDHandler, KeyAdder, convert_tabs_to_spaces  # noqa: F401 (re-exported)
 
 pjoin = os.path.join
 
@@ -24,37 +22,6 @@ TEST_DEBATE_KEY = "d1-lorem_ipsum"
 # this should be the same as in the web-application
 logger = logging.getLogger("fair-debate")
 logger.debug("fair_debate_md.core loaded")
-
-
-def convert_tabs_to_spaces(input_string):
-    lines = input_string.splitlines()
-
-    def replace_tabs(line):
-        leading_tabs = len(re.match(r"^\t*", line).group(0))
-        return " " * (leading_tabs * 4) + line.lstrip("\t")
-
-    converted_lines = [replace_tabs(line) for line in lines]
-    return "\n".join(converted_lines)
-
-
-class KeyAdder:
-    """
-    Convert proto-keys to numbered keys
-    """
-
-    def __init__(self, md_src: str):
-        self.md_src = md_src
-
-    def replace_proto_key_by_numbered_key(self, proto_key: str, prefix: str):
-        res = []
-        parts = self.md_src.split(proto_key)
-        for i, part in enumerate(parts[:-1], start=1):
-            res.append(part)
-            new_key = f'{proto_key.replace("k", prefix)}{i}'
-            res.append(new_key)
-        res.append(parts[-1])
-
-        return "".join(res)
 
 
 class SpanAdder:
@@ -314,7 +281,7 @@ class SpanAdder:
         return txt.replace(self.encoded_left_delimiter, "<").replace(self.encoded_right_delimiter, ">")
 
 
-class MDProcessor:
+class MDProcessor(MDHandler):
 
     def __init__(
         self,
@@ -326,189 +293,29 @@ class MDProcessor:
         db_ctb: bool = None,
         convert_now=False,
     ):
-        self.plain_md_src = plain_md
-        self.additional_css_classes = []
-        self.add_plain_md_as_data = False
+        super().__init__(
+            plain_md=plain_md,
+            proto_key_prefix=proto_key_prefix,
+            key_prefix=key_prefix,
+            md_with_real_keys=md_with_real_keys,
+            db_ctb=db_ctb,
+        )
 
-        self.proto_key_prefix = proto_key_prefix
-        self.key_prefix = key_prefix
-
-        self.md_with_proto_keys: str = None
-        self.md_with_real_keys = md_with_real_keys
-        self.db_ctb: bool = db_ctb
+        # html/segment/contribution related state
         self.segmented_html: str = None
         self.contribution_childs: dict[str, MDProcessor] = {}
         self.is_root_mdp: bool = False
         self.debate_key: str = None
-        self.cached_keys: list = None
-
-        self._code_element_contents = {}
-        self._early_placeholder_replacement = False
 
         # convenience: save one line in the caller
         if convert_now:
             self.convert()
-
-        # for debugging we save intermediate html-results
-        self.html_results = []
 
     def convert(self) -> str:
         self.convert_plain_md_to_md_with_proto_keys()
         self.convert_md_with_proto_keys_to_md_with_real_keys()
         self.get_html_with_segments()
         return self.segmented_html
-
-    def convert_plain_md_to_md_with_proto_keys(self) -> str:
-        self.md_with_proto_keys = self.add_proto_keys_to_md(self.plain_md_src, prefix=self.proto_key_prefix)
-
-    def _convert_md_to_html(self, md_src) -> str:
-        indent_width = utils.detect_list_indent(md_src)
-        use_extensions = False
-        if use_extensions:
-            # AIDER-Info:
-            # I want to use these extensions because future markdownify versions change the handling
-            # of nested lists and thus specifying the indent-width is necessary then
-            # however if I activate them they also change the behavior.
-
-            # TODO-AIDER:
-            # my desired solution (steps):
-            # - refactor the whole markdown-handling code (especially until proto-keys are added) into a separate module (current tests should pass)
-            #   - also refactor the tests `test_010__add_keys_to_md`, `test_030__get_html_with_segments` and `test_031__get_html_with_segments_bug` into a separate module
-            #   - the goal is to work on this problem independently from the rest of the code
-            # - simplify that code and add more fine-grained tests on intermediate results (but not too many)
-            # - activate extension
-            # - track down the changed behavior with the more fine-grained tests
-
-            extensions = ["mdx_truly_sane_lists"]
-            extension_configs = {"mdx_truly_sane_lists": {"nested_indent": indent_width}}
-        else:
-            extensions = []
-            extension_configs = {}
-        md = markdown.Markdown(extensions=extensions, extension_configs=extension_configs,)
-
-        html_src = md.convert(md_src)
-        return html_src
-
-    def add_proto_keys_to_md(
-        self, md_src: str = None, prefix: str = "k", early_placeholder_replacement: bool = False
-    ):
-        """
-
-        :param md_src:      original markdown source
-        :param prefix:      prefix for the inserted proto-keys (like "k"→"::k")
-        :param early_placeholder_replacement:
-                            default: False; if True code-block-placeholders are replaced by the associated
-                            content
-        """
-
-        if md_src is None:
-            md_src = self.plain_md_src
-
-        # first conversion from md to html (to add proto keys); will be converted back later
-
-        # Convert triple backtick code blocks to HTML before markdown processing
-        # also replace its content by placeholder-strings
-        md_src_processed = self.convert_triple_backticks_to_html(md_src)
-        html_src = self._convert_md_to_html(md_src_processed)
-        self.html_results.append(html_src)
-
-        pka = ProtoKeyAdder(html_src, prefix=prefix)
-        html_src2 = pka.add_proto_keys_to_html()
-        self.html_results.append(html_src2)
-
-        # now convert back from html to markdown
-        if early_placeholder_replacement:
-            self._early_placeholder_replacement = True
-        res = self.markdownify_and_postprocess(html_src2)
-        return res
-
-    def markdownify_and_postprocess(self, html_src):
-        """
-        employ customized MarkdownConverter
-        """
-
-        mdc = mdf.MarkdownConverter(heading_style="ATX", bullets="-")
-
-        # explicitly define conversion for strong and emphasized text
-        mdc.convert_b = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "**"), mdc)
-        mdc.convert_em = types.MethodType(mdf.abstract_inline_conversion(lambda foo: "_"), mdc)
-
-        # custom conversion for triple backtick code blocks
-        def convert_code_triple_backticks(unused_mdc_self, el, text, convert_as_inline):
-            if el.get('class') and 'triple_backticks' in el.get('class'):
-                # Convert to triple backtick fenced code block
-
-                # placeholder-replacements will be performed later in span-Adder
-
-                if self._early_placeholder_replacement:
-                    # used in some unittests only
-                    code_content = self._code_element_contents.get(text, text)
-                    return f"\n```{code_content}```"
-                else:
-                    return f"\n```{text}```"
-            else:
-                # Use default inline code conversion
-                return f"`{text}`"
-
-        mdc.convert_code = types.MethodType(convert_code_triple_backticks, mdc)
-
-        res0 = mdc.convert(html_src)
-        res1 = convert_tabs_to_spaces(res0)
-
-        return res1
-
-    def convert_triple_backticks_to_html(self, md_src):
-        """
-        Convert triple backtick code blocks to HTML code blocks with class="triple_backticks"
-        """
-        # Pattern to match triple backtick code blocks
-        pattern = r"```(.*?)```"
-
-        def replace_code_block(match):
-            code_content = match.group(1)
-            # Escape HTML entities in the code content
-            # import html
-            # escaped_content = html.escape(code_content)
-
-            idx = len(self._code_element_contents)
-
-            key = self._code_placeholder(idx)
-            self._code_element_contents[key] = code_content
-
-            return f'<code class="triple_backticks">{key}</code>'
-
-        # Use DOTALL flag to match newlines within the code blocks
-        result = re.sub(pattern, replace_code_block, md_src, flags=re.DOTALL)
-        return result
-
-    def _code_placeholder(self, idx: int):
-        return f"::code_placeholder_{idx}::"
-
-    def convert_md_with_proto_keys_to_md_with_real_keys(self) -> str:
-        proto_key = f"::{self.proto_key_prefix}"
-        self.md_with_real_keys = KeyAdder(self.md_with_proto_keys).replace_proto_key_by_numbered_key(
-            proto_key, self.key_prefix
-        )
-        return self.md_with_real_keys
-
-    def convert_plain_md_to_md_with_real_keys(self):
-        self.convert_plain_md_to_md_with_proto_keys()
-        return self.convert_md_with_proto_keys_to_md_with_real_keys()
-
-    def get_keys(self) -> list[str]:
-
-        # use caching because we need this several times in one run
-        if self.cached_keys is not None:
-            return self.cached_keys
-
-        assert self.md_with_real_keys
-
-        cre = re.compile(r"::XXX\d+".replace("XXX", self.key_prefix))
-        # matches = list(cre.finditer(self.md_with_real_keys))
-        matches = list(cre.findall(self.md_with_real_keys))
-
-        self.cached_keys = matches
-        return matches
 
     def get_html_with_segments(self) -> str:
         """
