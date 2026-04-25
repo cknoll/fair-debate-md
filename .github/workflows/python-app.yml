@@ -41,6 +41,12 @@ jobs:
         uv pip install --system -r requirements.txt
         uv pip install --system -e .
 
+    - name: configure git
+      run: |
+        git config --global user.email "ci-user@ci-server.com"
+        git config --global user.name "CI User"
+        git config --global init.defaultBranch main
+
     - name: run all tests
       run: |
         pytest
