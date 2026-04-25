@@ -34,11 +34,12 @@ jobs:
       run: |
         python -m pip install uv
 
-    - name: Installing requirements and
+    - name: Installing requirements and package
       run: |
         # install this package
         pwd
         uv pip install --system -r requirements.txt
+        uv pip install --system -e .
 
     - name: run all tests
       run: |
