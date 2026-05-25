@@ -38,12 +38,12 @@ Referenzen verweisen auf die Diskussionsfragen, in denen die Entscheidung fiel.
 - **Partei-Beschriftung (Q10b):** Username + Repo-Link, falls Repo-Link verfügbar, sonst nur
   Username.
 
-### Offene Annahme
+### Bestätigte Annahme
 
-- **Annahme A1 (Q8, Ereignisprotokoll):** v1 nutzt DB-Zeitstempel (`created`/`updated` auf
-  `Contribution`); die Veröffentlichungszeit kommt für committete Beiträge aus der
-  Git-Commit-Zeit. Das volle Doppel-Ereignis-Log (Entwurf erzeugt / veröffentlicht getrennt)
-  ist eine spätere Verfeinerung. *Diese Annahme ist noch nicht bestätigt.*
+- **Annahme A1 (Q8, Ereignisprotokoll) — bestätigt:** v1 nutzt DB-Zeitstempel
+  (`created`/`updated` auf `Contribution`); die Veröffentlichungszeit kommt für committete
+  Beiträge aus der Git-Commit-Zeit. Das volle Doppel-Ereignis-Log (Entwurf erzeugt /
+  veröffentlicht getrennt) ist eine spätere Verfeinerung.
 
 ## 3. Key-Schema (Modell X)
 
@@ -136,13 +136,19 @@ Zentrale, gut abgegrenzte Stellen — das Key-System ist das Fundament.
 
 ## 7. Darstellung
 
-- **Echter Baum:** Mit mehreren Antworten pro Segment wird die Anzeige erstmals ein echter
-  Baum (statt nahezu lineares a-b-Ping-Pong). Nötig: Verschachtelung/Einrückung pro Ebene,
-  Ein-/Ausklappen voller Segmente, **Autor-Anzeige pro Antwort** (der Token allein soll dem
-  Leser die Partei zeigen, Klartext-Identität aus Teilnehmer-Liste).
+- **Grundprinzip (bewusst schlicht):** Die Debatte ist logisch ein Baum (Segment → Antworten
+  → deren Segmente → …), aber das war auch mit zwei Parteien schon so. Optisch bleibt es bei
+  dem bewährten Bild: Antworten stehen **klar getrennt untereinander** unter dem jeweiligen
+  Segment. Kein neues, schwergewichtiges Tree-Widget nötig.
+- **Einzig Neues:** Ein Segment kann **mehrere** direkte Antworten haben → diese erscheinen als
+  mehrere klar abgegrenzte Antwort-Blöcke untereinander, **jeder mit Partei-Beschriftung**
+  (Token + Username, Klartext-Identität aus Teilnehmer-Liste). Die Verschachtelungstiefe
+  (Antwort auf Antwort) funktioniert wie bisher.
+- **Optional/später:** Ein-/Ausklappen sehr voller Segmente, stärkere Einrückung pro Ebene —
+  nur falls sich in Tests Unübersichtlichkeit zeigt.
 - **Sortierung:** Geschwister-Antworten chronologisch, älteste zuerst (v1). Sortier-Option
   später.
-- **Ereignisprotokoll:** optional einblendbar; pro Contribution Zeitstempel (Annahme A1).
+- **Ereignisprotokoll:** optional einblendbar; pro Contribution Zeitstempel.
 - **Sichtbarkeitsfilter:** clientseitiger Toggle pro Betrachter; v1 Blacklist.
 
 ## 8. Migration bestehender Debatten
