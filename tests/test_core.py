@@ -393,5 +393,72 @@ class TestCases1(unittest.TestCase):
 
 
 
+class TestKeyHelpers(unittest.TestCase):
+    """Tests for key_regex widening and new key helper functions."""
+
+    def test_key_regex_single_char_tokens(self):
+        import re
+        from fair_debate_md.core import key_regex
+        self.assertIsNotNone(key_regex.match("a5"))
+        self.assertIsNotNone(key_regex.match("b12"))
+        self.assertIsNotNone(key_regex.match("z1"))
+
+    def test_key_regex_multi_char_tokens(self):
+        from fair_debate_md.core import key_regex
+        self.assertIsNotNone(key_regex.match("aa5"))
+        self.assertIsNotNone(key_regex.match("ab12"))
+        self.assertIsNotNone(key_regex.match("zz99"))
+
+    def test_key_regex_no_match_uppercase(self):
+        from fair_debate_md.core import key_regex
+        self.assertIsNone(key_regex.match("A5"))
+        self.assertIsNone(key_regex.match("B3"))
+
+    def test_key_regex_no_match_digit_start(self):
+        from fair_debate_md.core import key_regex
+        self.assertIsNone(key_regex.match("5a"))
+        self.assertIsNone(key_regex.match("3b"))
+
+    def test_decompose_key_single_char(self):
+        from fair_debate_md.core import decompose_key
+        self.assertEqual(decompose_key("a5"), ["a5"])
+        self.assertEqual(decompose_key("b1"), ["b1"])
+        self.assertEqual(decompose_key("a304b1"), ["a304", "b1"])
+        self.assertEqual(decompose_key("a3ab"), ["a3", "ab"])
+
+    def test_decompose_key_multi_char_tokens(self):
+        from fair_debate_md.core import decompose_key
+        self.assertEqual(decompose_key("aa5"), ["aa5"])
+        self.assertEqual(decompose_key("ab12"), ["ab12"])
+        self.assertEqual(decompose_key("a3ab"), ["a3", "ab"])
+        self.assertEqual(decompose_key("aa5ab3"), ["aa5", "ab3"])
+        self.assertEqual(decompose_key("aa5ab3b"), ["aa5", "ab3", "b"])
+
+    def test_is_valid_key_multi_char_tokens(self):
+        from fair_debate_md.core import is_valid_key
+        self.assertTrue(is_valid_key("aa5"))
+        self.assertTrue(is_valid_key("ab12"))
+        self.assertTrue(is_valid_key("aa5ab3"))
+        self.assertTrue(is_valid_key("aa5ab3b"))
+        self.assertFalse(is_valid_key("5a"))
+        self.assertFalse(is_valid_key("AA5"))
+
+    def test_get_contribution_key(self):
+        from fair_debate_md.core import get_contribution_key
+        self.assertEqual(get_contribution_key("a5", "c"), "a5c")
+        self.assertEqual(get_contribution_key("a304b1", "a"), "a304b1a")
+        self.assertEqual(get_contribution_key("a5", "b"), "a5b")
+        self.assertEqual(get_contribution_key("aa5", "ab"), "aa5ab")
+
+    def test_get_last_token(self):
+        from fair_debate_md.core import get_last_token
+        self.assertEqual(get_last_token("a5c3b"), "b")
+        self.assertEqual(get_last_token("a3ab"), "ab")
+        self.assertEqual(get_last_token("a5"), None)
+        self.assertEqual(get_last_token("aa5ab3"), None)
+        self.assertEqual(get_last_token("aa5ab3b"), "b")
+        self.assertEqual(get_last_token("a5c"), "c")
+
+
 def remove_trailing_spaces(txt):
     return "\n".join([line.rstrip(" ") for line in txt.split("\n")])

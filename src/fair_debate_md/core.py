@@ -354,7 +354,7 @@ def _convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
     return mdp.md_with_real_keys, mdp.segmented_html
 
 
-key_regex = re.compile(r"[ab]\d+")
+key_regex = re.compile(r"[a-z]+\d+")
 
 
 def decompose_key(key):
@@ -528,12 +528,23 @@ class DebateDirLoader:
             self.final_html = res_segmented_html
 
 
-def get_contribution_key(segment_key):
+def get_contribution_key(segment_key, answering_token):
     """
-    For a keys like "a5", "a304b1" generate "a3b" or "a304b1a"
+    For a segment key like "a5" and answering_token "c" generate "a5c".
+    Example: get_contribution_key('a5', 'c') == 'a5c'
+             get_contribution_key('a304b1', 'a') == 'a304b1a'
     """
-    next_turn_key = get_next_turn_key(segment_key)
-    return f"{segment_key}{next_turn_key}"
+    return f"{segment_key}{answering_token}"
+
+
+def get_last_token(key):
+    """
+    Return the last letter-run (token) at the end of a key string.
+    Example: get_last_token('a5c3b') == 'b'
+             get_last_token('a3ab') == 'ab'
+    """
+    m = re.search(r"[a-z]+$", key)
+    return m.group() if m else None
 
 
 def get_next_turn_key(segment_key):
