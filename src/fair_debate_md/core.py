@@ -411,7 +411,6 @@ class DebateDirLoader:
         self.dirpath = dirpath
         self.new_debate = new_debate
         self.dir_a = pjoin(self.dirpath, "a")
-        self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
         self.num_contributions = None
         self.all_files: list = None
@@ -437,10 +436,12 @@ class DebateDirLoader:
                             background: temporary contributions, not yet committed
         """
 
-        a_files = glob.glob(pjoin(self.dir_a, "*.md"))
-        b_files = glob.glob(pjoin(self.dir_b, "*.md"))
-
-        self.all_files = [fpath for fpath in a_files + b_files if is_valid_fpath(fpath)]
+        all_md_files = glob.glob(pjoin(self.dirpath, "*", "*.md"))
+        self.all_files = []
+        for fpath in all_md_files:
+            dir_name = os.path.basename(os.path.dirname(fpath))
+            if re.match(r"^[a-z]+$", dir_name) and is_valid_fpath(fpath):
+                self.all_files.append(fpath)
         self.all_files.sort()
 
         for fpath in self.all_files:
@@ -619,8 +620,7 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
 
 def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
 
-    ctb.author_role = ctb.ctb_key[-1]
-    assert ctb.author_role in ["a", "b"]
+    ctb.author_role = get_last_token(ctb.ctb_key)
 
     dir_path = pjoin(repo_dir, ctb.author_role)
     os.makedirs(dir_path, exist_ok=True)

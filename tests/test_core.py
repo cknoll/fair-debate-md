@@ -558,3 +558,40 @@ class TestMultipleContributions(unittest.TestCase):
 
 def remove_trailing_spaces(txt):
     return "\n".join([line.rstrip(" ") for line in txt.split("\n")])
+
+
+# --- T3 tests: dynamic token directories and multi-char author tokens ---
+
+def test_write_ctb_to_file_token_c(tmp_path):
+    from fair_debate_md.core import DBContribution, write_ctb_to_file
+    ctb = DBContribution(ctb_key="a1c", body="Reply from c.")
+    write_ctb_to_file(str(tmp_path), ctb)
+    assert ctb.author_role == "c"
+    assert ctb.fpath == str(tmp_path / "c" / "a1c.md")
+    assert os.path.exists(ctb.fpath)
+
+
+def test_write_ctb_to_file_multi_char_token_aa(tmp_path):
+    from fair_debate_md.core import DBContribution, write_ctb_to_file
+    ctb = DBContribution(ctb_key="a1c3aa", body="Reply from aa.")
+    write_ctb_to_file(str(tmp_path), ctb)
+    assert ctb.author_role == "aa"
+    assert ctb.fpath == str(tmp_path / "aa" / "a1c3aa.md")
+    assert os.path.exists(ctb.fpath)
+
+
+def test_load_dir_three_party_debate(tmp_path):
+    from fair_debate_md.core import DebateDirLoader
+    (tmp_path / "a").mkdir()
+    (tmp_path / "b").mkdir()
+    (tmp_path / "c").mkdir()
+    (tmp_path / "a" / "a.md").write_text("::a1 First statement. ::a2 Second statement.\n")
+    (tmp_path / "b" / "a1b.md").write_text("::a1b1 Reply from b.\n")
+    (tmp_path / "c" / "a1c.md").write_text("::a1c1 Reply from c.\n")
+
+    ddl = DebateDirLoader(dirpath=str(tmp_path), debate_key="test-three-party")
+    ddl.load_dir()
+
+    assert "a" in ddl.tree
+    assert "a1b" in ddl.tree
+    assert "a1c" in ddl.tree
