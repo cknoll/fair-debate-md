@@ -26,7 +26,7 @@ logger.debug("fair_debate_md.core loaded")
 
 class SpanAdder:
     def __init__(
-        self, parent_mdp, html_src: str, key_prefix: str, contribution_childs: dict[str, "MDProcessor"] = None
+        self, parent_mdp, html_src: str, key_prefix: str, contribution_childs: dict[str, list["MDProcessor"]] = None
     ):
         self.parent_mdp: MDProcessor = parent_mdp
         self.html_src = html_src
@@ -152,42 +152,45 @@ class SpanAdder:
                                 (will be referenced by the contributions)
 
         """
-        for key, mdp in self.contribution_childs.items():
+        for key, mdp_list in self.contribution_childs.items():
+            if not mdp_list:
+                continue
 
-            contribution_content = mdp.get_html_with_segments()
-            contribution_soup = BeautifulSoup(contribution_content, "html.parser")
-            # here the use of `level` is consistent with the web app:
-            # current level (e.g. 1 (= number of key-parts) is applied to contribution_soup)
-            self._replace_p_with_div(contribution_soup, self.level)
-            additional_class_str = " ".join(mdp.additional_css_classes)
-            class_str = f"contribution level{self.level} {additional_class_str}".strip()
-
-            attribute_dict = {"class": class_str, "id": f"contribution_{mdp.key_prefix}"}
-            if mdp.add_plain_md_as_data:
-                # Note this attribute must be allowed by bleach (in settings.py of the web app)
-                attribute_dict["data-plain_md_src"] = json.dumps(mdp.plain_md_src)
-
-            contribution_div = self.soup.new_tag("div", attrs=attribute_dict)
-            contribution_div.extend(contribution_soup)
             referenced_segment = segment_dict[key]
             segment_parent = referenced_segment.parent
+
             if segment_parent.name in ("h1", "h2", "h3", "h4", "h5", "h6"):
                 # special treatment of answer-contributions to headings (styling reasons)
                 wrapper_div = self.soup.new_tag("div", attrs={"class": "answered_heading"})
-
-                # insert empty wrapper
                 segment_parent.insert_after(wrapper_div)
-
-                # remove segment_parent (h2, etc)
                 segment_parent.extract()
-
                 wrapper_div.append(segment_parent)
-                segment_parent.insert_after(contribution_div)
                 class_list = segment_parent.attrs.get("class", "").split(" ")
                 class_list.append("heading")
                 segment_parent.attrs["class"] = " ".join(class_list).strip()
+                insert_after_target = segment_parent
             else:
-                referenced_segment.insert_after(contribution_div)
+                insert_after_target = referenced_segment
+
+            # Insert in reverse order so that visual order matches the sorted mdp_list
+            # (each insert_after pushes the new div right after the anchor)
+            for mdp in reversed(mdp_list):
+                contribution_content = mdp.get_html_with_segments()
+                contribution_soup = BeautifulSoup(contribution_content, "html.parser")
+                # here the use of `level` is consistent with the web app:
+                # current level (e.g. 1 (= number of key-parts) is applied to contribution_soup)
+                self._replace_p_with_div(contribution_soup, self.level)
+                additional_class_str = " ".join(mdp.additional_css_classes)
+                class_str = f"contribution level{self.level} {additional_class_str}".strip()
+
+                attribute_dict = {"class": class_str, "id": f"contribution_{mdp.key_prefix}"}
+                if mdp.add_plain_md_as_data:
+                    # Note this attribute must be allowed by bleach (in settings.py of the web app)
+                    attribute_dict["data-plain_md_src"] = json.dumps(mdp.plain_md_src)
+
+                contribution_div = self.soup.new_tag("div", attrs=attribute_dict)
+                contribution_div.extend(contribution_soup)
+                insert_after_target.insert_after(contribution_div)
 
     def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
         """
@@ -303,7 +306,7 @@ class MDProcessor(MDHandler):
 
         # html/segment/contribution related state
         self.segmented_html: str = None
-        self.contribution_childs: dict[str, MDProcessor] = {}
+        self.contribution_childs: dict[str, list[MDProcessor]] = collections.defaultdict(list)
         self.is_root_mdp: bool = False
         self.debate_key: str = None
 
@@ -504,7 +507,8 @@ class DebateDirLoader:
         if parent_mdp is None:
             parent_mdp = self.root_mdp
 
-        next_turn_key = get_next_turn_key(parent_mdp.key_prefix)
+        # Clear to avoid duplication on repeated calls
+        parent_mdp.contribution_childs.clear()
 
         # get all keys which are used in this statement block (without contributions)
         key_str_list = parent_mdp.get_keys()
@@ -513,14 +517,19 @@ class DebateDirLoader:
         for key_str in key_str_list:
             key = key_str.lstrip("::")
 
-            contribution_key = f"{key}{next_turn_key}"
-            if contribution_key in self.tree:
-                child_mdp = self.tree.get(contribution_key)
+            # Find all direct children: tree keys matching ^{key}[a-z]+$
+            child_pattern = re.compile(r"^" + re.escape(key) + r"[a-z]+$")
+            child_keys = sorted(
+                [k for k in self.tree if child_pattern.match(k)],
+                key=get_last_token,
+            )
 
+            for child_key in child_keys:
+                child_mdp = self.tree[child_key]
                 # this recursively creates the .segmented_html
                 # attributes of the child_mdp objects
                 self.generate_html_with_contributions(parent_mdp=child_mdp)
-                parent_mdp.contribution_childs[key] = child_mdp
+                parent_mdp.contribution_childs[key].append(child_mdp)
 
         # this calls SpanAdder.add_spans_for_keys()
         res_segmented_html: str = parent_mdp.get_html_with_segments()
@@ -546,17 +555,6 @@ def get_last_token(key):
     m = re.search(r"[a-z]+$", key)
     return m.group() if m else None
 
-
-def get_next_turn_key(segment_key):
-    """
-    For a keys like "a5", "a304b1" generate "b" or "a"
-    (opposite of the letter of the last part)
-    """
-    key_parts = decompose_key(segment_key)
-    last_part_letter = key_parts[-1][0]
-    assert last_part_letter in ("a", "b")
-    next_turn_key = {"a": "b", "b": "a"}[last_part_letter]
-    return next_turn_key
 
 
 def load_dir(

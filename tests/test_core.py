@@ -460,5 +460,101 @@ class TestKeyHelpers(unittest.TestCase):
         self.assertEqual(get_last_token("a5c"), "c")
 
 
+class TestMultipleContributions(unittest.TestCase):
+    """Tests for multiple direct replies per segment (T2)."""
+
+    def _make_ddl(self, tree_content: dict):
+        from fair_debate_md.core import DebateDirLoader, MDProcessor
+
+        ddl = DebateDirLoader(dirpath="/tmp/dummy_test_fdmd", debate_key="test-debate")
+        for key, md_with_real_keys in tree_content.items():
+            ddl.tree[key] = MDProcessor(
+                key_prefix=key, md_with_real_keys=md_with_real_keys, db_ctb=False
+            )
+        ddl.handle_root_mdp()
+        return ddl
+
+    def test_single_reply_regression(self):
+        ddl = self._make_ddl({
+            "a": "::a1 Statement one. ::a2 Statement two.",
+            "a1b": "::a1b1 Single reply from b.",
+        })
+        ddl.generate_html_with_contributions()
+        soup = BeautifulSoup(ddl.final_html, "html.parser")
+
+        self.assertIsNotNone(soup.find(id="contribution_a1b"))
+        childs = ddl.root_mdp.contribution_childs["a1"]
+        self.assertIsInstance(childs, list)
+        self.assertEqual(len(childs), 1)
+        self.assertEqual(childs[0].key_prefix, "a1b")
+
+    def test_two_replies_both_present(self):
+        ddl = self._make_ddl({
+            "a": "::a1 Statement one. ::a2 Statement two.",
+            "a1b": "::a1b1 Reply from b.",
+            "a1c": "::a1c1 Reply from c.",
+        })
+        ddl.generate_html_with_contributions()
+        soup = BeautifulSoup(ddl.final_html, "html.parser")
+
+        self.assertIsNotNone(soup.find(id="contribution_a1b"))
+        self.assertIsNotNone(soup.find(id="contribution_a1c"))
+
+    def test_two_replies_deterministic_order(self):
+        ddl = self._make_ddl({
+            "a": "::a1 Statement one.",
+            "a1b": "::a1b1 Reply from b.",
+            "a1c": "::a1c1 Reply from c.",
+        })
+        ddl.generate_html_with_contributions()
+        soup = BeautifulSoup(ddl.final_html, "html.parser")
+
+        all_ids = [tag["id"] for tag in soup.find_all(id=True)]
+        idx_b = all_ids.index("contribution_a1b")
+        idx_c = all_ids.index("contribution_a1c")
+        self.assertLess(idx_b, idx_c, "contribution_a1b must appear before contribution_a1c")
+
+    def test_contribution_childs_is_list(self):
+        ddl = self._make_ddl({
+            "a": "::a1 Statement one.",
+            "a1b": "::a1b1 Reply from b.",
+            "a1c": "::a1c1 Reply from c.",
+        })
+        ddl.generate_html_with_contributions()
+        childs = ddl.root_mdp.contribution_childs["a1"]
+        self.assertIsInstance(childs, list)
+        self.assertEqual(len(childs), 2)
+        self.assertEqual(childs[0].key_prefix, "a1b")
+        self.assertEqual(childs[1].key_prefix, "a1c")
+
+    def test_no_duplication_on_repeated_call(self):
+        ddl = self._make_ddl({
+            "a": "::a1 Statement one.",
+            "a1b": "::a1b1 Reply from b.",
+            "a1c": "::a1c1 Reply from c.",
+        })
+        ddl.generate_html_with_contributions()
+        ddl.generate_html_with_contributions()
+        childs = ddl.root_mdp.contribution_childs["a1"]
+        self.assertEqual(len(childs), 2, "Repeated call must not duplicate contribution_childs entries")
+
+    def test_three_replies_order(self):
+        ddl = self._make_ddl({
+            "a": "::a1 Statement one.",
+            "a1b": "::a1b1 Reply from b.",
+            "a1c": "::a1c1 Reply from c.",
+            "a1d": "::a1d1 Reply from d.",
+        })
+        ddl.generate_html_with_contributions()
+        soup = BeautifulSoup(ddl.final_html, "html.parser")
+
+        all_ids = [tag["id"] for tag in soup.find_all(id=True)]
+        idx_b = all_ids.index("contribution_a1b")
+        idx_c = all_ids.index("contribution_a1c")
+        idx_d = all_ids.index("contribution_a1d")
+        self.assertLess(idx_b, idx_c)
+        self.assertLess(idx_c, idx_d)
+
+
 def remove_trailing_spaces(txt):
     return "\n".join([line.rstrip(" ") for line in txt.split("\n")])
