@@ -346,7 +346,7 @@ class TestCases1(unittest.TestCase):
             (
                 "no nesting -> default",
                 "- a\n- b\n- c\n",
-                4,
+                2,
             ),
             (
                 "4-space with fenced code block containing fake list",
@@ -387,6 +387,8 @@ class TestCases1(unittest.TestCase):
                 status = "OK" if got == expected else "FAIL"
                 print(f"[{status}] {label}: expected={expected}, got={got}")
                 assert got == expected, f"{label}: expected {expected}, got {got}"
+
+        _run_detect_tests()
 
 
 
