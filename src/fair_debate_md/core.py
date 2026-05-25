@@ -26,7 +26,7 @@ logger.debug("fair_debate_md.core loaded")
 
 class SpanAdder:
     def __init__(
-        self, parent_mdp, html_src: str, key_prefix: str, contribution_childs: dict[str, "MDProcessor"] = None
+        self, parent_mdp, html_src: str, key_prefix: str, contribution_childs: dict[str, list["MDProcessor"]] = None
     ):
         self.parent_mdp: MDProcessor = parent_mdp
         self.html_src = html_src
@@ -152,42 +152,45 @@ class SpanAdder:
                                 (will be referenced by the contributions)
 
         """
-        for key, mdp in self.contribution_childs.items():
+        for key, mdp_list in self.contribution_childs.items():
+            if not mdp_list:
+                continue
 
-            contribution_content = mdp.get_html_with_segments()
-            contribution_soup = BeautifulSoup(contribution_content, "html.parser")
-            # here the use of `level` is consistent with the web app:
-            # current level (e.g. 1 (= number of key-parts) is applied to contribution_soup)
-            self._replace_p_with_div(contribution_soup, self.level)
-            additional_class_str = " ".join(mdp.additional_css_classes)
-            class_str = f"contribution level{self.level} {additional_class_str}".strip()
-
-            attribute_dict = {"class": class_str, "id": f"contribution_{mdp.key_prefix}"}
-            if mdp.add_plain_md_as_data:
-                # Note this attribute must be allowed by bleach (in settings.py of the web app)
-                attribute_dict["data-plain_md_src"] = json.dumps(mdp.plain_md_src)
-
-            contribution_div = self.soup.new_tag("div", attrs=attribute_dict)
-            contribution_div.extend(contribution_soup)
             referenced_segment = segment_dict[key]
             segment_parent = referenced_segment.parent
+
             if segment_parent.name in ("h1", "h2", "h3", "h4", "h5", "h6"):
                 # special treatment of answer-contributions to headings (styling reasons)
                 wrapper_div = self.soup.new_tag("div", attrs={"class": "answered_heading"})
-
-                # insert empty wrapper
                 segment_parent.insert_after(wrapper_div)
-
-                # remove segment_parent (h2, etc)
                 segment_parent.extract()
-
                 wrapper_div.append(segment_parent)
-                segment_parent.insert_after(contribution_div)
                 class_list = segment_parent.attrs.get("class", "").split(" ")
                 class_list.append("heading")
                 segment_parent.attrs["class"] = " ".join(class_list).strip()
+                insert_after_target = segment_parent
             else:
-                referenced_segment.insert_after(contribution_div)
+                insert_after_target = referenced_segment
+
+            # Insert in reverse order so that visual order matches the sorted mdp_list
+            # (each insert_after pushes the new div right after the anchor)
+            for mdp in reversed(mdp_list):
+                contribution_content = mdp.get_html_with_segments()
+                contribution_soup = BeautifulSoup(contribution_content, "html.parser")
+                # here the use of `level` is consistent with the web app:
+                # current level (e.g. 1 (= number of key-parts) is applied to contribution_soup)
+                self._replace_p_with_div(contribution_soup, self.level)
+                additional_class_str = " ".join(mdp.additional_css_classes)
+                class_str = f"contribution level{self.level} {additional_class_str}".strip()
+
+                attribute_dict = {"class": class_str, "id": f"contribution_{mdp.key_prefix}"}
+                if mdp.add_plain_md_as_data:
+                    # Note this attribute must be allowed by bleach (in settings.py of the web app)
+                    attribute_dict["data-plain_md_src"] = json.dumps(mdp.plain_md_src)
+
+                contribution_div = self.soup.new_tag("div", attrs=attribute_dict)
+                contribution_div.extend(contribution_soup)
+                insert_after_target.insert_after(contribution_div)
 
     def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
         """
@@ -303,7 +306,7 @@ class MDProcessor(MDHandler):
 
         # html/segment/contribution related state
         self.segmented_html: str = None
-        self.contribution_childs: dict[str, MDProcessor] = {}
+        self.contribution_childs: dict[str, list[MDProcessor]] = collections.defaultdict(list)
         self.is_root_mdp: bool = False
         self.debate_key: str = None
 
@@ -354,7 +357,7 @@ def _convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
     return mdp.md_with_real_keys, mdp.segmented_html
 
 
-key_regex = re.compile(r"[ab]\d+")
+key_regex = re.compile(r"[a-z]+\d+")
 
 
 def decompose_key(key):
@@ -408,7 +411,6 @@ class DebateDirLoader:
         self.dirpath = dirpath
         self.new_debate = new_debate
         self.dir_a = pjoin(self.dirpath, "a")
-        self.dir_b = pjoin(self.dirpath, "b")
         self.root_file = pjoin(self.dir_a, "a.md")
         self.num_contributions = None
         self.all_files: list = None
@@ -434,10 +436,12 @@ class DebateDirLoader:
                             background: temporary contributions, not yet committed
         """
 
-        a_files = glob.glob(pjoin(self.dir_a, "*.md"))
-        b_files = glob.glob(pjoin(self.dir_b, "*.md"))
-
-        self.all_files = [fpath for fpath in a_files + b_files if is_valid_fpath(fpath)]
+        all_md_files = glob.glob(pjoin(self.dirpath, "*", "*.md"))
+        self.all_files = []
+        for fpath in all_md_files:
+            dir_name = os.path.basename(os.path.dirname(fpath))
+            if re.match(r"^[a-z]+$", dir_name) and is_valid_fpath(fpath):
+                self.all_files.append(fpath)
         self.all_files.sort()
 
         for fpath in self.all_files:
@@ -504,7 +508,8 @@ class DebateDirLoader:
         if parent_mdp is None:
             parent_mdp = self.root_mdp
 
-        next_turn_key = get_next_turn_key(parent_mdp.key_prefix)
+        # Clear to avoid duplication on repeated calls
+        parent_mdp.contribution_childs.clear()
 
         # get all keys which are used in this statement block (without contributions)
         key_str_list = parent_mdp.get_keys()
@@ -513,14 +518,19 @@ class DebateDirLoader:
         for key_str in key_str_list:
             key = key_str.lstrip("::")
 
-            contribution_key = f"{key}{next_turn_key}"
-            if contribution_key in self.tree:
-                child_mdp = self.tree.get(contribution_key)
+            # Find all direct children: tree keys matching ^{key}[a-z]+$
+            child_pattern = re.compile(r"^" + re.escape(key) + r"[a-z]+$")
+            child_keys = sorted(
+                [k for k in self.tree if child_pattern.match(k)],
+                key=get_last_token,
+            )
 
+            for child_key in child_keys:
+                child_mdp = self.tree[child_key]
                 # this recursively creates the .segmented_html
                 # attributes of the child_mdp objects
                 self.generate_html_with_contributions(parent_mdp=child_mdp)
-                parent_mdp.contribution_childs[key] = child_mdp
+                parent_mdp.contribution_childs[key].append(child_mdp)
 
         # this calls SpanAdder.add_spans_for_keys()
         res_segmented_html: str = parent_mdp.get_html_with_segments()
@@ -528,24 +538,24 @@ class DebateDirLoader:
             self.final_html = res_segmented_html
 
 
-def get_contribution_key(segment_key):
+def get_contribution_key(segment_key, answering_token):
     """
-    For a keys like "a5", "a304b1" generate "a3b" or "a304b1a"
+    For a segment key like "a5" and answering_token "c" generate "a5c".
+    Example: get_contribution_key('a5', 'c') == 'a5c'
+             get_contribution_key('a304b1', 'a') == 'a304b1a'
     """
-    next_turn_key = get_next_turn_key(segment_key)
-    return f"{segment_key}{next_turn_key}"
+    return f"{segment_key}{answering_token}"
 
 
-def get_next_turn_key(segment_key):
+def get_last_token(key):
     """
-    For a keys like "a5", "a304b1" generate "b" or "a"
-    (opposite of the letter of the last part)
+    Return the last letter-run (token) at the end of a key string.
+    Example: get_last_token('a5c3b') == 'b'
+             get_last_token('a3ab') == 'ab'
     """
-    key_parts = decompose_key(segment_key)
-    last_part_letter = key_parts[-1][0]
-    assert last_part_letter in ("a", "b")
-    next_turn_key = {"a": "b", "b": "a"}[last_part_letter]
-    return next_turn_key
+    m = re.search(r"[a-z]+$", key)
+    return m.group() if m else None
+
 
 
 def load_dir(
@@ -610,8 +620,7 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
 
 def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
 
-    ctb.author_role = ctb.ctb_key[-1]
-    assert ctb.author_role in ["a", "b"]
+    ctb.author_role = get_last_token(ctb.ctb_key)
 
     dir_path = pjoin(repo_dir, ctb.author_role)
     os.makedirs(dir_path, exist_ok=True)
