@@ -4,7 +4,10 @@ import glob
 import json
 import logging
 import collections
+import subprocess
+from datetime import datetime, timezone
 
+import yaml
 from bs4 import BeautifulSoup, element
 import git
 
@@ -310,6 +313,11 @@ class MDProcessor(MDHandler):
         self.is_root_mdp: bool = False
         self.debate_key: str = None
 
+        # front-matter / ordering metadata (Phase 4 foundation)
+        self.front_matter: dict = {}
+        self.created: str | None = None
+        self.order_hint = None
+
         # convenience: save one line in the caller
         if convert_now:
             self.convert()
@@ -390,15 +398,64 @@ def is_valid_fpath(fpath):
     return is_valid_key(get_base_name(fpath))
 
 
+def _git_first_commit_iso(fpath: str) -> str | None:
+    """
+    Return the ISO-8601 timestamp of the first commit that added `fpath`
+    (using --diff-filter=A --follow). Returns None on any failure.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--follow", "--format=%aI", "--", fpath],
+            cwd=os.path.dirname(fpath) or ".",
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return None
+
+    if result.returncode != 0:
+        return None
+    out = result.stdout.strip()
+    if not out:
+        return None
+    return out.splitlines()[-1]
+
+
+def split_front_matter(text: str) -> tuple[dict, str]:
+    """
+    Split a YAML front-matter header from the body.
+
+    Returns (front_matter_dict, body). If no header is present, returns ({}, text).
+    """
+    if not text.startswith("---\n"):
+        return {}, text
+
+    end_idx = text.find("\n---\n", 4)
+    if end_idx == -1:
+        return {}, text
+
+    header_src = text[4:end_idx]
+    body = text[end_idx + len("\n---\n"):]
+    try:
+        data = yaml.safe_load(header_src)
+    except yaml.YAMLError:
+        return {}, text
+    if not isinstance(data, dict):
+        return {}, text
+    return data, body
+
+
 class DBContribution:
     """
     Represents a contribution wich is not yet stored in a file but comes from the database
     of the web app.
     """
 
-    def __init__(self, ctb_key: str, body: str):
+    def __init__(self, ctb_key: str, body: str, order_hint=None):
         self.ctb_key = ctb_key
         self.body = body
+        self.order_hint = order_hint
 
         # will be set during commit process
         self.fpath: str = None
@@ -448,8 +505,14 @@ class DebateDirLoader:
             base_name = get_base_name(fpath)
 
             with open(fpath, "r") as fp:
-                md_with_real_keys = fp.read()
+                file_content = fp.read()
+            front_matter, md_with_real_keys = split_front_matter(file_content)
             mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys, db_ctb=False)
+            mdp.front_matter = front_matter
+            mdp.created = front_matter.get("created")
+            if mdp.created is None:
+                mdp.created = _git_first_commit_iso(fpath)
+            mdp.order_hint = mdp.created
             if len(mdp.get_keys()) == 0:
                 fname = os.path.split(fpath)[1]
                 msg = (
@@ -501,6 +564,8 @@ class DebateDirLoader:
             mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body, db_ctb=True)
             mdp.additional_css_classes.append("db_ctb")
             mdp.add_plain_md_as_data = True
+            mdp.front_matter = {}
+            mdp.order_hint = ctb.order_hint
             mdp.convert_plain_md_to_md_with_real_keys()
             self.tree[ctb.ctb_key] = mdp
 
@@ -520,10 +585,8 @@ class DebateDirLoader:
 
             # Find all direct children: tree keys matching ^{key}[a-z]+$
             child_pattern = re.compile(r"^" + re.escape(key) + r"[a-z]+$")
-            child_keys = sorted(
-                [k for k in self.tree if child_pattern.match(k)],
-                key=get_last_token,
-            )
+            candidate_keys = [k for k in self.tree if child_pattern.match(k)]
+            child_keys = sorted(candidate_keys, key=lambda k: _sort_key(self.tree[k]))
 
             for child_key in child_keys:
                 child_mdp = self.tree[child_key]
@@ -555,6 +618,16 @@ def get_last_token(key):
     """
     m = re.search(r"[a-z]+$", key)
     return m.group() if m else None
+
+
+def _sort_key(mdp):
+    """
+    Sort key for sibling contributions: primary by order_hint (None last),
+    secondary lex. by role-token (last letter-run of ctb_key / key_prefix).
+    """
+    oh = mdp.order_hint
+    key = getattr(mdp, "ctb_key", None) or getattr(mdp, "key_prefix", "")
+    return (oh is None, oh if oh is not None else "", get_last_token(key) or "")
 
 
 
@@ -633,7 +706,11 @@ def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
     mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
     mdp._early_placeholder_replacement = True
     md_with_real_keys = mdp.convert_plain_md_to_md_with_real_keys()
+
+    front_matter = {"created": datetime.now(timezone.utc).isoformat()}
+    header = "---\n" + yaml.safe_dump(front_matter, sort_keys=False) + "---\n"
     with open(ctb.fpath, "w") as fp:
+        fp.write(header)
         fp.write(md_with_real_keys)
 
 
