@@ -4,6 +4,7 @@ import glob
 import json
 import logging
 import collections
+import subprocess
 from datetime import datetime, timezone
 
 import yaml
@@ -397,6 +398,30 @@ def is_valid_fpath(fpath):
     return is_valid_key(get_base_name(fpath))
 
 
+def _git_first_commit_iso(fpath: str) -> str | None:
+    """
+    Return the ISO-8601 timestamp of the first commit that added `fpath`
+    (using --diff-filter=A --follow). Returns None on any failure.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--follow", "--format=%aI", "--", fpath],
+            cwd=os.path.dirname(fpath) or ".",
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return None
+
+    if result.returncode != 0:
+        return None
+    out = result.stdout.strip()
+    if not out:
+        return None
+    return out.splitlines()[-1]
+
+
 def split_front_matter(text: str) -> tuple[dict, str]:
     """
     Split a YAML front-matter header from the body.
@@ -485,6 +510,9 @@ class DebateDirLoader:
             mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys, db_ctb=False)
             mdp.front_matter = front_matter
             mdp.created = front_matter.get("created")
+            if mdp.created is None:
+                mdp.created = _git_first_commit_iso(fpath)
+            mdp.order_hint = mdp.created
             if len(mdp.get_keys()) == 0:
                 fname = os.path.split(fpath)[1]
                 msg = (
@@ -557,10 +585,8 @@ class DebateDirLoader:
 
             # Find all direct children: tree keys matching ^{key}[a-z]+$
             child_pattern = re.compile(r"^" + re.escape(key) + r"[a-z]+$")
-            child_keys = sorted(
-                [k for k in self.tree if child_pattern.match(k)],
-                key=get_last_token,
-            )
+            candidate_keys = [k for k in self.tree if child_pattern.match(k)]
+            child_keys = sorted(candidate_keys, key=lambda k: _sort_key(self.tree[k]))
 
             for child_key in child_keys:
                 child_mdp = self.tree[child_key]
@@ -592,6 +618,16 @@ def get_last_token(key):
     """
     m = re.search(r"[a-z]+$", key)
     return m.group() if m else None
+
+
+def _sort_key(mdp):
+    """
+    Sort key for sibling contributions: primary by order_hint (None last),
+    secondary lex. by role-token (last letter-run of ctb_key / key_prefix).
+    """
+    oh = mdp.order_hint
+    key = getattr(mdp, "ctb_key", None) or getattr(mdp, "key_prefix", "")
+    return (oh is None, oh if oh is not None else "", get_last_token(key) or "")
 
 
 
