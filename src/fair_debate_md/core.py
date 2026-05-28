@@ -4,7 +4,9 @@ import glob
 import json
 import logging
 import collections
+from datetime import datetime, timezone
 
+import yaml
 from bs4 import BeautifulSoup, element
 import git
 
@@ -310,6 +312,11 @@ class MDProcessor(MDHandler):
         self.is_root_mdp: bool = False
         self.debate_key: str = None
 
+        # front-matter / ordering metadata (Phase 4 foundation)
+        self.front_matter: dict = {}
+        self.created: str | None = None
+        self.order_hint = None
+
         # convenience: save one line in the caller
         if convert_now:
             self.convert()
@@ -390,15 +397,40 @@ def is_valid_fpath(fpath):
     return is_valid_key(get_base_name(fpath))
 
 
+def split_front_matter(text: str) -> tuple[dict, str]:
+    """
+    Split a YAML front-matter header from the body.
+
+    Returns (front_matter_dict, body). If no header is present, returns ({}, text).
+    """
+    if not text.startswith("---\n"):
+        return {}, text
+
+    end_idx = text.find("\n---\n", 4)
+    if end_idx == -1:
+        return {}, text
+
+    header_src = text[4:end_idx]
+    body = text[end_idx + len("\n---\n"):]
+    try:
+        data = yaml.safe_load(header_src)
+    except yaml.YAMLError:
+        return {}, text
+    if not isinstance(data, dict):
+        return {}, text
+    return data, body
+
+
 class DBContribution:
     """
     Represents a contribution wich is not yet stored in a file but comes from the database
     of the web app.
     """
 
-    def __init__(self, ctb_key: str, body: str):
+    def __init__(self, ctb_key: str, body: str, order_hint=None):
         self.ctb_key = ctb_key
         self.body = body
+        self.order_hint = order_hint
 
         # will be set during commit process
         self.fpath: str = None
@@ -448,8 +480,11 @@ class DebateDirLoader:
             base_name = get_base_name(fpath)
 
             with open(fpath, "r") as fp:
-                md_with_real_keys = fp.read()
+                file_content = fp.read()
+            front_matter, md_with_real_keys = split_front_matter(file_content)
             mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys, db_ctb=False)
+            mdp.front_matter = front_matter
+            mdp.created = front_matter.get("created")
             if len(mdp.get_keys()) == 0:
                 fname = os.path.split(fpath)[1]
                 msg = (
@@ -501,6 +536,8 @@ class DebateDirLoader:
             mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body, db_ctb=True)
             mdp.additional_css_classes.append("db_ctb")
             mdp.add_plain_md_as_data = True
+            mdp.front_matter = {}
+            mdp.order_hint = ctb.order_hint
             mdp.convert_plain_md_to_md_with_real_keys()
             self.tree[ctb.ctb_key] = mdp
 
@@ -633,7 +670,11 @@ def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
     mdp = MDProcessor(key_prefix=ctb.ctb_key, plain_md=ctb.body)
     mdp._early_placeholder_replacement = True
     md_with_real_keys = mdp.convert_plain_md_to_md_with_real_keys()
+
+    front_matter = {"created": datetime.now(timezone.utc).isoformat()}
+    header = "---\n" + yaml.safe_dump(front_matter, sort_keys=False) + "---\n"
     with open(ctb.fpath, "w") as fp:
+        fp.write(header)
         fp.write(md_with_real_keys)
 
 
