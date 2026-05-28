@@ -147,7 +147,13 @@ Zentrale, gut abgegrenzte Stellen — das Key-System ist das Fundament.
 - **Optional/später:** Ein-/Ausklappen sehr voller Segmente, stärkere Einrückung pro Ebene —
   nur falls sich in Tests Unübersichtlichkeit zeigt.
 - **Sortierung:** Geschwister-Antworten chronologisch, älteste zuerst (v1). Sortier-Option
-  später.
+  später. Der maßgebliche Zeitstempel kommt für Repo-Beiträge aus einem YAML-Front-matter
+  in der `.md`-Datei (`created:`); für noch nicht committete `DBContribution` aus dem
+  DB-`created`. Solange ausschließlich die zentrale Plattform schreibt, ist dieser
+  Header-Zeitstempel praktisch vertrauenswürdig; bei späterer Federation (Beiträge aus
+  externen Repos) braucht es einen Admission-Schritt, der den Aggregator-Zeitstempel
+  kanonisch macht — bewusst vertagt, siehe §10 sowie `fair-debate-web/konzept.md`
+  („Multi-User-Problem").
 - **Ereignisprotokoll:** optional einblendbar; pro Contribution Zeitstempel.
 - **Sichtbarkeitsfilter:** clientseitiger Toggle pro Betrachter; v1 Blacklist.
 
@@ -180,3 +186,14 @@ Risiko gering; die Verzeichnisstruktur `a/`, `b/` bleibt kompatibel.
 - Repo-pro-Partei mit eigenen Remotes / Fork-Workflow.
 - Voting / Reputation / Whitelist-Sichtbarkeit / umstellbare Sortierung.
 - Volles Doppel-Ereignis-Log (Entwurf vs. Veröffentlichung).
+- **Trust-Modell für Sortier-Metadaten bei Federation.** Sobald Beiträge auch aus
+  externen, nicht-plattformvermittelten Repos zugelassen werden, ist jede selbst-deklarierte
+  Sortiergröße (Zeitstempel, Vote-Score, Reputation) manipulierbar. Geplante spätere
+  Antwort: ein Admission-Schritt der zentralen Aggregator-Instanz mit (a) eigener
+  Re-Stempelung (externer Original-Zeitstempel bleibt als Audit-Feld), (b) Re-Keying
+  bei role-token-Kollision — der externe Beitragende behält seinen Wunsch-Token im
+  eigenen Repo, im zentralen Aggregat bekommt er den nächsten freien Token. **Wichtige
+  konzeptionelle Trennung:** role-token-Zuweisung und Anzeige­reihenfolge sind unabhängig
+  (ein späterer role-token kann mit belegbar früherem Zeitstempel trotzdem oben stehen).
+  Für Phase 4 ohne Auswirkung — vertraut wird dem Header-Zeitstempel direkt. Ausführlicher
+  in `fair-debate-web/konzept.md` („Multi-User-Problem").
