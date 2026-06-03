@@ -1,6 +1,7 @@
 # Konzept: Mehr-Parteien-Debatten (Multi-Party)
 
-Status: Entwurf / Designdokument
+Status: umgesetzt — alle Phasen 0–4 implementiert und gemergt (Stand 2026-06-03).
+§10 listet die weiterhin bewusst vertagten Punkte.
 Betrifft beide Repos: `fair-debate-md` (Backend, Key-System) und `fair-debate-web` (Frontend, Datenmodell + UI).
 
 ## 1. Ziel
@@ -43,7 +44,8 @@ Referenzen verweisen auf die Diskussionsfragen, in denen die Entscheidung fiel.
 - **Annahme A1 (Q8, Ereignisprotokoll) — bestätigt:** v1 nutzt DB-Zeitstempel
   (`created`/`updated` auf `Contribution`); die Veröffentlichungszeit kommt für committete
   Beiträge aus der Git-Commit-Zeit. Das volle Doppel-Ereignis-Log (Entwurf erzeugt /
-  veröffentlicht getrennt) ist eine spätere Verfeinerung.
+  veröffentlicht getrennt) war als spätere Verfeinerung geplant und ist inzwischen
+  umgesetzt (siehe §10).
 
 ## 3. Key-Schema (Modell X)
 
@@ -169,23 +171,32 @@ Risiko gering; die Verzeichnisstruktur `a/`, `b/` bleibt kompatibel.
 
 ## 9. Phasen
 
-0. **Designdokument** (dieses Dokument) — bestätigen.
-1. **Backend-Keys:** Regex weiten, `get_contribution_key(seg, token)`, mehrere Kinder pro
+Alle Phasen sind umgesetzt (Stand 2026-06-03).
+
+0. ✓ **Designdokument** (dieses Dokument) — bestätigt.
+1. ✓ **Backend-Keys:** Regex weiten, `get_contribution_key(seg, token)`, mehrere Kinder pro
    Segment, role-token-Verzeichnisse, `write_ctb_to_file`/`get_author` verallgemeinern.
    Testintensiv (Fundament). Bestehende Tests müssen grün bleiben.
-2. **Frontend-Datenmodell:** `DebateParticipant` Through-Model + Migration, `Contribution`
+   → umgesetzt in `fair-debate-md` v0.7.0 (Branch `phase1-multiparty-backend`).
+2. ✓ **Frontend-Datenmodell:** `DebateParticipant` Through-Model + Migration, `Contribution`
    Zeitstempel, Queries (`get_user_role`, `get_for_user`) anpassen.
-3. **Frontend-Logik:** role-token-Vergabe, Antwort-Routing, `_ensure_suitable_user_role`,
+   → umgesetzt (Branch `phase2-3-multiparty-frontend`).
+3. ✓ **Frontend-Logik:** role-token-Vergabe, Antwort-Routing, `_ensure_suitable_user_role`,
    Context/Teilnehmer-Liste.
-4. **Frontend-UX:** Baum-Darstellung, Autor-Anzeige, Sortierung, Ereignisprotokoll,
+   → umgesetzt (Branches `phase2-3-multiparty-frontend`, `user-role`).
+4. ✓ **Frontend-UX:** Baum-Darstellung, Autor-Anzeige, Sortierung, Ereignisprotokoll,
    Sichtbarkeitsfilter.
+   → umgesetzt (Branch `phase4-multiparty-ux`; chronologische Sortierung via
+   `fair-debate-md` v0.7.1: YAML-Front-matter `created` + `order_hint`).
 
 ## 10. Bewusst vertagt
 
 - Gruppen (mehrere Personen pro Partei).
 - Repo-pro-Partei mit eigenen Remotes / Fork-Workflow.
 - Voting / Reputation / Whitelist-Sichtbarkeit / umstellbare Sortierung.
-- Volles Doppel-Ereignis-Log (Entwurf vs. Veröffentlichung).
+- ~~Volles Doppel-Ereignis-Log (Entwurf vs. Veröffentlichung)~~ — **inzwischen umgesetzt**
+  (Branch `double-event-log`, gemergt 2026-06-03: Doppel-Events pro Contribution,
+  Draft-Body-Privacy, `Contribution.published_at`; Suite 50-Run-stresstestverifiziert).
 - **Trust-Modell für Sortier-Metadaten bei Federation.** Sobald Beiträge auch aus
   externen, nicht-plattformvermittelten Repos zugelassen werden, ist jede selbst-deklarierte
   Sortiergröße (Zeitstempel, Vote-Score, Reputation) manipulierbar. Geplante spätere
