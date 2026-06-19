@@ -104,7 +104,11 @@ class MDHandler:
             #   - [x] the goal is to work on this problem independently from the rest of the code
             # - [x] simplify that code and add more fine-grained tests on intermediate results (but not too many)
             # - [x] activate extension
-            # - track down the changed behavior with the more fine-grained tests
+            # - [x] track down the changed behavior with the more fine-grained tests
+            #   RESOLVED (i53): markdownify 1.2.2 handles mixed-content <li> (text + nested <ul>
+            #   without <p> wrapper) correctly -- the mis-indentation bug described in i53 is not
+            #   reproducible. Roundtrip md->html->md->html is stable. Regression tests test_310-340
+            #   in tests/test_md_handling.py serve as specification guards.
 
             extensions = ["mdx_truly_sane_lists"]
             extension_configs = {"mdx_truly_sane_lists": {"nested_indent": indent_width}}

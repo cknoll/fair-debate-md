@@ -311,6 +311,81 @@ class TestMDHandling(unittest.TestCase):
 
         self.assertEqual(actual, expected)
 
+    def test_310__flat_list_html_structure(self):
+        """A flat markdown list produces correct <ul>/<li> HTML."""
+        md_src = "- Item A\n- Item B\n- Item C\n"
+        mdp = fdmd.MDProcessor(md_src)
+        html = mdp._md_to_html(md_src)
+        self.assertIn("<ul>", html)
+        self.assertIn("<li>Item A</li>", html)
+        self.assertIn("<li>Item B</li>", html)
+        self.assertIn("<li>Item C</li>", html)
+
+    def test_320__nested_list_html_structure(self):
+        """A nested list produces the correct HTML tree structure."""
+        md_src = "- Item A\n- Item B\n    - Nested B1\n    - Nested B2\n- Item C\n"
+        mdp = fdmd.MDProcessor(md_src)
+        html = mdp._md_to_html(md_src)
+        self.assertIn("<ul>", html)
+        soup = BeautifulSoup(html, "html.parser")
+        item_b_li = None
+        for li in soup.find_all("li"):
+            if li.get_text().startswith("Item B"):
+                item_b_li = li
+                break
+        self.assertIsNotNone(item_b_li, "Could not find <li> for 'Item B'")
+        self.assertIsNotNone(item_b_li.find("ul"), "<li> for 'Item B' should contain a nested <ul>")
+
+    def test_330__nested_list_roundtrip_idempotency(self):
+        """md -> html -> md -> html roundtrip must be stable for nested lists (regression for i53)."""
+        md_src = "- Item A\n- Item B\n    - Nested B1\n    - Nested B2\n- Item C\n"
+        mdp = fdmd.MDProcessor(md_src)
+        html1 = mdp._md_to_html(md_src)
+        md2 = mdp.markdownify_and_postprocess(html1)
+        html2 = fdmd.MDProcessor(md2)._md_to_html(md2)
+
+        soup1 = BeautifulSoup(html1, "html.parser")
+        soup2 = BeautifulSoup(html2, "html.parser")
+
+        outer_ul1 = soup1.find("ul")
+        outer_ul2 = soup2.find("ul")
+
+        self.assertIsNotNone(outer_ul1, "html1 must contain a <ul>")
+        self.assertIsNotNone(outer_ul2, f"html2 must contain a <ul>; md2={md2!r}")
+
+        top_li1 = [li for li in outer_ul1.children if getattr(li, "name", None) == "li"]
+        top_li2 = [li for li in outer_ul2.children if getattr(li, "name", None) == "li"]
+
+        if len(top_li1) != 3 or len(top_li2) != 3:
+            self.fail(
+                f"Expected 3 top-level <li> items in both html1 and html2, "
+                f"got {len(top_li1)} and {len(top_li2)}.\nmd2={md2!r}"
+            )
+
+        item_b_li1 = next((li for li in top_li1 if li.get_text().startswith("Item B")), None)
+        item_b_li2 = next((li for li in top_li2 if li.get_text().startswith("Item B")), None)
+
+        self.assertIsNotNone(item_b_li1, "html1: expected <li> for 'Item B' with nested <ul>")
+        nested_ul1 = item_b_li1.find("ul") if item_b_li1 else None
+        self.assertIsNotNone(nested_ul1, "html1: <li> for 'Item B' should contain a nested <ul>")
+        self.assertEqual(len(nested_ul1.find_all("li")), 2, "html1: nested <ul> should have 2 items")
+
+        self.assertIsNotNone(item_b_li2, f"html2: expected <li> for 'Item B' with nested <ul>; md2={md2!r}")
+        nested_ul2 = item_b_li2.find("ul") if item_b_li2 else None
+        self.assertIsNotNone(nested_ul2, f"html2: <li> for 'Item B' should contain a nested <ul>; md2={md2!r}")
+        self.assertEqual(len(nested_ul2.find_all("li")), 2, f"html2: nested <ul> should have 2 items; md2={md2!r}")
+
+    def test_340__keys_assigned_for_list_contribution(self):
+        """Proto-keys and real keys are correctly assigned for a contribution containing a list."""
+        md_src = "Intro sentence.\n\n- Item A\n- Item B\n    - Nested B1\n- Item C\n"
+        md_with_keys = fdmd.MDProcessor(md_src).add_proto_keys_to_md(md_src, prefix="k")
+        self.assertIn("::k", md_with_keys)
+        self.assertIn("Item A", md_with_keys)
+        self.assertIn("Item B", md_with_keys)
+        self.assertIn("Item C", md_with_keys)
+        self.assertIn("Intro sentence.", md_with_keys)
+        self.assertGreaterEqual(md_with_keys.count("::k"), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
