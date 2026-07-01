@@ -1,0 +1,21 @@
+From 063b90a3526da7eb27ca4333467054d73f8cf8f0 Mon Sep 17 00:00:00 2001
+From: fair debate user d30-many-parties l
+ <d30-many-parties_l@fair-debate-users.org>
+Date: Sun, 15 Dec 2024 13:11:00 +0000
+Subject: [PATCH 13/26] add contribution l/a11l.md
+
+---
+ l/a11l.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 l/a11l.md
+
+diff --git a/l/a11l.md b/l/a11l.md
+new file mode 100644
+index 0000000..2d0275a
+--- /dev/null
++++ b/l/a11l.md
+@@ -0,0 +1 @@
++::a11l1 Labore et dolore magna aliqua lorem ipsum dolor sit amet consectetur adipiscing.
+-- 
+2.39.5
+

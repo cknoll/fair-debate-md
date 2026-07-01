@@ -1,0 +1,25 @@
+From 5c79782fbd98ac0da8e0f05ffbc827302a197b19 Mon Sep 17 00:00:00 2001
+From: fair debate user d30-many-parties a
+ <d30-many-parties_a@fair-debate-users.org>
+Date: Sun, 15 Dec 2024 11:03:24 +0000
+Subject: [PATCH 02/26] add contribution a/a.md
+
+---
+ a/a.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 a/a.md
+
+diff --git a/a/a.md b/a/a.md
+new file mode 100644
+index 0000000..32a5a7a
+--- /dev/null
++++ b/a/a.md
+@@ -0,0 +1,5 @@
++# ::a1 Ipsum dolor sit amet.
++
++
++::a2 Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. ::a3 Sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt. ::a4 Amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut. ::a5 Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore. ::a6 Adipiscing elit sed do eiusmod tempor incididunt ut labore et. ::a7 Elit sed do eiusmod tempor incididunt ut labore et dolore. ::a8 Sed do eiusmod tempor incididunt ut labore et dolore magna. ::a9 Do eiusmod tempor incididunt ut labore et dolore magna aliqua. ::a10 Eiusmod tempor incididunt ut labore et dolore magna aliqua lorem. ::a11 Tempor incididunt ut labore et dolore magna aliqua lorem ipsum. ::a12 Incididunt ut labore et dolore magna aliqua lorem ipsum dolor. ::a13 Ut labore et dolore magna aliqua lorem ipsum dolor sit. ::a14 Labore et dolore magna aliqua lorem ipsum dolor sit amet. ::a15 Et dolore magna aliqua lorem ipsum dolor sit amet consectetur. ::a16 Dolore magna aliqua lorem ipsum dolor sit amet consectetur adipiscing. ::a17 Magna aliqua lorem ipsum dolor sit amet consectetur adipiscing elit. ::a18 Aliqua lorem ipsum dolor sit amet consectetur adipiscing elit sed. ::a19 Lorem ipsum dolor sit amet consectetur adipiscing elit sed do. ::a20 Ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod. ::a21 Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. ::a22 Sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt. ::a23 Amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut. ::a24 Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore.
++
+-- 
+2.39.5
+
