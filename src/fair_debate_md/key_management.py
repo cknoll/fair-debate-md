@@ -5,19 +5,110 @@ from bs4 import BeautifulSoup, element
 # characters which end a sentence / segment
 SENTENCE_SPLITTERS = (".", "!", "?", ":")
 
-# known abbreviations: after matching the abbreviation (case-sensitive,
-# at a word boundary) we must NOT split, even if it ends with `.`.
-# Each entry is matched against the text ending just before the splitter.
-_ABBREVIATIONS = (
+# Abbreviations whose trailing dot practically never ends a sentence.
+# A dot terminating (or lying inside) such an abbreviation never splits.
+# Matching details (see `_is_abbreviation_dot`):
+#   * a word boundary is required before the abbreviation
+#     ("africa." does not match "ca.")
+#   * internal dots may be followed by whitespace ("z. B." == "z.B.")
+#   * a sentence-case variant is matched as well ("Vgl." for "vgl.")
+_STRONG_ABBREVIATIONS = (
+    # English
     "i.e.",
     "e.g.",
     "w.r.t.",
+    "cf.",
+    "vs.",
+    "approx.",
+    "resp.",
+    # German
     "bspw.",
+    "bzgl.",
+    "bzw.",
+    "ca.",
+    "d.h.",
+    "evtl.",
+    "ggf.",
+    "i.d.R.",
+    "inkl.",
+    "sog.",
+    "u.a.",
+    "u.U.",
+    "vgl.",
+    "z.B.",
+    "z.T.",
+    "Nr.",
+    "Mio.",
+    "Mrd.",
+)
+
+# Abbreviations which often *do* end a sentence ("... Äpfel, Birnen usw. Der
+# nächste Satz."). Their final dot only suppresses a split if the text
+# continues in lowercase; their internal dots never split.
+_WEAK_ABBREVIATIONS = (
+    "etc.",
+    "usw.",
+    "usf.",
+    "o.ä.",
+    "o.Ä.",
+    "u.v.m.",
 )
 
 # version-number pattern: something like "v1." followed by a digit
 # means the dot is part of a version number, not a sentence splitter.
 _VERSION_RE = re.compile(r"v\d+\.$")
+
+# char before the abbreviation must not be a word char or a dot
+_BOUNDARY = r"(?<![\w.])"
+
+
+def _abbr_regex_fragment(abbr: str) -> str:
+    """
+    Regex fragment matching `abbr`, allowing optional whitespace after
+    internal dots (so that "z. B." matches like "z.B.").
+    """
+    assert abbr.endswith(".")
+    parts = abbr[:-1].split(".")
+    return r"\.\s?".join(re.escape(p) for p in parts) + r"\."
+
+
+def _case_variants(abbr: str) -> tuple:
+    """Return `abbr` plus (if different) its sentence-case variant."""
+    sentence_case = abbr[0].upper() + abbr[1:]
+    if sentence_case == abbr:
+        return (abbr,)
+    return (abbr, sentence_case)
+
+
+def _compile_abbr_res(abbreviations: tuple) -> tuple:
+    """
+    Compile matching regexes for `abbreviations`.
+
+    :return: 2-tuple ``(end_re, partial_res)`` where
+        - ``end_re`` matches when the text ends with a complete abbreviation
+        - ``partial_res`` is a list of ``(prefix_re, rest_re)`` pairs for dots
+          *inside* an abbreviation: ``prefix_re`` must match the end of the
+          text so far and ``rest_re`` the (whitespace-stripped) continuation
+    """
+    end_fragments = []
+    partial_res = []
+    for base in abbreviations:
+        for abbr in _case_variants(base):
+            end_fragments.append(_abbr_regex_fragment(abbr))
+            fragments = abbr[:-1].split(".")
+            for k in range(1, len(fragments)):
+                prefix = ".".join(fragments[:k]) + "."
+                rest = ".".join(fragments[k:]) + "."
+                prefix_re = re.compile(_BOUNDARY + _abbr_regex_fragment(prefix) + r"$")
+                rest_re = re.compile(_abbr_regex_fragment(rest))
+                partial_res.append((prefix_re, rest_re))
+    end_re = re.compile(_BOUNDARY + "(?:" + "|".join(end_fragments) + r")$")
+    return end_re, partial_res
+
+
+_STRONG_END_RE, _STRONG_PARTIAL_RES = _compile_abbr_res(_STRONG_ABBREVIATIONS)
+_WEAK_END_RE, _WEAK_PARTIAL_RES = _compile_abbr_res(_WEAK_ABBREVIATIONS)
+_ALL_PARTIAL_RES = _STRONG_PARTIAL_RES + _WEAK_PARTIAL_RES
 
 
 def _is_abbreviation_dot(text_so_far: str, text_rest: str) -> bool:
@@ -30,21 +121,24 @@ def _is_abbreviation_dot(text_so_far: str, text_rest: str) -> bool:
     :param text_rest:    the text after the candidate splitter (may start with
                          whitespace and then another abbreviation fragment)
     """
-    # known fixed abbreviations ending at this dot
-    for abbr in _ABBREVIATIONS:
-        if text_so_far.endswith(abbr):
+    stripped_rest = text_rest.lstrip()
+
+    # dot terminates a strong abbreviation -> never split
+    if _STRONG_END_RE.search(text_so_far):
+        return True
+
+    # dot terminates a weak abbreviation -> only suppress the split if the
+    # text continues in lowercase (i.e. the sentence goes on)
+    if _WEAK_END_RE.search(text_so_far):
+        first = stripped_rest[:1]
+        if first and not first.isupper():
             return True
 
-    # partial abbreviations like "i." (followed by "e." etc.)
-    # we look at the short tail before the dot and check whether together
-    # with the next non-space characters it forms a known abbreviation.
-    stripped_rest = text_rest.lstrip()
-    # consider up to 6 chars of tail before the dot (covers "w.r.t." etc.)
-    for tail_len in range(2, 7):
-        tail = text_so_far[-tail_len:]
-        for abbr in _ABBREVIATIONS:
-            if abbr.startswith(tail) and (tail + stripped_rest).startswith(abbr):
-                return True
+    # dot inside an abbreviation, e.g. "e." followed by "g." (also spans the
+    # spaced variants like "z. B.")
+    for prefix_re, rest_re in _ALL_PARTIAL_RES:
+        if prefix_re.search(text_so_far) and rest_re.match(stripped_rest):
+            return True
 
     # version number like "...v12." followed by a digit
     if _VERSION_RE.search(text_so_far) and stripped_rest[:1].isdigit():
@@ -57,8 +151,9 @@ def split_text_into_segments(text: str) -> list[str]:
     """
     Split `text` at sentence splitters (``.``, ``!``, ``?``, ``:``) into
     segments. Splitters stay attached to the preceding segment. Known
-    abbreviations (``i.e.``, ``e.g.``, ``w.r.t.``, ``bspw.``) and version
-    numbers (``v12.3``) do NOT cause a split.
+    abbreviations (see `_STRONG_ABBREVIATIONS` / `_WEAK_ABBREVIATIONS`, e.g.
+    ``i.e.``, ``z.B.``, also in spaced form ``z. B.``) and version numbers
+    (``v12.3``) do NOT cause a split.
 
     The concatenation of the returned segments equals the input text.
 
@@ -97,7 +192,7 @@ class ProtoKeyAdder:
       * at the start of each relevant tag that contains direct text content
       * after every sentence splitter inside such a tag
 
-    Abbreviations (`i.e.`, `e.g.`, `w.r.t.`, `bspw.`) and version numbers
+    Abbreviations (`i.e.`, `e.g.`, `z.B.`, `bspw.`, ...) and version numbers
     (`v12.3`) do NOT cause a split (see `split_text_into_segments`).
 
     No trailing proto-key is inserted if the tag's text content already ends

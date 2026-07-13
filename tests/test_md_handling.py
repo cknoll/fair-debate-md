@@ -244,6 +244,68 @@ class TestMDHandling(unittest.TestCase):
         res = split_text_into_segments("Uses v12.3 here.")
         self.assertEqual(res, ["Uses v12.3 here."])
 
+    def test_207__split_text_abbreviations_extended(self):
+        # strong abbreviations (never split), including spaced variants
+        cases = [
+            "See e. g. this example.",
+            "Siehe z.B. dieses Beispiel.",
+            "Siehe z. B. dieses Beispiel.",
+            "Das gilt, d.h. es stimmt.",
+            "Das gilt, d. h. es stimmt.",
+            "Es kamen u.a. viele Leute.",
+            "Es waren ca. 50 Leute.",
+            "Das gilt i.d.R. immer.",
+            "Das gilt i. d. R. immer.",
+            "Siehe Nr. 5 der Liste.",
+            "Rund 3 Mio. Menschen kamen.",
+            "A vs. B is the question.",
+        ]
+        for text in cases:
+            with self.subTest(text=text):
+                self.assertEqual(split_text_into_segments(text), [text])
+
+    def test_208__split_text_weak_abbreviations(self):
+        # weak abbreviations: no split if the sentence continues (lowercase),
+        # but a split if a new sentence starts (uppercase)
+        continuing = [
+            "Wir haben Äpfel usw. im Angebot.",
+            "We have apples etc. in stock.",
+            "Es gab Musik u.v.m. an dem Abend.",
+        ]
+        for text in continuing:
+            with self.subTest(text=text):
+                self.assertEqual(split_text_into_segments(text), [text])
+
+        splitting = [
+            ("Wir haben Äpfel usw. Der Rest folgt.", ["Wir haben Äpfel usw.", " Der Rest folgt."]),
+            ("We have apples etc. Next sentence.", ["We have apples etc.", " Next sentence."]),
+        ]
+        for text, expected in splitting:
+            with self.subTest(text=text):
+                self.assertEqual(split_text_into_segments(text), expected)
+
+    def test_209__split_text_abbreviation_word_boundary(self):
+        # words that merely *end* like an abbreviation must still split
+        # ("africa." vs "ca.", "Absatz." vs "z.")
+        cases = [
+            ("We visited africa. Next sentence.", ["We visited africa.", " Next sentence."]),
+            ("Das steht im Absatz. Bald mehr dazu.", ["Das steht im Absatz.", " Bald mehr dazu."]),
+        ]
+        for text, expected in cases:
+            with self.subTest(text=text):
+                self.assertEqual(split_text_into_segments(text), expected)
+
+    def test_210__split_text_abbreviation_sentence_case(self):
+        # sentence-case variants at the beginning of a sentence
+        cases = [
+            "Vgl. hierzu Abschnitt 3.",
+            "Bspw. dieses Beispiel zeigt es.",
+            "Ca. 50 Leute kamen.",
+        ]
+        for text in cases:
+            with self.subTest(text=text):
+                self.assertEqual(split_text_into_segments(text), [text])
+
     def test_206__split_text_concatenation_is_identity(self):
         texts = [
             "Hello world.",
