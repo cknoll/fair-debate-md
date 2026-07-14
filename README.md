@@ -27,9 +27,15 @@ Properties:
   sides. Role-tokens are scoped to a single debate — the same user may be `b` in one debate and
   `f` in another.
 - **A single segment can receive replies from several parties** (e.g. `a5b`, `a5c`, `a5d`).
-- A given party has at most one direct answer to a given segment (it can be edited).
+- **Flexible references:** a reply can reference a range of sequential segments (`a5-7b` =
+  reply to segments 5–7) or a word range within one segment (`a7_4-8b` = reply to words 4–8
+  of segment `a7`). The reference is encoded in the key itself, so debates remain verifiable
+  from the raw `.md` files alone. Keys are unique, but overlapping references by the same
+  party are allowed.
 
-See `docs/multi_party_concept.md` for the full design.
+See `docs/multi_party_concept.md` for the multi-party design and
+`docs/flexible_references_concept.md` for the flexible-reference design (including the
+frozen word-tokenizer specification).
 
 ## Installation
 

@@ -15,8 +15,21 @@ from ipydex import IPS
 
 from . import utils
 from . import repo_handling
+from . import references
 from .key_management import ProtoKeyAdder
 from .md_handling import MDHandler, KeyAdder, convert_tabs_to_spaces  # noqa: F401 (re-exported)
+from .references import (  # noqa: F401 (re-exported)
+    key_regex,
+    decompose_key,
+    is_valid_key,
+    parse_key_unit,
+    get_anchor_segment_key,
+    get_first_referenced_segment_key,
+    get_parent_contribution_key,
+    get_segment_source,
+    get_segment_words,
+    validate_reference,
+)
 
 pjoin = os.path.join
 
@@ -159,7 +172,11 @@ class SpanAdder:
             if not mdp_list:
                 continue
 
-            referenced_segment = segment_dict[key]
+            referenced_segment = segment_dict.get(key)
+            if referenced_segment is None:
+                ctb_keys = [mdp.key_prefix for mdp in mdp_list]
+                msg = f"anchor segment '{key}' (referenced by {ctb_keys}) not found among the segments"
+                raise ValueError(msg)
             segment_parent = referenced_segment.parent
 
             if segment_parent.name in ("h1", "h2", "h3", "h4", "h5", "h6"):
@@ -187,6 +204,7 @@ class SpanAdder:
                 class_str = f"contribution level{self.level} {additional_class_str}".strip()
 
                 attribute_dict = {"class": class_str, "id": f"contribution_{mdp.key_prefix}"}
+                self._add_reference_data_attributes(attribute_dict, mdp.key_prefix)
                 if mdp.add_plain_md_as_data:
                     # Note this attribute must be allowed by bleach (in settings.py of the web app)
                     attribute_dict["data-plain_md_src"] = json.dumps(mdp.plain_md_src)
@@ -194,6 +212,33 @@ class SpanAdder:
                 contribution_div = self.soup.new_tag("div", attrs=attribute_dict)
                 contribution_div.extend(contribution_soup)
                 insert_after_target.insert_after(contribution_div)
+
+    @staticmethod
+    def _add_reference_data_attributes(attribute_dict: dict, ctb_key: str) -> None:
+        """
+        For contributions with a range or word reference add data attributes
+        which allow the frontend to render the reference without re-parsing
+        the key. Plain references get no extra attributes.
+        """
+        parts = references.decompose_key(ctb_key)
+        if len(parts) < 2:
+            return
+        try:
+            ref_unit = references.parse_key_unit(parts[-2])
+        except ValueError:
+            return
+        if not (ref_unit.is_segment_range or ref_unit.has_word_ref):
+            return
+
+        # Note: these attributes must be allowed by bleach (settings.py of the web app)
+        attribute_dict["data-ref-anchor"] = references.get_anchor_segment_key(ctb_key)
+        if ref_unit.is_segment_range:
+            attribute_dict["data-ref-seg-start"] = references.get_first_referenced_segment_key(ctb_key)
+        if ref_unit.has_word_ref:
+            if ref_unit.word_end is not None:
+                attribute_dict["data-ref-words"] = f"{ref_unit.word_start}-{ref_unit.word_end}"
+            else:
+                attribute_dict["data-ref-words"] = str(ref_unit.word_start)
 
     def _replace_p_with_div(self, part_soup: BeautifulSoup, level: int):
         """
@@ -365,29 +410,6 @@ def _convert_plain_md_to_segmented_html(md_src: str, key_prefix="k") -> str:
     return mdp.md_with_real_keys, mdp.segmented_html
 
 
-key_regex = re.compile(r"[a-z]+\d+")
-
-
-def decompose_key(key):
-    """
-    :param key:     str like "a4b12a2b"
-    """
-    # to match the parts with an easy regex we append a digit and remove it later
-    parts = key_regex.findall(f"{key}0")
-
-    if parts:
-        # remove the trailing 0 from last part
-        assert parts[-1][-1] == "0"
-        parts[-1] = parts[-1][:-1]
-
-    return parts
-
-
-def is_valid_key(key):
-    parts = decompose_key(key)
-    return "".join(parts) == key
-
-
 def get_base_name(fpath):
     fname = os.path.split(fpath)[1]
     base_name = os.path.splitext(fname)[0]
@@ -526,6 +548,7 @@ class DebateDirLoader:
         self.process_ctb_list(ctb_list)
         self.handle_root_mdp()
         self.set_level_tree()
+        self.validate_references()
 
     def handle_root_mdp(self):
         self.root_mdp = self.tree["a"]
@@ -535,6 +558,37 @@ class DebateDirLoader:
 
         if self.root_mdp.additional_css_classes:
             additional_class_str = " ".join(self.root_mdp.additional_css_classes)
+
+    def validate_references(self):
+        """
+        Validate range and word references against their parent contribution.
+
+        Contributions with plain references keep the legacy behavior (missing
+        parents/segments are silently ignored). For range/word references a
+        missing parent or an inconsistent reference raises ValueError.
+        """
+        for ctb_key, mdp in self.tree.items():
+            parts = references.decompose_key(ctb_key)
+            if len(parts) < 2:
+                continue
+            try:
+                ref_unit = references.parse_key_unit(parts[-2])
+            except ValueError:
+                continue
+            if not (ref_unit.is_segment_range or ref_unit.has_word_ref):
+                continue
+
+            parent_key = references.get_parent_contribution_key(ctb_key)
+            parent_mdp = self.tree.get(parent_key)
+            if parent_mdp is None:
+                msg = (
+                    f"invalid reference '{ctb_key}' in debate '{self.debate_key}': parent "
+                    f"contribution '{parent_key}' does not exist"
+                )
+                raise ValueError(msg)
+            references.validate_reference(
+                ctb_key, parent_mdp.md_with_real_keys, code_contents=parent_mdp._code_element_contents
+            )
 
     # TODO unit-test
     def set_level_tree(self):
@@ -579,13 +633,17 @@ class DebateDirLoader:
         # get all keys which are used in this statement block (without contributions)
         key_str_list = parent_mdp.get_keys()
 
+        # map each contribution key to the segment it is anchored at
+        # (plain reference: the referenced segment; range/word reference: see
+        # references.get_anchor_segment_key)
+        anchor_map = {k: references.get_anchor_segment_key(k) for k in self.tree}
+
         # recursively process elements
         for key_str in key_str_list:
             key = key_str.lstrip("::")
 
-            # Find all direct children: tree keys matching ^{key}[a-z]+$
-            child_pattern = re.compile(r"^" + re.escape(key) + r"[a-z]+$")
-            candidate_keys = [k for k in self.tree if child_pattern.match(k)]
+            # Find all direct children: tree keys anchored at this segment
+            candidate_keys = [k for k, anchor in anchor_map.items() if anchor == key]
             child_keys = sorted(candidate_keys, key=lambda k: _sort_key(self.tree[k]))
 
             for child_key in child_keys:
