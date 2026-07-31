@@ -1,0 +1,20 @@
+From aad19f5e8dc5ed1aba0bf085d051be133fd5e263 Mon Sep 17 00:00:00 2001
+From: Fixture Builder <fixture@fair-debate.local>
+Date: Wed, 29 Jul 2026 17:41:08 +0200
+Subject: [PATCH 31/43] add contribution g/a3g.md
+
+---
+ g/a3g.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 g/a3g.md
+
+diff --git a/g/a3g.md b/g/a3g.md
+new file mode 100644
+index 0000000..38e9a7c
+--- /dev/null
++++ b/g/a3g.md
+@@ -0,0 +1 @@
++::a3g1 Party g answers segment a3 (level 1). Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+-- 
+2.39.5
+

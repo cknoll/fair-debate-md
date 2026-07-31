@@ -1,0 +1,20 @@
+From 30ebf447f5d09392a5c3e15c32b787dcd3232a08 Mon Sep 17 00:00:00 2001
+From: Fixture Builder <fixture@fair-debate.local>
+Date: Wed, 29 Jul 2026 17:41:09 +0200
+Subject: [PATCH 35/43] add contribution k/a3k.md
+
+---
+ k/a3k.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 k/a3k.md
+
+diff --git a/k/a3k.md b/k/a3k.md
+new file mode 100644
+index 0000000..7862486
+--- /dev/null
++++ b/k/a3k.md
+@@ -0,0 +1 @@
++::a3k1 Party k answers segment a3 (level 1). Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+-- 
+2.39.5
+

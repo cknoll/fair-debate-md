@@ -1,0 +1,20 @@
+From c3c872dbd4db917c67ef676b900a9ca0fe773107 Mon Sep 17 00:00:00 2001
+From: Fixture Builder <fixture@fair-debate.local>
+Date: Wed, 29 Jul 2026 17:41:08 +0200
+Subject: [PATCH 28/43] add contribution c/a3c.md
+
+---
+ c/a3c.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 c/a3c.md
+
+diff --git a/c/a3c.md b/c/a3c.md
+new file mode 100644
+index 0000000..47d633d
+--- /dev/null
++++ b/c/a3c.md
+@@ -0,0 +1 @@
++::a3c1 Party c answers segment a3 (level 1). Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+-- 
+2.39.5
+
