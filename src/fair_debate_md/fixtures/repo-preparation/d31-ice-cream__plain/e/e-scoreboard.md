@@ -1,0 +1,1 @@
+The scoreboard objection is fair, but it cuts both ways. Any argument about a "best" flavour has to fix its criteria first, and there is no neutral place to stand while doing it. What would you propose instead, a criterion that strawberry satisfies and chocolate does not? I suspect that list is shorter than you would like it to be.

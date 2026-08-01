@@ -1,0 +1,1 @@
+I picked it because it is the point that is doing hidden work. Reliability and melting are stated as measurable properties, so they can be argued about in the open, whereas "combines well" quietly assumes that the standard by which combinations are judged is a chocolate-shaped one. The weak points that everyone waves through are exactly the ones worth stopping at.

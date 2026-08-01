@@ -1,0 +1,7 @@
+# The best ice cream flavour is chocolate
+
+Every summer the same argument breaks out in our office kitchen, and every summer it ends without anyone changing their mind. I would like to make the case properly this time. Chocolate is the best ice cream flavour, and the reasons for it are not purely a matter of taste. A flavour can be judged by three things, namely whether it is reliable, whether it combines well with others, and whether it survives the walk home from the shop. Chocolate wins on all three counts, and I will take them in turn.
+
+Reliability first. A scoop of chocolate tastes roughly the same in a cheap corner shop and in an expensive gelateria, which is emphatically not true of strawberry. Strawberry depends entirely on the fruit, and outside of about six weeks in early summer that fruit simply is not there. Pistachio has the opposite problem. When it is good it is extraordinary, but most of what is sold as pistachio is dyed almond paste. Chocolate has a floor that the other flavours do not have.
+
+The second point is about combination. Chocolate sits next to almost anything without fighting it, which is why it ends up in every mixed cup that leaves the counter. The third point is the most practical one. Chocolate melts slowly and stays edible, whereas a fruit sorbet turns into coloured water within minutes. I am aware that none of this will convince the vanilla faction, but I would at least like to hear a better argument than "vanilla goes with everything".

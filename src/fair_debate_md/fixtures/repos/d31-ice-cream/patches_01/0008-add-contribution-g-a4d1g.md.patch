@@ -1,0 +1,21 @@
+From 35414084bfbeba3a0ad9ea0624c4c72c683567dd Mon Sep 17 00:00:00 2001
+From: fair debate user d31-ice-cream g <d31-ice-cream_g@fair-debate-users.org>
+Date: Tue, 3 Mar 2026 18:18:00 +0100
+Subject: [PATCH 08/27] add contribution g/a4d1g.md
+
+---
+ g/a4d1g.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 g/a4d1g.md
+
+diff --git a/g/a4d1g.md b/g/a4d1g.md
+new file mode 100644
+index 0000000..38ce7ea
+--- /dev/null
++++ b/g/a4d1g.md
+@@ -0,0 +1 @@
++::a4d1g1 "Broadly on your side" is doing a lot of work in a comment that then rejects the entire claim.
+\ No newline at end of file
+-- 
+2.39.5
+

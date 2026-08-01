@@ -1,0 +1,1 @@
+Pushing back hardest on the weakest of the three points is a strange allocation of effort. The combination argument was clearly the decorative one; reliability and melting behaviour are where the actual claim lives. If you can defeat those, the mixed-cup observation does not matter either way.

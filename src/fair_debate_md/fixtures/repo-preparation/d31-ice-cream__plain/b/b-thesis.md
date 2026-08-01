@@ -1,0 +1,3 @@
+I want to object to the framing rather than to the conclusion. You have chosen three criteria that chocolate happens to satisfy and then declared a winner, which is not an argument, it is a scoreboard designed after the game. If reliability were really the decisive property, we would all be eating industrial vanilla, because that is the flavour with the smallest variance of all.
+
+My own candidate is strawberry, and I will defend it against exactly the objection you raise further down. Yes, it is seasonal, and yes, a bad strawberry ice cream is worse than a bad chocolate one. But a flavour that can only be excellent for six weeks a year is still capable of being excellent, and the ceiling matters at least as much as the floor.

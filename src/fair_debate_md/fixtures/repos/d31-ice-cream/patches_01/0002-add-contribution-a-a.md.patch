@@ -1,0 +1,27 @@
+From 8649d88ed2e1f2926b598cb3b7f30b04211c13bf Mon Sep 17 00:00:00 2001
+From: fair debate user d31-ice-cream a <d31-ice-cream_a@fair-debate-users.org>
+Date: Mon, 2 Mar 2026 09:00:00 +0100
+Subject: [PATCH 02/27] add contribution a/a.md
+
+---
+ a/a.md | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 a/a.md
+
+diff --git a/a/a.md b/a/a.md
+new file mode 100644
+index 0000000..f0dc64a
+--- /dev/null
++++ b/a/a.md
+@@ -0,0 +1,7 @@
++# ::a1 The best ice cream flavour is chocolate
++
++::a2 Every summer the same argument breaks out in our office kitchen, and every summer it ends without anyone changing their mind. ::a3 I would like to make the case properly this time. ::a4 Chocolate is the best ice cream flavour, and the reasons for it are not purely a matter of taste. ::a5 A flavour can be judged by three things, namely whether it is reliable, whether it combines well with others, and whether it survives the walk home from the shop. ::a6 Chocolate wins on all three counts, and I will take them in turn.
++
++::a7 Reliability first. ::a8 A scoop of chocolate tastes roughly the same in a cheap corner shop and in an expensive gelateria, which is emphatically not true of strawberry. ::a9 Strawberry depends entirely on the fruit, and outside of about six weeks in early summer that fruit simply is not there. ::a10 Pistachio has the opposite problem. ::a11 When it is good it is extraordinary, but most of what is sold as pistachio is dyed almond paste. ::a12 Chocolate has a floor that the other flavours do not have.
++
++::a13 The second point is about combination. ::a14 Chocolate sits next to almost anything without fighting it, which is why it ends up in every mixed cup that leaves the counter. ::a15 The third point is the most practical one. ::a16 Chocolate melts slowly and stays edible, whereas a fruit sorbet turns into coloured water within minutes. ::a17 I am aware that none of this will convince the vanilla faction, but I would at least like to hear a better argument than "vanilla goes with everything".
+\ No newline at end of file
+-- 
+2.39.5
+

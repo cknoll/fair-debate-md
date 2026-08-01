@@ -1,0 +1,3 @@
+As the resident pistachio partisan I have to accept the premise and reject the conclusion. Most of what is sold as pistachio is indeed dyed almond paste with a little flavouring, and the bright green colour is a reliable warning sign rather than a selling point. But this is an argument about the market, not about the flavour.
+
+Judge a flavour by what it is at its best and pistachio is nowhere near being beaten. A proper Sicilian pistachio is savoury, slightly resinous and salty in a way that no chocolate ever manages, and it does not need sugar to carry it. That it is hard to find is a fact about shops. Chocolate is easy to find because it is easy to make passably, which is not the compliment you seem to think it is.
