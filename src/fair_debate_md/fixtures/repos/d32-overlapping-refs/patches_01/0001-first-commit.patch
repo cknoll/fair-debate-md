@@ -1,0 +1,24 @@
+From 4791677d9088e69402ec9dad5639185242b14201 Mon Sep 17 00:00:00 2001
+From: fair debate system <fair_debate_system@fair-debate-users.org>
+Date: Sun, 5 Apr 2026 18:00:00 +0200
+Subject: [PATCH 01/10] first commit
+
+---
+ README.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 README.md
+
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..ffb97cc
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,5 @@
++# Debate "d32-overlapping-refs"
++
++This repository contains statements which are part of a formalized debate.
++
++Visit <debate_url> to view this debate and <background_url> for background information.
+-- 
+2.39.5
+

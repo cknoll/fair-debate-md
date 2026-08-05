@@ -1,0 +1,22 @@
+From 3e416b3d94d7b3fbec381ad61576950ca9c7c0ef Mon Sep 17 00:00:00 2001
+From: fair debate user d32-overlapping-refs e
+ <d32-overlapping-refs_e@fair-debate-users.org>
+Date: Tue, 7 Apr 2026 09:25:00 +0200
+Subject: [PATCH 07/10] add contribution e/a7e.md
+
+---
+ e/a7e.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 e/a7e.md
+
+diff --git a/e/a7e.md b/e/a7e.md
+new file mode 100644
+index 0000000..0c21220
+--- /dev/null
++++ b/e/a7e.md
+@@ -0,0 +1 @@
++::a7e1 This sentence does a lot of work for one sentence. ::a7e2 It contains a price estimate, a space claim and a durability claim, and I would like to take them one at a time rather than accept them as a package.
+\ No newline at end of file
+-- 
+2.39.5
+
