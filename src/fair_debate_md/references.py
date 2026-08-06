@@ -305,3 +305,75 @@ def validate_reference(ctb_key: str, parent_md_with_real_keys: str, code_content
                 f"the word count ({len(words)}) of segment '{segment_key}'"
             )
             raise ValueError(msg)
+
+
+def get_rendered_word_offsets(segment_text: str, words: list[str]) -> list[int]:
+    """
+    Align raw-markdown words (as returned by `get_segment_words`) with their
+    rendered occurrence in `segment_text`, the rendered plain-text content of
+    the same segment (i.e. what `element.textContent` gives the frontend).
+
+    Coordinate system: character offsets into `segment_text`, i.e. the same
+    string this function receives -- callers must pass the exact rendered
+    text they later index into.
+
+    Returns a flat list ``[start0, end0, start1, end1, ...]``, one
+    ``(start, end)`` pair per entry in `words`, in the same order. Each pair
+    is a half-open interval (``segment_text[start:end]``).
+
+    Invariants (guaranteed for arbitrary input):
+
+    - ``len(result) == 2 * len(words)``, always.
+    - offsets are monotonically non-decreasing, pairs never overlap, and all
+      values lie in ``[0, len(segment_text)]``.
+    - deterministic: depends only on the two arguments, in order.
+
+    Alignment algorithm: a single left-to-right scan that consumes `words`
+    and `segment_text` in lockstep. Before each word, leading whitespace in
+    `segment_text` is skipped (words are separated by exactly the renderer's
+    inter-word whitespace). A word is then matched character by character
+    against `segment_text` starting at the current position: matching
+    characters advance both pointers, and any non-matching raw-word character
+    is skipped without advancing the rendered-text position -- covering both
+    markdown markup (``*_`[]()#>!``, invisible in rendered text) and content
+    the renderer drops entirely, such as the URL part of ``[text](url)``.
+    This makes the function robust to markup that spans word or tag
+    boundaries (``**wichtig**e`` -> one interval covering ``wichtige``)
+    without needing to parse markdown itself.
+
+    Null-interval behavior: if no character of a word could be matched (e.g.
+    ``![alt](url)``, which renders to no text at all), the word gets an empty
+    interval ``[p, p]`` at the current search position `p` rather than a
+    guessed span -- callers must expect and handle zero-length intervals.
+    """
+    offsets: list[int] = []
+    cur = 0
+    n = len(segment_text)
+
+    for word in words:
+        while cur < n and segment_text[cur].isspace():
+            cur += 1
+
+        start = None
+        pos = cur
+        for ch in word:
+            if pos < n and segment_text[pos] == ch:
+                if start is None:
+                    start = pos
+                pos += 1
+            # else: `ch` has no counterpart at the current rendered position --
+            # either it is markup (dropped by the renderer) or, like the URL
+            # part of "[text](url)", content the renderer consumed entirely.
+            # Either way it is skipped without advancing `pos`.
+
+        if start is None:
+            start = cur
+            end = cur
+        else:
+            end = pos
+
+        offsets.append(start)
+        offsets.append(end)
+        cur = end
+
+    return offsets
