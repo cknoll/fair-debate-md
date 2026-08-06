@@ -175,3 +175,58 @@ No new fixture repo was added in `fair-debate-md` yet (adding one changes the fi
 that `fair-debate-web`'s `initializefixtures` and test counters depend on — coordinate with
 the web repo when frontend work starts). The md-side integration tests build temporary
 debates instead, see `tests/test_references.py::TestDebateIntegration`.
+
+## Word offset table
+
+Status: backend implemented and wired into the render pipeline (`DebateDirLoader.word_offsets`,
+computed in `_compute_word_offsets`); no frontend consumer yet. This section is the handover for
+the raw↔rendered word alignment referenced in point 3 of "Frontend work" above; details of *why*
+this particular algorithm was chosen and what it does and does not cover are in
+`word_offsets_report.md` at the repo root.
+
+**The contract.** `ddl.word_offsets: dict[str, list[int]]`. Keys are segment keys (`a7`, `a3-6b2`,
+…) for **all** segments of the debate, not only referenced ones. Each value is a flat list
+`[start0, end0, start1, end1, …]` — one `[start, end)` pair per raw word of that segment, in the
+same order as `references.get_segment_words(md, segment_key)`.
+
+**Coordinate system and the critical condition.** The offsets are character offsets into the
+`textContent` of the *emitted* segment element — exactly the string
+`document.getElementById("a7").textContent` returns in the browser. They are explicitly **not**
+offsets into the Markdown source and **not** offsets into any intermediate HTML string.
+`BeautifulSoup(..., prettify=True)` (used for `final_html`) inserts whitespace at tag boundaries,
+and this whitespace is real `textContent` once delivered — so the offsets are deliberately
+computed against the *final* delivered string, including that injected whitespace when it falls
+inside a word's interval (see "Words across tag boundaries" below).
+
+**Invariants.** For segment key `k` with raw words `words = get_segment_words(md, k)` and text
+`text = document.getElementById(k).textContent`:
+
+- pair count is exact: `len(word_offsets[k]) == 2 * len(words)`, no more, no fewer;
+- offsets are non-decreasing across the whole list and non-overlapping between consecutive pairs;
+- every offset lies in `[0, len(text)]`.
+
+**Null intervals.** A raw word that has no visible rendered counterpart — an image reference
+(`![alt](url)`) or a standalone thematic break (`---` on its own line, i.e. `<hr>`) — gets a
+zero-length interval `[p, p]` at the plausible position (right after the previous word's end, or
+`0` for the first word). The pair count stays correct: the word is still counted, it just maps to
+an empty slice. The frontend should not highlight anything for such a word, but must **not** skip
+it when advancing through the numbering — it still occupies its 1-based word index.
+
+**Words across tag boundaries.** `**wichtig**e` is **one** raw word but renders across two inline
+tags (`<strong>wichtig</strong>e`), with prettify whitespace injected between them. It still maps
+to **one** contiguous interval spanning that whitespace, because the alignment works against
+`textContent`, which has no notion of tags — `<strong>` and `</strong>` simply do not appear in
+the string being indexed. Highlighting such a word in the DOM therefore requires wrapping a
+partial range across two (or more) text nodes, not just one.
+
+**Example.** `d32-overlapping-refs`, segment `a7`, reference key `a7_7-12` (words 7–12,
+1-based, end-inclusive) targets the raw words `cost us maybe sixty euros once,`. Given
+`pairs = word_offsets["a7"]`, group it into per-word pairs first —
+`word_pairs = list(zip(pairs[0::2], pairs[1::2]))` — then the 1-based end-inclusive range
+`[start, end]` maps to the plain Python slice `word_pairs[start - 1 : end]` (this is the
+conversion the frontend needs: `word_pairs[7 - 1 : 12]` selects exactly words 7 through 12).
+Measured for this fixture: `word_pairs[6:12] == [(31, 35), (36, 38), (39, 44), (45, 50),
+(51, 56), (57, 62)]`, and `text[31:35] == "cost"`, …, `text[57:62] == "once,"`; the combined
+highlighted span is `text[31:62] == "cost us maybe sixty euros once,"` — the first selected
+pair's start to the last selected pair's end, since pairs in a range are always contiguous and
+non-overlapping.
