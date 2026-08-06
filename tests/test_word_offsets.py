@@ -199,19 +199,19 @@ class TestWordOffsetsMarkupIntegration:
         assert len(offsets) == 2 * len(words)
         assert _slices(text, offsets) == ["very", "important", "words", "here."]
 
-    def test_bold_crossing_tag_boundary_mid_word_is_a_known_limitation(self, tmp_path):
+    def test_bold_crossing_tag_boundary_mid_word_is_exact(self, tmp_path):
         """
-        Known limitation (see T2 result report): under `prettify=True` (the
-        actually delivered rendering, which this repo's orchestrator
-        decision keeps unchanged), BeautifulSoup's prettify inserts
-        whitespace at *every* tag boundary, including inside inline markup.
-        For "**wichtig**e" this splits the rendered "wichtige" into
-        "wichtig" + injected whitespace + "e", which the word-matching
-        algorithm (a purely local scan, see `get_rendered_word_offsets`)
-        cannot bridge without risking bleeding into the next word -- so the
-        trailing "e" (and, as a knock-on effect, the following two words)
-        degrade to null intervals here. We only assert the structural
-        invariants (pair count, monotonicity, in-bounds), not exact slices.
+        Regression test for T2b: under `prettify=True` (the actually
+        delivered rendering, kept unchanged by orchestrator decision),
+        BeautifulSoup's prettify inserts whitespace at *every* tag boundary,
+        including inside inline markup. For "**wichtig**e" this splits the
+        rendered "wichtige" into "wichtig" + injected whitespace + "e". The
+        frozen contract requires this to be ONE non-empty, contiguous
+        interval spanning the whole range (injected whitespace included),
+        and the two following words must keep correct, non-null intervals
+        (no cascade). This replaces the former
+        `test_bold_crossing_tag_boundary_mid_word_is_a_known_limitation`,
+        which documented exactly this defect instead of the fix.
         """
         ddl = self._load(tmp_path, "::a1 **wichtig**e stuff follows.\n", "test-wo-wichtig")
         soup = BeautifulSoup(ddl.final_html, "html.parser")
@@ -220,9 +220,58 @@ class TestWordOffsetsMarkupIntegration:
         words = get_segment_words(ddl.tree["a"].md_with_real_keys, "a1")
         assert words == ["**wichtig**e", "stuff", "follows."]
         assert len(offsets) == 2 * len(words)
-        assert offsets == sorted(offsets)
-        for start, end in _pairs(offsets):
-            assert 0 <= start <= end <= len(text)
+        assert text == "\n\n    wichtig\n   \n   e stuff follows.\n  "
+        assert _slices(text, offsets) == ["wichtig\n   \n   e", "stuff", "follows."]
+
+    def test_link_url_does_not_bleed_into_next_word(self, tmp_path):
+        """
+        Runaway regression test for T2b: an earlier fix attempt (skipping
+        unmatched *rendered* whitespace mid-word in a local scan) let the
+        unmatched URL characters of "text](url)" run on and accidentally
+        resync with the *next* word's rendered occurrence ("here."),
+        matching "h", "e", "r" of "http" against "h", "e", "r" of "here.".
+        Global alignment must not reproduce this: the interval of
+        "text](url)" ends at "text", strictly before "here." starts, and
+        "here." gets its own correct interval.
+        """
+        ddl = self._load(tmp_path, "::a1 [link text](http://example.org) here.\n", "test-wo-link-runaway")
+        soup = BeautifulSoup(ddl.final_html, "html.parser")
+        text = soup.find(id="a1").get_text()
+        offsets = ddl.word_offsets["a1"]
+        words = get_segment_words(ddl.tree["a"].md_with_real_keys, "a1")
+        assert words == ["[link", "text](http://example.org)", "here."]
+        pairs = _pairs(offsets)
+        text_word_end, here_word_start = pairs[1][1], pairs[2][0]
+        assert text_word_end <= here_word_start
+        assert _slices(text, offsets) == ["link", "text", "here."]
+
+    def test_no_cascade_from_consecutive_unmatched_words(self, tmp_path):
+        """
+        Explicit cascade regression test for T2b requirement 3: two
+        consecutive raw words that render to no text at all (images) must
+        not corrupt the interval assignment of the words that follow them
+        in the same segment.
+        """
+        md_src = (
+            "::a1 Start ![img1](http://example.org/1.png) "
+            "![img2](http://example.org/2.png) middle two words end.\n"
+        )
+        ddl = self._load(tmp_path, md_src, "test-wo-no-cascade")
+        soup = BeautifulSoup(ddl.final_html, "html.parser")
+        text = soup.find(id="a1").get_text()
+        offsets = ddl.word_offsets["a1"]
+        words = get_segment_words(ddl.tree["a"].md_with_real_keys, "a1")
+        assert words == [
+            "Start",
+            "![img1](http://example.org/1.png)",
+            "![img2](http://example.org/2.png)",
+            "middle",
+            "two",
+            "words",
+            "end.",
+        ]
+        assert len(offsets) == 2 * len(words)
+        assert _slices(text, offsets) == ["Start", "", "", "middle", "two", "words", "end."]
 
     def test_link(self, tmp_path):
         ddl = self._load(tmp_path, "::a1 [link text](http://example.org) here.\n", "test-wo-link")

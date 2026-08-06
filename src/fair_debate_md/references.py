@@ -56,6 +56,7 @@ words of its raw form, and code-block segments have their code tokens counted
 as words.
 """
 
+import difflib
 import re
 from dataclasses import dataclass
 
@@ -343,37 +344,106 @@ def get_rendered_word_offsets(segment_text: str, words: list[str]) -> list[int]:
 
     Null-interval behavior: if no character of a word could be matched (e.g.
     ``![alt](url)``, which renders to no text at all), the word gets an empty
-    interval ``[p, p]`` at the current search position `p` rather than a
-    guessed span -- callers must expect and handle zero-length intervals.
+    interval ``[p, p]`` at the end of the previous word's interval (0 if it is
+    the first word) rather than a guessed span -- callers must expect and
+    handle zero-length intervals.
+
+    Alignment algorithm: global sequence alignment via
+    ``difflib.SequenceMatcher`` (``autojunk=False``), not a local scan. A
+    "probe" string is built by joining `words` with single spaces; the
+    matcher aligns `probe` against `segment_text` as a whole and returns
+    matching blocks that are monotonic and internally consistent by
+    construction. Each word's known character range in `probe` is then
+    intersected with those blocks to obtain the set of its characters that
+    have a counterpart in `segment_text`; the word's interval is the span
+    from the first to the last such counterpart. A final pass clamps offsets
+    to be monotonically non-decreasing and non-overlapping, guarding against
+    degenerate inputs.
+
+    This is deliberately global rather than local: a purely local,
+    character-by-character scan has to guess, for each raw character that
+    fails to match, whether it is markup to skip (advance the raw pointer,
+    hold the rendered pointer) or content the renderer dropped outright --
+    and a wrong guess either fractures one word into several null intervals
+    (e.g. "**wichtig**e" rendered with prettify-injected whitespace between
+    "wichtig" and "e") or lets the raw pointer run on and accidentally
+    resync with a *later* word's rendered text (e.g. the URL of
+    "[text](url)" bleeding into the next word). Global alignment avoids both
+    failure modes: it considers the whole string at once, so an unmatched
+    stretch in the middle of one word does not have to be classified at all
+    -- it simply contributes no mapped characters -- and it cannot let one
+    word's unmatched tail "consume" a later word's rendered occurrence,
+    because the matcher already committed to the overall best alignment
+    before any per-word interval is read off.
     """
-    offsets: list[int] = []
-    cur = 0
     n = len(segment_text)
+    if not words:
+        return []
 
-    for word in words:
-        while cur < n and segment_text[cur].isspace():
-            cur += 1
+    # `probe`: raw words joined by single spaces, and each word's character
+    # range [p_start, p_end) within `probe` (computed by counting lengths,
+    # not by searching).
+    word_ranges: list[tuple[int, int]] = []
+    pos = 0
+    for i, word in enumerate(words):
+        if i:
+            pos += 1
+        word_ranges.append((pos, pos + len(word)))
+        pos += len(word)
+    probe = " ".join(words)
 
-        start = None
-        pos = cur
-        for ch in word:
-            if pos < n and segment_text[pos] == ch:
-                if start is None:
-                    start = pos
-                pos += 1
-            # else: `ch` has no counterpart at the current rendered position --
-            # either it is markup (dropped by the renderer) or, like the URL
-            # part of "[text](url)", content the renderer consumed entirely.
-            # Either way it is skipped without advancing `pos`.
+    matcher = difflib.SequenceMatcher(None, probe, segment_text, autojunk=False)
+    blocks = [b for b in matcher.get_matching_blocks() if b.size > 0]
 
-        if start is None:
-            start = cur
-            end = cur
+    # For each word, find the min/max segment_text index reached by mapping
+    # its probe range through the matching blocks (partial mapping: only
+    # characters inside `equal` blocks are mapped at all).
+    mapped_min: list[int | None] = [None] * len(words)
+    mapped_max: list[int | None] = [None] * len(words)
+
+    block_idx = 0
+    for word_idx, (p_start, p_end) in enumerate(word_ranges):
+        # blocks are sorted by `a`; once a block ends before the current
+        # word starts, it is behind every later (larger) word range too.
+        while block_idx < len(blocks) and blocks[block_idx].a + blocks[block_idx].size <= p_start:
+            block_idx += 1
+        j = block_idx
+        while j < len(blocks) and blocks[j].a < p_end:
+            a, b, size = blocks[j]
+            lo = max(a, p_start)
+            hi = min(a + size, p_end)
+            if lo < hi:
+                seg_lo = b + (lo - a)
+                seg_hi = b + (hi - a) - 1
+                if mapped_min[word_idx] is None or seg_lo < mapped_min[word_idx]:
+                    mapped_min[word_idx] = seg_lo
+                if mapped_max[word_idx] is None or seg_hi > mapped_max[word_idx]:
+                    mapped_max[word_idx] = seg_hi
+            j += 1
+
+    offsets: list[int] = [0] * (2 * len(words))
+    last_end = 0
+    for word_idx in range(len(words)):
+        if mapped_min[word_idx] is None:
+            start = end = last_end
         else:
-            end = pos
+            start = mapped_min[word_idx]
+            end = mapped_max[word_idx] + 1
+        offsets[2 * word_idx] = start
+        offsets[2 * word_idx + 1] = end
+        last_end = end
 
-        offsets.append(start)
-        offsets.append(end)
-        cur = end
+    # Enforce monotonicity and non-overlap explicitly, so the contract holds
+    # even if the mapping above ever produced a locally-plausible but
+    # globally-inconsistent interval for degenerate input.
+    prev_end = 0
+    for word_idx in range(len(words)):
+        start, end = offsets[2 * word_idx], offsets[2 * word_idx + 1]
+        start = max(start, prev_end)
+        end = max(end, start)
+        offsets[2 * word_idx], offsets[2 * word_idx + 1] = start, end
+        prev_end = end
+    for i, value in enumerate(offsets):
+        offsets[i] = max(0, min(n, value))
 
     return offsets
