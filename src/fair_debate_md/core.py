@@ -503,6 +503,12 @@ class DebateDirLoader:
 
         self.final_html: str = None
 
+        # dict[str, list[int]]: segment key -> flat [start0, end0, start1, end1, ...]
+        # char-offset pairs, one pair per raw word (see `_compute_word_offsets`
+        # docstring for the full contract). Populated after `final_html` is
+        # assembled, i.e. after `generate_html_with_contributions()`.
+        self.word_offsets: dict[str, list[int]] = {}
+
         if debate_key is None:
             raise NotImplementedError
         # TODO: read this from metadata.toml or ensure consistency
@@ -657,6 +663,41 @@ class DebateDirLoader:
         res_segmented_html: str = parent_mdp.get_html_with_segments()
         if parent_mdp == self.root_mdp:
             self.final_html = res_segmented_html
+            self._compute_word_offsets()
+
+    def _compute_word_offsets(self) -> None:
+        """
+        Populate `self.word_offsets` for every segment of every contribution
+        in the debate.
+
+        Coordinate system (the critical contract, see also T2 report): each
+        offset pair indexes into the segment's `.get_text()` as extracted
+        from `self.final_html` -- i.e. the *actually delivered* HTML, after
+        `SpanAdder.add_spans_for_keys(prettify=True)`. This is, by construction,
+        the same string a browser exposes as
+        `document.getElementById(segment_key).textContent`, regardless of
+        what prettify() does to whitespace: we never assume a coordinate
+        system, we parse the delivered string itself.
+
+        Raw words come exclusively from `references.get_segment_words()`
+        (the frozen tokenizer spec), looked up against the `md_with_real_keys`
+        of the contribution that owns the segment (found via
+        `MDHandler.get_keys()`, not by string-splitting the segment key).
+        """
+        self.word_offsets = {}
+
+        owner_by_segment_key: dict[str, MDProcessor] = {}
+        for mdp in self.tree.values():
+            for raw_key in mdp.get_keys():
+                owner_by_segment_key[raw_key.lstrip(":")] = mdp
+
+        soup = BeautifulSoup(self.final_html, "html.parser")
+        for span in soup.find_all("span", class_="segment"):
+            segment_key = span.attrs["id"]
+            owner_mdp = owner_by_segment_key[segment_key]
+            words = references.get_segment_words(owner_mdp.md_with_real_keys, segment_key)
+            segment_text = span.get_text()
+            self.word_offsets[segment_key] = references.get_rendered_word_offsets(segment_text, words)
 
 
 def get_contribution_key(segment_key, answering_token):
