@@ -12,6 +12,7 @@ result of `get_segment_words` on the corresponding markdown source.
 
 import json
 import os
+import re
 
 import pytest
 from bs4 import BeautifulSoup
@@ -447,11 +448,39 @@ class TestWordOffsetsInvariantsAcrossFixtures:
 
 
 _MARKUP_CHARS = set("*_`[]()!#>")
+_THEMATIC_BREAK_LINE_RE = re.compile(r"^[ \t]*(?:-{3,}|\*{3,}|_{3,})[ \t]*$", re.MULTILINE)
 
 
 def _is_markup_free_source(source: str) -> bool:
-    """Conservative, character-based criterion: no inline-markup punctuation at all."""
-    return not any(ch in _MARKUP_CHARS for ch in source)
+    """
+    Conservative, character-based criterion for "raw word and rendered word
+    must be character-identical". A segment only qualifies if none of its
+    raw words can possibly be transformed by rendering.
+
+    Excludes three things, all found by T3 (see task_004/task_005 reports):
+    - inline-markup punctuation (`_MARKUP_CHARS`) -- the original criterion;
+    - a literal backslash: a raw word like "in\\-context\\-answers" contains
+      none of `_MARKUP_CHARS`, but is a markdown escape sequence, and the
+      renderer strips the backslashes, so raw and rendered word differ;
+    - a line consisting only of a markdown thematic-break marker (`---`,
+      `***`, `___`, three or more of the same character, with optional
+      surrounding whitespace): such a line contains none of `_MARKUP_CHARS`
+      either, but renders to an `<hr>` with no text content at all.
+
+    This criterion is intentionally conservative: its purpose is to select
+    segments where raw word and rendered word are *guaranteed* to coincide,
+    not to sweep in as many segments as possible. Any raw source with a
+    transformation the tokenizer/renderer might apply belongs on the
+    exclusion side, even if that leaves segments out that would, in
+    practice, still turn out exact.
+    """
+    if any(ch in _MARKUP_CHARS for ch in source):
+        return False
+    if "\\" in source:
+        return False
+    if _THEMATIC_BREAK_LINE_RE.search(source):
+        return False
+    return True
 
 
 def _iter_markup_free_words(all_fixture_debates):
@@ -491,20 +520,26 @@ class TestWordOffsetsExactnessWithoutMarkup:
             (debate_key, segment_key)
             for debate_key, segment_key, *_ in _iter_markup_free_words(all_fixture_debates)
         }
-        # measured: 349 of 393 fixture segments (2026-08-06); generous margin
+        # measured: 337 of 393 fixture segments (2026-08-06), after excluding
+        # backslash-escapes and thematic-break lines in addition to inline
+        # markup punctuation; generous margin (~70% of the measured value)
         # below that so this stays robust, but high enough to fail loudly if
         # the criterion stops matching almost everything
-        assert len(markup_free_segments) >= 250
+        assert len(markup_free_segments) >= 235
 
     def test_exact_match_for_markup_free_segments(self, all_fixture_debates):
         """
-        T3 real finding (see task_004 report): 12 of 361 markup-free words
-        currently mismatch exactly -- escaped hyphens (e.g.
+        T3 real finding (see task_004 report): with the original,
+        punctuation-only `_is_markup_free_source`, 12 of the then-3994
+        markup-free words mismatched exactly -- escaped hyphens (e.g.
         "in\\-context\\-answers") lose their backslash on render, and a
         horizontal-rule line ("---") renders to no text at all, even though
-        neither source contains any of the excluded markup characters.
-        Left red on purpose, per task instructions, instead of narrowing
-        the criterion or the assertion to make it pass.
+        neither source contains any of the excluded markup punctuation.
+        Resolved (task_005) by precising the criterion itself -- excluding
+        backslashes and thematic-break lines -- rather than loosening this
+        assertion or marking the test xfail; see
+        `TestWordOffsetsKnownNonExactCategories` for explicit coverage of
+        both excluded categories.
         """
         mismatches = [
             (debate_key, segment_key, word_index, word, actual)
@@ -514,6 +549,70 @@ class TestWordOffsetsExactnessWithoutMarkup:
             if actual != word
         ]
         assert not mismatches, mismatches
+
+
+class TestWordOffsetsKnownNonExactCategories:
+    """
+    Group 2b (T3): explicit, hand-checked coverage of the two raw-word
+    categories that `_is_markup_free_source` excludes precisely because
+    they are known to render non-identically (see its docstring). Neither
+    case below is a defect of `get_rendered_word_offsets` -- the offsets
+    are the correct, contract-compliant answer for what actually gets
+    rendered; the mismatch is between the *raw* word and the rendered
+    text, which the exclusion criterion already accounts for.
+    """
+
+    def test_backslash_escape_word_maps_to_unescaped_slice(self, all_fixture_debates):
+        """
+        Segment "a3" of "d00-explanatory-example-debate" has raw word 2
+        "in\\-context\\-answers" (with literal backslashes escaping the
+        hyphens -- markdown syntax for a literal "-"). The renderer strips
+        the backslashes on output, so the offsets correctly point at the
+        unescaped rendered text; the slice differs from the raw word by
+        design, not by bug.
+        """
+        ddl = all_fixture_debates["d00-explanatory-example-debate"]
+        owner_by_segment_key = _owner_mdp_by_segment_key(ddl)
+        words = get_segment_words(owner_by_segment_key["a3"].md_with_real_keys, "a3")
+        assert words[1] == "in\\-context\\-answers"
+
+        text = _segment_texts(ddl)["a3"]
+        pairs = _pairs(ddl.word_offsets["a3"])
+        start, end = pairs[1]
+        assert (start, end) == (16, 34)
+        assert text[start:end] == "in-context-answers"
+
+    def test_thematic_break_word_maps_to_null_interval(self, all_fixture_debates):
+        """
+        Segment "a8" of "d02-test_debate" has raw word 9 "---" on its own
+        line -- markdown syntax for a thematic break (`<hr>`), which has no
+        text content at all. The offsets correctly assign it a null
+        interval right after the preceding word's end, and the pair count
+        still matches the raw word count exactly: the word is neither
+        dropped nor does it swallow a neighbor's interval.
+        """
+        ddl = all_fixture_debates["d02-test_debate"]
+        owner_by_segment_key = _owner_mdp_by_segment_key(ddl)
+        words = get_segment_words(owner_by_segment_key["a8"].md_with_real_keys, "a8")
+        assert words == [
+            "Mollit",
+            "culpa",
+            "pariatur",
+            "officia",
+            "duis",
+            "tempor",
+            "adipiscing",
+            "consequat.",
+            "---",
+        ]
+
+        text = _segment_texts(ddl)["a8"]
+        pairs = _pairs(ddl.word_offsets["a8"])
+        assert len(pairs) == len(words)
+
+        start, end = pairs[8]
+        assert (start, end) == (67, 67)
+        assert text[start:end] == ""
 
 
 class TestWordOffsetsD32OverlappingRefsEndToEnd:
