@@ -56,6 +56,7 @@ words of its raw form, and code-block segments have their code tokens counted
 as words.
 """
 
+import difflib
 import re
 from dataclasses import dataclass
 
@@ -305,3 +306,144 @@ def validate_reference(ctb_key: str, parent_md_with_real_keys: str, code_content
                 f"the word count ({len(words)}) of segment '{segment_key}'"
             )
             raise ValueError(msg)
+
+
+def get_rendered_word_offsets(segment_text: str, words: list[str]) -> list[int]:
+    """
+    Align raw-markdown words (as returned by `get_segment_words`) with their
+    rendered occurrence in `segment_text`, the rendered plain-text content of
+    the same segment (i.e. what `element.textContent` gives the frontend).
+
+    Coordinate system: character offsets into `segment_text`, i.e. the same
+    string this function receives -- callers must pass the exact rendered
+    text they later index into.
+
+    Returns a flat list ``[start0, end0, start1, end1, ...]``, one
+    ``(start, end)`` pair per entry in `words`, in the same order. Each pair
+    is a half-open interval (``segment_text[start:end]``).
+
+    Invariants (guaranteed for arbitrary input):
+
+    - ``len(result) == 2 * len(words)``, always.
+    - offsets are monotonically non-decreasing, pairs never overlap, and all
+      values lie in ``[0, len(segment_text)]``.
+    - deterministic: depends only on the two arguments, in order.
+
+    Alignment algorithm: a single left-to-right scan that consumes `words`
+    and `segment_text` in lockstep. Before each word, leading whitespace in
+    `segment_text` is skipped (words are separated by exactly the renderer's
+    inter-word whitespace). A word is then matched character by character
+    against `segment_text` starting at the current position: matching
+    characters advance both pointers, and any non-matching raw-word character
+    is skipped without advancing the rendered-text position -- covering both
+    markdown markup (``*_`[]()#>!``, invisible in rendered text) and content
+    the renderer drops entirely, such as the URL part of ``[text](url)``.
+    This makes the function robust to markup that spans word or tag
+    boundaries (``**wichtig**e`` -> one interval covering ``wichtige``)
+    without needing to parse markdown itself.
+
+    Null-interval behavior: if no character of a word could be matched (e.g.
+    ``![alt](url)``, which renders to no text at all), the word gets an empty
+    interval ``[p, p]`` at the end of the previous word's interval (0 if it is
+    the first word) rather than a guessed span -- callers must expect and
+    handle zero-length intervals.
+
+    Alignment algorithm: global sequence alignment via
+    ``difflib.SequenceMatcher`` (``autojunk=False``), not a local scan. A
+    "probe" string is built by joining `words` with single spaces; the
+    matcher aligns `probe` against `segment_text` as a whole and returns
+    matching blocks that are monotonic and internally consistent by
+    construction. Each word's known character range in `probe` is then
+    intersected with those blocks to obtain the set of its characters that
+    have a counterpart in `segment_text`; the word's interval is the span
+    from the first to the last such counterpart. A final pass clamps offsets
+    to be monotonically non-decreasing and non-overlapping, guarding against
+    degenerate inputs.
+
+    This is deliberately global rather than local: a purely local,
+    character-by-character scan has to guess, for each raw character that
+    fails to match, whether it is markup to skip (advance the raw pointer,
+    hold the rendered pointer) or content the renderer dropped outright --
+    and a wrong guess either fractures one word into several null intervals
+    (e.g. "**wichtig**e" rendered with prettify-injected whitespace between
+    "wichtig" and "e") or lets the raw pointer run on and accidentally
+    resync with a *later* word's rendered text (e.g. the URL of
+    "[text](url)" bleeding into the next word). Global alignment avoids both
+    failure modes: it considers the whole string at once, so an unmatched
+    stretch in the middle of one word does not have to be classified at all
+    -- it simply contributes no mapped characters -- and it cannot let one
+    word's unmatched tail "consume" a later word's rendered occurrence,
+    because the matcher already committed to the overall best alignment
+    before any per-word interval is read off.
+    """
+    n = len(segment_text)
+    if not words:
+        return []
+
+    # `probe`: raw words joined by single spaces, and each word's character
+    # range [p_start, p_end) within `probe` (computed by counting lengths,
+    # not by searching).
+    word_ranges: list[tuple[int, int]] = []
+    pos = 0
+    for i, word in enumerate(words):
+        if i:
+            pos += 1
+        word_ranges.append((pos, pos + len(word)))
+        pos += len(word)
+    probe = " ".join(words)
+
+    matcher = difflib.SequenceMatcher(None, probe, segment_text, autojunk=False)
+    blocks = [b for b in matcher.get_matching_blocks() if b.size > 0]
+
+    # For each word, find the min/max segment_text index reached by mapping
+    # its probe range through the matching blocks (partial mapping: only
+    # characters inside `equal` blocks are mapped at all).
+    mapped_min: list[int | None] = [None] * len(words)
+    mapped_max: list[int | None] = [None] * len(words)
+
+    block_idx = 0
+    for word_idx, (p_start, p_end) in enumerate(word_ranges):
+        # blocks are sorted by `a`; once a block ends before the current
+        # word starts, it is behind every later (larger) word range too.
+        while block_idx < len(blocks) and blocks[block_idx].a + blocks[block_idx].size <= p_start:
+            block_idx += 1
+        j = block_idx
+        while j < len(blocks) and blocks[j].a < p_end:
+            a, b, size = blocks[j]
+            lo = max(a, p_start)
+            hi = min(a + size, p_end)
+            if lo < hi:
+                seg_lo = b + (lo - a)
+                seg_hi = b + (hi - a) - 1
+                if mapped_min[word_idx] is None or seg_lo < mapped_min[word_idx]:
+                    mapped_min[word_idx] = seg_lo
+                if mapped_max[word_idx] is None or seg_hi > mapped_max[word_idx]:
+                    mapped_max[word_idx] = seg_hi
+            j += 1
+
+    offsets: list[int] = [0] * (2 * len(words))
+    last_end = 0
+    for word_idx in range(len(words)):
+        if mapped_min[word_idx] is None:
+            start = end = last_end
+        else:
+            start = mapped_min[word_idx]
+            end = mapped_max[word_idx] + 1
+        offsets[2 * word_idx] = start
+        offsets[2 * word_idx + 1] = end
+        last_end = end
+
+    # Enforce monotonicity and non-overlap explicitly, so the contract holds
+    # even if the mapping above ever produced a locally-plausible but
+    # globally-inconsistent interval for degenerate input.
+    prev_end = 0
+    for word_idx in range(len(words)):
+        start, end = offsets[2 * word_idx], offsets[2 * word_idx + 1]
+        start = max(start, prev_end)
+        end = max(end, start)
+        offsets[2 * word_idx], offsets[2 * word_idx + 1] = start, end
+        prev_end = end
+    for i, value in enumerate(offsets):
+        offsets[i] = max(0, min(n, value))
+
+    return offsets
