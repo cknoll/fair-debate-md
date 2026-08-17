@@ -1,0 +1,3 @@
+Ich bin weder gegen Technik noch gegen Innovationen, aber an dieser Stelle gibt es ein Zeitproblem, das sich nicht wegdiskutieren lässt. Bis 2045 sind es weniger als zwanzig Jahre. Aus der Technikgeschichte weiß man, dass Innovationszyklen, also der Weg von einer Erfindung bis zu einer breit wirksamen Effizienzsteigerung, länger dauern als zwanzig Jahre.
+
+Wenn wir Klimaschutz machen wollen, müssen wir ihn deshalb mit der Technik machen, die wir bereits haben. Und mit dieser Technik lässt sich nicht genug Energie ökologisch erzeugen, um das bestehende System und zusätzliches Wachstum zu befeuern.

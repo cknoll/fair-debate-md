@@ -1,0 +1,3 @@
+Ich mache hier keine Wunschliste, sondern eine Analyse, wie es kommen wird und was funktionieren würde. Und diese Analyse führt zu dem Schluss, dass die Natur uns das Schrumpfen aufzwingen wird, wenn wir nicht rechtzeitig und geordnet darauf umstellen.
+
+Genau das sehen die Leute in diesem Sommer. Dürre, Hitze, knappes Wasser, perspektivisch auch knappe Lebensmittel. Wenn wir jetzt nicht ernsthaft handeln, landen wir ebenfalls bei einer Art staatlicher Planung, ganz einfach deshalb, weil sonst nicht mehr jeder Wasser und Lebensmittel hat. Wenn aber der Kapitalismus in seiner jetzigen Form ohnehin keine Zukunft hat, dann wäre es klug, rechtzeitig auszusteigen und dabei die schlimmsten Kipppunkte im Klimasystem noch zu vermeiden.

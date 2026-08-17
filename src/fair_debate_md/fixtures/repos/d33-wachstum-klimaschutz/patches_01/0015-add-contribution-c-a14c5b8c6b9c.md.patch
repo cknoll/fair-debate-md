@@ -1,0 +1,24 @@
+From 7341ca5ce0a348e25a7714cbed9aa08109f492e3 Mon Sep 17 00:00:00 2001
+From: fair debate user d33-wachstum-klimaschutz c
+ <d33-wachstum-klimaschutz_c@fair-debate-users.org>
+Date: Tue, 18 Aug 2026 00:49:00 +0200
+Subject: [PATCH 15/19] add contribution c/a14c5b8c6b9c.md
+
+---
+ c/a14c5b8c6b9c.md | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 c/a14c5b8c6b9c.md
+
+diff --git a/c/a14c5b8c6b9c.md b/c/a14c5b8c6b9c.md
+new file mode 100644
+index 0000000..7d6c8db
+--- /dev/null
++++ b/c/a14c5b8c6b9c.md
+@@ -0,0 +1,3 @@
++::a14c5b8c6b9c1 Dass man CO2 wieder aus der Luft holen kann, ist unbestritten. ::a14c5b8c6b9c2 Nur ist das ein typischer Fall, in dem technische Machbarkeit mit ökonomischer Effizienz verwechselt wird. ::a14c5b8c6b9c3 Es ist sehr teuer, CO2 zurückzugewinnen, und genau deshalb macht es im Augenblick praktisch niemand.
++
++::a14c5b8c6b9c4 Und wenn man es täte, würden die Produktionskosten steigen, vom Zement bis zu allem anderen. ::a14c5b8c6b9c5 Steigende Kosten bei gleichem Ausstoß bedeuten sinkende Produktivität. ::a14c5b8c6b9c6 Steigende Produktivität ist aber genau das, was wir Wachstum nennen, und sinkende Produktivität ist deshalb nichts anderes als Schrumpfen. ::a14c5b8c6b9c7 Eine technische Lösung zu haben heißt eben noch nicht, dass das Problem gelöst ist, denn entscheidend sind am Ende immer die Kosten.
+\ No newline at end of file
+-- 
+2.39.5
+

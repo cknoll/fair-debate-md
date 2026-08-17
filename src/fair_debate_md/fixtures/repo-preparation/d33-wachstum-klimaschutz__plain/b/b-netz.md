@@ -1,0 +1,5 @@
+Ich halte den Ausbau der Primärenergieerzeugung für darstellbar, denn die Potenziale sind bei weitem nicht ausgeschöpft. Der entscheidende Hebel liegt allerdings gar nicht bei den Windrädern und Solarpaneelen selbst, sondern bei den Infrastrukturvoraussetzungen, also beim Netz- und Speicherausbau und vor allem bei der netzdienlichen Platzierung der Speicher.
+
+Genau das ist über mehr als ein Jahrzehnt liegen geblieben. Der Ausbau verzögert sich dadurch erheblich und wird in der Summe sehr viel teurer, was sich an den Redispatch-Kosten im System ablesen lässt. Ausgerechnet dort also, wo der Staat die zentrale Verantwortung trägt, nämlich beim Energiesystem, hat er seine selbst gesteckten Ziele verfehlt. Die zehn Prozent sind deshalb kein Beleg für eine technische Grenze, sondern für ein Umsetzungsversagen.
+
+Auf der Nachfrageseite gilt dasselbe. Bei der Elektrifizierung der Wärmeversorgung ist die Wärmepumpe längst die überlegene Technik, und wir hätten mit einfachen Regeln beim Neubau schon vor fünfzehn Jahren eine ganz andere Ausgangslage schaffen können.

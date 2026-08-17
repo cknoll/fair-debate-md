@@ -1,0 +1,3 @@
+Mit dieser Rede vom Kapitalismus, der ohnehin keine Zukunft habe, habe ich Schwierigkeiten. Dieselbe Wirtschaftsordnung hat einen beispiellosen medizinischen und technischen Fortschritt hervorgebracht, und das muss man mitdenken, bevor man sie so abstrakt verabschiedet. Sonst ist man sehr schnell bei der großen Kapitalismusschelte der späten sechziger Jahre, und die hat zu nichts geführt.
+
+Ich bleibe deshalb dabei, dass diejenigen, die wissen, wie es praktisch geht, die Unternehmen vor Ort sind, und dass die privaten Haushalte wissen müssen, woran sie sind. Wenn man ihnen einen verlässlichen Rahmen setzt, funktioniert dieser Umbau. Genau daran hat es bisher gefehlt, und deshalb bin ich an dieser Stelle deutlich optimistischer.

@@ -1,0 +1,3 @@
+Ich habe diese Studien gelesen, und sie funktionieren fast alle nach demselben Muster. Im Vorwort steht, dass grünes Wachstum möglich sei. Im Hauptteil folgt eine lange Reihe technischer Lösungen, von Wasserstoff über Windräder bis zur Kreislaufführung von Material. Und ganz hinten findet sich dann ein kleiner Satz oder auch nur eine Anmerkung, in der eingeräumt wird, dass die ökonomischen Folgen der technischen Vorschläge nicht modelliert wurden. Das Wachstum wird also behauptet, aber nicht durchgerechnet.
+
+Dafür gibt es auch einen Grund. Wer diese Vorschläge tatsächlich makroökonomisch modellieren würde, käme sofort darauf, dass sie auf Schrumpfen hinauslaufen. Grünes Wachstum funktioniert als Behauptung, aber nicht im Beweis.

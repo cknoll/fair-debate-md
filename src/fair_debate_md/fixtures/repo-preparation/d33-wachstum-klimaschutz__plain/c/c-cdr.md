@@ -1,0 +1,3 @@
+Dass man CO2 wieder aus der Luft holen kann, ist unbestritten. Nur ist das ein typischer Fall, in dem technische Machbarkeit mit ökonomischer Effizienz verwechselt wird. Es ist sehr teuer, CO2 zurückzugewinnen, und genau deshalb macht es im Augenblick praktisch niemand.
+
+Und wenn man es täte, würden die Produktionskosten steigen, vom Zement bis zu allem anderen. Steigende Kosten bei gleichem Ausstoß bedeuten sinkende Produktivität. Steigende Produktivität ist aber genau das, was wir Wachstum nennen, und sinkende Produktivität ist deshalb nichts anderes als Schrumpfen. Eine technische Lösung zu haben heißt eben noch nicht, dass das Problem gelöst ist, denn entscheidend sind am Ende immer die Kosten.
