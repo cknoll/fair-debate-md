@@ -764,7 +764,16 @@ def load_repo(
     return load_dir(repo_dir, ctb_list, debate_key=debate_key)
 
 
-def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution]):
+def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContribution]) -> str:
+    """
+    Write the given contributions to the repo and commit them.
+
+    :return:    the hex sha of the created commit
+
+    Note that *all* contributions of one call end up in *one* commit and thus share the
+    same hash. That is intended (they are published in one action), but it means the hash
+    does not identify a single contribution -- see `contribution_commit_hashes`.
+    """
 
     repo_dir = pjoin(repo_host_dir, debate_key)
     repo = git.Repo(repo_dir)
@@ -787,7 +796,8 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
         msg = f"add contributions:\n{contributions}"
 
     author = repo_handling.get_author(debate_key, ctb.author_role)
-    repo.index.commit(message=msg, author=author)
+    commit = repo.index.commit(message=msg, author=author)
+    return commit.hexsha
 
 
 def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
@@ -813,10 +823,89 @@ def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
         fp.write(md_with_real_keys)
 
 
-def commit_ctb(repo_host_dir: str, debate_key: str, ctb: DBContribution):
+def commit_ctb(repo_host_dir: str, debate_key: str, ctb: DBContribution) -> str:
+    """
+    Write a single contribution to the repo and commit it.
+
+    :return:    the hex sha of the created commit
+    """
 
     ctb_list = [ctb]
-    commit_ctb_list(repo_host_dir, debate_key, ctb_list)
+    return commit_ctb_list(repo_host_dir, debate_key, ctb_list)
+
+
+# a contribution file lives at "<role_token>/<contribution_key>.md" inside a debate repo
+_ctb_rel_path_regex = re.compile(r"^([a-z]+)/([a-z0-9]+)\.md$")
+_git_sha_regex = re.compile(r"^[0-9a-f]{40}$")
+
+
+def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str, str]:
+    """
+    Map every contribution key of a debate repo to the hash of the commit that
+    *last touched* its file.
+
+    :return:    dict {contribution_key: commit_hash}; empty on any failure
+                (missing directory, no git repo, git not installed)
+
+    Why the last touching commit and not the one that introduced the file: the purpose of
+    the hash is to make a change to a published contribution detectable (see
+    `konzept_manipulationssicherheit.md` in the web repo, E1). For an untouched file both
+    are the same commit; they only differ once the file *was* changed -- and exactly then
+    the introducing commit would keep displaying an unchanged hash, i.e. hide what it is
+    supposed to reveal. A commit hash covers the whole history leading up to it, so a
+    rewrite of any earlier commit changes it too.
+
+    One `git log` for the whole repo rather than one per file (as `_git_first_commit_iso`
+    does): a debate page needs every contribution anyway, and the per-file variant costs
+    one subprocess each.
+
+    Merge commits are not walked into (`--name-only` lists nothing for them). Content
+    repos are written by a single process and are linear, so there are none; a merge would
+    merely leave the pre-merge hash in place, never a wrong one.
+    """
+
+    repo_dir = pjoin(repo_host_dir, debate_key)
+    if not os.path.isdir(pjoin(repo_dir, ".git")):
+        return {}
+
+    try:
+        result = subprocess.run(
+            ["git", "log", "--format=%H", "--name-only"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return {}
+
+    if result.returncode != 0:
+        return {}
+
+    hashes = {}
+    current_hash = None
+    # newest commit first -> the first mention of a path is its most recent change
+    for line in result.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if _git_sha_regex.match(line):
+            current_hash = line
+            continue
+        match = _ctb_rel_path_regex.match(line)
+        if match is None or current_hash is None:
+            # repo-level files (README.md, data.toml, ...) and anything not shaped like a
+            # contribution are none of this function's business
+            continue
+        ctb_key = match.group(2)
+        if ctb_key in hashes:
+            continue
+        if not os.path.isfile(pjoin(repo_dir, line)):
+            # the file was deleted later; there is nothing on the page to label with it
+            continue
+        hashes[ctb_key] = current_hash
+
+    return hashes
 
 
 def unpack_repos(target_dir):
