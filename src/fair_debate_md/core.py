@@ -1036,7 +1036,10 @@ def convert_dir_to_collection_of_patches(target_dir):
 
     commits = dict(sorted(commits.items()))
 
-    utils.tolerant_rmtree("./git")
+    # ".git", not "git": the typo meant an existing repo was never removed here, so
+    # rebuilding into an existing target dir stacked the new commits on top of the old
+    # history instead of starting over
+    utils.tolerant_rmtree("./.git")
     os.system("git init")
 
     users = ["user_a <user_a@example.org>", "user_b <user_b@example.org>"]
