@@ -1,8 +1,19 @@
+---
+debate_key: d00-explanatory-example-debate
+language: en
+parties:
+  a: Explainer
+  b: Elaborator
+  c: Questioner
+first_commit: 2026-08-24T08:00:00+02:00
+hours_between_contributions: 5
+---
+
 <!-- !!== label=root party=a ==== -->
 
 # Explanatory Example Debate
 
-This document is itself a debate, and its subject is *Fair Debate* — the platform you are looking at. Reading it should be enough to understand how this place works.
+This document is a *debate*, and its subject is *Fair Debate* — the platform you are looking at. Reading it should be enough to understand how this place works.
 
 You are reading the opening *contribution* of this debate. Every contribution is split automatically into *statements* — a sentence, a heading, a bullet point. Each statement carries a key of its own and can therefore be referenced and answered on its own. Hovering over a statement shows its key, clicking it shows its full URL.
 

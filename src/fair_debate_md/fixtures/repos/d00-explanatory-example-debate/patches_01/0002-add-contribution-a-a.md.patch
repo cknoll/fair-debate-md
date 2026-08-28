@@ -1,6 +1,6 @@
-From 7b064b8abdb6c10ac8b2aaf4ed81673894aca4e2 Mon Sep 17 00:00:00 2001
+From 70ec1ef716214a2dac6a233f0c1e5ec86eefe800 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
-Date: Mon, 24 Aug 2026 09:00:00 +0200
+Date: Mon, 24 Aug 2026 13:00:00 +0200
 Subject: [PATCH 02/11] add contribution a/a.md
 
 ---
@@ -10,13 +10,13 @@ Subject: [PATCH 02/11] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..a4d8e24
+index 0000000..496d3b7
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,21 @@
 +# ::a1 Explanatory Example Debate
 +
-+::a2 This document is itself a debate, and its subject is _Fair Debate_ — the platform you are looking at. ::a3 Reading it should be enough to understand how this place works.
++::a2 This document is a _debate_, and its subject is _Fair Debate_ — the platform you are looking at. ::a3 Reading it should be enough to understand how this place works.
 +
 +::a4 You are reading the opening _contribution_ of this debate. ::a5 Every contribution is split automatically into _statements_ — a sentence, a heading, a bullet point. ::a6 Each statement carries a key of its own and can therefore be referenced and answered on its own. ::a7 Hovering over a statement shows its key, clicking it shows its full URL.
 +
