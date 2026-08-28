@@ -4,13 +4,16 @@ that ships it).
 
 Usage::
 
-    python build_debate_repo.py <source.md>
-    python build_debate_repo.py <source.md> --patches-into <dir>
-    python build_debate_repo.py <source.md> --repo-into <dir>     # keep the repo itself
+    fdmd build-debate-repo <source.md>
+    fdmd build-debate-repo <source.md> --patches-into <dir>
+    fdmd build-debate-repo <source.md> --repo-into <dir>      # keep the repo itself
+    fdmd build-debate-repo <source.md> --into-fixtures        # update a fixture debate
 
-Without `--repo-into` the repo is built in a temporary directory and only its patches are
-kept; by default they go to `../repos/<debate_key>/patches_01`, which is where
-`fdmd unpack-repos` looks for them.
+Without `--repo-into` the repo is built in a temporary directory and only its patch
+collection is kept; by default it goes to `./<debate_key>/patches_01`. `--into-fixtures`
+writes it into the fixture directory of the *installed* fair_debate_md instead, which is
+what maintaining one of the fixture debates needs -- with an editable install that is the
+checkout, and `fdmd unpack-repos` picks the result up from there.
 
 Source format
 -------------
@@ -81,7 +84,6 @@ Traps when writing (the splitter splits at ":" and at every "."):
 * abbreviations with dots ("e.g.", "i.e.") are torn apart -- write "for instance" instead.
 """
 
-import argparse
 import datetime
 import os
 import re
@@ -89,12 +91,9 @@ import shutil
 import subprocess
 import tempfile
 
-from fair_debate_md.core import MDProcessor, split_front_matter
+from .core import MDProcessor, split_front_matter
 
 pjoin = os.path.join
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_PATCH_ROOT = pjoin(os.path.dirname(HERE), "repos")
 
 SEGMENT_KEY_RE = re.compile(r"::([a-zA-Z0-9]+)")
 SEGMENT_RE = re.compile(r"::([a-zA-Z0-9]+)\s*(.*?)(?=::[a-zA-Z0-9]+|\Z)", re.DOTALL)
@@ -228,7 +227,14 @@ def resolve_anchor(quote: str, label: str, segments: dict) -> tuple:
     raise SystemExit("\n".join(lines))
 
 
-def build(source_path: str, patches_into: str = None, repo_into: str = None):
+def build_debate_repo(
+    source_path: str, patches_into: str = None, repo_into: str = None, into_fixtures: bool = False
+) -> dict:
+    """
+    Build the content repo described by `source_path` and write its patch collection.
+
+    Returns {label: contribution_key} of the contributions, in the order of the source.
+    """
     meta, contributions = read_source(source_path)
     debate_key = meta["debate_key"]
     party_names = meta["parties"]
@@ -238,8 +244,17 @@ def build(source_path: str, patches_into: str = None, repo_into: str = None):
         first_commit = datetime.datetime.fromisoformat(first_commit)
     step = datetime.timedelta(hours=float(meta.get("hours_between_contributions", 5)))
 
-    if patches_into is None:
-        patches_into = pjoin(DEFAULT_PATCH_ROOT, debate_key, "patches_01")
+    if into_fixtures:
+        if patches_into is not None:
+            raise SystemExit("--into-fixtures and --patches-into exclude each other")
+        from . import fixtures
+
+        patches_into = pjoin(fixtures.TEST_REPO_HOST_DIR, debate_key, "patches_01")
+    elif patches_into is None:
+        patches_into = pjoin(debate_key, "patches_01")
+
+    # git runs with the repo as its cwd, so a relative target would end up INSIDE the repo
+    patches_into = os.path.abspath(patches_into)
 
     if repo_into is None:
         repo_dir = tempfile.mkdtemp(prefix=f"{debate_key}-repo-")
@@ -324,21 +339,4 @@ def build(source_path: str, patches_into: str = None, repo_into: str = None):
     else:
         shutil.rmtree(repo_dir, ignore_errors=True)
 
-
-def main():
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    parser.add_argument("source", help="the markdown file holding the whole debate")
-    parser.add_argument(
-        "--patches-into", metavar="DIR",
-        help="where to write the patch collection (default: ../repos/<debate_key>/patches_01)",
-    )
-    parser.add_argument(
-        "--repo-into", metavar="DIR",
-        help="keep the built repo here instead of building it in a temporary directory",
-    )
-    args = parser.parse_args()
-    build(args.source, patches_into=args.patches_into, repo_into=args.repo_into)
-
-
-if __name__ == "__main__":
-    main()
+    return keys

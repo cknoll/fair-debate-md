@@ -8,15 +8,21 @@ Every build writes its patches to `../repos/<debate-key>/patches_01/`, which is 
 commit the changed patches, and re-run `fdmd unpack-repos ./content_repos` in the web app.
 
 
-## `build_debate_repo.py` -- one file in, one debate repo out
+## `fdmd build-debate-repo` -- one file in, one debate repo out
 
 The general tool: it takes a debate written as a **single markdown file** and builds the
 repo (and the patches) from it.
 
 ```bash
-python build_debate_repo.py <source.md>
-python build_debate_repo.py <source.md> --patches-into <dir> --repo-into <dir>
+fdmd build-debate-repo <source.md>                  # patches -> ./<debate_key>/patches_01
+fdmd build-debate-repo <source.md> --into-fixtures  # patches -> the fixture dir here
+fdmd build-debate-repo <source.md> --repo-into <dir> --patches-into <dir>
 ```
+
+Updating one of the fixture debates below is the `--into-fixtures` case: it writes into
+the fixture directory of the *installed* fair_debate_md, which with an editable install is
+this checkout. Implementation: `fair_debate_md/debate_builder.py`, tests in
+`tests/test_debate_builder.py`.
 
 The source carries its own metadata in a yaml front matter header (`debate_key`, the
 `parties` map from role-token to author name, the commit dates), and separates the
@@ -57,7 +63,7 @@ It is the only German-language fixture and the only one with real argumentative 
 reconstruction of a radio debate on economic growth vs. climate protection. Its anchors are
 still segment indices, so its build script prints, for every contribution, the sentence it
 answers -- editing a plain source can shift the indices its children are anchored to. Both
-could move to `build_debate_repo.py` if their sources were converted to the single-file
+could move to `fdmd build-debate-repo` if their sources were converted to the single-file
 format.
 
 

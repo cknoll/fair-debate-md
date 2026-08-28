@@ -50,13 +50,20 @@ Bring the web app's working directory into a defined state (unpack fixture repos
 
 - `fdmd unpack-repos ./content_repos`
 
+Build a content repo from a debate written as a single markdown file (its front matter
+carries the debate key and the parties, marker comments separate the contributions -- see
+`fair_debate_md/debate_builder.py`):
+
+- `fdmd build-debate-repo ./my-debate.md`
+- `fdmd build-debate-repo ./my-debate.md --repo-into ./my-debate --patches-into ./patches`
+
 Transform a plain directory of markdown files (`<party>/<key>.md`) into a repo with keys.
 Without `--patches` this writes the keyed files only -- the git repo is created by the
 patch step:
 
 - `fdmd process-content-dir ./my-debate__plain ./my-debate --patches`
 
-The fixture debates themselves are no longer built this way; each has a build script, see
+For the sources of the fixture debates see
 `src/fair_debate_md/fixtures/repo-preparation/README.md`.
 
 ## Testing

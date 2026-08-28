@@ -12,7 +12,9 @@ try:
     from . import utils
     from . import repo_handling
     from . import fixtures
+    from . import debate_builder
     from .core import *
+    from .debate_builder import build_debate_repo
 except ImportError as ex:
     import os
     import sys
