@@ -1,0 +1,41 @@
+From 7b064b8abdb6c10ac8b2aaf4ed81673894aca4e2 Mon Sep 17 00:00:00 2001
+From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
+Date: Mon, 24 Aug 2026 09:00:00 +0200
+Subject: [PATCH 02/11] add contribution a/a.md
+
+---
+ a/a.md | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 a/a.md
+
+diff --git a/a/a.md b/a/a.md
+new file mode 100644
+index 0000000..a4d8e24
+--- /dev/null
++++ b/a/a.md
+@@ -0,0 +1,21 @@
++# ::a1 Explanatory Example Debate
++
++::a2 This document is itself a debate, and its subject is _Fair Debate_ — the platform you are looking at. ::a3 Reading it should be enough to understand how this place works.
++
++::a4 You are reading the opening _contribution_ of this debate. ::a5 Every contribution is split automatically into _statements_ — a sentence, a heading, a bullet point. ::a6 Each statement carries a key of its own and can therefore be referenced and answered on its own. ::a7 Hovering over a statement shows its key, clicking it shows its full URL.
++
++::a8 Statements that are highlighted have been answered already. ::a9 Click one to unfold the answers below it. ::a10 Most of this document lives in those answers, so unfolding them is how you read it.
++
++::a11 Parties are identified by letters, assigned in the order in which they join a debate.
++
++- ::a12 `a` is the party that opens the debate, which here is me.
++- ::a13 `b` is the first party to answer.
++- ::a14 `c` is the second party to answer.
++- ::a15 Further parties continue the alphabet, for as long as a debate attracts them.
++
++::a16 A party may also answer a statement of its own. ::a17 That is how a later addition gets a place of its own instead of quietly rewriting what was already published.
++
++::a18 Two properties set this platform apart from an ordinary comment section.
++
++1. ::a19 Persistent in-context answers.
++2. ::a20 Provable integrity of the content data.
+\ No newline at end of file
+-- 
+2.39.5
+

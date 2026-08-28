@@ -1,0 +1,24 @@
+From 20389a029f34af4b4566c0466e2877c12fc6864c Mon Sep 17 00:00:00 2001
+From: fair debate system <fair_debate_system@fair-debate-users.org>
+Date: Mon, 24 Aug 2026 08:00:00 +0200
+Subject: [PATCH 01/11] first commit
+
+---
+ README.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 README.md
+
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..e7856d5
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,5 @@
++# Debate "d00-explanatory-example-debate"
++
++This repository contains statements which are part of a formalized debate.
++
++Visit <debate_url> to view this debate and <background_url> for background information.
+-- 
+2.39.5
+

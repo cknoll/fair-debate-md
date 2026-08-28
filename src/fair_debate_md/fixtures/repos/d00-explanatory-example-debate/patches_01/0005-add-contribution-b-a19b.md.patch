@@ -1,0 +1,30 @@
+From a78e1985de4bff43c6a0fc8dd06189277fce6bc0 Mon Sep 17 00:00:00 2001
+From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
+Date: Tue, 25 Aug 2026 00:51:00 +0200
+Subject: [PATCH 05/11] add contribution b/a19b.md
+
+---
+ b/a19b.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100644 b/a19b.md
+
+diff --git a/b/a19b.md b/b/a19b.md
+new file mode 100644
+index 0000000..ecfdb43
+--- /dev/null
++++ b/b/a19b.md
+@@ -0,0 +1,10 @@
++::a19b1 This answer hangs on the first entry of that list, and it is a contribution in its own right. ::a19b2 Because it refers to statement `a19`, its key is `a19b`, and its own statements are keyed `a19b1`, `a19b2`, and so on.
++
++::a19b3 What that arrangement buys you:
++
++- ::a19b4 An answer appears directly underneath the statement it refers to. ::a19b5 **A statement is therefore tied to its context twice — by its key and by the place where it is shown.** Whole levels of answers can be folded away when a page gets crowded.
++- ::a19b6 An answer is set apart from the surrounding contribution by colour and indentation, so it stays visible whose text you are reading.
++- ::a19b7 Any number of parties can take part, each with its own letter and its own colour.
++- ::a19b8 Contributions may be written in Markdown.
++
++::a19b9 Because the context travels with the statement, quoting somebody out of context does not work here. ::a19b10 The surrounding text is always one click away, and it stays there.
+\ No newline at end of file
+-- 
+2.39.5
+
