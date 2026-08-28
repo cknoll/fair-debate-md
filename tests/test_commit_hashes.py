@@ -14,7 +14,12 @@ import subprocess
 import pytest
 
 import fair_debate_md as fdmd
-from fair_debate_md.core import DBContribution, contribution_commit_hashes, debate_commit_log
+from fair_debate_md.core import (
+    DBContribution,
+    contribution_commit_hashes,
+    debate_bundle,
+    debate_commit_log,
+)
 
 
 pjoin = os.path.join
@@ -40,6 +45,13 @@ def _make_debate_repo(host_dir, debate_key="d-hashes"):
     _git(repo_dir, "config", "user.name", "t")
     _git(repo_dir, "config", "commit.gpgsign", "false")
     return repo_dir
+
+
+def _log_hashes(repo_dir):
+    res = subprocess.run(
+        ["git", "log", "--format=%H"], cwd=repo_dir, check=True, capture_output=True, text=True
+    )
+    return res.stdout.split()
 
 
 def _head(repo_dir):
@@ -217,3 +229,45 @@ def test_debate_commit_log_without_repo_returns_empty(tmp_path, debate_key):
     os.makedirs(pjoin(host_dir, "plain-dir"))
 
     assert debate_commit_log(host_dir, debate_key) == []
+
+
+def test_debate_bundle_clones_back_into_the_same_history(tmp_path):
+    """
+    The bundle is handed to readers so they can run `git log` on the chain themselves
+    (integrity page, "how to check"). It therefore has to be a real repo again after a
+    `git clone`, carrying the very hashes the page displays -- an archive of the working
+    tree would look similar and prove nothing.
+    """
+    host_dir = str(tmp_path)
+    _make_debate_repo(host_dir)
+
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+    sha_b = fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a1b", "::a1b1 Reply b."))
+
+    blob = debate_bundle(host_dir, "d-hashes")
+    assert blob.startswith(b"# v2 git bundle"), blob[:40]
+
+    bundle_path = pjoin(host_dir, "out.bundle")
+    with open(bundle_path, "wb") as fp:
+        fp.write(blob)
+
+    clone_dir = pjoin(host_dir, "clone")
+    subprocess.run(["git", "clone", "-q", bundle_path, clone_dir], check=True, capture_output=True)
+
+    assert _head(clone_dir) == sha_b
+    # the whole chain travels along, not just the tip
+    assert [e["hash"] for e in debate_commit_log(host_dir, "d-hashes")] == _log_hashes(clone_dir)
+    # ... and so does the content
+    assert os.path.isfile(pjoin(clone_dir, "b", "a1b.md"))
+
+
+@pytest.mark.parametrize("debate_key", ["does-not-exist", "plain-dir"])
+def test_debate_bundle_without_repo_returns_empty(tmp_path, debate_key):
+    """
+    Same safe direction as its neighbours: the caller gets nothing to hand out, not an
+    exception on a page that would otherwise render fine.
+    """
+    host_dir = str(tmp_path)
+    os.makedirs(pjoin(host_dir, "plain-dir"))
+
+    assert debate_bundle(host_dir, debate_key) == b""

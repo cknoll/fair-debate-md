@@ -955,6 +955,46 @@ def debate_commit_log(repo_host_dir: str, debate_key: str) -> list[dict]:
     return commit_log
 
 
+def debate_bundle(repo_host_dir: str, debate_key: str) -> bytes:
+    """
+    The complete content repo of a debate -- history included -- as a single git bundle.
+
+    :return:    the bundle as bytes; empty on any failure (no git repo, git not
+                installed, a repo without commits)
+
+    A bundle rather than an archive of the working tree: the point of handing the repo
+    out is that a reader can check the commit chain against a fingerprint they noted
+    earlier, and an archive of the file contents carries no chain at all. `git clone
+    <file>` turns a bundle back into a full repo, so the check needs nothing but git.
+
+    Written to git's stdout instead of through a temporary file: the caller wants the
+    bytes, and a debate repo is small (kilobytes), so a temp file would only add cleanup
+    that can fail.
+    """
+
+    repo_dir = pjoin(repo_host_dir, debate_key)
+
+    if not os.path.isdir(pjoin(repo_dir, ".git")):
+        return b""
+
+    try:
+        result = subprocess.run(
+            # `--all` so every ref travels along; content repos have one branch, but a
+            # bundle that silently omitted a ref would be the wrong kind of evidence
+            ["git", "bundle", "create", "-", "--all"],
+            cwd=repo_dir,
+            capture_output=True,  # no text=True: a bundle is binary
+            timeout=30,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return b""
+
+    if result.returncode != 0:
+        return b""
+
+    return result.stdout
+
+
 def unpack_repos(target_dir):
     """
     Unpack predefined fixture repos
