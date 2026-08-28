@@ -50,9 +50,14 @@ Bring the web app's working directory into a defined state (unpack fixture repos
 
 - `fdmd unpack-repos ./content_repos`
 
-Transform a plain directory of markdown files into a repo with keys:
+Transform a plain directory of markdown files (`<party>/<key>.md`) into a repo with keys.
+Without `--patches` this writes the keyed files only -- the git repo is created by the
+patch step:
 
-- `fdmd process-content-dir __FIXTURES_RP__/d00-explanatory-example-debate__plain ./d00-explanatory-example-debate --patches`
+- `fdmd process-content-dir ./my-debate__plain ./my-debate --patches`
+
+The fixture debates themselves are no longer built this way; each has a build script, see
+`src/fair_debate_md/fixtures/repo-preparation/README.md`.
 
 ## Testing
 
