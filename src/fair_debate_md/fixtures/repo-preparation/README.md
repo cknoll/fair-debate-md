@@ -9,13 +9,24 @@ script, commit the changed patches, and re-run `fdmd unpack-repos ./content_repo
 web app.
 
 `d00-explanatory-example-debate__plain` -- the debate a first-time visitor is pointed to.
-Built by `build_d00_explanatory_example.py`; sources live under `<lang>/<party>/<label>.md`,
-currently `en` only. Anchors are declared in the script as **quotes** of the answered text
-rather than as segment indices, so rewording a contribution does not move the anchors of
-its answers, and a quote that no longer matches aborts the build. Until 2026-08 this
-fixture was built with `fdmd process-content-dir`, whose file-name anchors (`b/a14b.md`)
-forced a rename cascade after every edit and allowed two parties at most; the deployment
-had to special-case it, and its patches here had silently fallen behind the plain sources.
+Built by `build_d00_explanatory_example.py`. The whole debate of one language is **one
+file**, `<lang>.md` (currently `en` only), split into contributions by marker comments:
+
+```
+<!-- !!== label=b-intro party=b answers="`b` is the first party to answer" ==== -->
+```
+
+The markers are html comments, so the file stays valid markdown and can be written and
+read as one document. `answers` quotes the answered text literally; the build resolves it
+against the segments of the preceding contributions and aborts, with the candidates, if it
+matches none or several. Rewording a contribution therefore does not move the anchors of
+its answers. The order of the contributions in the file is the chronology of the debate.
+
+Until 2026-08 this fixture was built with `fdmd process-content-dir` from one file per
+contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):
+every inserted sentence forced a rename cascade, only two parties were possible, the
+deployment had to special-case the debate, and the patches here had silently fallen behind
+the sources.
 
 `d31-ice-cream__plain` is built by `build_d31_ice_cream.py`, because that fixture needs a
 nesting structure and per-party commits which `process-content-dir` does not provide. See
