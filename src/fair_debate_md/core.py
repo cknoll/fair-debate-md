@@ -836,7 +836,55 @@ def commit_ctb(repo_host_dir: str, debate_key: str, ctb: DBContribution) -> str:
 
 # a contribution file lives at "<role_token>/<contribution_key>.md" inside a debate repo
 _ctb_rel_path_regex = re.compile(r"^([a-z]+)/([a-z0-9]+)\.md$")
-_git_sha_regex = re.compile(r"^[0-9a-f]{40}$")
+_git_log_header_regex = re.compile(r"^([0-9a-f]{40})\t(.+)$")
+
+
+def _read_git_log(repo_dir: str) -> list[tuple[str, str, list[str]]]:
+    """
+    The repo's commits, newest first, as (hash, author date ISO-8601, changed paths).
+
+    :return:    list of tuples; empty on any failure (no git repo, git not installed,
+                unreadable repo)
+
+    One `git log` for the whole repo rather than one call per file (as
+    `_git_first_commit_iso` does): both callers below want the complete picture anyway,
+    and the per-file variant costs one subprocess each.
+
+    Merge commits arrive with an empty path list (`--name-only` does not walk into them).
+    Content repos are written by a single process and are linear, so there are none.
+    """
+
+    if not os.path.isdir(pjoin(repo_dir, ".git")):
+        return []
+
+    try:
+        result = subprocess.run(
+            # the tab separator cannot occur in either field, so the header line is
+            # unambiguous even next to a path
+            ["git", "log", "--format=%H%x09%aI", "--name-only"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return []
+
+    if result.returncode != 0:
+        return []
+
+    commits = []
+    for line in result.stdout.splitlines():
+        line = line.rstrip()
+        if not line:
+            continue
+        match = _git_log_header_regex.match(line)
+        if match is not None:
+            commits.append((match.group(1), match.group(2), []))
+        elif commits:
+            commits[-1][2].append(line)
+
+    return commits
 
 
 def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str, str]:
@@ -845,7 +893,6 @@ def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str,
     *last touched* its file.
 
     :return:    dict {contribution_key: commit_hash}; empty on any failure
-                (missing directory, no git repo, git not installed)
 
     Why the last touching commit and not the one that introduced the file: the purpose of
     the hash is to make a change to a published contribution detectable (see
@@ -854,58 +901,58 @@ def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str,
     the introducing commit would keep displaying an unchanged hash, i.e. hide what it is
     supposed to reveal. A commit hash covers the whole history leading up to it, so a
     rewrite of any earlier commit changes it too.
-
-    One `git log` for the whole repo rather than one per file (as `_git_first_commit_iso`
-    does): a debate page needs every contribution anyway, and the per-file variant costs
-    one subprocess each.
-
-    Merge commits are not walked into (`--name-only` lists nothing for them). Content
-    repos are written by a single process and are linear, so there are none; a merge would
-    merely leave the pre-merge hash in place, never a wrong one.
     """
 
     repo_dir = pjoin(repo_host_dir, debate_key)
-    if not os.path.isdir(pjoin(repo_dir, ".git")):
-        return {}
-
-    try:
-        result = subprocess.run(
-            ["git", "log", "--format=%H", "--name-only"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
-        return {}
-
-    if result.returncode != 0:
-        return {}
 
     hashes = {}
-    current_hash = None
     # newest commit first -> the first mention of a path is its most recent change
-    for line in result.stdout.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        if _git_sha_regex.match(line):
-            current_hash = line
-            continue
-        match = _ctb_rel_path_regex.match(line)
-        if match is None or current_hash is None:
-            # repo-level files (README.md, data.toml, ...) and anything not shaped like a
-            # contribution are none of this function's business
-            continue
-        ctb_key = match.group(2)
-        if ctb_key in hashes:
-            continue
-        if not os.path.isfile(pjoin(repo_dir, line)):
-            # the file was deleted later; there is nothing on the page to label with it
-            continue
-        hashes[ctb_key] = current_hash
+    for commit_hash, _, rel_paths in _read_git_log(repo_dir):
+        for rel_path in rel_paths:
+            match = _ctb_rel_path_regex.match(rel_path)
+            if match is None:
+                # repo-level files (README.md, data.toml, ...) and anything not shaped
+                # like a contribution are none of this function's business
+                continue
+            ctb_key = match.group(2)
+            if ctb_key in hashes:
+                continue
+            if not os.path.isfile(pjoin(repo_dir, rel_path)):
+                # the file was deleted later; there is nothing left to label with it
+                continue
+            hashes[ctb_key] = commit_hash
 
     return hashes
+
+
+def debate_commit_log(repo_host_dir: str, debate_key: str) -> list[dict]:
+    """
+    The commit chain of a debate repo, newest first, for display.
+
+    :return:    list of {"hash", "timestamp", "contribution_keys"}; empty on any failure
+
+    `contribution_keys` names the contributions a commit touched, in the order git
+    reports them. Unlike `contribution_commit_hashes` this does NOT drop keys whose file
+    was later deleted: the chain is meant to show what happened, and a removal is part of
+    that. Commits that touched no contribution at all (the initial commit with the repo's
+    README, for instance) are kept with an empty list -- leaving gaps in a chain that is
+    shown as evidence would be the wrong kind of tidiness.
+    """
+
+    repo_dir = pjoin(repo_host_dir, debate_key)
+
+    commit_log = []
+    for commit_hash, timestamp, rel_paths in _read_git_log(repo_dir):
+        ctb_keys = []
+        for rel_path in rel_paths:
+            match = _ctb_rel_path_regex.match(rel_path)
+            if match is not None:
+                ctb_keys.append(match.group(2))
+        commit_log.append(
+            {"hash": commit_hash, "timestamp": timestamp, "contribution_keys": ctb_keys}
+        )
+
+    return commit_log
 
 
 def unpack_repos(target_dir):

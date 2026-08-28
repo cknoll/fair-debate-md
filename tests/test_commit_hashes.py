@@ -14,7 +14,7 @@ import subprocess
 import pytest
 
 import fair_debate_md as fdmd
-from fair_debate_md.core import DBContribution, contribution_commit_hashes
+from fair_debate_md.core import DBContribution, contribution_commit_hashes, debate_commit_log
 
 
 pjoin = os.path.join
@@ -153,3 +153,67 @@ def test_contribution_commit_hashes_without_repo_returns_empty(tmp_path, debate_
     os.makedirs(pjoin(host_dir, "plain-dir"))
 
     assert contribution_commit_hashes(host_dir, debate_key) == {}
+
+
+def test_debate_commit_log_is_newest_first_with_timestamps(tmp_path):
+    host_dir = str(tmp_path)
+    _make_debate_repo(host_dir)
+
+    sha_a = fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+    sha_b = fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a1b", "::a1b1 Reply b."))
+
+    log = debate_commit_log(host_dir, "d-hashes")
+
+    # newest first: reply, root, then the repo's initial commit
+    chain = [entry["hash"] for entry in log]
+    assert chain[:2] == [sha_b, sha_a]
+    assert len(log) == 3
+
+    assert log[0]["contribution_keys"] == ["a1b"]
+    assert log[1]["contribution_keys"] == ["a"]
+    # the initial commit carries only README.md -- kept, but with no contribution
+    assert log[2]["contribution_keys"] == []
+
+    for entry in log:
+        assert entry["timestamp"].startswith("20"), entry["timestamp"]
+
+
+def test_debate_commit_log_groups_a_multi_contribution_commit(tmp_path):
+    host_dir = str(tmp_path)
+    _make_debate_repo(host_dir)
+
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First. ::a2 Second."))
+    sha = fdmd.commit_ctb_list(
+        host_dir,
+        "d-hashes",
+        [DBContribution("a1b", "::a1b1 Reply one."), DBContribution("a2b", "::a2b1 Reply two.")],
+    )
+
+    newest = debate_commit_log(host_dir, "d-hashes")[0]
+    assert newest["hash"] == sha
+    assert sorted(newest["contribution_keys"]) == ["a1b", "a2b"]
+
+
+def test_debate_commit_log_keeps_deleted_contributions(tmp_path):
+    """
+    Unlike the hash map: a chain shown as evidence must not quietly omit a removal.
+    """
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a1b", "::a1b1 Reply b."))
+    _git(repo_dir, "rm", "-q", "b/a1b.md")
+    _git(repo_dir, "commit", "-q", "-m", "remove a1b")
+
+    log = debate_commit_log(host_dir, "d-hashes")
+    assert log[0]["contribution_keys"] == ["a1b"], "the removal commit still names the file"
+    assert "a1b" not in contribution_commit_hashes(host_dir, "d-hashes")
+
+
+@pytest.mark.parametrize("debate_key", ["does-not-exist", "plain-dir"])
+def test_debate_commit_log_without_repo_returns_empty(tmp_path, debate_key):
+    host_dir = str(tmp_path)
+    os.makedirs(pjoin(host_dir, "plain-dir"))
+
+    assert debate_commit_log(host_dir, debate_key) == []
