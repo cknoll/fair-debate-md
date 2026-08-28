@@ -80,13 +80,20 @@ class TestCases1(unittest.TestCase):
         with open(debug_fpath, "w") as fp:
             fp.write(result)
 
-    def _unpack_d00_explanatory_example_debate_repo(self, patches=False):
+    def _build_repo_with_process_content_dir(self, patches=False):
+        """
+        Run the `process-content-dir` command on a frozen miniature source (see
+        `testdata/process_content_dir__plain/README.md`).
+
+        This used to run on `d00-explanatory-example-debate__plain`, which meant every
+        edit of that user-facing text broke tests comparing trees and markup literally.
+        d00 is no longer built this way either -- it has its own build script.
+        """
         import shutil
 
-        repo_key = "d00-explanatory-example-debate"
+        repo_key = "d99-process-content-dir-demo"
         tempdir_path = self._mk_temp_dir()
-        # content_path = pjoin(FIXTURE_DIR, "repo-preparation", f"{repo_key}__plain")
-        self.content_path = pjoin("__FIXTURES_RP__", f"{repo_key}__plain")
+        self.content_path = pjoin(TESTDATA_DIR, "process_content_dir__plain")
         target_dir_path = pjoin(tempdir_path, repo_key)
         shutil.rmtree(target_dir_path, ignore_errors=True)
 
@@ -111,12 +118,14 @@ class TestCases1(unittest.TestCase):
 
     def test_011__add_keys_to_md(self):
 
-        repo_path = self._unpack_d00_explanatory_example_debate_repo(patches=True)
+        repo_path = self._build_repo_with_process_content_dir(patches=True)
         repo_parent_path = os.path.dirname(repo_path)
-        ddl = fdmd.load_repo(repo_parent_path, debate_key="d00-explanatory-example-debate", new_debate=False)
+        ddl = fdmd.load_repo(
+            repo_parent_path, debate_key=os.path.basename(repo_path), new_debate=False
+        )
         self.assertIn("This is an answer to statement", ddl.final_html)
 
-        self.assertIn("<code>a14</code>", ddl.final_html)
+        self.assertIn("<code>a3</code>", ddl.final_html)
 
     def test_013__handle_abbreviations(self):
 
@@ -285,9 +294,10 @@ class TestCases1(unittest.TestCase):
         expected_result = TEST_REPO1_EXPECTED_TREE
         self.assertEqual(res, expected_result)
 
-    def test_070__cli_unpack_repos(self):
-        # TODO: improve this test such that its adaption to content updates is easier (or unnecessary)
-        repo_path = self._unpack_d00_explanatory_example_debate_repo()
+    def test_070__cli_process_content_dir(self):
+        # runs on the frozen miniature source, so the expected trees below stay valid
+        # however often the user-facing fixture debates are rewritten
+        repo_path = self._build_repo_with_process_content_dir()
 
         # Force byte-order sorting (LC_ALL=C.UTF-8) for deterministic `tree` output.
         res = (
@@ -297,13 +307,14 @@ class TestCases1(unittest.TestCase):
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a.md\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n"
-            "│   └── a14b6a.md\n└── b\n    ├── a14b.md\n    ├── a15b.md\n    └── a20b.md\n\n3 directories, 7 files\n"
+            ".\n├── a\n│   ├── a.md\n│   └── a3b2a.md\n└── b\n    └── a3b.md\n"
+            "\n3 directories, 3 files\n"
         )
 
         self.assertEqual(res, expected_tree)
 
-        repo_path = self._unpack_d00_explanatory_example_debate_repo(patches=True)
+        # with --patches: one commit per nesting level, plus the patch files
+        repo_path = self._build_repo_with_process_content_dir(patches=True)
         res = (
             fdmd.utils.get_cmd_output(f"tree {repo_path}", extra_env={"LC_ALL": "C.UTF-8"})
             .replace(repo_path, ".")
@@ -311,11 +322,10 @@ class TestCases1(unittest.TestCase):
         )  # replace strange space
 
         expected_tree = (
-            ".\n├── a\n│   ├── a.md\n│   ├── a14b12a.md\n│   ├── a14b15a.md\n│   └── a14b6a.md\n├── b\n"
-            "│   ├── a14b.md\n│   ├── a15b.md\n│   └── a20b.md\n"
+            ".\n├── a\n│   ├── a.md\n│   └── a3b2a.md\n├── b\n│   └── a3b.md\n"
             "└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
             "├── 0002-automatic-contribution.patch\n    "
-            "└── 0003-automatic-contribution.patch\n\n4 directories, 10 files\n"
+            "└── 0003-automatic-contribution.patch\n\n4 directories, 6 files\n"
         )
 
         self.assertEqual(res, expected_tree)
