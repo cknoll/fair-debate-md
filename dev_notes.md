@@ -63,3 +63,38 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
   explicitly not a db column, which the repo alone would not carry.
   Still to be decided when (1)/(2) land: whether the existing fixtures are rebuilt under
   the new version or pinned to the old one.
+
+
+## whitespace around inline elements (backlog, added 2026-08-28)
+
+Surfaced while rewriting the `d00-explanatory-example-debate` fixture, whose text
+mentions a lot of contribution keys and therefore hits the case in almost every
+sentence. Concerns `SpanAdder.convert_soup_to_final_html()` in `core.py` (called with
+`prettify=True` from `MDProcessor.convert()`, ~line 394).
+
+- [] **inline elements get a space before the following punctuation.**
+  `soup.prettify()` puts every tag on a line of its own, and the browser renders that
+  line break as a space. Source:
+
+      Their statements are keyed `a1`, `a2` and so on.
+
+  delivered html:
+
+      Their statements are keyed
+      <code>a1</code>
+      ,
+      <code>a2</code>
+      and so on.
+
+  rendered: `Their statements are keyed a1 , a2 and so on.` -- with a space before the
+  comma. The same happens after `<em>`/`<strong>` and before a full stop. Affects every
+  debate, not just this fixture.
+
+  Worth knowing before touching it: the rendered segment text is what
+  `get_rendered_word_offsets()` (`references.py`) aligns raw words against, and its
+  docstring names prettify-injected whitespace explicitly as one of the cases the global
+  alignment is built to survive. Removing that whitespace should make its job easier
+  rather than harder, but it shifts the offsets of every existing segment, and some
+  tests in `test_word_offsets.py` compare offsets literally. Also to be checked: whether
+  anything besides readability of the delivered html depends on `prettify` at all -- if
+  not, dropping it may be cheaper than post-processing it away.
