@@ -796,13 +796,59 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
         msg = f"add contributions:\n{contributions}"
 
     author = repo_handling.get_author(debate_key, ctb.author_role)
-    commit = repo.index.commit(message=msg, author=author)
+    commit_sha = _commit_index(repo, repo_dir, msg, author)
 
     # keep the repo cloneable over HTTP; a stale server info would make a clone deliver an
     # older state without saying so
     prepare_repo_for_serving(repo_dir)
 
-    return commit.hexsha
+    return commit_sha
+
+
+def _commit_index(repo, repo_dir: str, msg: str, author, settings=None) -> str:
+    """
+    Commit what is staged, signed when this instance has a signing key.
+
+    :return:    hex sha of the new commit
+
+    Goes through the git CLI instead of `repo.index.commit()` because GitPython cannot
+    produce a signature: `IndexFile.commit()` has no parameter for one, and it builds the
+    commit object itself rather than calling git. (It *can* carry one -- `Commit.__init__`
+    takes `gpgsig` and `_serialize` writes it -- so the gap is only in creating it; see
+    `gitPythonSigningFeatureRequest.md`.)
+
+    The signing key is passed per call rather than stored in the repo's config: it is the
+    one setting that depends on the machine, and a wrong path in a repo config would abort
+    every commit there. Identity settings do live in the repo config, written by
+    `repo_handling.apply_platform_identity()`.
+
+    Without a configured key the commit is simply unsigned -- running this library must
+    not require a secret.
+    """
+
+    if settings is None:
+        settings = repo_handling.platform_settings
+
+    repo_handling.apply_platform_identity(repo_dir, settings)
+
+    config_args = []
+    if settings.signing_key_path:
+        config_args = [
+            "-c",
+            f"user.signingkey={settings.signing_key_path}",
+            "-c",
+            "commit.gpgsign=true",
+        ]
+
+    # `repo.git.execute` with the full argv, because the `-c` options belong to git
+    # itself and have to precede the subcommand -- `repo.git.commit(...)` could only
+    # place them after it. Errors surface as GitCommandError: a commit that fails must
+    # not pass silently, the caller is about to report a publication as done.
+    repo.git.execute(
+        ["git", *config_args, "commit", "-m", msg,
+         f"--author={author.name} <{author.email}>", "--no-verify"]
+    )
+    return repo.head.commit.hexsha
 
 
 # Above this many loose objects a repo is packed before it is served (see

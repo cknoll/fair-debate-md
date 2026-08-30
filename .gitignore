@@ -10,3 +10,6 @@ src/**/*debug*
 
 src/fair_debate_md/fixtures/repo-preparation/d00-explanatory-example-debate
 .orchester/
+
+# ssh keys never belong in this repo; the .pub half belongs in the fair-debate-web repo.
+commit_signing_key*

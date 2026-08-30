@@ -332,3 +332,94 @@ def test_prepare_repo_without_repo_is_silent(tmp_path, debate_key):
     os.makedirs(pjoin(host_dir, "plain-dir"))
 
     prepare_repo_for_serving(pjoin(host_dir, debate_key))
+
+
+def _make_signing_key(tmp_dir):
+    """A throwaway key, so the signing path is exercised without touching a real one."""
+    key_path = pjoin(tmp_dir, "test_signing_key")
+    subprocess.run(
+        ["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-C", "test", "-f", key_path],
+        check=True,
+        capture_output=True,
+    )
+    return key_path
+
+
+def _signature_states(repo_dir, allowed_signers=None):
+    """`%G?` per commit, newest first: G = good, U = unknown key, N = unsigned."""
+    args = ["git"]
+    if allowed_signers is not None:
+        args += ["-c", f"gpg.ssh.allowedSignersFile={allowed_signers}"]
+    res = subprocess.run(
+        args + ["log", "--format=%G?"], cwd=repo_dir, check=True, capture_output=True, text=True
+    )
+    return res.stdout.split()
+
+
+def test_commits_carry_the_platform_identity(tmp_path):
+    """
+    Without an explicit committer git falls back to the identity of the unix user running
+    the process -- which put a private address into every commit of every debate repo, and
+    those repos are downloadable. It is also the principal `.allowed_signers` names.
+    """
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+
+    res = subprocess.run(
+        ["git", "log", "--format=%cn|%ce|%an", "-1"],
+        cwd=repo_dir,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    committer_name, committer_email, author_name = res.stdout.strip().split("|")
+    settings = fdmd.repo_handling.platform_settings
+    assert committer_name == settings.committer_name
+    assert committer_email == settings.committer_email
+    # the author still names the contributing party -- that distinction is the point
+    assert author_name != committer_name
+
+
+def test_commits_are_signed_when_a_key_is_configured(tmp_path):
+    """
+    E4: a signature turns "a manipulation can be noticed" into "it can be proven". The
+    check runs through git itself with an allowed_signers file, because a signature that
+    is present but does not verify would be worthless and looks identical from Python.
+    """
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+    key_path = _make_signing_key(host_dir)
+
+    settings = fdmd.repo_handling.platform_settings
+    previous = settings.signing_key_path
+    settings.signing_key_path = key_path
+    try:
+        fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+        fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a1b", "::a1b1 Reply."))
+    finally:
+        settings.signing_key_path = previous
+
+    allowed = pjoin(host_dir, "allowed_signers")
+    with open(f"{key_path}.pub") as fp:
+        key_type, key_data = fp.read().split()[:2]
+    with open(allowed, "w") as fp:
+        fp.write(f"{settings.committer_email} {key_type} {key_data}\n")
+
+    states = _signature_states(repo_dir, allowed)
+    assert states[:2] == ["G", "G"], states
+    # the repo's initial commit predates the key and stays unsigned -- signing starts
+    # where it starts, it does not rewrite what came before
+    assert states[-1] == "N", states
+
+
+def test_commits_stay_unsigned_without_a_key(tmp_path):
+    """Running this library must not require a secret."""
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+    assert fdmd.repo_handling.platform_settings.signing_key_path is None
+
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+
+    assert _signature_states(repo_dir) == ["N", "N"]
