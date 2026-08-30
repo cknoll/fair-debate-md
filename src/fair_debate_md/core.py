@@ -797,7 +797,71 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
 
     author = repo_handling.get_author(debate_key, ctb.author_role)
     commit = repo.index.commit(message=msg, author=author)
+
+    # keep the repo cloneable over HTTP; a stale server info would make a clone deliver an
+    # older state without saying so
+    prepare_repo_for_serving(repo_dir)
+
     return commit.hexsha
+
+
+# Above this many loose objects a repo is packed before it is served (see
+# `prepare_repo_for_serving`). Deliberately our own threshold instead of `git gc --auto`:
+# that one estimates the loose-object count by sampling a single `objects/` bucket, which
+# at these repo sizes reports zero often enough that the packing never happens (measured
+# 2026-08-30 on d30-many-parties: 171 loose objects, `gc --auto` with gc.auto=50 did
+# nothing). `git count-objects` gives the exact number for about 2 ms.
+LOOSE_OBJECT_PACK_LIMIT = 50
+
+
+def prepare_repo_for_serving(repo_dir: str, loose_object_limit: int = LOOSE_OBJECT_PACK_LIMIT):
+    """
+    Make a debate repo cloneable over plain HTTP, and keep that cheap.
+
+    Called after every commit. Two steps, and the order matters -- packing rewrites what
+    the index has to describe:
+
+    1. `git gc` once the loose objects pile up. Serving happens over git's "dumb" HTTP
+       protocol, where the client fetches **every object with its own request**: 171 loose
+       objects meant 173 requests through Django, packing them cut that to a handful (and
+       684 KB to 24 KB, measured on d30-many-parties).
+    2. `git update-server-info`, which writes `info/refs` and `objects/info/packs`. A dumb
+       client has no git on the other end to compute those, so without them a clone fails
+       outright -- and, worse, a *stale* index makes the clone silently deliver an older
+       state. On an integrity page that is the ugliest failure mode there is: a reader
+       would not find the fingerprint they noted and conclude manipulation where only an
+       index was out of date. Hence after every commit, not on a schedule.
+
+    Failures stay silent, like everywhere else in this module: a repo that cannot be
+    prepared must not bring down the publishing action that just succeeded.
+    """
+
+    if not os.path.isdir(pjoin(repo_dir, ".git")):
+        return
+
+    try:
+        result = subprocess.run(
+            ["git", "count-objects", "-v"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        loose = 0
+        if result.returncode == 0:
+            for line in result.stdout.splitlines():
+                if line.startswith("count: "):
+                    loose = int(line.split()[1])
+                    break
+
+        if loose > loose_object_limit:
+            subprocess.run(["git", "gc", "-q"], cwd=repo_dir, capture_output=True, timeout=300)
+
+        subprocess.run(
+            ["git", "update-server-info"], cwd=repo_dir, capture_output=True, timeout=30
+        )
+    except (FileNotFoundError, OSError, ValueError, subprocess.TimeoutExpired):
+        return
 
 
 def write_ctb_to_file(repo_dir: str, ctb: DBContribution):

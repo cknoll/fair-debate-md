@@ -19,6 +19,7 @@ from fair_debate_md.core import (
     contribution_commit_hashes,
     debate_bundle,
     debate_commit_log,
+    prepare_repo_for_serving,
 )
 
 
@@ -271,3 +272,63 @@ def test_debate_bundle_without_repo_returns_empty(tmp_path, debate_key):
     os.makedirs(pjoin(host_dir, "plain-dir"))
 
     assert debate_bundle(host_dir, debate_key) == b""
+
+
+def test_committing_keeps_the_http_server_info_current(tmp_path):
+    """
+    The reason this runs after every commit rather than on a schedule: a dumb HTTP client
+    reads `info/refs` as written, so a stale one makes a clone deliver an OLDER state
+    without failing. On the integrity page that is the worst failure mode available -- a
+    reader would not find the fingerprint they noted and conclude manipulation.
+    """
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+    info_refs = pjoin(repo_dir, ".git", "info", "refs")
+    assert os.path.isfile(info_refs), "a clone cannot find any ref without this file"
+    assert _head(repo_dir) in open(info_refs).read()
+
+    # ... and it follows along, instead of freezing at the first commit
+    sha_b = fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a1b", "::a1b1 Reply b."))
+    assert sha_b in open(info_refs).read()
+
+
+def test_prepare_repo_packs_once_loose_objects_pile_up(tmp_path):
+    """
+    Every loose object costs the cloning client its own HTTP request; packing them turns
+    a few hundred requests into a handful. The threshold is ours because `git gc --auto`
+    samples one object bucket and reports zero at these repo sizes.
+    """
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 One. ::a2 Two. ::a3 Three."))
+    for ctb_key in ["a1b", "a2c", "a3d", "a1e"]:
+        fdmd.commit_ctb(host_dir, "d-hashes", DBContribution(ctb_key, f"::{ctb_key}1 Reply."))
+
+    def loose_count():
+        res = subprocess.run(
+            ["git", "count-objects", "-v"], cwd=repo_dir, capture_output=True, text=True
+        )
+        return int(res.stdout.split("count: ")[1].split()[0])
+
+    assert loose_count() > 0, "the commits above should leave loose objects behind"
+
+    # below the limit nothing is packed -- gc on every commit would be wasted work
+    prepare_repo_for_serving(repo_dir, loose_object_limit=10_000)
+    assert loose_count() > 0
+
+    prepare_repo_for_serving(repo_dir, loose_object_limit=0)
+    assert loose_count() == 0, "above the limit the objects move into a pack"
+    assert os.path.isfile(pjoin(repo_dir, ".git", "objects", "info", "packs"))
+    # packing must not lose anything the page displays
+    assert len(debate_commit_log(host_dir, "d-hashes")) == 6
+
+
+@pytest.mark.parametrize("debate_key", ["does-not-exist", "plain-dir"])
+def test_prepare_repo_without_repo_is_silent(tmp_path, debate_key):
+    """A repo that cannot be prepared must not bring down the publishing that succeeded."""
+    host_dir = str(tmp_path)
+    os.makedirs(pjoin(host_dir, "plain-dir"))
+
+    prepare_repo_for_serving(pjoin(host_dir, debate_key))
