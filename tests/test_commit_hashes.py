@@ -360,7 +360,7 @@ def test_commits_carry_the_platform_identity(tmp_path):
     """
     Without an explicit committer git falls back to the identity of the unix user running
     the process -- which put a private address into every commit of every debate repo, and
-    those repos are downloadable. It is also the principal `.allowed_signers` names.
+    those repos are downloadable. It is also the principal `allowed_signers` names.
     """
     host_dir = str(tmp_path)
     repo_dir = _make_debate_repo(host_dir)

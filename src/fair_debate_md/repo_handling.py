@@ -21,7 +21,7 @@ class PlatformSettings:
     `committer_*` matters beyond cosmetics. Without it git falls back to the identity of
     the unix user running the process -- which put a private address into every commit of
     every debate repo, and those repos are downloadable since `/d/<key>/bundle` exists.
-    It is also the principal a repo's `.allowed_signers` names, so two instances writing
+    It is also the principal a repo's `allowed_signers` names, so two instances writing
     into the same repos must agree on it or verification stops.
 
     The default domain is `.invalid` (reserved for this purpose by RFC 2606): an
