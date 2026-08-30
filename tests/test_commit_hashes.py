@@ -19,8 +19,8 @@ from fair_debate_md.core import (
     contribution_commit_hashes,
     debate_bundle,
     debate_commit_log,
-    prepare_repo_for_serving,
 )
+from fair_debate_md.repo_handling import prepare_repo_for_serving
 
 
 pjoin = os.path.join
@@ -423,3 +423,105 @@ def test_commits_stay_unsigned_without_a_key(tmp_path):
     fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
 
     assert _signature_states(repo_dir) == ["N", "N"]
+
+
+def test_a_new_repo_ships_allowed_signers_in_its_first_commit(tmp_path):
+    """
+    Without this file a reader who clones the repo cannot verify anything -- git refuses
+    with "gpg.ssh.allowedSignersFile needs to be configured". Shipping it inside the repo
+    turns the check into two commands and no key hunting.
+
+    It has to be COMMITTED, not merely present: an untracked file travels with neither
+    `git clone` nor `debate_bundle()`.
+    """
+    host_dir = str(tmp_path)
+    key_path = _make_signing_key(host_dir)
+
+    settings = fdmd.repo_handling.platform_settings
+    previous = settings.signing_key_path
+    settings.signing_key_path = key_path
+    try:
+        repo_dir = _make_debate_repo(host_dir, debate_key="d-signed")
+        fdmd.commit_ctb(host_dir, "d-signed", DBContribution("a", "::a1 First."))
+    finally:
+        settings.signing_key_path = previous
+
+    signers_path = pjoin(repo_dir, "allowed_signers")
+    assert os.path.isfile(signers_path)
+
+    tracked = subprocess.run(
+        ["git", "ls-files", "allowed_signers"], cwd=repo_dir, capture_output=True, text=True
+    )
+    assert tracked.stdout.strip() == "allowed_signers", "must be committed, not just present"
+
+    # ... and it actually verifies the repo's own commits, which is the whole point
+    assert _signature_states(repo_dir, signers_path)[0] == "G"
+
+
+def test_without_a_key_no_allowed_signers_is_written(tmp_path):
+    """A file naming no key would only mislead."""
+    host_dir = str(tmp_path)
+    assert fdmd.repo_handling.platform_settings.signing_key_path is None
+    repo_dir = _make_debate_repo(host_dir)
+
+    assert not os.path.exists(pjoin(repo_dir, "allowed_signers"))
+
+
+def test_the_commit_log_can_report_the_signature_status(tmp_path):
+    """
+    What the integrity page shows per commit. It verifies against the repo's own
+    `allowed_signers` -- the same file a reader who clones will use.
+    """
+    host_dir = str(tmp_path)
+    key_path = _make_signing_key(host_dir)
+
+    settings = fdmd.repo_handling.platform_settings
+    previous = settings.signing_key_path
+    settings.signing_key_path = key_path
+    try:
+        _make_debate_repo(host_dir, debate_key="d-signed")
+        fdmd.commit_ctb(host_dir, "d-signed", DBContribution("a", "::a1 First."))
+    finally:
+        settings.signing_key_path = previous
+
+    log = debate_commit_log(host_dir, "d-signed", with_signature_status=True)
+    assert [entry["signature"] for entry in log] == ["G", "G"]
+
+    # off by default: verifying costs a signature check per commit, and only one page
+    # displays it
+    plain = debate_commit_log(host_dir, "d-signed")
+    assert all(entry["signature"] == "" for entry in plain)
+
+
+def test_unsigned_commits_are_reported_as_such(tmp_path):
+    host_dir = str(tmp_path)
+    _make_debate_repo(host_dir)
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+
+    log = debate_commit_log(host_dir, "d-hashes", with_signature_status=True)
+    assert [entry["signature"] for entry in log] == ["N", "N"]
+
+
+def test_the_signing_key_fingerprint_is_available(tmp_path):
+    """Shown on the integrity page and written into the hash export, so a reader can tell
+    later whether the key changed."""
+    host_dir = str(tmp_path)
+    key_path = _make_signing_key(host_dir)
+
+    settings = fdmd.repo_handling.platform_settings
+    previous = settings.signing_key_path
+    settings.signing_key_path = key_path
+    try:
+        fingerprint = fdmd.repo_handling.signing_key_fingerprint()
+    finally:
+        settings.signing_key_path = previous
+
+    assert fingerprint.startswith("SHA256:")
+    expected = subprocess.run(
+        ["ssh-keygen", "-lf", key_path], capture_output=True, text=True, check=True
+    )
+    assert fingerprint in expected.stdout
+
+    settings.signing_key_path = None
+    assert fdmd.repo_handling.signing_key_fingerprint() == ""
+    settings.signing_key_path = previous

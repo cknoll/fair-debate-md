@@ -796,118 +796,13 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
         msg = f"add contributions:\n{contributions}"
 
     author = repo_handling.get_author(debate_key, ctb.author_role)
-    commit_sha = _commit_index(repo, repo_dir, msg, author)
+    commit_sha = repo_handling.commit_index(repo, repo_dir, msg, author)
 
     # keep the repo cloneable over HTTP; a stale server info would make a clone deliver an
     # older state without saying so
-    prepare_repo_for_serving(repo_dir)
+    repo_handling.prepare_repo_for_serving(repo_dir)
 
     return commit_sha
-
-
-def _commit_index(repo, repo_dir: str, msg: str, author, settings=None) -> str:
-    """
-    Commit what is staged, signed when this instance has a signing key.
-
-    :return:    hex sha of the new commit
-
-    Goes through the git CLI instead of `repo.index.commit()` because GitPython cannot
-    produce a signature: `IndexFile.commit()` has no parameter for one, and it builds the
-    commit object itself rather than calling git. (It *can* carry one -- `Commit.__init__`
-    takes `gpgsig` and `_serialize` writes it -- so the gap is only in creating it; see
-    `gitPythonSigningFeatureRequest.md`.)
-
-    The signing key is passed per call rather than stored in the repo's config: it is the
-    one setting that depends on the machine, and a wrong path in a repo config would abort
-    every commit there. Identity settings do live in the repo config, written by
-    `repo_handling.apply_platform_identity()`.
-
-    Without a configured key the commit is simply unsigned -- running this library must
-    not require a secret.
-    """
-
-    if settings is None:
-        settings = repo_handling.platform_settings
-
-    repo_handling.apply_platform_identity(repo_dir, settings)
-
-    config_args = []
-    if settings.signing_key_path:
-        config_args = [
-            "-c",
-            f"user.signingkey={settings.signing_key_path}",
-            "-c",
-            "commit.gpgsign=true",
-        ]
-
-    # `repo.git.execute` with the full argv, because the `-c` options belong to git
-    # itself and have to precede the subcommand -- `repo.git.commit(...)` could only
-    # place them after it. Errors surface as GitCommandError: a commit that fails must
-    # not pass silently, the caller is about to report a publication as done.
-    repo.git.execute(
-        ["git", *config_args, "commit", "-m", msg,
-         f"--author={author.name} <{author.email}>", "--no-verify"]
-    )
-    return repo.head.commit.hexsha
-
-
-# Above this many loose objects a repo is packed before it is served (see
-# `prepare_repo_for_serving`). Deliberately our own threshold instead of `git gc --auto`:
-# that one estimates the loose-object count by sampling a single `objects/` bucket, which
-# at these repo sizes reports zero often enough that the packing never happens (measured
-# 2026-08-30 on d30-many-parties: 171 loose objects, `gc --auto` with gc.auto=50 did
-# nothing). `git count-objects` gives the exact number for about 2 ms.
-LOOSE_OBJECT_PACK_LIMIT = 50
-
-
-def prepare_repo_for_serving(repo_dir: str, loose_object_limit: int = LOOSE_OBJECT_PACK_LIMIT):
-    """
-    Make a debate repo cloneable over plain HTTP, and keep that cheap.
-
-    Called after every commit. Two steps, and the order matters -- packing rewrites what
-    the index has to describe:
-
-    1. `git gc` once the loose objects pile up. Serving happens over git's "dumb" HTTP
-       protocol, where the client fetches **every object with its own request**: 171 loose
-       objects meant 173 requests through Django, packing them cut that to a handful (and
-       684 KB to 24 KB, measured on d30-many-parties).
-    2. `git update-server-info`, which writes `info/refs` and `objects/info/packs`. A dumb
-       client has no git on the other end to compute those, so without them a clone fails
-       outright -- and, worse, a *stale* index makes the clone silently deliver an older
-       state. On an integrity page that is the ugliest failure mode there is: a reader
-       would not find the fingerprint they noted and conclude manipulation where only an
-       index was out of date. Hence after every commit, not on a schedule.
-
-    Failures stay silent, like everywhere else in this module: a repo that cannot be
-    prepared must not bring down the publishing action that just succeeded.
-    """
-
-    if not os.path.isdir(pjoin(repo_dir, ".git")):
-        return
-
-    try:
-        result = subprocess.run(
-            ["git", "count-objects", "-v"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-        loose = 0
-        if result.returncode == 0:
-            for line in result.stdout.splitlines():
-                if line.startswith("count: "):
-                    loose = int(line.split()[1])
-                    break
-
-        if loose > loose_object_limit:
-            subprocess.run(["git", "gc", "-q"], cwd=repo_dir, capture_output=True, timeout=300)
-
-        subprocess.run(
-            ["git", "update-server-info"], cwd=repo_dir, capture_output=True, timeout=30
-        )
-    except (FileNotFoundError, OSError, ValueError, subprocess.TimeoutExpired):
-        return
 
 
 def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
@@ -949,9 +844,10 @@ _ctb_rel_path_regex = re.compile(r"^([a-z]+)/([a-z0-9]+)\.md$")
 _git_log_header_regex = re.compile(r"^([0-9a-f]{40})\t(.+)$")
 
 
-def _read_git_log(repo_dir: str) -> list[tuple[str, str, list[str]]]:
+def _read_git_log(repo_dir: str, with_signature_status: bool = False) -> list[tuple]:
     """
-    The repo's commits, newest first, as (hash, author date ISO-8601, changed paths).
+    The repo's commits, newest first, as (hash, author date ISO-8601, changed paths) --
+    plus git's one-letter signature status as a fourth field when asked for.
 
     :return:    list of tuples; empty on any failure (no git repo, git not installed,
                 unreadable repo)
@@ -960,6 +856,13 @@ def _read_git_log(repo_dir: str) -> list[tuple[str, str, list[str]]]:
     `_git_first_commit_iso` does): both callers below want the complete picture anyway,
     and the per-file variant costs one subprocess each.
 
+    `with_signature_status` is off by default because verifying costs a signature check
+    per commit, and only the integrity page displays it. It verifies against the repo's
+    own `allowed_signers`, which is what a reader who clones will use as well -- but note
+    that the server is then checking a signature against a file it wrote itself. That says
+    the signature is intact, not that the key is trustworthy; the latter can only be
+    settled outside this server.
+
     Merge commits arrive with an empty path list (`--name-only` does not walk into them).
     Content repos are written by a single process and are linear, so there are none.
     """
@@ -967,11 +870,20 @@ def _read_git_log(repo_dir: str) -> list[tuple[str, str, list[str]]]:
     if not os.path.isdir(pjoin(repo_dir, ".git")):
         return []
 
+    log_format = "%H%x09%aI"
+    config_args = []
+    if with_signature_status:
+        log_format += "%x09%G?"
+        config_args = [
+            "-c",
+            f"gpg.ssh.allowedSignersFile={pjoin(repo_dir, repo_handling.ALLOWED_SIGNERS_FILENAME)}",
+        ]
+
     try:
         result = subprocess.run(
-            # the tab separator cannot occur in either field, so the header line is
+            # the tab separator cannot occur in any field, so the header line is
             # unambiguous even next to a path
-            ["git", "log", "--format=%H%x09%aI", "--name-only"],
+            ["git", *config_args, "log", f"--format={log_format}", "--name-only"],
             cwd=repo_dir,
             capture_output=True,
             text=True,
@@ -990,7 +902,10 @@ def _read_git_log(repo_dir: str) -> list[tuple[str, str, list[str]]]:
             continue
         match = _git_log_header_regex.match(line)
         if match is not None:
-            commits.append((match.group(1), match.group(2), []))
+            fields = match.group(2).split("\t")
+            timestamp = fields[0]
+            status = fields[1] if len(fields) > 1 else ""
+            commits.append((match.group(1), timestamp, [], status))
         elif commits:
             commits[-1][2].append(line)
 
@@ -1017,7 +932,7 @@ def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str,
 
     hashes = {}
     # newest commit first -> the first mention of a path is its most recent change
-    for commit_hash, _, rel_paths in _read_git_log(repo_dir):
+    for commit_hash, _, rel_paths, _status in _read_git_log(repo_dir):
         for rel_path in rel_paths:
             match = _ctb_rel_path_regex.match(rel_path)
             if match is None:
@@ -1035,11 +950,14 @@ def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str,
     return hashes
 
 
-def debate_commit_log(repo_host_dir: str, debate_key: str) -> list[dict]:
+def debate_commit_log(
+    repo_host_dir: str, debate_key: str, with_signature_status: bool = False
+) -> list[dict]:
     """
     The commit chain of a debate repo, newest first, for display.
 
-    :return:    list of {"hash", "timestamp", "contribution_keys"}; empty on any failure
+    :return:    list of {"hash", "timestamp", "contribution_keys", "signature"};
+                empty on any failure
 
     `contribution_keys` names the contributions a commit touched, in the order git
     reports them. Unlike `contribution_commit_hashes` this does NOT drop keys whose file
@@ -1052,14 +970,24 @@ def debate_commit_log(repo_host_dir: str, debate_key: str) -> list[dict]:
     repo_dir = pjoin(repo_host_dir, debate_key)
 
     commit_log = []
-    for commit_hash, timestamp, rel_paths in _read_git_log(repo_dir):
+    for commit_hash, timestamp, rel_paths, signature in _read_git_log(
+        repo_dir, with_signature_status=with_signature_status
+    ):
         ctb_keys = []
         for rel_path in rel_paths:
             match = _ctb_rel_path_regex.match(rel_path)
             if match is not None:
                 ctb_keys.append(match.group(2))
         commit_log.append(
-            {"hash": commit_hash, "timestamp": timestamp, "contribution_keys": ctb_keys}
+            {
+                "hash": commit_hash,
+                "timestamp": timestamp,
+                "contribution_keys": ctb_keys,
+                # git's own one-letter verdict: G good, U untrusted key, N unsigned,
+                # B/E/X/Y/R for the various ways a signature can be broken. "" when the
+                # status was not requested.
+                "signature": signature,
+            }
         )
 
     return commit_log

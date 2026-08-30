@@ -83,9 +83,122 @@ def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, st
             fp.write(content)
         repo.index.add(fname)
 
+    # into the initial commit, next to the README: that commit carries repo metadata and
+    # no debate content yet, so this is where a file describing the repo belongs. It also
+    # means readers get it from the very first commit onwards instead of finding it added
+    # somewhere in the middle of a debate's history.
+    if write_allowed_signers(repo_dir):
+        repo.index.add(ALLOWED_SIGNERS_FILENAME)
+
     msg = "first commit"
     author = get_author(name="fair debate system")
-    repo.index.commit(message=msg, author=author)
+    # through `commit_index`, not `repo.index.commit`, so this commit is signed like every
+    # other one. It is the commit carrying README and allowed_signers -- the files the
+    # whole verification rests on; leaving exactly those unsigned would be backwards.
+    commit_index(repo, repo_dir, msg, author)
+
+
+ALLOWED_SIGNERS_FILENAME = "allowed_signers"
+
+
+def build_allowed_signers_content(settings: PlatformSettings = None) -> str:
+    """
+    The `allowed_signers` line for this instance's signing key, or "" without one.
+
+    Format is OpenSSH's, and it differs from a `.pub` file -- the principal replaces the
+    trailing comment:
+
+        .pub:             ssh-ed25519 AAAA...  <comment>
+        allowed_signers:  <principal> ssh-ed25519 AAAA...
+
+    The principal is the committer address, because that is what git matches a commit
+    signature against.
+
+    The public half is derived from the private key with `ssh-keygen -y` rather than read
+    from a neighbouring `.pub`: the configured path points at the private key, and a
+    `.pub` beside it may or may not exist (it does not survive every way of moving a key
+    around). Deriving it is one subprocess and cannot disagree with the key actually used.
+    """
+
+    if settings is None:
+        settings = platform_settings
+    if not settings.signing_key_path:
+        return ""
+
+    try:
+        result = subprocess.run(
+            ["ssh-keygen", "-y", "-f", settings.signing_key_path],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return ""
+    if result.returncode != 0:
+        return ""
+
+    parts = result.stdout.split()
+    if len(parts) < 2:
+        return ""
+    key_type, key_data = parts[0], parts[1]
+
+    return f"{settings.committer_email} {key_type} {key_data}\n"
+
+
+def signing_key_fingerprint(settings: PlatformSettings = None) -> str:
+    """
+    The `SHA256:...` fingerprint of this instance's signing key, or "" without one.
+
+    Short enough to print on a page and to keep in a saved export, so a reader can tell
+    later whether the key changed -- which is the cheap half of what a public key
+    publication buys (konzept_manipulationssicherheit.md, E4).
+    """
+
+    if settings is None:
+        settings = platform_settings
+    if not settings.signing_key_path:
+        return ""
+
+    try:
+        result = subprocess.run(
+            ["ssh-keygen", "-lf", settings.signing_key_path],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return ""
+    if result.returncode != 0:
+        return ""
+
+    for part in result.stdout.split():
+        if part.startswith("SHA256:"):
+            return part
+    return ""
+
+
+def write_allowed_signers(repo_dir: str, settings: PlatformSettings = None) -> bool:
+    """
+    Put this instance's `allowed_signers` into a repo, so a reader who clones it can
+    verify the signatures without hunting for the key first.
+
+    :return:    True if the file was written
+
+    Does not commit -- the caller decides when that happens. It has to *become* committed
+    eventually though: an untracked file travels with neither `git clone` nor the bundle,
+    and would then help nobody.
+
+    Deliberately not hidden behind a leading dot: this is the file readers are supposed to
+    find, and a dotfile does not show up in a plain `ls`.
+    """
+
+    content = build_allowed_signers_content(settings)
+    if not content:
+        return False
+
+    with open(pjoin(repo_dir, ALLOWED_SIGNERS_FILENAME), "w") as fp:
+        fp.write(content)
+    return True
 
 
 def apply_platform_identity(repo_dir: str, settings: PlatformSettings = None):
@@ -122,6 +235,111 @@ def apply_platform_identity(repo_dir: str, settings: PlatformSettings = None):
             )
         except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
             return
+
+
+def commit_index(repo, repo_dir: str, msg: str, author, settings: PlatformSettings = None) -> str:
+    """
+    Commit what is staged, signed when this instance has a signing key.
+
+    :return:    hex sha of the new commit
+
+    Goes through the git CLI instead of `repo.index.commit()` because GitPython cannot
+    produce a signature: `IndexFile.commit()` has no parameter for one, and it builds the
+    commit object itself rather than calling git. (It *can* carry one -- `Commit.__init__`
+    takes `gpgsig` and `_serialize` writes it -- so the gap is only in creating it; see
+    `gitPythonSigningFeatureRequest.md`.)
+
+    The signing key is passed per call rather than stored in the repo's config: it is the
+    one setting that depends on the machine, and a wrong path in a repo config would abort
+    every commit there. Identity settings do live in the repo config, written by
+    `apply_platform_identity()`.
+
+    Without a configured key the commit is simply unsigned -- running this library must
+    not require a secret.
+    """
+
+    if settings is None:
+        settings = platform_settings
+
+    apply_platform_identity(repo_dir, settings)
+
+    config_args = []
+    if settings.signing_key_path:
+        config_args = [
+            "-c",
+            f"user.signingkey={settings.signing_key_path}",
+            "-c",
+            "commit.gpgsign=true",
+        ]
+
+    # `repo.git.execute` with the full argv, because the `-c` options belong to git
+    # itself and have to precede the subcommand -- `repo.git.commit(...)` could only
+    # place them after it. Errors surface as GitCommandError: a commit that fails must
+    # not pass silently, the caller is about to report a publication as done.
+    repo.git.execute(
+        ["git", *config_args, "commit", "-m", msg,
+         f"--author={author.name} <{author.email}>", "--no-verify"]
+    )
+    return repo.head.commit.hexsha
+
+
+# Above this many loose objects a repo is packed before it is served (see
+# `prepare_repo_for_serving`). Deliberately our own threshold instead of `git gc --auto`:
+# that one estimates the loose-object count by sampling a single `objects/` bucket, which
+# at these repo sizes reports zero often enough that the packing never happens (measured
+# 2026-08-30 on d30-many-parties: 171 loose objects, `gc --auto` with gc.auto=50 did
+# nothing). `git count-objects` gives the exact number for about 2 ms.
+LOOSE_OBJECT_PACK_LIMIT = 50
+
+
+def prepare_repo_for_serving(repo_dir: str, loose_object_limit: int = LOOSE_OBJECT_PACK_LIMIT):
+    """
+    Make a debate repo cloneable over plain HTTP, and keep that cheap.
+
+    Called after every commit. Two steps, and the order matters -- packing rewrites what
+    the index has to describe:
+
+    1. `git gc` once the loose objects pile up. Serving happens over git's "dumb" HTTP
+       protocol, where the client fetches **every object with its own request**: 171 loose
+       objects meant 173 requests through Django, packing them cut that to a handful (and
+       684 KB to 24 KB, measured on d30-many-parties).
+    2. `git update-server-info`, which writes `info/refs` and `objects/info/packs`. A dumb
+       client has no git on the other end to compute those, so without them a clone fails
+       outright -- and, worse, a *stale* index makes the clone silently deliver an older
+       state. On an integrity page that is the ugliest failure mode there is: a reader
+       would not find the fingerprint they noted and conclude manipulation where only an
+       index was out of date. Hence after every commit, not on a schedule.
+
+    Failures stay silent, like everywhere else in this module: a repo that cannot be
+    prepared must not bring down the publishing action that just succeeded.
+    """
+
+    if not os.path.isdir(pjoin(repo_dir, ".git")):
+        return
+
+    try:
+        result = subprocess.run(
+            ["git", "count-objects", "-v"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        loose = 0
+        if result.returncode == 0:
+            for line in result.stdout.splitlines():
+                if line.startswith("count: "):
+                    loose = int(line.split()[1])
+                    break
+
+        if loose > loose_object_limit:
+            subprocess.run(["git", "gc", "-q"], cwd=repo_dir, capture_output=True, timeout=300)
+
+        subprocess.run(
+            ["git", "update-server-info"], cwd=repo_dir, capture_output=True, timeout=30
+        )
+    except (FileNotFoundError, OSError, ValueError, subprocess.TimeoutExpired):
+        return
 
 
 def get_author(debate_key: str = None, author_role: str = None, name: str = None):
