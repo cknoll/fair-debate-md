@@ -1,0 +1,34 @@
+From aa39146129379b371ebd1afdfb113b0eb8b28468 Mon Sep 17 00:00:00 2001
+From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
+Date: Tue, 25 Aug 2026 09:00:00 +0200
+Subject: [PATCH 06/11] add contribution a/a19b7a.md
+
+---
+ a/a19b7a.md | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 a/a19b7a.md
+
+diff --git a/a/a19b7a.md b/a/a19b7a.md
+new file mode 100644
+index 0000000..d7e522f
+--- /dev/null
++++ b/a/a19b7a.md
+@@ -0,0 +1,14 @@
++### ::a19b7a1 An example
++
++::a19b7a2 Consider a debate with three parties.
++
++- ::a19b7a3 Party `a` opens it. ::a19b7a4 Their statements are keyed `a1`, `a2` and so on.
++- ::a19b7a5 Party `b` disagrees with two points. ::a19b7a6 They answer statement 7 with a contribution keyed `a7b`, and statement 10 with another one keyed `a10b`. ::a19b7a7 The statements inside those contributions are keyed `a7b1`, `a7b2` and `a10b1`, `a10b2`. ::a19b7a8 Note that a contribution key ends with a letter, a statement key with a number.
++- ::a19b7a9 Party `c` joins, reads the exchange and answers statement 4 of `a7b`. ::a19b7a10 Their contribution is `a7b4c`.
++- ::a19b7a11 Party `a` returns to clear up a misunderstanding in the second statement of that answer, which produces `a7b4c2a`.
++
++::a19b7a12 A key is a path. ::a19b7a13 Read from left to right it names every step from the opening contribution down to the answer in front of you, which is why no answer can be detached from what it responds to.
++
++### ::a19b7a14 Why this is worth the trouble
++
++::a19b7a15 A discussion becomes granular. ::a19b7a16 A single point can be addressed precisely, and a disagreement can be followed down to the level where it actually starts — often an assumption that neither side had stated. ::a19b7a17 Meanwhile the wider context is never lost, because every contribution stays anchored where it belongs. ::a19b7a18 And since every statement has a key, referring to something precisely costs nothing.
+\ No newline at end of file
+-- 
+2.39.5
+

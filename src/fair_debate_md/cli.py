@@ -4,6 +4,7 @@ Command line interface for fair_debate_md
 
 import argparse
 from . import core
+from . import debate_builder
 from .release import __version__
 
 from ipydex import IPS, activate_ips_on_exception
@@ -28,11 +29,42 @@ def main():
         "--patches", help="flag whether or not to create patches", action="store_true"
     )
 
+    parser_c = subparsers.add_parser(
+        "build-debate-repo",
+        help="build a content repo from a debate written as a single md file",
+    )
+    parser_c.add_argument("source", type=str, help="the md file holding the whole debate")
+    parser_c.add_argument(
+        "--patches-into",
+        metavar="DIR",
+        type=str,
+        help="where to write the patch collection (default: ./<debate_key>/patches_01)",
+    )
+    parser_c.add_argument(
+        "--repo-into",
+        metavar="DIR",
+        type=str,
+        help="keep the built repo here instead of building it in a temporary dir",
+    )
+    parser_c.add_argument(
+        "--into-fixtures",
+        action="store_true",
+        help="write the patches into the fixture dir of the installed fair_debate_md "
+        "(this is how a fixture debate is updated)",
+    )
+
     args = parser.parse_args()
 
     if args.cmd == "unpack-repos":
         core.unpack_repos(args.target_dir)
     elif args.cmd == "process-content-dir":
         core.process_content_dir(args.content_dir, args.target_dir, convert_to_patches=args.patches)
+    elif args.cmd == "build-debate-repo":
+        debate_builder.build_debate_repo(
+            args.source,
+            patches_into=args.patches_into,
+            repo_into=args.repo_into,
+            into_fixtures=args.into_fixtures,
+        )
     else:
         print("nothing to do, see option `--help` for more info")

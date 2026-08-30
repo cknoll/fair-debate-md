@@ -1,0 +1,21 @@
+From 9a4c6b883400ff43e51bf27c444f28e2898cc5ab Mon Sep 17 00:00:00 2001
+From: Questioner <d00-explanatory-example-debate_c@fair-debate-users.org>
+Date: Mon, 24 Aug 2026 23:00:00 +0200
+Subject: [PATCH 04/11] add contribution c/a14c.md
+
+---
+ c/a14c.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 c/a14c.md
+
+diff --git a/c/a14c.md b/c/a14c.md
+new file mode 100644
+index 0000000..fc1d73c
+--- /dev/null
++++ b/c/a14c.md
+@@ -0,0 +1 @@
++::a14c1 And that is me. ::a14c2 I ask the questions that a text written by a platform about itself tends to leave out.
+\ No newline at end of file
+-- 
+2.39.5
+

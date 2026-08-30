@@ -1,0 +1,23 @@
+From e6a913841705e1eff9daa46e4df11612e32b7a48 Mon Sep 17 00:00:00 2001
+From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
+Date: Wed, 26 Aug 2026 10:00:00 +0200
+Subject: [PATCH 11/11] add contribution a/a16a.md
+
+---
+ a/a16a.md | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 a/a16a.md
+
+diff --git a/a/a16a.md b/a/a16a.md
+new file mode 100644
+index 0000000..c18299e
+--- /dev/null
++++ b/a/a16a.md
+@@ -0,0 +1,3 @@
++::a16a1 This contribution demonstrates exactly that. ::a16a2 It was written by party `a` and it answers a statement of party `a`, and such a self-answer is marked as one, so that nobody mistakes it for a reply by somebody else.
++
++::a16a3 It also does what the statement above describes. ::a16a4 By the time it was written, two further parties had answered the opening text — which that text could not have mentioned, having been published before them. ::a16a5 Rather than editing it afterwards and pretending it had known all along, the addition arrives here, as a contribution of its own, with its own place in the commit chain.
+\ No newline at end of file
+-- 
+2.39.5
+

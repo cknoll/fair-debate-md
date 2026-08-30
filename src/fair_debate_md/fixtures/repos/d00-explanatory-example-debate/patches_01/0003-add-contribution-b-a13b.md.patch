@@ -1,0 +1,21 @@
+From dbdcebdd746d2342d7e01a7cb80a4edc834a6d92 Mon Sep 17 00:00:00 2001
+From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
+Date: Mon, 24 Aug 2026 18:00:00 +0200
+Subject: [PATCH 03/11] add contribution b/a13b.md
+
+---
+ b/a13b.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 b/a13b.md
+
+diff --git a/b/a13b.md b/b/a13b.md
+new file mode 100644
+index 0000000..b9d8b72
+--- /dev/null
++++ b/b/a13b.md
+@@ -0,0 +1 @@
++::a13b1 That is me. ::a13b2 Where the opening text is too brief, I take it apart and add what it skips.
+\ No newline at end of file
+-- 
+2.39.5
+

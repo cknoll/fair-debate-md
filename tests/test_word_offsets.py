@@ -379,6 +379,27 @@ def all_fixture_debates(tmp_path_factory):
     }
 
 
+@pytest.fixture(scope="module")
+def backslash_escape_debate(tmp_path_factory):
+    """
+    A miniature debate written for one purpose: a raw word carrying backslash escapes.
+
+    The case used to be taken from `d00-explanatory-example-debate`, where the escapes
+    were an artifact of the markdownify round trip that had produced that text -- they
+    disappeared when the debate was rewritten from hand-written sources, and with them
+    the only occurrence in any fixture. Since the point is a property of the renderer,
+    not of any debate's content, the input belongs here rather than in a text that is
+    written for readers.
+    """
+    debate_key = "d98-backslash-escape-demo"
+    debate_dir = tmp_path_factory.mktemp("word-offsets-escape") / debate_key
+    (debate_dir / "a").mkdir(parents=True)
+    (debate_dir / "a" / "a.md").write_text(
+        "::a1 Persistent in\\-context\\-answers are the point of it.\n"
+    )
+    return fdmd.load_dir(str(debate_dir), debate_key=debate_key)
+
+
 def _segment_texts(ddl):
     """Map every segment key of `ddl` to its delivered `textContent`."""
     soup = BeautifulSoup(ddl.final_html, "html.parser")
@@ -562,24 +583,23 @@ class TestWordOffsetsKnownNonExactCategories:
     text, which the exclusion criterion already accounts for.
     """
 
-    def test_backslash_escape_word_maps_to_unescaped_slice(self, all_fixture_debates):
+    def test_backslash_escape_word_maps_to_unescaped_slice(self, backslash_escape_debate):
         """
-        Segment "a3" of "d00-explanatory-example-debate" has raw word 2
+        Segment "a1" of the miniature escape debate has raw word 2
         "in\\-context\\-answers" (with literal backslashes escaping the
         hyphens -- markdown syntax for a literal "-"). The renderer strips
         the backslashes on output, so the offsets correctly point at the
         unescaped rendered text; the slice differs from the raw word by
         design, not by bug.
         """
-        ddl = all_fixture_debates["d00-explanatory-example-debate"]
+        ddl = backslash_escape_debate
         owner_by_segment_key = _owner_mdp_by_segment_key(ddl)
-        words = get_segment_words(owner_by_segment_key["a3"].md_with_real_keys, "a3")
+        words = get_segment_words(owner_by_segment_key["a1"].md_with_real_keys, "a1")
         assert words[1] == "in\\-context\\-answers"
 
-        text = _segment_texts(ddl)["a3"]
-        pairs = _pairs(ddl.word_offsets["a3"])
+        text = _segment_texts(ddl)["a1"]
+        pairs = _pairs(ddl.word_offsets["a1"])
         start, end = pairs[1]
-        assert (start, end) == (16, 34)
         assert text[start:end] == "in-context-answers"
 
     def test_thematic_break_word_maps_to_null_interval(self, all_fixture_debates):
