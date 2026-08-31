@@ -1033,14 +1033,25 @@ def debate_bundle(repo_host_dir: str, debate_key: str) -> bytes:
     return result.stdout
 
 
-def unpack_repos(target_dir):
+def unpack_repos(target_dir, demo_only: bool = False):
     """
-    Unpack predefined fixture repos
+    Unpack predefined fixture repos.
+
+    :param demo_only:   restrict to `fixtures.DEMO_DEBATE_KEYS` -- what a deployment
+                        wants. The default rolls out everything, which is what the test
+                        suites need. See the comment on that constant for the reason.
     """
     target_dir = os.path.abspath(target_dir)
     from . import repo_handling, fixtures
 
     repo_dirs = os.listdir(fixtures.TEST_REPO_HOST_DIR)
+    if demo_only:
+        repo_dirs = [name for name in repo_dirs if name in fixtures.DEMO_DEBATE_KEYS]
+        missing = set(fixtures.DEMO_DEBATE_KEYS) - set(repo_dirs)
+        if missing:
+            # a typo in the constant would otherwise deploy an instance with less content
+            # than intended and say nothing about it
+            raise ValueError(f"DEMO_DEBATE_KEYS names debates without a repo: {sorted(missing)}")
     repo_dirs.sort()
     for repo_dir_name in repo_dirs:
         repo_dir_path = pjoin(fixtures.TEST_REPO_HOST_DIR, repo_dir_name)

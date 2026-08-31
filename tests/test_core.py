@@ -359,6 +359,50 @@ class TestCases1(unittest.TestCase):
 
 
 
+class TestDemoOnlyRollout(unittest.TestCase):
+    """
+    A deployment must not roll out the whole fixture collection.
+
+    All eleven exist for the test suites and none can be deleted -- every one is named by
+    a test here or in the web app. But rolling out all of them put `d1-lorem_ipsum` and
+    three debates called "test_debate" onto the public instance, so `unpack_repos` can
+    restrict itself to `fixtures.DEMO_DEBATE_KEYS`.
+    """
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp(prefix="fdmd-demo-rollout-")
+
+    def tearDown(self):
+        fdmd.utils.tolerant_rmtree(self.tmpdir)
+
+    def test_010__demo_only_rolls_out_exactly_the_declared_debates(self):
+        target = pjoin(self.tmpdir, "content_repos")
+        fdmd.unpack_repos(target, demo_only=True)
+
+        self.assertEqual(sorted(os.listdir(target)), sorted(fdmd.fixtures.DEMO_DEBATE_KEYS))
+
+    def test_020__the_default_still_rolls_out_everything(self):
+        # the test suites depend on it, so the restriction must not become the default
+        target = pjoin(self.tmpdir, "content_repos")
+        fdmd.unpack_repos(target)
+
+        self.assertEqual(
+            sorted(os.listdir(target)), sorted(os.listdir(fdmd.fixtures.TEST_REPO_HOST_DIR))
+        )
+
+    def test_030__a_demo_key_without_a_repo_is_an_error(self):
+        # silently deploying an instance with less content than intended is the failure
+        # this guards against -- a typo in the constant would do exactly that
+        original = fdmd.fixtures.DEMO_DEBATE_KEYS
+        fdmd.fixtures.DEMO_DEBATE_KEYS = original + ("d99-does-not-exist",)
+        try:
+            with self.assertRaises(ValueError) as ctx:
+                fdmd.unpack_repos(pjoin(self.tmpdir, "content_repos"), demo_only=True)
+            self.assertIn("d99-does-not-exist", str(ctx.exception))
+        finally:
+            fdmd.fixtures.DEMO_DEBATE_KEYS = original
+
+
 class TestSignedRollout(unittest.TestCase):
     """
     `rollout_patches` is where a patch collection becomes a repository, so it is the only
