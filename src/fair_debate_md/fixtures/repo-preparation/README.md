@@ -44,6 +44,9 @@ with its own `dNN` key, not a variant of another one:
 
 - `d00-explanatory-example-debate__plain/source.md` -- the debate a first-time visitor is
   pointed to (english).
+- `d34-pazifismus-ukraine__plain/source.md` -- german, argumentative: a role play between
+  two fictional persons on pacifism and the war in Ukraine, both referring to one podcast
+  episode. Eleven contributions along three threads, deliberately unresolved.
 
 Until 2026-08 that fixture was built by `fdmd process-content-dir` from one file per
 contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):

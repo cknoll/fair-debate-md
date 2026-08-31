@@ -1,0 +1,26 @@
+From d178bd0268197998923c529f5ec0deb3953b2290 Mon Sep 17 00:00:00 2001
+From: Nicht-Pazifistische Person
+ <d34-pazifismus-ukraine_b@fair-debate-users.org>
+Date: Sat, 4 Jul 2026 14:10:00 +0200
+Subject: [PATCH 06/12] add contribution b/a34b.md
+
+---
+ b/a34b.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 b/a34b.md
+
+diff --git a/b/a34b.md b/b/a34b.md
+new file mode 100644
+index 0000000..ae2eeee
+--- /dev/null
++++ b/b/a34b.md
+@@ -0,0 +1,5 @@
++::a34b1 Diesem Satz stimme ich sogar zu, und ich finde es richtig, dass Sie auf dieses Risiko hinweisen.
++
++::a34b2 Je öfter man würfelt, desto größer die Wahrscheinlichkeit, dass irgendwann die Sechs fällt. ::a34b3 Über einen langen Zeitraum nähert sich diese Wahrscheinlichkeit der Gewissheit. ::a34b4 Dass es vierzig Jahre gut gegangen ist, beweist nichts über die nächsten vierzig.
++
++::a34b5 Nur trägt Ihr Argument die Schlussfolgerung nicht, die Sie daraus ziehen. ::a34b6 Die Kubakrise und der Fall Petrow konnten sich ereignen, ohne dass irgendjemand Waffen an eine angegriffene Nation lieferte. ::a34b7 Das Risiko entsteht daraus, dass es diese Waffen gibt und dass die Systeme fehleranfällig sind. ::a34b8 Es besteht in Friedenszeiten genauso. ::a34b9 Ob wir liefern oder nicht liefern, ändert daran nichts.
+\ No newline at end of file
+-- 
+2.39.5
+
