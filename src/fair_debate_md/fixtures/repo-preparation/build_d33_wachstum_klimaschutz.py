@@ -27,7 +27,8 @@ What this fixture adds to the existing ones:
 Structure: role-token `a` is the editorial frame (topic, context, the disputed question,
 and three further anchor sentences), `b` is the economist, `c` is the journalist.
 
-Why a script instead of `fdmd process-content-dir` -- see the module docstring of
+Why a script instead of the (since removed) `fdmd process-content-dir` -- see the
+module docstring of
 `build_d31_ice_cream.py`; the reasoning is identical.
 
 To change the content, edit the files under

@@ -20,15 +20,6 @@ def main():
 
     parser_a = subparsers.add_parser("unpack-repos", help="unpack repos from fixtures")
     parser_a.add_argument("target_dir", type=str, help="target dir to unpack repos to")
-    parser_b = subparsers.add_parser(
-        "process-content-dir", help="convert a directory with plain md into md-files with keys"
-    )
-    parser_b.add_argument("content_dir", type=str, help="dir of content to process")
-    parser_b.add_argument("target_dir", type=str, help="target dir (where to create the repo)")
-    parser_b.add_argument(
-        "--patches", help="flag whether or not to create patches", action="store_true"
-    )
-
     parser_c = subparsers.add_parser(
         "build-debate-repo",
         help="build a content repo from a debate written as a single md file",
@@ -57,8 +48,6 @@ def main():
 
     if args.cmd == "unpack-repos":
         core.unpack_repos(args.target_dir)
-    elif args.cmd == "process-content-dir":
-        core.process_content_dir(args.content_dir, args.target_dir, convert_to_patches=args.patches)
     elif args.cmd == "build-debate-repo":
         debate_builder.build_debate_repo(
             args.source,

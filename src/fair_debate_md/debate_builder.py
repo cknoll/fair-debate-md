@@ -73,7 +73,8 @@ far; it must match exactly one, otherwise the build aborts and lists the candida
 Rewording a contribution therefore does not move the anchors of its answers, and a quote
 that no longer matches says so instead of silently anchoring the answer somewhere else.
 
-The predecessor of this tool, `fdmd process-content-dir`, kept every contribution in a
+The predecessor of this tool, `fdmd process-content-dir` (removed 2026-08-31), kept
+every contribution in a
 file of its own and encoded the anchor in its name (`b/a14b.md` answers segment 14 of
 `a`), so every inserted sentence forced a rename cascade; it also alternated between two
 authors by nesting level, which made a third party impossible.
@@ -101,6 +102,8 @@ import re
 import shutil
 import subprocess
 import tempfile
+
+from git import Actor, Repo
 
 from . import repo_handling
 from .core import MDProcessor, split_front_matter
@@ -317,41 +320,36 @@ def build_debate_repo(
     keys = {}       # label -> contribution key
     anchor_of = {}  # label -> the text this contribution answers
 
-    def git(*argv, env_extra=None):
-        env = dict(os.environ)
-        env.update(env_extra or {})
-        subprocess.run(["git", *argv], cwd=repo_dir, check=True, env=env,
+    def run_git(*argv):
+        subprocess.run(["git", *argv], cwd=repo_dir, check=True,
                        stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
-    # The party is the AUTHOR of a contribution, the platform is its COMMITTER -- the same
-    # split `commit_index()` makes for a live publication, so a built repo and a published
-    # one describe authorship the same way. Before this, the party was both, which made the
-    # fixtures the only repos claiming that a debate participant had operated the platform.
-    settings = repo_handling.platform_settings
-
     def commit(message, name, email, date):
-        stamp = date.isoformat()
-        # signed when a key is configured, so `--repo-into` yields a repo that verifies.
-        # It changes nothing about the patches: `git format-patch` carries neither the
-        # committer nor the signature, which is why `rollout_patches()` has to sign again.
-        config_args = []
-        if settings.signing_key_path:
-            config_args = [
-                "-c", f"user.signingkey={settings.signing_key_path}",
-                "-c", "gpg.format=ssh",
-                "-c", "commit.gpgsign=true",
-            ]
-        git(*config_args, "commit", "-m", message, env_extra={
-            "GIT_AUTHOR_NAME": name, "GIT_AUTHOR_EMAIL": email, "GIT_AUTHOR_DATE": stamp,
-            "GIT_COMMITTER_NAME": settings.committer_name,
-            "GIT_COMMITTER_EMAIL": settings.committer_email,
-            "GIT_COMMITTER_DATE": stamp,
-        })
+        """
+        One commit, through the same function a live publication goes through.
 
-    git("init", "-b", "main")
+        Not a local `git commit`: identity and signing then had to be spelled out twice,
+        in two places that must agree but nothing keeps in step -- exactly how
+        `create_repo()` once ended up leaving the initial commit of every repo unsigned.
+        `commit_index()` decides both, so this only supplies what is specific here.
+
+        Specific here is the date -- a fixture invents its chronology, a live publication
+        does not -- and it goes in through the environment, which is git's own way of
+        overriding it and needs no parameter on the shared function. The party is the
+        AUTHOR, the platform is the COMMITTER, which is the split `commit_index()` makes
+        anyway; before this the party was both, so the fixtures were the only repos
+        claiming that a debate participant had operated the platform.
+        """
+
+        stamp = date.isoformat()
+        with repo.git.custom_environment(GIT_AUTHOR_DATE=stamp, GIT_COMMITTER_DATE=stamp):
+            repo_handling.commit_index(repo, repo_dir, message, Actor(name=name, email=email))
+
+    run_git("init", "-b", "main")
+    repo = Repo(repo_dir)
     with open(pjoin(repo_dir, "README.md"), "w") as fp:
         fp.write(README.format(debate_key=debate_key))
-    git("add", "README.md")
+    run_git("add", "README.md")
     commit("first commit", "fair debate system", "fair_debate_system@fair-debate-users.org",
            first_commit)
 
@@ -382,7 +380,7 @@ def build_debate_repo(
 
         when = into_active_hours(when + scaled_gap(len(body), gap_min, gap_max), active_hours)
 
-        git("add", rel_path)
+        run_git("add", rel_path)
         commit(f"add contribution {rel_path}",
                party_names[party],
                f"{debate_key}_{party}@fair-debate-users.org",
@@ -390,7 +388,7 @@ def build_debate_repo(
 
     shutil.rmtree(patches_into, ignore_errors=True)
     os.makedirs(patches_into, exist_ok=True)
-    git("format-patch", "--root", "-o", patches_into)
+    run_git("format-patch", "--root", "-o", patches_into)
 
     def level(key):
         return len(re.findall(r"[a-z]+[0-9]*", key)) - 1

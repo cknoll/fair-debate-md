@@ -82,32 +82,22 @@ class TestCases1(unittest.TestCase):
         with open(debug_fpath, "w") as fp:
             fp.write(result)
 
-    def _build_repo_with_process_content_dir(self, patches=False):
+    def _build_demo_repo(self):
         """
-        Run the `process-content-dir` command on a frozen miniature source (see
-        `testdata/process_content_dir__plain/README.md`).
+        Build the frozen miniature debate (see `testdata/builder_demo_source_README.md`).
 
-        This used to run on `d00-explanatory-example-debate__plain`, which meant every
-        edit of that user-facing text broke tests comparing trees and markup literally.
-        d00 is no longer built this way either -- it has its own build script.
+        Frozen on purpose: the assertions below compare rendered markup literally, and
+        they once ran on the explanatory example debate, so every edit to that
+        user-facing text broke them.
         """
-        import shutil
 
-        repo_key = "d99-process-content-dir-demo"
-        tempdir_path = self._mk_temp_dir()
-        self.content_path = pjoin(TESTDATA_DIR, "process_content_dir__plain")
-        target_dir_path = pjoin(tempdir_path, repo_key)
-        shutil.rmtree(target_dir_path, ignore_errors=True)
-
-        if patches:
-            flag = " --patches"
-        else:
-            flag = ""
-        cmd = f"fdmd process-content-dir {self.content_path} {target_dir_path}{flag}"
-        return_value = os.system(cmd)
-        self.assertEqual(return_value, 0)  # check that command exited without error
-
-        return target_dir_path
+        repo_dir = pjoin(self._mk_temp_dir(), "d99-builder-demo")
+        fdmd.debate_builder.build_debate_repo(
+            pjoin(TESTDATA_DIR, "builder_demo_source.md"),
+            repo_into=repo_dir,
+            patches_into=pjoin(self._mk_temp_dir(), "patches"),
+        )
+        return repo_dir
 
     def test_012__add_keys_to_md(self):
 
@@ -120,7 +110,7 @@ class TestCases1(unittest.TestCase):
 
     def test_011__add_keys_to_md(self):
 
-        repo_path = self._build_repo_with_process_content_dir(patches=True)
+        repo_path = self._build_demo_repo()
         repo_parent_path = os.path.dirname(repo_path)
         ddl = fdmd.load_repo(
             repo_parent_path, debate_key=os.path.basename(repo_path), new_debate=False
@@ -295,42 +285,6 @@ class TestCases1(unittest.TestCase):
 
         expected_result = TEST_REPO1_EXPECTED_TREE
         self.assertEqual(res, expected_result)
-
-    def test_070__cli_process_content_dir(self):
-        # runs on the frozen miniature source, so the expected trees below stay valid
-        # however often the user-facing fixture debates are rewritten
-        repo_path = self._build_repo_with_process_content_dir()
-
-        # Force byte-order sorting (LC_ALL=C.UTF-8) for deterministic `tree` output.
-        res = (
-            fdmd.utils.get_cmd_output(f"tree {repo_path}", extra_env={"LC_ALL": "C.UTF-8"})
-            .replace(repo_path, ".")
-            .replace("\xa0", " ")
-        )  # replace strange space
-
-        expected_tree = (
-            ".\n├── a\n│   ├── a.md\n│   └── a3b2a.md\n└── b\n    └── a3b.md\n"
-            "\n3 directories, 3 files\n"
-        )
-
-        self.assertEqual(res, expected_tree)
-
-        # with --patches: one commit per nesting level, plus the patch files
-        repo_path = self._build_repo_with_process_content_dir(patches=True)
-        res = (
-            fdmd.utils.get_cmd_output(f"tree {repo_path}", extra_env={"LC_ALL": "C.UTF-8"})
-            .replace(repo_path, ".")
-            .replace("\xa0", " ")
-        )  # replace strange space
-
-        expected_tree = (
-            ".\n├── a\n│   ├── a.md\n│   └── a3b2a.md\n├── b\n│   └── a3b.md\n"
-            "└── patches_01\n    ├── 0001-automatic-contribution.patch\n    "
-            "├── 0002-automatic-contribution.patch\n    "
-            "└── 0003-automatic-contribution.patch\n\n4 directories, 6 files\n"
-        )
-
-        self.assertEqual(res, expected_tree)
 
     def test_080_a(self):
         _TEST_CASES = [

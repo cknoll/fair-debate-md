@@ -13,7 +13,7 @@ has realistic text lengths and a realistic answer structure -- 10 parties, 26
 contributions, only 5 of the root segments answered, roughly half of the answers
 one or two paragraphs long, and one spine reaching level 8.
 
-Why a script instead of `fdmd process-content-dir`:
+Why a script instead of `fdmd process-content-dir` (removed 2026-08-31):
 
 * the answer structure has to be expressed somewhere. A contribution key encodes
   which *segment* it answers (`a4b` = party b answers segment `a4`), and segment

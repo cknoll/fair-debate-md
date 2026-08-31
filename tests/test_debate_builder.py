@@ -3,7 +3,7 @@ Tests for `fdmd build-debate-repo` / `fair_debate_md.debate_builder`.
 
 The sources here are miniature and written for the test: the fixture debates are
 user-facing texts and get rewritten, so asserting on their content would tie these tests
-to editorial decisions (see `testdata/process_content_dir__plain/README.md`).
+to editorial decisions (see `testdata/builder_demo_source_README.md`).
 """
 
 import os

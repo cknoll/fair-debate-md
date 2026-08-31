@@ -55,21 +55,29 @@ the sources.
 ## Debate-specific build scripts
 
 `d31-ice-cream__plain` is built by `build_d31_ice_cream.py`, because that fixture needs a
-nesting structure and per-party commits which `process-content-dir` did not provide. See
-the module docstring there.
+nesting structure and per-party commits which the old `process-content-dir` did not
+provide. See the module docstring there.
 
 `d33-wachstum-klimaschutz__plain` follows the same pattern (`build_d33_wachstum_klimaschutz.py`).
 It is the only German-language fixture and the only one with real argumentative content: a
 reconstruction of a radio debate on economic growth vs. climate protection. Its anchors are
 still segment indices, so its build script prints, for every contribution, the sentence it
-answers -- editing a plain source can shift the indices its children are anchored to. Both
-could move to `fdmd build-debate-repo` if their sources were converted to the single-file
-format.
+answers -- editing a plain source can shift the indices its children are anchored to.
+
+`d31` and `d33` could move to `fdmd build-debate-repo` if their sources were
+converted to the single-file format, which would remove their scripts entirely.
+`d32-overlapping-refs` could not: it exists to exercise segment ranges (`a3-6b`) and word
+ranges (`a7_7-12f`), and an `answers=` quote resolves to exactly one segment. The source
+format would have to grow a way of spelling a range first.
 
 
-## `fdmd process-content-dir`
+## Removed: `fdmd process-content-dir`
 
-`fdmd process-content-dir <plain-dir> <target-dir> [--patches]` still exists for a quick
-throwaway repo from a directory of plain files whose names are keys. Note that without
-`--patches` it only writes the keyed .md files: the git repo is created by the patch step,
-not by the conversion.
+Gone since 2026-08-31. It built a repo from a directory of plain files whose *names* were
+the anchors (`b/a14b.md` answers segment 14 of `a`), which forced a rename cascade on every
+inserted sentence and could only alternate between two parties -- it derived the author
+from the nesting level. Its last user, `d00`, moved to `build-debate-repo` in 2026-08, and
+after that the only thing it still built was its own test.
+
+`build-debate-repo` covers what it did, minus the file-name anchors. A one-off throwaway
+repo is a source file with a front matter header and one marker comment.
