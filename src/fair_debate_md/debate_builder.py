@@ -27,7 +27,8 @@ A yaml front matter header, followed by the contributions, separated by marker c
       a: Explainer
       b: Elaborator
     first_commit: 2026-08-24T08:00:00+02:00
-    hours_between_contributions: 5
+    hours_between_contributions: [4, 8]
+    active_hours: [8, 22]
     ---
 
     <!-- !!== label=root party=a ==== -->
@@ -41,8 +42,14 @@ A yaml front matter header, followed by the contributions, separated by marker c
 
 `parties` maps every role-token to the name the commits are authored with -- usually the
 username of the account holding that party on the instance. `language` is documentation
-only. `first_commit` dates the repo-creating commit, the contributions follow it in steps
-of `hours_between_contributions`.
+only. `first_commit` dates the repo-creating commit.
+
+`hours_between_contributions` is the gap to the previous commit: a single number is a
+fixed step, a `[min, max]` pair is scaled by the length of the contribution, so that a
+long text plausibly took its author longer than a one-liner. `active_hours` (optional)
+confines the commits to a daily window -- a gap that would land outside it is pushed to
+the next morning instead, which keeps a fixture from claiming that somebody published at
+four in the morning.
 
 Marker fields:
 
@@ -81,7 +88,11 @@ Traps when writing (the splitter splits at ":" and at every "."):
 * one paragraph must be one line -- a hard line break inside a paragraph puts the segment
   key on a line of its own;
 * a colon always starts a new segment, so use it only where a split is wanted;
-* abbreviations with dots ("e.g.", "i.e.") are torn apart -- write "for instance" instead.
+* three dots as an ellipsis fall apart into four segments ("(such as ...)" becomes
+  "(such as ." / "." / "." / ")") -- write the "…" character instead;
+* abbreviations with dots ("e.g.", "i.e.") are NOT a problem, contrary to what this
+  docstring claimed until 2026-08-31: `_is_abbreviation_dot()` in `key_management.py`
+  already keeps them in one segment. Do not reword a text around them.
 """
 
 import datetime
@@ -110,6 +121,36 @@ This repository contains statements which are part of a formalized debate.
 
 Visit <debate_url> to view this debate and <background_url> for background information.
 """
+
+
+# a contribution of this many characters gets the longest gap; longer ones are capped
+FULL_LENGTH = 1500
+
+
+def scaled_gap(text_len: int, gap_min: float, gap_max: float) -> datetime.timedelta:
+    """Time an author needed for a contribution: longer text, longer gap."""
+    share = min(1.0, text_len / FULL_LENGTH)
+    minutes = round((gap_min + (gap_max - gap_min) * share) * 60 / 5) * 5
+    return datetime.timedelta(minutes=minutes)
+
+
+def into_active_hours(when, window):
+    """
+    Move a timestamp into the daily window `(day_start, day_end)`, keeping its minutes.
+
+    Nobody publishes at four in the morning, and a fixture whose commit times say
+    otherwise looks made up -- which it is, but needlessly so. Too late in the evening
+    means the next morning; too early means later the same morning. Without a window
+    (`window is None`) the timestamp is left alone.
+    """
+    if window is None:
+        return when
+    day_start, day_end = window
+    if when.time() > datetime.time(day_end):
+        return (when + datetime.timedelta(days=1)).replace(hour=day_start)
+    if when.time() < datetime.time(day_start):
+        return when.replace(hour=day_start)
+    return when
 
 
 def normalize(text: str) -> str:
@@ -242,7 +283,10 @@ def build_debate_repo(
     first_commit = meta.get("first_commit", "2026-01-01T08:00:00+00:00")
     if isinstance(first_commit, str):
         first_commit = datetime.datetime.fromisoformat(first_commit)
-    step = datetime.timedelta(hours=float(meta.get("hours_between_contributions", 5)))
+    gap = meta.get("hours_between_contributions", 5)
+    # a scalar is a fixed step, a [min, max] pair is scaled by the length of the text
+    gap_min, gap_max = (gap, gap) if isinstance(gap, (int, float)) else (gap[0], gap[1])
+    active_hours = meta.get("active_hours")
 
     if into_fixtures:
         if patches_into is not None:
@@ -289,7 +333,8 @@ def build_debate_repo(
     commit("first commit", "fair debate system", "fair_debate_system@fair-debate-users.org",
            first_commit)
 
-    for i, (label, party, anchor_quote, body) in enumerate(contributions):
+    when = first_commit
+    for label, party, anchor_quote, body in contributions:
         if anchor_quote is None:
             ctb_key, anchor_key = party, ""
         else:
@@ -313,11 +358,13 @@ def build_debate_repo(
         with open(repo_path, "w") as fp:
             fp.write(keyed)
 
+        when = into_active_hours(when + scaled_gap(len(body), gap_min, gap_max), active_hours)
+
         git("add", rel_path)
         commit(f"add contribution {rel_path}",
                party_names[party],
                f"{debate_key}_{party}@fair-debate-users.org",
-               first_commit + (i + 1) * step)
+               when)
 
     shutil.rmtree(patches_into, ignore_errors=True)
     os.makedirs(patches_into, exist_ok=True)
