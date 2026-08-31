@@ -1,6 +1,7 @@
 import unittest
 import os
 from textwrap import dedent as twdd
+import subprocess
 import tempfile
 
 from bs4 import BeautifulSoup
@@ -401,6 +402,112 @@ class TestCases1(unittest.TestCase):
         _run_detect_tests()
 
 
+
+
+class TestSignedRollout(unittest.TestCase):
+    """
+    `rollout_patches` is where a patch collection becomes a repository, so it is the only
+    place that can decide the repo's identity and its signatures -- a patch carries
+    neither. Everything below used to be wrong silently: the committer was whoever ran
+    the rollout, nothing was signed, and the committer date was "now", so the same
+    content produced different hashes on every run.
+
+    The key is generated per test rather than taken from a fixture: a private key does
+    not belong in a repository, not even a throwaway one.
+    """
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp(prefix="fdmd-signed-rollout-")
+        self.key_path = pjoin(self.tmpdir, "test_key")
+        subprocess.run(
+            ["ssh-keygen", "-t", "ed25519", "-N", "", "-C", "fdmd test key",
+             "-f", self.key_path],
+            check=True, capture_output=True,
+        )
+        self.settings = fdmd.repo_handling.PlatformSettings()
+        self.settings.committer_name = "Test platform"
+        self.settings.committer_email = "platform@fair-debate.invalid"
+        self.settings.signing_key_path = self.key_path
+        self.patch_dir = pjoin(TEST_REPO1_DIR, "patches_01")
+
+    def tearDown(self):
+        fdmd.utils.tolerant_rmtree(self.tmpdir)
+
+    def _rollout(self, name):
+        repo_dir = pjoin(self.tmpdir, name)
+        fdmd.repo_handling.rollout_patches(
+            repo_dir=repo_dir, patch_dir=self.patch_dir, settings=self.settings
+        )
+        return repo_dir
+
+    def _git(self, repo_dir, args):
+        signers = pjoin(repo_dir, fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME)
+        return fdmd.utils.get_cmd_output(
+            f"git -C {repo_dir} -c gpg.ssh.allowedSignersFile={signers} {args}"
+        )
+
+    def test_010__every_commit_is_signed_and_verifies_in_place(self):
+        repo_dir = self._rollout("repo1")
+
+        # "G" is git's verdict for a good signature. Checked against the repo's OWN
+        # allowed_signers, which is what a reader who clones it has -- a signature that
+        # only verifies with something the platform keeps to itself proves nothing.
+        verdicts = set(self._git(repo_dir, "log --format=%G?").split())
+        self.assertEqual(verdicts, {"G"})
+
+    def test_020__allowed_signers_is_committed_first(self):
+        repo_dir = self._rollout("repo1")
+
+        # untracked it would travel with neither `git clone` nor the bundle; arriving
+        # mid-history it would leave the commits before it unverifiable
+        first_commit_files = self._git(repo_dir, "log --diff-filter=A --format= --name-only")
+        self.assertIn(fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME, first_commit_files.split())
+
+        root = self._git(repo_dir, "rev-list --max-parents=0 HEAD").strip()
+        root_files = self._git(repo_dir, f"show --format= --name-only {root}").split()
+        self.assertEqual(root_files, [fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME])
+
+    def test_030__the_platform_is_the_committer_and_the_party_is_the_author(self):
+        repo_dir = self._rollout("repo1")
+
+        committers = set(self._git(repo_dir, "log --format=%ce").split())
+        self.assertEqual(committers, {self.settings.committer_email})
+
+        # the debate authors survive from the patch headers; without that the rollout
+        # would flatten every party into the platform
+        authors = set(self._git(repo_dir, "log --format=%ae").split())
+        self.assertTrue(len(authors) > 1, authors)
+
+    def test_040__the_rollout_is_reproducible(self):
+        first = self._git(self._rollout("repo1"), "rev-parse HEAD").strip()
+        second = self._git(self._rollout("repo2"), "rev-parse HEAD").strip()
+
+        # differing hashes for identical content would make every deployment look like a
+        # rewritten history to anyone who noted one down. Before the committer date was
+        # tied to the author date, this failed.
+        self.assertEqual(first, second)
+
+    def test_050__the_signing_commit_is_not_younger_than_the_content(self):
+        repo_dir = self._rollout("repo1")
+
+        dates = self._git(repo_dir, "log --format=%ct").split()
+        # `git log` is newest-first, so the reversed list must not decrease
+        self.assertEqual(dates, sorted(dates, key=int, reverse=True))
+
+    def test_060__without_a_key_nothing_changes(self):
+        self.settings.signing_key_path = None
+        repo_dir = self._rollout("unsigned")
+
+        # running this library must not require a secret, so a keyless rollout keeps the
+        # old shape: no extra commit, no allowed_signers, no signature
+        self.assertFalse(
+            os.path.exists(pjoin(repo_dir, fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME))
+        )
+        root = fdmd.utils.get_cmd_output(f"git -C {repo_dir} rev-list --max-parents=0 HEAD").strip()
+        root_files = fdmd.utils.get_cmd_output(
+            f"git -C {repo_dir} show --format= --name-only {root}"
+        ).split()
+        self.assertNotIn(fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME, root_files)
 
 
 class TestKeyHelpers(unittest.TestCase):

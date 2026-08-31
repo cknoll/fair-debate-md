@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 from . import utils
 import glob
@@ -39,8 +40,51 @@ class PlatformSettings:
 platform_settings = PlatformSettings()
 
 
+PATCH_DATE_RE = re.compile(r"^Date:\s*(.+)$", re.MULTILINE)
+
+
+def first_patch_date(patch_files: list) -> str | None:
+    """The `Date:` header of the earliest patch, so a repo can be dated like its content."""
+
+    if not patch_files:
+        return None
+    with open(patch_files[0]) as fp:
+        # the header is the first few lines; no need to read a whole patch for it
+        match = PATCH_DATE_RE.search(fp.read(2000))
+    return match.group(1).strip() if match else None
+
+
 @utils.preserve_cwd
-def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None):
+def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
+                    settings: PlatformSettings = None):
+    """
+    Turn a patch collection into a real repo, committed and signed like a live one.
+
+    This is where a fixture debate actually becomes a repository, and therefore the only
+    place where its identity and its signatures can be decided. A patch carries neither:
+    `git format-patch` writes the *author* into the mail header and drops the committer
+    and the signature, and `git am` builds fresh commit objects. Whatever a patch
+    collection was built from, the commits a reader ends up cloning are made here.
+
+    Three things follow, all of which used to go wrong silently:
+
+    * without a configured identity `git am` takes the one of the unix user running it,
+      which put a private address into every fixture repo -- and those are downloadable
+      through `/d/<key>/bundle`;
+    * without `-S` nothing is signed, however carefully the patches were prepared;
+    * without `--committer-date-is-author-date` the committer date is "now", so every
+      rollout produced different commit hashes for identical content.
+
+    `allowed_signers` goes in as the repo's first commit, before the patches: it names the
+    key the following commits are signed with, and it must not sit in the checked-in patch
+    data, where a key change would invalidate every collection at once. Without a signing
+    key the file is not written and the commit does not happen, so a run without secrets
+    behaves as before.
+    """
+
+    if settings is None:
+        settings = platform_settings
+
     patch_dir = os.path.abspath(patch_dir)
     os.makedirs(repo_dir, exist_ok=True)
     os.chdir(repo_dir)
@@ -54,8 +98,36 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None):
 
     if not os.path.isdir(pjoin(repo_dir, ".git")):
         os.system("git init")
-    cmd = f"git am {patch_files_str}"
-    os.system(cmd)
+
+    apply_platform_identity(repo_dir, settings)
+
+    sign_args = []
+    if settings.signing_key_path:
+        sign_args = ["-c", f"user.signingkey={settings.signing_key_path}"]
+
+        if write_allowed_signers(repo_dir, settings):
+            repo = git.Repo(repo_dir)
+            repo.index.add(ALLOWED_SIGNERS_FILENAME)
+            # the platform itself, not `get_author()`, which would derive a user address
+            # from the name -- this commit is repo metadata and has no debate author
+            author = git.Actor(name=settings.committer_name, email=settings.committer_email)
+            # dated like the patch it precedes, not "now": a repo whose first commit is
+            # younger than its second reads as a repaired history, which is the one
+            # impression an integrity page must not create by accident
+            stamp = first_patch_date(patch_files_limited)
+            env = {"GIT_AUTHOR_DATE": stamp, "GIT_COMMITTER_DATE": stamp} if stamp else {}
+            with repo.git.custom_environment(**env):
+                commit_index(repo, repo_dir, "name the key these commits are signed with",
+                             author, settings)
+
+    # `-S` signs, and the date option keeps the rollout reproducible. Both have to be
+    # passed here rather than configured in the repo: the key path depends on the machine
+    # (see `apply_platform_identity`), and committing the date behaviour to the config
+    # would change it for every later commit in that repo too.
+    argv = ["git", *sign_args, "am", "--committer-date-is-author-date"]
+    if sign_args:
+        argv.append("-S")
+    os.system(" ".join(argv) + " " + patch_files_str)
 
 
 @utils.preserve_cwd

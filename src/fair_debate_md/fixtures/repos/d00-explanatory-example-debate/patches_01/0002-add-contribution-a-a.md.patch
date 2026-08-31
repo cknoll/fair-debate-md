@@ -1,40 +1,53 @@
-From 70ec1ef716214a2dac6a233f0c1e5ec86eefe800 Mon Sep 17 00:00:00 2001
+From 07aaddef3a36b4c779f7f2f79499ee3fa0ed921f Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
-Date: Mon, 24 Aug 2026 13:00:00 +0200
-Subject: [PATCH 02/11] add contribution a/a.md
+Date: Mon, 24 Aug 2026 16:00:00 +0200
+Subject: [PATCH 02/18] add contribution a/a.md
 
 ---
- a/a.md | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ a/a.md | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..496d3b7
+index 0000000..17115a5
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,34 @@
 +# ::a1 Explanatory Example Debate
 +
-+::a2 This document is a _debate_, and its subject is _Fair Debate_ — the platform you are looking at. ::a3 Reading it should be enough to understand how this place works.
++::a2 This document is a _debate_. ::a3 Its purpose is to describe and motivate the main features of _Fair Debate_ — the platform you are looking at. ::a4 Please be aware that this document kind of abuses the platform's functionality (i.e. the special way to display a stream of speech and counter-speech) for explanations. ::a5 Actually Fair Debate is not meant for displaying documentation but as tool for constructive and reliable communication about possibly controversial topics.
 +
-+::a4 You are reading the opening _contribution_ of this debate. ::a5 Every contribution is split automatically into _statements_ — a sentence, a heading, a bullet point. ::a6 Each statement carries a key of its own and can therefore be referenced and answered on its own. ::a7 Hovering over a statement shows its key, clicking it shows its full URL.
++::a6 You are reading the opening _contribution_ of this debate. ::a7 It has the contribution key `a`. ::a8 Every contribution is split automatically into _segments_ — headings, sentences, bullet points. ::a9 The segments of a contribution carry keys of their own like `a1`, `a2`, etc. ::a10 Therefore each segment can be precisely referenced. ::a11 And each segment can be answered on its own. ::a12 Hovering over a segment shows its key; clicking or tapping it also lets you copy its URL and answer it.
 +
-+::a8 Statements that are highlighted have been answered already. ::a9 Click one to unfold the answers below it. ::a10 Most of this document lives in those answers, so unfolding them is how you read it.
++::a13 Segments that are highlighted have been answered already. ::a14 Click one such answered segment to unfold the answers below it. ::a15 Most of this document lives in those answers, so unfolding them is how you read it.
 +
-+::a11 Parties are identified by letters, assigned in the order in which they join a debate.
++::a16 Multiple parties (users) can participate in a debate. ::a17 Parties are identified by letters, assigned in the order in which they join a debate.
 +
-+- ::a12 `a` is the party that opens the debate, which here is me.
-+- ::a13 `b` is the first party to answer.
-+- ::a14 `c` is the second party to answer.
-+- ::a15 Further parties continue the alphabet, for as long as a debate attracts them.
++- ::a18 `a` is the party that opens the debate, which here is me.
++- ::a19 `b` is the first party to answer.
++- ::a20 `c` is the second party to answer.
++- ::a21 Further parties continue the alphabet and beyond (see below).
 +
-+::a16 A party may also answer a statement of its own. ::a17 That is how a later addition gets a place of its own instead of quietly rewriting what was already published.
++::a22 A party may also answer a segment of its own. ::a23 That is how a later addition can be introduced to the debate instead of rewriting what was already published.
 +
-+::a18 Two properties set this platform apart from an ordinary comment section.
++::a24 Two main features set this platform apart from an ordinary comment section or forum. ::a25 They are explained in the answers.
 +
-+1. ::a19 Persistent in-context answers.
-+2. ::a20 Provable integrity of the content data.
++1. ::a26 Persistent in-context answers.
++2. ::a27 Provable integrity of the content data.
++
++::a28 If you have understood those main features you can use Fair Debate pretty well. ::a29 However, there are some more details you might be interested in.
++
++## ::a30 FAQ
++
++::a31 Each of these is answered below, in an answer of its own — which is at the same time a small demonstration of what this platform does.
++
++- ::a32 What happens if more parties join the debate than there are letters in the alphabet?
++- ::a33 Is it possible to answer multiple segments or parts of segments?
++- ::a34 How can the integrity of a debate (i.e. the absence of manipulation) be checked?
++- ::a35 How is the platform moderated?
++- ::a36 How does the project collect feedback?
++- ::a37 Is it possible to help the project?
 \ No newline at end of file
 -- 
 2.39.5

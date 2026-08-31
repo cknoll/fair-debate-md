@@ -1,0 +1,21 @@
+From ddcb1d4cd9fc247dd2b3a96dcd7cef175c799815 Mon Sep 17 00:00:00 2001
+From: Questioner <d00-explanatory-example-debate_c@fair-debate-users.org>
+Date: Tue, 25 Aug 2026 08:00:00 +0200
+Subject: [PATCH 04/18] add contribution c/a20c.md
+
+---
+ c/a20c.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 c/a20c.md
+
+diff --git a/c/a20c.md b/c/a20c.md
+new file mode 100644
+index 0000000..0419df5
+--- /dev/null
++++ b/c/a20c.md
+@@ -0,0 +1 @@
++::a20c1 And that is me. ::a20c2 I ask (sometimes critical) questions and try to find flaws. ::a20c3 By the way, one thing does not add up here. ::a20c4 The opening contribution already knows that there will be a party `b` and a party `c`, and speaks of us before either of us had written a word. ::a20c5 So this debate was not held, it was composed.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -1,0 +1,53 @@
+From f87d3e3ef66838fdb247cd31d8912b207ae4b2c9 Mon Sep 17 00:00:00 2001
+From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
+Date: Wed, 26 Aug 2026 20:30:00 +0200
+Subject: [PATCH 09/18] add contribution b/a27b.md
+
+---
+ b/a27b.md | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 b/a27b.md
+
+diff --git a/b/a27b.md b/b/a27b.md
+new file mode 100644
+index 0000000..4478f30
+--- /dev/null
++++ b/b/a27b.md
+@@ -0,0 +1,33 @@
++### ::a27b1 Why this matters
++
++::a27b2 Like any infrastructure, a discussion platform is run by people. ::a27b3 In a genuinely contested debate there is a risk that whoever operates the platform interferes with the content, by deleting or by altering it. ::a27b4 A second risk points the other way — that an operator is accused of having done so although they did not, for instance after an argument turned out badly for the side making the accusation.
++
++::a27b5 By providing technical means for independent manipulation checks this platform can form a neutral ground for controversial debates.
++
++### ::a27b6 How it is done
++
++::a27b7 _Fair Debate_ answers both risks by keeping the content out of its own database. ::a27b8 Each contribution is a plain text file, committed to a version-controlled publicly readable repository, one per debate, and the platform renders a debate by reading those files. ::a27b9 When a user publishes a contribution this creates a new commit with a timestamp, a fingerprint and a cryptographic signature, and since each fingerprint is computed over the previous one as well, the commits form a chain. ::a27b10 Altering an old contribution afterwards changes every fingerprint from that point onwards.
++
++::a27b11 This might seem like irrelevant technical detail but signed commits to publicly readable repositories enable _everyone_ to detect a manipulation (via changed fingerprints) and to prove that (with the cryptographic commit signatures). ::a27b12 This is a fundamental difference to classic online publishing where whoever controls the server can control (and thus change) what it displays. ::a27b13 Users could save screenshots but they could never prove that these are not faked.
++
++### ::a27b14 Why the signature matters
++
++::a27b15 Without it, a fingerprint you saved is only your own claim, and the operator can answer that you wrote that file yourself. ::a27b16 The signature makes it a statement of the platform. ::a27b17 By signing a commit, the platform attests that this is the version it published — so if two differently signed versions of the same history turn up, it stands behind both, and one of them must be wrong. ::a27b18 The only excuse left is that the key was stolen, which is not a comfortable position either.
++
++::a27b19 The signature travels with the repository, so anyone who clones it holds that evidence. ::a27b20 In a contested debate the opposing side has the strongest interest of all in keeping such a copy, and so do interested observers such as journalists.
++
++### ::a27b21 Where to look
++
++::a27b22 Every contribution carries a link (click the magnifier symbol) to the integrity page of the debate. ::a27b23 There the fingerprints are listed, and the repository with the signed commits can be downloaded as a single file or cloned directly with git. ::a27b24 Additionally, that page describes how to check for manipulation of the content.
++
++### ::a27b25 What is promised, and what is not
++
++::a27b26 The platform cannot promise that the commit history is never changed. ::a27b27 There might be cases where content has to be removed from the history (e.g. personal information). ::a27b28 We instead promise that every change to the history is visible. ::a27b29 It breaks the chain of fingerprints, and it will be reported on the integrity page of the debate it concerns. ::a27b30 A broken chain with no such report means manipulation.
++
++::a27b31 However, the exact procedure for such a removal is not specified yet.
++
++### ::a27b32 Current status
++
++::a27b33 Establishing a really waterproof system for integrity checks which is still understandable for most users is actually not trivial. ::a27b34 The current approach thus is a compromise and work in progress. ::a27b35 However, it already provides a lot more safety than what is usual.
++
++::a27b36 This debate (along with some others) is a demonstration fixture. ::a27b37 Its repo is rebuilt whenever the explanation changes, so its authors, its commits, their times and their fingerprints are made up, although the integrity page shows them as it would for a real debate. ::a27b38 For the debates that people actually hold here, everything described above applies unchanged.
+\ No newline at end of file
+-- 
+2.39.5
+

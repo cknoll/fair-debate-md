@@ -102,6 +102,7 @@ import shutil
 import subprocess
 import tempfile
 
+from . import repo_handling
 from .core import MDProcessor, split_front_matter
 
 pjoin = os.path.join
@@ -114,6 +115,9 @@ FIELDS_RE = re.compile(
     r"^label=(?P<label>\S+)\s+party=(?P<party>[a-z]+)(?:\s+answers=(?P<answers>.+))?$"
 )
 
+# No `allowed_signers` next to it: that file names the signing key, and freezing a key
+# into checked-in patch data would invalidate every collection at once when it changes.
+# `repo_handling.rollout_patches()` adds it when the repo is actually created.
 README = """\
 # Debate "{debate_key}"
 
@@ -319,11 +323,29 @@ def build_debate_repo(
         subprocess.run(["git", *argv], cwd=repo_dir, check=True, env=env,
                        stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
+    # The party is the AUTHOR of a contribution, the platform is its COMMITTER -- the same
+    # split `commit_index()` makes for a live publication, so a built repo and a published
+    # one describe authorship the same way. Before this, the party was both, which made the
+    # fixtures the only repos claiming that a debate participant had operated the platform.
+    settings = repo_handling.platform_settings
+
     def commit(message, name, email, date):
         stamp = date.isoformat()
-        git("commit", "-m", message, env_extra={
+        # signed when a key is configured, so `--repo-into` yields a repo that verifies.
+        # It changes nothing about the patches: `git format-patch` carries neither the
+        # committer nor the signature, which is why `rollout_patches()` has to sign again.
+        config_args = []
+        if settings.signing_key_path:
+            config_args = [
+                "-c", f"user.signingkey={settings.signing_key_path}",
+                "-c", "gpg.format=ssh",
+                "-c", "commit.gpgsign=true",
+            ]
+        git(*config_args, "commit", "-m", message, env_extra={
             "GIT_AUTHOR_NAME": name, "GIT_AUTHOR_EMAIL": email, "GIT_AUTHOR_DATE": stamp,
-            "GIT_COMMITTER_NAME": name, "GIT_COMMITTER_EMAIL": email, "GIT_COMMITTER_DATE": stamp,
+            "GIT_COMMITTER_NAME": settings.committer_name,
+            "GIT_COMMITTER_EMAIL": settings.committer_email,
+            "GIT_COMMITTER_DATE": stamp,
         })
 
     git("init", "-b", "main")
