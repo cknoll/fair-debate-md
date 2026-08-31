@@ -54,6 +54,29 @@ def first_patch_date(patch_files: list) -> str | None:
     return match.group(1).strip() if match else None
 
 
+def amend_root_with_allowed_signers(repo_dir: str, sign_args: list):
+    """
+    Add the untracked `allowed_signers` to the commit that is currently HEAD.
+
+    The committer date is pinned to the author date of that commit, the same rule
+    `git am --committer-date-is-author-date` follows -- an amend would otherwise stamp
+    "now" and make the rollout unreproducible again.
+    """
+
+    author_date = subprocess.run(
+        ["git", "-C", repo_dir, "log", "-1", "--format=%aI"],
+        capture_output=True, text=True, check=True,
+    ).stdout.strip()
+
+    env = dict(os.environ, GIT_COMMITTER_DATE=author_date)
+    subprocess.run(["git", "-C", repo_dir, "add", ALLOWED_SIGNERS_FILENAME], check=True)
+    subprocess.run(
+        ["git", "-C", repo_dir, *sign_args[:2], "commit", "--amend", "--no-edit",
+         *(["-S"] if sign_args else []), "--no-verify"],
+        check=True, env=env, capture_output=True,
+    )
+
+
 @utils.preserve_cwd
 def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
                     settings: PlatformSettings = None):
@@ -75,11 +98,12 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
     * without `--committer-date-is-author-date` the committer date is "now", so every
       rollout produced different commit hashes for identical content.
 
-    `allowed_signers` goes in as the repo's first commit, before the patches: it names the
-    key the following commits are signed with, and it must not sit in the checked-in patch
-    data, where a key change would invalidate every collection at once. Without a signing
-    key the file is not written and the commit does not happen, so a run without secrets
-    behaves as before.
+    `allowed_signers` is amended INTO the root commit rather than added in one of its own:
+    that is where `create_repo()` puts it for a repo the platform creates itself, and a
+    separate metadata commit would appear on the integrity page as a second row carrying
+    no contribution. It must not sit in the checked-in patch data either, where a key
+    change would invalidate every collection at once. Without a signing key the file is
+    not written at all, so a run without secrets behaves exactly as before.
     """
 
     if settings is None:
@@ -96,38 +120,43 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
 
     patch_files_str = " ".join(patch_files_limited)
 
+    from_scratch = not os.path.isdir(pjoin(repo_dir, ".git")) and start == 0
     if not os.path.isdir(pjoin(repo_dir, ".git")):
         os.system("git init")
 
     apply_platform_identity(repo_dir, settings)
 
+    # `-S` signs, and the date option keeps the rollout reproducible. Both are passed per
+    # call rather than written into the repo config: the key path depends on the machine
+    # (see `apply_platform_identity`), and configuring the date behaviour would change it
+    # for every later commit in that repo too.
     sign_args = []
     if settings.signing_key_path:
-        sign_args = ["-c", f"user.signingkey={settings.signing_key_path}"]
+        sign_args = ["-c", f"user.signingkey={settings.signing_key_path}", "-S"]
 
-        if write_allowed_signers(repo_dir, settings):
-            repo = git.Repo(repo_dir)
-            repo.index.add(ALLOWED_SIGNERS_FILENAME)
-            # the platform itself, not `get_author()`, which would derive a user address
-            # from the name -- this commit is repo metadata and has no debate author
-            author = git.Actor(name=settings.committer_name, email=settings.committer_email)
-            # dated like the patch it precedes, not "now": a repo whose first commit is
-            # younger than its second reads as a repaired history, which is the one
-            # impression an integrity page must not create by accident
-            stamp = first_patch_date(patch_files_limited)
-            env = {"GIT_AUTHOR_DATE": stamp, "GIT_COMMITTER_DATE": stamp} if stamp else {}
-            with repo.git.custom_environment(**env):
-                commit_index(repo, repo_dir, "name the key these commits are signed with",
-                             author, settings)
+    def apply(files):
+        argv = ["git", *sign_args[:2], "am", "--committer-date-is-author-date"]
+        if sign_args:
+            argv.append("-S")
+        os.system(" ".join(argv) + " " + " ".join(files))
 
-    # `-S` signs, and the date option keeps the rollout reproducible. Both have to be
-    # passed here rather than configured in the repo: the key path depends on the machine
-    # (see `apply_platform_identity`), and committing the date behaviour to the config
-    # would change it for every later commit in that repo too.
-    argv = ["git", *sign_args, "am", "--committer-date-is-author-date"]
-    if sign_args:
-        argv.append("-S")
-    os.system(" ".join(argv) + " " + patch_files_str)
+    add_signers = (
+        from_scratch and settings.signing_key_path and patch_files_limited
+        and build_allowed_signers_content(settings)
+    )
+    if not add_signers:
+        apply(patch_files_limited)
+        return
+
+    # `allowed_signers` belongs INTO the root commit, not into one of its own in front of
+    # it: `create_repo()` puts it there for a repo the platform creates itself, and a
+    # second metadata commit would show up on the integrity page as a second row without
+    # any contribution. So apply the first patch, amend the file into that commit, then
+    # apply the rest.
+    apply(patch_files_limited[:1])
+    write_allowed_signers(repo_dir, settings)
+    amend_root_with_allowed_signers(repo_dir, sign_args)
+    apply(patch_files_limited[1:])
 
 
 @utils.preserve_cwd

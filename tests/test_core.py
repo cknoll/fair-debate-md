@@ -1,4 +1,5 @@
 import unittest
+import glob
 import os
 from textwrap import dedent as twdd
 import subprocess
@@ -455,17 +456,20 @@ class TestSignedRollout(unittest.TestCase):
         verdicts = set(self._git(repo_dir, "log --format=%G?").split())
         self.assertEqual(verdicts, {"G"})
 
-    def test_020__allowed_signers_is_committed_first(self):
+    def test_020__allowed_signers_is_part_of_the_root_commit(self):
         repo_dir = self._rollout("repo1")
 
         # untracked it would travel with neither `git clone` nor the bundle; arriving
         # mid-history it would leave the commits before it unverifiable
-        first_commit_files = self._git(repo_dir, "log --diff-filter=A --format= --name-only")
-        self.assertIn(fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME, first_commit_files.split())
-
         root = self._git(repo_dir, "rev-list --max-parents=0 HEAD").strip()
         root_files = self._git(repo_dir, f"show --format= --name-only {root}").split()
-        self.assertEqual(root_files, [fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME])
+        self.assertIn(fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME, root_files)
+
+        # amended into that commit, not added in front of it: a metadata commit of its own
+        # would show up on the integrity page as a second row with no contribution
+        n_patches = len(glob.glob(pjoin(self.patch_dir, "*.patch")))
+        n_commits = len(self._git(repo_dir, "log --format=%H").split())
+        self.assertEqual(n_commits, n_patches)
 
     def test_030__the_platform_is_the_committer_and_the_party_is_the_author(self):
         repo_dir = self._rollout("repo1")
