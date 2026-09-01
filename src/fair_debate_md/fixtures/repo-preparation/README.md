@@ -48,9 +48,10 @@ with its own `dNN` key, not a variant of another one:
   structure and the same anchor points, so the two produce almost the same contribution
   keys; only the integrity contribution has more segments in german, which moves `a27b38c`
   to `a27b41c`. It addresses the reader informally ("du"), like the german interface does.
-  A *debate* is a "Debatte" here -- **the interface still says "Diskussion" and is meant to
-  be changed over**, by the user's decision of 2026-09-01; this text was written the new
-  way rather than translated twice, so until that rework lands the two disagree.
+  A *debate* is a "Debatte" here, and so is it in the interface: the german texts were
+  changed over from "Diskussion" on 2026-09-01, by the user's decision. Keep new german
+  sources on "Debatte"; a compound that does not name the platform object (the standing
+  example is "Diskussionskultur") is the only reason to depart from it.
 
 Until 2026-08 that fixture was built by `fdmd process-content-dir` from one file per
 contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):
