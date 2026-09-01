@@ -22,25 +22,67 @@ point. It is only needed as reinsurance to detect and prove manipulation.
 
 ## How to check it
 
-The platform's public key is in the file `allowed_signers`, added with the first commit of
-this repository.
+Cloning this repository was the important step. From here on it is one command, run
+whenever you come back to the debate.
+
+    git pull --ff-only
+
+If the debate only grew since your last visit, this fast-forwards silently: new
+contributions, nothing else. If the history was rewritten, the command refuses to do
+anything and says so twice.
+
+    + abc1234...def5678  main -> origin/main  (forced update)
+    fatal: Not possible to fast-forward, aborting.
+
+`--ff-only` is what turns a routine update into a check. A plain `git pull` would try to
+merge the two versions into one and could bury the difference in a merge commit.
+
+So you do not have to note fingerprints anywhere or remember to compare anything. Keeping
+the clone and pulling from it is the whole procedure.
+
+### When it refuses
+
+Your own branch is untouched, so you are now holding **both** versions -- and that, not the
+warning, is the valuable part. What you had is still in `main`, what the platform serves
+now is in `origin/main`, and
+
+    git range-diff main...origin/main
+
+lists which commits differ and how. Together with the signatures on both sides this is
+evidence rather than suspicion: a platform that only ever appends cannot produce two signed
+histories that contradict each other. Which of the two is the "real" one does not even
+matter for that argument.
+
+A rewrite is not automatically an attack. Contributions sometimes have to be removed for
+legal reasons, and that cannot be done any other way. What separates the two cases is
+whether the event was announced and explained on the debate's integrity page, and whether
+the rest of the history still matches commit for commit.
+
+### Checking the signatures
+
+A different question, and a separate command -- `git pull` verifies nothing, it only
+compares the shape of the history.
 
     git -c gpg.ssh.allowedSignersFile=./allowed_signers log --show-signature
 
-`Good "git" signature` on every commit means the history is intact and was published by
-whoever holds that key.
+`Good "git" signature` on every commit means each one was made by whoever holds the key in
+`allowed_signers`, which is part of the first commit of this repository. A clone therefore
+carries everything it needs to verify itself, with nothing to install and nobody to ask.
+
+### Without a clone
+
+If you only noted fingerprints from the integrity page,
 
     git log --format="%H  %ci"
 
-lists every commit with its fingerprint and time, newest first. If you noted a fingerprint
-down earlier -- from the integrity page of the debate, or from an older copy of this
-repository -- look for it here. Present means nothing before it was altered. Missing means
-the history was rewritten.
+lists every commit with its fingerprint and time, newest first; look for the value you
+noted. Present means nothing before it was altered, missing means the history was
+rewritten. That route needs you to have written something down at the right moment, which
+is why the clone is the better one -- but it keeps working after the platform is gone.
 
-`git fsck` does **not** answer this question. It only checks that the stored data matches
-its own fingerprints, and a rewritten history passes that test, because the rewrite
-produces new and internally consistent fingerprints. Only a comparison against a value kept
-outside the server settles it.
+`git fsck` answers none of these questions. It only checks that the stored data matches its
+own fingerprints, and a rewritten history passes that test, because the rewrite produces
+new and internally consistent fingerprints.
 
 ## What this does not prove
 
