@@ -1,7 +1,7 @@
-From a02fc2d9e56fc2dbefe5acdbc47e908e0f80a6dc Mon Sep 17 00:00:00 2001
+From 17ec29fdda5426b1d4a758a87a2240ec4f9ddc0b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
-Date: Tue, 25 Aug 2026 12:55:00 +0200
+Date: Tue, 25 Aug 2026 12:50:00 +0200
 Subject: [PATCH 05/18] add contribution a/a20c5a.md
 
 ---
@@ -11,11 +11,11 @@ Subject: [PATCH 05/18] add contribution a/a20c5a.md
 
 diff --git a/a/a20c5a.md b/a/a20c5a.md
 new file mode 100644
-index 0000000..fa4ae71
+index 0000000..69a228b
 --- /dev/null
 +++ b/a/a20c5a.md
 @@ -0,0 +1 @@
-+::a20c5a1 Das stimmt, und es gehört ausgesprochen. ::a20c5a2 Der Eröffnungsbeitrag sagt schon ganz am Anfang, dass dieses Dokument die Funktionen der Plattform für Erklärungen zweckentfremdet, und genau hier zeigt sich das. ::a20c5a3 Eine echte Diskussion wächst nach vorn, und niemand darin weiß, wer als Nächstes antwortet.
++::a20c5a1 Das stimmt, und es gehört ausgesprochen. ::a20c5a2 Der Eröffnungsbeitrag sagt schon ganz am Anfang, dass dieses Dokument die Funktionen der Plattform für Erklärungen zweckentfremdet, und genau hier zeigt sich das. ::a20c5a3 Eine echte Debatte wächst nach vorn, und niemand darin weiß, wer als Nächstes antwortet.
 \ No newline at end of file
 -- 
 2.39.5

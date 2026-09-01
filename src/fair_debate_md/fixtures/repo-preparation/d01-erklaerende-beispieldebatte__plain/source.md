@@ -12,22 +12,22 @@ active_hours: [8, 22]
 
 <!-- !!== label=root party=a ==== -->
 
-# Erklärende Beispiel-Diskussion
+# Erklärende Beispiel-Debatte
 
-Dieses Dokument ist eine *Diskussion*. Es beschreibt die wichtigsten Eigenschaften von *Fair Debate* — der Plattform, die du gerade vor dir hast — und begründet sie. Dabei zweckentfremdet es die Funktionen der Plattform, nämlich die besondere Darstellung von Rede und Gegenrede, für Erklärungen. Eigentlich ist Fair Debate nicht dafür gedacht, Dokumentation anzuzeigen, sondern als Werkzeug für sachliche und nachvollziehbare Verständigung über womöglich strittige Themen.
+Dieses Dokument ist eine *Debatte*. Es beschreibt die wichtigsten Eigenschaften von *Fair Debate* — der Plattform, die du gerade vor dir hast — und begründet sie. Dabei zweckentfremdet es die Funktionen der Plattform, nämlich die besondere Darstellung von Rede und Gegenrede, für Erklärungen. Eigentlich ist Fair Debate nicht dafür gedacht, Dokumentation anzuzeigen, sondern als Werkzeug für sachliche und nachvollziehbare Verständigung über womöglich strittige Themen.
 
-Du liest gerade den Eröffnungs-*beitrag* dieser Diskussion. Er trägt den Beitragsschlüssel `a`. Jeder Beitrag wird automatisch in *Segmente* zerlegt — Überschriften, Sätze, Aufzählungspunkte. Die Segmente eines Beitrags bekommen eigene Schlüssel wie `a1`, `a2` und so weiter. Dadurch lässt sich jedes Segment genau benennen. Und jedes Segment lässt sich einzeln beantworten. Wenn du mit der Maus über ein Segment fährst, siehst du seinen Schlüssel; ein Klick oder Fingertipp erlaubt dir außerdem, seine URL zu kopieren und darauf zu antworten.
+Du liest gerade den eröffnenden *Beitrag* dieser Debatte. Er trägt den Beitragsschlüssel `a`. Jeder Beitrag wird automatisch in *Segmente* zerlegt — Überschriften, Sätze, Aufzählungspunkte. Die Segmente eines Beitrags bekommen eigene Schlüssel wie `a1`, `a2` und so weiter. Dadurch lässt sich jedes Segment genau benennen. Und jedes Segment lässt sich einzeln beantworten. Wenn du mit der Maus über ein Segment fährst, siehst du seinen Schlüssel; ein Klick oder Fingertipp erlaubt dir außerdem, seine URL zu kopieren und darauf zu antworten.
 
 Hervorgehobene Segmente sind bereits beantwortet worden. Klicke auf ein solches Segment, um die Antworten darunter aufzuklappen. Der größte Teil dieses Dokuments steckt in diesen Antworten, Aufklappen ist also die Art, es zu lesen.
 
-An einer Diskussion können mehrere Parteien (Benutzerkonten) teilnehmen. Parteien werden durch Buchstaben bezeichnet, vergeben in der Reihenfolge des Beitritts.
+An einer Debatte können mehrere Parteien (Benutzerkonten) teilnehmen. Parteien werden durch Buchstaben bezeichnet, vergeben in der Reihenfolge des Beitritts.
 
-- `a` ist die Partei, die die Diskussion eröffnet, hier also ich.
+- `a` ist die Partei, die die Debatte eröffnet, hier also ich.
 - `b` ist die Partei, die als erste antwortet.
 - `c` ist die Partei, die als zweite antwortet.
 - Weitere Parteien setzen das Alphabet fort und darüber hinaus (siehe unten).
 
-Eine Partei kann auch ein eigenes Segment beantworten. So lässt sich ein Nachtrag in die Diskussion einbringen, ohne das bereits Veröffentlichte umzuschreiben.
+Eine Partei kann auch ein eigenes Segment beantworten. So lässt sich ein Nachtrag in die Debatte einbringen, ohne das bereits Veröffentlichte umzuschreiben.
 
 Zwei Eigenschaften unterscheiden diese Plattform von einem gewöhnlichen Kommentarbereich oder Forum. Sie werden in den Antworten erklärt.
 
@@ -40,24 +40,24 @@ Wenn du diese beiden Eigenschaften verstanden hast, kannst du Fair Debate schon 
 
 Jede dieser Fragen wird weiter unten in einer eigenen Antwort behandelt — was zugleich vorführt, was diese Plattform tut.
 
-- Was passiert, wenn mehr Parteien an der Diskussion teilnehmen, als das Alphabet Buchstaben hat?
+- Was passiert, wenn mehr Parteien an der Debatte teilnehmen, als das Alphabet Buchstaben hat?
 - Können mehrere Segmente oder Teile von Segmenten beantwortet werden?
-- Wie lässt sich die Integrität einer Diskussion prüfen, also die Abwesenheit von Manipulation?
+- Wie lässt sich die Integrität einer Debatte prüfen, also die Abwesenheit von Manipulation?
 - Wie wird die Plattform moderiert?
 - Wie sammelt das Projekt Rückmeldungen?
 - Kann man das Projekt unterstützen?
 
 <!-- !!== label=b-intro party=b answers="`b` ist die Partei, die als erste antwortet" ==== -->
 
-Das bin ich. Meine Rolle in dieser Diskussion ist es, Einzelheiten zu ergänzen.
+Das bin ich. Meine Rolle in dieser Debatte ist es, Einzelheiten zu ergänzen.
 
 <!-- !!== label=c-intro party=c answers="`c` ist die Partei, die als zweite antwortet" ==== -->
 
-Und das bin ich. Ich stelle (mitunter kritische) Fragen und suche nach Schwachstellen. Übrigens geht hier etwas nicht auf. Der Eröffnungsbeitrag weiß bereits, dass es eine Partei `b` und eine Partei `c` geben wird, und spricht von uns, bevor eine von uns beiden ein Wort geschrieben hatte. Diese Diskussion wurde also nicht geführt, sie wurde verfasst.
+Und das bin ich. Ich stelle (mitunter kritische) Fragen und suche nach Schwachstellen. Übrigens geht hier etwas nicht auf. Der Eröffnungsbeitrag weiß bereits, dass es eine Partei `b` und eine Partei `c` geben wird, und spricht von uns, bevor eine von uns beiden ein Wort geschrieben hatte. Diese Debatte wurde also nicht geführt, sie wurde verfasst.
 
-<!-- !!== label=a-chronology party=a answers="Diese Diskussion wurde also nicht geführt, sie wurde verfasst" ==== -->
+<!-- !!== label=a-chronology party=a answers="Diese Debatte wurde also nicht geführt, sie wurde verfasst" ==== -->
 
-Das stimmt, und es gehört ausgesprochen. Der Eröffnungsbeitrag sagt schon ganz am Anfang, dass dieses Dokument die Funktionen der Plattform für Erklärungen zweckentfremdet, und genau hier zeigt sich das. Eine echte Diskussion wächst nach vorn, und niemand darin weiß, wer als Nächstes antwortet.
+Das stimmt, und es gehört ausgesprochen. Der Eröffnungsbeitrag sagt schon ganz am Anfang, dass dieses Dokument die Funktionen der Plattform für Erklärungen zweckentfremdet, und genau hier zeigt sich das. Eine echte Debatte wächst nach vorn, und niemand darin weiß, wer als Nächstes antwortet.
 
 <!-- !!== label=b-answers party=b answers="Dauerhafte Antworten im Kontext" ==== -->
 
@@ -76,7 +76,7 @@ Weil der Zusammenhang einer Antwort technisch an das Segment gebunden ist, funkt
 
 ### Ein Beispiel
 
-Stell dir eine Diskussion mit drei Parteien vor.
+Stell dir eine Debatte mit drei Parteien vor.
 
 - Partei `a` eröffnet sie mit dem ersten Beitrag `a`. Seine Segmente heißen `a1`, `a2` und so weiter.
 - Partei `b` widerspricht an zwei Stellen. Sie beantwortet Segment 7 mit einem Beitrag namens `a7b` und Segment 10 mit einem weiteren namens `a10b`. Die Segmente innerhalb dieser Beiträge heißen `a7b1`, `a7b2` sowie `a10b1`, `a10b2`. Beachte, dass ein Beitragsschlüssel auf einen Buchstaben endet, ein Segmentschlüssel auf eine Zahl.
@@ -97,13 +97,13 @@ Markdown fügt Formatierungen über eine Handvoll gewöhnlicher Zeichen hinzu �
 
 ### Warum das wichtig ist
 
-Wie jede Infrastruktur wird auch eine Diskussionsplattform von Menschen betrieben. In einer wirklich strittigen Auseinandersetzung besteht die Gefahr, dass der Betreiber in die Inhalte eingreift, indem er löscht oder verändert. Eine zweite Gefahr weist in die Gegenrichtung — dass einem Betreiber genau das vorgeworfen wird, obwohl er es nicht getan hat, etwa nachdem eine Auseinandersetzung für die vorwerfende Seite schlecht ausgegangen ist.
+Wie jede Infrastruktur wird auch eine Debattenplattform von Menschen betrieben. In einer wirklich strittigen Auseinandersetzung besteht die Gefahr, dass der Betreiber in die Inhalte eingreift, indem er löscht oder verändert. Eine zweite Gefahr weist in die Gegenrichtung — dass einem Betreiber genau das vorgeworfen wird, obwohl er es nicht getan hat, etwa nachdem eine Auseinandersetzung für die vorwerfende Seite schlecht ausgegangen ist.
 
-Indem diese Plattform technische Mittel für unabhängige Manipulationsprüfungen bereitstellt, kann sie zu einem neutralen Boden für strittige Diskussionen werden.
+Indem diese Plattform technische Mittel für unabhängige Manipulationsprüfungen bereitstellt, kann sie zu einem neutralen Boden für strittige Debatten werden.
 
 ### Wie das gemacht wird
 
-*Fair Debate* begegnet beiden Gefahren, indem es die Inhalte aus der eigenen Datenbank heraushält. Jeder Beitrag ist eine einfache Textdatei, festgehalten in einem versionierten, öffentlich lesbaren Repository — eines je Diskussion. Die Plattform stellt eine Diskussion dar, indem sie diese Dateien liest. Veröffentlicht jemand einen Beitrag, entsteht dabei ein neuer Commit mit Zeitstempel, Fingerabdruck und kryptografischer Signatur. Und weil jeder Fingerabdruck auch auf Basis des vorherigen berechnet wird, bilden die Commits eine Kette. Wird ein alter Beitrag nachträglich verändert, ändern sich dadurch alle Fingerabdrücke ab dieser Stelle.
+*Fair Debate* begegnet beiden Gefahren, indem es die Inhalte aus der eigenen Datenbank heraushält. Jeder Beitrag ist eine einfache Textdatei, festgehalten in einem versionierten, öffentlich lesbaren Repository — eines je Debatte. Die Plattform stellt eine Debatte dar, indem sie diese Dateien liest. Veröffentlicht jemand einen Beitrag, entsteht dabei ein neuer Commit mit Zeitstempel, Fingerabdruck und kryptografischer Signatur. Und weil jeder Fingerabdruck auch auf Basis des vorherigen berechnet wird, bilden die Commits eine Kette. Wird ein alter Beitrag nachträglich verändert, ändern sich dadurch alle Fingerabdrücke ab dieser Stelle.
 
 Das mag nach nebensächlicher Technik klingen, aber signierte Commits in öffentlich lesbaren Repositories versetzen *jeden* in die Lage, eine Manipulation zu erkennen (an den veränderten Fingerabdrücken) und sie zu beweisen (mit den kryptografischen Commit-Signaturen). Das ist ein grundlegender Unterschied zum klassischen Veröffentlichen im Netz, wo derjenige, der den Server kontrolliert, auch kontrolliert, was dieser anzeigt, und es folglich ändern kann. Nutzerinnen und Nutzer könnten zwar Bildschirmfotos aufheben, aber sie könnten nie beweisen, dass diese nicht gefälscht sind.
 
@@ -111,17 +111,17 @@ Das mag nach nebensächlicher Technik klingen, aber signierte Commits in öffent
 
 Ohne sie ist ein Fingerabdruck, den du dir gespeichert hast, nur deine eigene Behauptung, und der Betreiber kann entgegnen, du habest diese Datei selbst geschrieben. Die Signatur macht daraus eine Aussage der Plattform. Indem sie einen Commit signiert, bezeugt die Plattform, dass dies die Fassung ist, die sie veröffentlicht hat. Tauchen also zwei unterschiedlich signierte Fassungen derselben Vorgeschichte auf, steht sie für beide ein, und eine davon muss falsch sein. Als Ausrede bleibt dann nur noch, der Schlüssel sei gestohlen worden — ebenfalls keine bequeme Lage.
 
-Die Signatur reist mit dem Repository mit, wer es also klont, hat dieses Beweismittel in der Hand. In einer strittigen Diskussion hat die Gegenseite das allergrößte Interesse daran, eine solche Kopie zu behalten, und interessierte Beobachter wie Journalistinnen und Journalisten ebenso.
+Die Signatur reist mit dem Repository mit, wer es also klont, hat dieses Beweismittel in der Hand. In einer strittigen Debatte hat die Gegenseite das allergrößte Interesse daran, eine solche Kopie zu behalten, und interessierte Beobachter wie Journalistinnen und Journalisten ebenso.
 
 ### Wo du nachschauen kannst
 
-Jeder Beitrag trägt einen Link zur Integritätsseite seiner Diskussion, erreichbar über das Lupensymbol. Dort sind die Fingerabdrücke aufgelistet, und das Repository mit den signierten Commits lässt sich als einzelne Datei herunterladen oder direkt mit git klonen. Außerdem beschreibt diese Seite, wie sich Manipulationen an den Inhalten aufspüren lassen.
+Jeder Beitrag trägt einen Link zur Integritätsseite seiner Debatte, erreichbar über das Lupensymbol. Dort sind die Fingerabdrücke aufgelistet, und das Repository mit den signierten Commits lässt sich als einzelne Datei herunterladen oder direkt mit git klonen. Außerdem beschreibt diese Seite, wie sich Manipulationen an den Inhalten aufspüren lassen.
 
-Wer an einer Diskussion teilnimmt, geht am kürzesten Weg, indem er dieses Repository einmal klont. Von da an übernimmt ein einzelnes `git pull --ff-only` die Prüfung. Es läuft still durch, solange die Diskussion nur wächst, und es verweigert den Dienst in dem Moment, in dem die Vorgeschichte umgeschrieben wurde. Du musst dir nichts notieren und nichts merken, und die Verweigerung lässt dich beide Fassungen zugleich in der Hand halten — das ist es, was aus einem Verdacht etwas Vorzeigbares macht.
+Wer an einer Debatte teilnimmt, geht am kürzesten Weg, indem er dieses Repository einmal klont. Von da an übernimmt ein einzelnes `git pull --ff-only` die Prüfung. Es läuft still durch, solange die Debatte nur wächst, und es verweigert den Dienst in dem Moment, in dem die Vorgeschichte umgeschrieben wurde. Du musst dir nichts notieren und nichts merken, und die Verweigerung lässt dich beide Fassungen zugleich in der Hand halten — das ist es, was aus einem Verdacht etwas Vorzeigbares macht.
 
 ### Was zugesagt wird und was nicht
 
-Die Plattform kann nicht zusagen, dass die Commit-Vorgeschichte niemals verändert wird. Es kann Fälle geben, in denen Inhalte daraus entfernt werden müssen, etwa personenbezogene Angaben. Zugesagt wird stattdessen, dass jede Änderung an der Vorgeschichte sichtbar ist. Sie zerreißt die Kette der Fingerabdrücke, und sie wird auf der Integritätsseite der betroffenen Diskussion vermerkt. Eine zerrissene Kette ohne einen solchen Vermerk bedeutet Manipulation.
+Die Plattform kann nicht zusagen, dass die Commit-Vorgeschichte niemals verändert wird. Es kann Fälle geben, in denen Inhalte daraus entfernt werden müssen, etwa personenbezogene Angaben. Zugesagt wird stattdessen, dass jede Änderung an der Vorgeschichte sichtbar ist. Sie zerreißt die Kette der Fingerabdrücke, und sie wird auf der Integritätsseite der betroffenen Debatte vermerkt. Eine zerrissene Kette ohne einen solchen Vermerk bedeutet Manipulation.
 
 Das genaue Verfahren für ein solches Entfernen ist allerdings noch nicht festgelegt.
 
@@ -129,7 +129,7 @@ Das genaue Verfahren für ein solches Entfernen ist allerdings noch nicht festge
 
 Ein wirklich wasserdichtes System für Integritätsprüfungen aufzubauen, das für die meisten Menschen trotzdem verständlich bleibt, ist tatsächlich nicht einfach. Der jetzige Ansatz ist daher ein Kompromiss und noch in Arbeit. Er bietet aber schon jetzt deutlich mehr Sicherheit als das, was sonst üblich ist.
 
-Diese Diskussion ist, wie einige andere auch, ein Anschauungsstück. Ihr Repository wird jedes Mal neu gebaut, wenn sich die Erklärung ändert. Ihre Verfasser, ihre Commits, deren Zeitpunkte und Fingerabdrücke sind deshalb erfunden, obwohl die Integritätsseite sie so zeigt, wie sie es bei einer echten Diskussion täte. Für die Diskussionen, die hier tatsächlich geführt werden, gilt alles oben Beschriebene unverändert.
+Diese Debatte ist, wie einige andere auch, ein Anschauungsstück. Ihr Repository wird jedes Mal neu gebaut, wenn sich die Erklärung ändert. Ihre Verfasser, ihre Commits, deren Zeitpunkte und Fingerabdrücke sind deshalb erfunden, obwohl die Integritätsseite sie so zeigt, wie sie es bei einer echten Debatte täte. Für die Debatten, die hier tatsächlich geführt werden, gilt alles oben Beschriebene unverändert.
 
 <!-- !!== label=c-critical party=c answers="ist daher ein Kompromiss" ==== -->
 
@@ -157,23 +157,23 @@ Zurzeit gibt es die folgenden Schwachstellen.
 
 Das hier ist so ein Fall. Der Beitrag stammt von Partei `a` und beantwortet ein Segment von Partei `a`, und die Plattform kennzeichnet ihn als Selbstantwort, damit ihn niemand für den einer anderen Partei hält. Der nützliche Fall ist nicht diese Vorführung, sondern die Richtigstellung. Ein Nachtrag oder das Eingeständnis eines Fehlers landet unmittelbar neben dem Satz, um den es geht, statt weit darunter, wo ihn niemand sieht, der das Ursprüngliche liest.
 
-<!-- !!== label=b-faq-alphabet party=b answers="mehr Parteien an der Diskussion teilnehmen, als das Alphabet Buchstaben hat" ==== -->
+<!-- !!== label=b-faq-alphabet party=b answers="mehr Parteien an der Debatte teilnehmen, als das Alphabet Buchstaben hat" ==== -->
 
-Die Buchstaben laufen einfach weiter. Nach `z` gehen die Bezeichner zweistellig weiter, mit `aa`, `ab` und so fort, in der Reihenfolge des Beitritts. Es gibt also keine Obergrenze im Schlüsselsystem, und ein Schlüssel wie `a5aa` ist ein ganz gewöhnlicher Schlüssel — Partei `aa` antwortet auf Segment 5 des Eröffnungsbeitrags. In der Praxis wird eine Diskussion mit 26 aktiven Parteien allerdings andere Probleme zuerst haben.
+Die Buchstaben laufen einfach weiter. Nach `z` gehen die Bezeichner zweistellig weiter, mit `aa`, `ab` und so fort, in der Reihenfolge des Beitritts. Es gibt also keine Obergrenze im Schlüsselsystem, und ein Schlüssel wie `a5aa` ist ein ganz gewöhnlicher Schlüssel — Partei `aa` antwortet auf Segment 5 des Eröffnungsbeitrags. In der Praxis wird eine Debatte mit 26 aktiven Parteien allerdings andere Probleme zuerst haben.
 
 <!-- !!== label=b-faq-references party=b answers="Können mehrere Segmente oder Teile von Segmenten beantwortet werden?" ==== -->
 
 Beides ist möglich, und der Schlüssel sagt, was gemeint ist. Eine Folge zusammenhängender Segmente wird `a5-7b` geschrieben, zu lesen als Partei `b` beantwortet die Segmente 5 bis 7 des Beitrags `a`. Einzelne Wörter innerhalb eines Segments werden `a7_4-8b` geschrieben, also die Wörter 4 bis 8 des Segments `a7`. Gezählt wird dabei auf der Textdatei im Repository, nicht auf der dargestellten Seite, und die Zählregel ist bewusst einfach und unveränderlich. So kann jeder durch Lesen der Datei nachprüfen, worauf eine Wortangabe zeigt, ohne der Plattform glauben zu müssen.
 
-<!-- !!== label=a-faq-integrity party=a answers="Wie lässt sich die Integrität einer Diskussion prüfen" ==== -->
+<!-- !!== label=a-faq-integrity party=a answers="Wie lässt sich die Integrität einer Debatte prüfen" ==== -->
 
-Jeder Beitrag trägt ein kleines Lupensymbol, das zur Integritätsseite seiner Diskussion führt. Diese Seite listet den Fingerabdruck jedes Commits auf, nennt den Signaturschlüssel der Plattform, gibt das ganze Repository als git-Klon heraus und erklärt im Einzelnen, wie sich Fingerabdrücke und Signaturen prüfen lassen. Das Repository trägt dieselbe Anleitung in seiner eigenen README, eine Kopie davon erklärt sich also selbst.
+Jeder Beitrag trägt ein kleines Lupensymbol, das zur Integritätsseite seiner Debatte führt. Diese Seite listet den Fingerabdruck jedes Commits auf, nennt den Signaturschlüssel der Plattform, gibt das ganze Repository als git-Klon heraus und erklärt im Einzelnen, wie sich Fingerabdrücke und Signaturen prüfen lassen. Das Repository trägt dieselbe Anleitung in seiner eigenen README, eine Kopie davon erklärt sich also selbst.
 
 Die kurze Antwort lautet, dass du das Repository einmal klonst und bei jeder Rückkehr `git pull --ff-only` ausführst. Neue Beiträge kommen kommentarlos an; bei einer umgeschriebenen Vorgeschichte verweigert der Befehl den Dienst und sagt das auch. Umschreiben ist nicht automatisch ein Angriff, denn Beiträge müssen gelegentlich aus organisatorischen oder rechtlichen Gründen entfernt werden. Unsichtbar ist es aber nie, und ein solcher Vorgang soll auf der Integritätsseite angekündigt und begründet werden.
 
 <!-- !!== label=a-faq-moderation party=a answers="Wie wird die Plattform moderiert?" ==== -->
 
-Eine Diskussion hat drei Stufen der Auffindbarkeit. *Öffentlich* bedeutet gelistet und für alle lesbar, *versteckt* bedeutet nur über den Link lesbar und nirgends gelistet, *privat* bedeutet nur für die Teilnehmenden und die Moderation lesbar. Die Auffindbarkeit einer Diskussion zu ändern kann die Zustimmung sowohl der Moderation als auch der Teilnehmenden erfordern. Öffentliche Beiträge neuer Konten starten zum Beispiel versteckt und müssen von der Moderation freigegeben werden. Und eine öffentliche Diskussion kann nur dann auf privat gestellt werden, wenn alle Parteien zustimmen oder die Moderation es durchsetzt. Andernfalls könnte eine Partei, die eine Auseinandersetzung verloren hat, eine Diskussion einfach aus der Öffentlichkeit tilgen. Teile davon werden noch gebaut. Heute wird eine Moderationsentscheidung über die Verwaltungsoberfläche getroffen.
+Eine Debatte hat drei Stufen der Auffindbarkeit. *Öffentlich* bedeutet gelistet und für alle lesbar, *versteckt* bedeutet nur über den Link lesbar und nirgends gelistet, *privat* bedeutet nur für die Teilnehmenden und die Moderation lesbar. Die Auffindbarkeit einer Debatte zu ändern kann die Zustimmung sowohl der Moderation als auch der Teilnehmenden erfordern. Öffentliche Beiträge neuer Konten starten zum Beispiel versteckt und müssen von der Moderation freigegeben werden. Und eine öffentliche Debatte kann nur dann auf privat gestellt werden, wenn alle Parteien zustimmen oder die Moderation es durchsetzt. Andernfalls könnte eine Partei, die eine Auseinandersetzung verloren hat, eine Debatte einfach aus der Öffentlichkeit tilgen. Teile davon werden noch gebaut. Heute wird eine Moderationsentscheidung über die Verwaltungsoberfläche getroffen.
 
 <!-- !!== label=a-faq-feedback party=a answers="Wie sammelt das Projekt Rückmeldungen?" ==== -->
 

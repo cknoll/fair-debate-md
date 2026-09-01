@@ -47,10 +47,10 @@ with its own `dNN` key, not a variant of another one:
 - `d01-erklaerende-beispieldebatte__plain/source.md` -- its german counterpart. Same
   structure and the same anchor points, so the two produce almost the same contribution
   keys; only the integrity contribution has more segments in german, which moves `a27b38c`
-  to `a27b41c`. Its wording follows the terminology of the german UI in `base/i18n/de.toml`
-  rather than the english source -- a *debate* is a "Diskussion" there, and the interface
-  addresses the reader informally ("du"), so a translation that said "Debatte" and "Sie"
-  would contradict the page it sits on.
+  to `a27b41c`. It addresses the reader informally ("du"), like the german interface does.
+  A *debate* is a "Debatte" here -- **the interface still says "Diskussion" and is meant to
+  be changed over**, by the user's decision of 2026-09-01; this text was written the new
+  way rather than translated twice, so until that rework lands the two disagree.
 
 Until 2026-08 that fixture was built by `fdmd process-content-dir` from one file per
 contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):

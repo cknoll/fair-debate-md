@@ -1,7 +1,7 @@
-From c4d5e89a2ecea1c2438bfac31b2582fe31547068 Mon Sep 17 00:00:00 2001
+From 6775734db92a82d0d737c57daf1f9f501ddfcf17 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
-Date: Mon, 24 Aug 2026 21:15:00 +0200
+Date: Mon, 24 Aug 2026 21:10:00 +0200
 Subject: [PATCH 03/18] add contribution b/a19b.md
 
 ---
@@ -11,11 +11,11 @@ Subject: [PATCH 03/18] add contribution b/a19b.md
 
 diff --git a/b/a19b.md b/b/a19b.md
 new file mode 100644
-index 0000000..90e9574
+index 0000000..7fbab70
 --- /dev/null
 +++ b/b/a19b.md
 @@ -0,0 +1 @@
-+::a19b1 Das bin ich. ::a19b2 Meine Rolle in dieser Diskussion ist es, Einzelheiten zu ergänzen.
++::a19b1 Das bin ich. ::a19b2 Meine Rolle in dieser Debatte ist es, Einzelheiten zu ergänzen.
 \ No newline at end of file
 -- 
 2.39.5

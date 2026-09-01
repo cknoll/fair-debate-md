@@ -1,7 +1,7 @@
-From d474636db373d5fbd194b8a293f41abafbf96909 Mon Sep 17 00:00:00 2001
+From e8a0e220fe567fcfcba414be53aff6852348c2b4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
-Date: Wed, 26 Aug 2026 08:00:00 +0200
+Date: Wed, 26 Aug 2026 08:55:00 +0200
 Subject: [PATCH 07/18] add contribution a/a26b7a.md
 
 ---
@@ -11,13 +11,13 @@ Subject: [PATCH 07/18] add contribution a/a26b7a.md
 
 diff --git a/a/a26b7a.md b/a/a26b7a.md
 new file mode 100644
-index 0000000..38a75c3
+index 0000000..bf3ba89
 --- /dev/null
 +++ b/a/a26b7a.md
 @@ -0,0 +1,14 @@
 +### ::a26b7a1 Ein Beispiel
 +
-+::a26b7a2 Stell dir eine Diskussion mit drei Parteien vor.
++::a26b7a2 Stell dir eine Debatte mit drei Parteien vor.
 +
 +- ::a26b7a3 Partei `a` eröffnet sie mit dem ersten Beitrag `a`. ::a26b7a4 Seine Segmente heißen `a1`, `a2` und so weiter.
 +- ::a26b7a5 Partei `b` widerspricht an zwei Stellen. ::a26b7a6 Sie beantwortet Segment 7 mit einem Beitrag namens `a7b` und Segment 10 mit einem weiteren namens `a10b`. ::a26b7a7 Die Segmente innerhalb dieser Beiträge heißen `a7b1`, `a7b2` sowie `a10b1`, `a10b2`. ::a26b7a8 Beachte, dass ein Beitragsschlüssel auf einen Buchstaben endet, ein Segmentschlüssel auf eine Zahl.
