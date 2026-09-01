@@ -1,0 +1,22 @@
+From ffb002668891faa02407eb0a8c408599c2ee94de Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erg=C3=A4nzer?=
+ <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
+Date: Fri, 28 Aug 2026 08:00:00 +0200
+Subject: [PATCH 13/18] add contribution b/a32b.md
+
+---
+ b/a32b.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 b/a32b.md
+
+diff --git a/b/a32b.md b/b/a32b.md
+new file mode 100644
+index 0000000..8b49a06
+--- /dev/null
++++ b/b/a32b.md
+@@ -0,0 +1 @@
++::a32b1 Die Buchstaben laufen einfach weiter. ::a32b2 Nach `z` gehen die Bezeichner zweistellig weiter, mit `aa`, `ab` und so fort, in der Reihenfolge des Beitritts. ::a32b3 Es gibt also keine Obergrenze im Schlüsselsystem, und ein Schlüssel wie `a5aa` ist ein ganz gewöhnlicher Schlüssel — Partei `aa` antwortet auf Segment 5 des Eröffnungsbeitrags. ::a32b4 In der Praxis wird eine Diskussion mit 26 aktiven Parteien allerdings andere Probleme zuerst haben.
+\ No newline at end of file
+-- 
+2.39.5
+

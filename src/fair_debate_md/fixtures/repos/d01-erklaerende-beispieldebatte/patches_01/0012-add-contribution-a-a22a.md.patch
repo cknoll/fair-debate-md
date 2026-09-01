@@ -1,0 +1,22 @@
+From 81d55f318e78ae759fc157fbc958df25639fb508 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erkl=C3=A4rer?=
+ <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
+Date: Thu, 27 Aug 2026 21:50:00 +0200
+Subject: [PATCH 12/18] add contribution a/a22a.md
+
+---
+ a/a22a.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 a/a22a.md
+
+diff --git a/a/a22a.md b/a/a22a.md
+new file mode 100644
+index 0000000..e10a495
+--- /dev/null
++++ b/a/a22a.md
+@@ -0,0 +1 @@
++::a22a1 Das hier ist so ein Fall. ::a22a2 Der Beitrag stammt von Partei `a` und beantwortet ein Segment von Partei `a`, und die Plattform kennzeichnet ihn als Selbstantwort, damit ihn niemand für den einer anderen Partei hält. ::a22a3 Der nützliche Fall ist nicht diese Vorführung, sondern die Richtigstellung. ::a22a4 Ein Nachtrag oder das Eingeständnis eines Fehlers landet unmittelbar neben dem Satz, um den es geht, statt weit darunter, wo ihn niemand sieht, der das Ursprüngliche liest.
+\ No newline at end of file
+-- 
+2.39.5
+

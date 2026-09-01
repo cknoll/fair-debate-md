@@ -1,0 +1,22 @@
+From a4f3f54df8442fc317bf8f86367666c7f53ffcb1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erkl=C3=A4rer?=
+ <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
+Date: Sat, 29 Aug 2026 13:05:00 +0200
+Subject: [PATCH 17/18] add contribution a/a36a.md
+
+---
+ a/a36a.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 a/a36a.md
+
+diff --git a/a/a36a.md b/a/a36a.md
+new file mode 100644
+index 0000000..75d6629
+--- /dev/null
++++ b/a/a36a.md
+@@ -0,0 +1 @@
++::a36a1 Über die [Kontaktseite](/contact/) dieser Website, die auf die Betreuung des Projekts und auf das öffentliche Quelltext-Repository verweist, wo sich Fehlermeldungen und Vorschläge einreichen lassen. ::a36a2 Ein Rückmeldeformular innerhalb der Plattform selbst gibt es noch nicht.
+\ No newline at end of file
+-- 
+2.39.5
+

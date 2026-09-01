@@ -23,6 +23,7 @@ TEST_REPO1_DIR = pjoin(TEST_REPO_HOST_DIR, "d1-lorem_ipsum")
 # qualify, however useful it is as a test.
 DEMO_DEBATE_KEYS = (
     "d00-explanatory-example-debate",   # what the landing page links to
+    "d01-erklaerende-beispieldebatte",  # the german counterpart of d00
     "d31-ice-cream",                    # a small dispute with nesting and several parties
     "d33-wachstum-klimaschutz",         # the only fixture with real argumentative content
 )
