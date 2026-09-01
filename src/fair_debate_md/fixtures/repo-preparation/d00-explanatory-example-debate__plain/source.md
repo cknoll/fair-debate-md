@@ -117,6 +117,8 @@ The signature travels with the repository, so anyone who clones it holds that ev
 
 Every contribution carries a link (click the magnifier symbol) to the integrity page of the debate. There the fingerprints are listed, and the repository with the signed commits can be downloaded as a single file or cloned directly with git. Additionally, that page describes how to check for manipulation of the content.
 
+For anyone taking part in a debate the shortest route is to clone that repository once. From then on a single `git pull --ff-only` does the checking. It passes quietly while the debate merely grows, and it refuses to run the moment the history was rewritten. Nothing has to be noted down and nothing has to be remembered, and the refusal leaves the reader holding both versions at once, which is what turns a suspicion into something showable.
+
 ### What is promised, and what is not
 
 The platform cannot promise that the commit history is never changed. There might be cases where content has to be removed from the history (e.g. personal information). We instead promise that every change to the history is visible. It breaks the chain of fingerprints, and it will be reported on the integrity page of the debate it concerns. A broken chain with no such report means manipulation.
@@ -165,7 +167,9 @@ Both are possible, and the key says which one is meant. A range of consecutive s
 
 <!-- !!== label=a-faq-integrity party=a answers="How can the integrity of a debate" ==== -->
 
-Every contribution carries a small magnifier symbol that leads to the integrity page of its debate. That page lists the fingerprint of every commit, names the signing key of the platform, hands out the whole repository as a git clone, and gives details on how to check fingerprints and signatures.
+Every contribution carries a small magnifier symbol that leads to the integrity page of its debate. That page lists the fingerprint of every commit, names the signing key of the platform, hands out the whole repository as a git clone, and gives details on how to check fingerprints and signatures. The repository carries the same instructions in its own README, so a copy of it explains itself.
+
+The short answer is that you clone the repository once and run `git pull --ff-only` whenever you come back. New contributions arrive without comment; a rewritten history makes the command refuse and say so. Rewriting is not automatically an attack, since contributions occasionally have to be removed for organisational or legal reasons, but it is never invisible, and such an event is meant to be announced and explained on the integrity page.
 
 <!-- !!== label=a-faq-moderation party=a answers="How is the platform moderated?" ==== -->
 

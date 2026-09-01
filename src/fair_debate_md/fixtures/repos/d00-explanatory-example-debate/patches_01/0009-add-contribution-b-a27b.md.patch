@@ -1,19 +1,19 @@
-From f87d3e3ef66838fdb247cd31d8912b207ae4b2c9 Mon Sep 17 00:00:00 2001
+From 15943d459eb544e7f8641f365121a2578567e8df Mon Sep 17 00:00:00 2001
 From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 20:30:00 +0200
 Subject: [PATCH 09/18] add contribution b/a27b.md
 
 ---
- b/a27b.md | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ b/a27b.md | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
  create mode 100644 b/a27b.md
 
 diff --git a/b/a27b.md b/b/a27b.md
 new file mode 100644
-index 0000000..4478f30
+index 0000000..bbc82cf
 --- /dev/null
 +++ b/b/a27b.md
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,35 @@
 +### ::a27b1 Why this matters
 +
 +::a27b2 Like any infrastructure, a discussion platform is run by people. ::a27b3 In a genuinely contested debate there is a risk that whoever operates the platform interferes with the content, by deleting or by altering it. ::a27b4 A second risk points the other way — that an operator is accused of having done so although they did not, for instance after an argument turned out badly for the side making the accusation.
@@ -36,17 +36,19 @@ index 0000000..4478f30
 +
 +::a27b22 Every contribution carries a link (click the magnifier symbol) to the integrity page of the debate. ::a27b23 There the fingerprints are listed, and the repository with the signed commits can be downloaded as a single file or cloned directly with git. ::a27b24 Additionally, that page describes how to check for manipulation of the content.
 +
-+### ::a27b25 What is promised, and what is not
++::a27b25 For anyone taking part in a debate the shortest route is to clone that repository once. ::a27b26 From then on a single `git pull --ff-only` does the checking. ::a27b27 It passes quietly while the debate merely grows, and it refuses to run the moment the history was rewritten. ::a27b28 Nothing has to be noted down and nothing has to be remembered, and the refusal leaves the reader holding both versions at once, which is what turns a suspicion into something showable.
 +
-+::a27b26 The platform cannot promise that the commit history is never changed. ::a27b27 There might be cases where content has to be removed from the history (e.g. personal information). ::a27b28 We instead promise that every change to the history is visible. ::a27b29 It breaks the chain of fingerprints, and it will be reported on the integrity page of the debate it concerns. ::a27b30 A broken chain with no such report means manipulation.
++### ::a27b29 What is promised, and what is not
 +
-+::a27b31 However, the exact procedure for such a removal is not specified yet.
++::a27b30 The platform cannot promise that the commit history is never changed. ::a27b31 There might be cases where content has to be removed from the history (e.g. personal information). ::a27b32 We instead promise that every change to the history is visible. ::a27b33 It breaks the chain of fingerprints, and it will be reported on the integrity page of the debate it concerns. ::a27b34 A broken chain with no such report means manipulation.
 +
-+### ::a27b32 Current status
++::a27b35 However, the exact procedure for such a removal is not specified yet.
 +
-+::a27b33 Establishing a really waterproof system for integrity checks which is still understandable for most users is actually not trivial. ::a27b34 The current approach thus is a compromise and work in progress. ::a27b35 However, it already provides a lot more safety than what is usual.
++### ::a27b36 Current status
 +
-+::a27b36 This debate (along with some others) is a demonstration fixture. ::a27b37 Its repo is rebuilt whenever the explanation changes, so its authors, its commits, their times and their fingerprints are made up, although the integrity page shows them as it would for a real debate. ::a27b38 For the debates that people actually hold here, everything described above applies unchanged.
++::a27b37 Establishing a really waterproof system for integrity checks which is still understandable for most users is actually not trivial. ::a27b38 The current approach thus is a compromise and work in progress. ::a27b39 However, it already provides a lot more safety than what is usual.
++
++::a27b40 This debate (along with some others) is a demonstration fixture. ::a27b41 Its repo is rebuilt whenever the explanation changes, so its authors, its commits, their times and their fingerprints are made up, although the integrity page shows them as it would for a real debate. ::a27b42 For the debates that people actually hold here, everything described above applies unchanged.
 \ No newline at end of file
 -- 
 2.39.5
