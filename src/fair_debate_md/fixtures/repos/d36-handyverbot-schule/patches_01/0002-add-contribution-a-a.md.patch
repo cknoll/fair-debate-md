@@ -1,0 +1,52 @@
+From c875ad1e6dcdef32c830830c1179f25ef97b6059 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Verbotsbef=C3=BCrwortende=20Person?=
+ <d36-handyverbot-schule_a@fair-debate-users.org>
+Date: Wed, 12 Aug 2026 17:00:00 +0200
+Subject: [PATCH 2/5] add contribution a/a.md
+
+---
+ a/a.md | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 a/a.md
+
+diff --git a/a/a.md b/a/a.md
+new file mode 100644
+index 0000000..e3cb177
+--- /dev/null
++++ b/a/a.md
+@@ -0,0 +1,31 @@
++# ::a1 Schluss mit dem Zögern — handyfreie Schulen und ein Social-Media-Mindestalter von 16 Jahren
++
++::a2 Vorbemerkung zur Einordnung. ::a3 Diese Debatte ist ein Rollenspiel zwischen fiktiven Personen. ::a4 Der Eröffnungsbeitrag ist ein bewusst zugespitzter Meinungstext, wie er so in einer Zeitung stehen könnte, mitsamt der Schwächen, die solche Texte haben. ::a5 Bisher stehen nur drei Einwände darunter, und zu den meisten Behauptungen im Text ist noch gar nichts gesagt. ::a6 Diese Debatte ist ausdrücklich unfertig.
++
++::a7 Die Debatte um Smartphones an Schulen wird seit Jahren geführt, und sie ist längst entschieden. ::a8 Die Studienlage ist eindeutig. ::a9 Smartphones im Klassenzimmer senken die Konzentration, verschlechtern die Lernleistung und befeuern Mobbing. ::a10 Es ist kein Zufall, dass die deutschen PISA-Ergebnisse genau in dem Jahrzehnt eingebrochen sind, in dem das Smartphone auf dem Pausenhof allgegenwärtig wurde. ::a11 Wer heute noch Gegenargumente vorbringt, wiederholt meist nur die Ausreden der Plattform-Lobby.
++
++## ::a12 Was jetzt zu tun ist
++
++::a13 Sechs Bundesländer, darunter Sachsen und Bayern, haben die private Handynutzung an Schulen bereits per Gesetz eingeschränkt. ::a14 Das ist ein Anfang, aber es reicht nicht. ::a15 Drei Schritte sind überfällig.
++
++1. ::a16 **Ein bundesweit einheitliches Handyverbot an Schulen bis einschließlich Klasse 10.** Der föderale Flickenteppich verwirrt Eltern und Schüler. ::a17 Ob ein Kind konzentriert lernen kann, darf nicht davon abhängen, ob es in Dresden oder in Bremen zur Schule geht.
++2. ::a18 **Ein gesetzliches Mindestalter von 16 Jahren für soziale Medien.** Die CDU hat auf ihrem Bundesparteitag im Februar ein Mindestalter von 14 Jahren beschlossen. ::a19 Das war ein wichtiger Schritt, aber ein halber. ::a20 Australien hat mit 16 Jahren vorgemacht, dass es geht, und die Erfahrungen dort sind durchweg positiv.
++3. ::a21 **Harte Sanktionen für Plattformen, die sich nicht an die Altersgrenze halten.** Bußgelder im Promillebereich des Umsatzes beeindrucken niemanden.
++
++## ::a22 Die Argumente liegen auf dem Tisch
++
++::a23 Jugendliche verbringen heute im Durchschnitt mehr als fünf Stunden täglich am Smartphone. ::a24 Jeder Lehrer kann bestätigen, dass die Aufmerksamkeitsspanne der Schüler von Jahr zu Jahr sinkt. ::a25 An einer Dresdner Oberschule, die das Handyverbot schon vor zwei Jahren eingeführt hat, berichten die Lehrkräfte von einem völlig veränderten Pausenhof. ::a26 Die Kinder reden wieder miteinander, sie spielen wieder. ::a27 Das allein sollte als Beweis genügen.
++
++::a28 Beim Jugendschutz sind wir sonst zu Recht streng. ::a29 Wir geben Kindern keinen Alkohol, wir lassen sie nicht ins Spielcasino, wir verkaufen ihnen keine Zigaretten. ::a30 Nur beim Smartphone, dessen Suchtpotenzial Experten längst mit dem von Glücksspiel vergleichen, schauen wir zu. ::a31 Das ist nicht liberal, das ist verantwortungslos.
++
++::a32 Und die Sorge um die Umsetzbarkeit? ::a33 Die Altersverifikation ist technisch längst kein Problem mehr, Banken und Online-Händler machen es seit Jahren vor. ::a34 Wer die Durchsetzbarkeit anzweifelt, will in Wahrheit gar keine Lösung.
++
++## ::a35 Medienkompetenz ist die falsche Antwort
++
++::a36 Gern wird eingewandt, statt Verboten brauche es Medienbildung. ::a37 Das klingt gut, ist aber eine Nebelkerze. ::a38 Man bringt Kindern das Schwimmen auch nicht bei, indem man sie ins offene Meer wirft. ::a39 Erst wenn die Schule ein geschützter Raum ist und die Jüngsten von den Plattformen ferngehalten werden, kann Medienbildung überhaupt wirken. ::a40 Wer beides gegeneinander ausspielt, hat das Problem nicht verstanden oder verdient am Status quo.
++
++::a41 Manche warnen auch, ein Verbot treibe die Jugendlichen erst recht zu den Plattformen, weil das Verbotene attraktiv werde. ::a42 Nach dieser Logik müssten wir auch die Altersgrenze für Alkohol abschaffen. ::a43 Ernst nehmen muss man solche Einwände nicht.
++
++## ::a44 Fazit
++
++::a45 Eine ganze Generation wächst gerade mit einem Aufmerksamkeits-Staubsauger in der Hosentasche auf, und die Politik diskutiert seit zehn Jahren über Zuständigkeiten. ::a46 Jedes Jahr des Zögerns ist ein verlorener Jahrgang. ::a47 Die Länder, die vorangegangen sind, haben gezeigt, dass Verbote funktionieren und die Aufregung nach wenigen Wochen verfliegt. ::a48 Jetzt muss der Bund nachziehen, mit einem einheitlichen Schulverbot und einem Mindestalter von 16 Jahren. ::a49 Alles andere ist Politikversagen mit Ansage.
+\ No newline at end of file
+-- 
+2.39.5
+

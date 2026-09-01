@@ -1,0 +1,25 @@
+From 2ad9c17296a61c64af82e73c79fc236b0e7a718d Mon Sep 17 00:00:00 2001
+From: Verbotskritische Person <d36-handyverbot-schule_b@fair-debate-users.org>
+Date: Thu, 13 Aug 2026 08:25:00 +0200
+Subject: [PATCH 3/5] add contribution b/a8b.md
+
+---
+ b/a8b.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 b/a8b.md
+
+diff --git a/b/a8b.md b/b/a8b.md
+new file mode 100644
+index 0000000..44654f6
+--- /dev/null
++++ b/b/a8b.md
+@@ -0,0 +1,5 @@
++::a8b1 Sie ist es nicht, und der Text nennt keine einzige Quelle. ::a8b2 Überblicksdarstellungen kommen zu dem Ergebnis, dass die Befunde zu Handyverboten uneinheitlich sind. ::a8b3 Einzelne Studien finden Effekte auf Konzentration und Mobbing, andere finden keine messbare Verbesserung der Lernleistung.
++
++::a8b4 Die Expertenkommission zum Kinder- und Jugendmedienschutz in der digitalen Welt hat im Juni ihre 56 Handlungsempfehlungen vorgelegt und sich gerade nicht für ein pauschales Verbot ausgesprochen. ::a8b5 Sie bestätigt das Problem deutlich, rund eine Million Jugendliche nutzen problematisch, ein knappes Drittel davon suchtartig. ::a8b6 Ihre Antwort ist trotzdem ein Bündel aus Plattformpflichten, altersgerechten Voreinstellungen und Medienbildung.
++
++::a8b7 Wäre die Studienlage eindeutig, hätte diese Kommission anders entschieden. ::a8b8 Man kann ihr widersprechen. ::a8b9 Man kann sie aber nicht übergehen und im selben Text behaupten, die Sache sei entschieden.
+\ No newline at end of file
+-- 
+2.39.5
+

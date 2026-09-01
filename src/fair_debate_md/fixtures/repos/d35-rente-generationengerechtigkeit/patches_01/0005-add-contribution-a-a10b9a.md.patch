@@ -1,0 +1,26 @@
+From a414064396435e2686b96e0c3a2b3e5a49adbb87 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
+ <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
+Date: Tue, 21 Jul 2026 19:55:00 +0200
+Subject: [PATCH 05/13] add contribution a/a10b9a.md
+
+---
+ a/a10b9a.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 a/a10b9a.md
+
+diff --git a/a/a10b9a.md b/a/a10b9a.md
+new file mode 100644
+index 0000000..35a5aec
+--- /dev/null
++++ b/a/a10b9a.md
+@@ -0,0 +1,5 @@
++::a10b9a1 Den Punkt zur Produktivität nehme ich an. ::a10b9a2 Er ist richtig, und ich hätte ihn im Text nicht auslassen dürfen.
++
++::a10b9a3 Er entlastet die Rechnung aber nicht so weit, wie Sie andeuten. ::a10b9a4 Damit steigende Produktivität den sinkenden Anteil der Beitragszahler ausgleicht, müssten die Löhne dauerhaft stärker wachsen als in den letzten zwei Jahrzehnten, und ein Teil des Zuwachses ist längst verplant. ::a10b9a5 Wer die Finanzierung darauf stützt, verschiebt das Risiko nur von der Demografie auf die Konjunktur.
++
++::a10b9a6 Zur Erwerbstätigenversicherung. ::a10b9a7 Sie bringt kurzfristig Einnahmen, weil neue Beitragszahler hinzukommen, erzeugt aber genauso neue Ansprüche. ::a10b9a8 Das Problem wird dadurch später größer und nicht kleiner.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -140,6 +140,13 @@ def _is_abbreviation_dot(text_so_far: str, text_rest: str) -> bool:
         if prefix_re.search(text_so_far) and rest_re.match(stripped_rest):
             return True
 
+    # a dot between two digits groups them rather than ending a sentence:
+    # "100.000", "3.14", "24.12.2026". Checked against the UNstripped rest on
+    # purpose -- in "Es waren 2022. 500 kamen." the dot does end the sentence,
+    # and only the whitespace tells the two cases apart.
+    if text_so_far[-2:-1].isdigit() and text_rest[:1].isdigit():
+        return True
+
     # version number like "...v12." followed by a digit
     if _VERSION_RE.search(text_so_far) and stripped_rest[:1].isdigit():
         return True
@@ -152,8 +159,9 @@ def split_text_into_segments(text: str) -> list[str]:
     Split `text` at sentence splitters (``.``, ``!``, ``?``, ``:``) into
     segments. Splitters stay attached to the preceding segment. Known
     abbreviations (see `_STRONG_ABBREVIATIONS` / `_WEAK_ABBREVIATIONS`, e.g.
-    ``i.e.``, ``z.B.``, also in spaced form ``z. B.``) and version numbers
-    (``v12.3``) do NOT cause a split.
+    ``i.e.``, ``z.B.``, also in spaced form ``z. B.``), dots between digits
+    (``100.000``, ``3.14``, ``24.12.2026``) and version numbers (``v12.3``) do
+    NOT cause a split.
 
     The concatenation of the returned segments equals the input text.
 

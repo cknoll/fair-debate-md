@@ -1,0 +1,26 @@
+From 5b75bc9c0b75ede92daf603c10b0ebec1f1f064f Mon Sep 17 00:00:00 2001
+From: Reformkritische Person
+ <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
+Date: Wed, 22 Jul 2026 19:00:00 +0200
+Subject: [PATCH 08/13] add contribution b/a10b9a5b.md
+
+---
+ b/a10b9a5b.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 b/a10b9a5b.md
+
+diff --git a/b/a10b9a5b.md b/b/a10b9a5b.md
+new file mode 100644
+index 0000000..bff61ba
+--- /dev/null
++++ b/b/a10b9a5b.md
+@@ -0,0 +1,5 @@
++::a10b9a5b1 Das Risiko verschwindet in keinem der beiden Systeme, es wechselt nur den Träger. ::a10b9a5b2 Genau das ist mein Einwand gegen die Aktienrente, und er gilt symmetrisch.
++
++::a10b9a5b3 Bei der Umlage trägt die Gesellschaft das Konjunkturrisiko gemeinsam, bei der Kapitaldeckung trägt es der Einzelne mit seinem Depot. ::a10b9a5b4 Wer das eine als unsolide und das andere als solide bezeichnet, hat sich für einen Träger entschieden, ohne das zu sagen.
++
++::a10b9a5b5 Zu den neuen Ansprüchen. ::a10b9a5b6 Sie entstehen, aber später und niedriger als die Einnahmen, weil die einbezogenen Gruppen im Schnitt jünger sind und oberhalb der Beitragsbemessungsgrenze nur begrenzt Ansprüche erwerben. ::a10b9a5b7 Die Kommission rechnet damit, sonst hätte sie es nicht empfohlen.
+\ No newline at end of file
+-- 
+2.39.5
+

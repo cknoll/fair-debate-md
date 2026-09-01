@@ -1,0 +1,28 @@
+From 13fe052c8a053ca7cd0748a44734ffc09919ac38 Mon Sep 17 00:00:00 2001
+From: Nicht-Pazifistische Person
+ <d34-pazifismus-ukraine_b@fair-debate-users.org>
+Date: Fri, 3 Jul 2026 08:20:00 +0200
+Subject: [PATCH 03/12] add contribution b/a20b.md
+
+---
+ b/a20b.md | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 b/a20b.md
+
+diff --git a/b/a20b.md b/b/a20b.md
+new file mode 100644
+index 0000000..f748ce0
+--- /dev/null
++++ b/b/a20b.md
+@@ -0,0 +1,7 @@
++::a20b1 Hier liegt der Kern unserer Meinungsverschiedenheit, und ich halte Ihre Annahme über den Menschen für zu optimistisch.
++
++::a20b2 Die historische Forschung kennt genau diesen Fall. ::a20b3 Zu einem Hamburger Polizeibataillon, das im besetzten Osteuropa eingesetzt wurde, gibt es sehr genaue Untersuchungen. ::a20b4 Es waren keine Ideologen und keine ausgesuchten Fanatiker, sondern, so der Titel der bekanntesten Darstellung, ganz normale Männer. ::a20b5 Sie haben an wehrlosen Menschen Massenmorde begangen. ::a20b6 Wer also sagt, so etwas lasse sich nicht organisieren, muss erklären, warum es damals organisiert werden konnte.
++
++::a20b7 Dazu kommt der Befund aus der Gegenwart. ::a20b8 Was aus den seit Jahren besetzten Gebieten berichtet wird, klingt nicht nach Verhandeln und Singen. ::a20b9 Es wird gefoltert, es wird vergewaltigt, es werden Kinder verschleppt. ::a20b10 Und das geschieht dort, wo die Besetzung längst gesichert ist und niemand mehr auf die Besatzer schießt.
++
++::a20b11 Am schwersten wiegt für mich die Krim. ::a20b12 Sie wurde 2014 praktisch ohne bewaffneten Widerstand besetzt, es folgten acht Jahre, in denen tatsächlich verhandelt wurde. ::a20b13 Trotzdem gab es auch dort von Anfang an Gewaltverbrechen. ::a20b14 Ihr Modell hatte auf der Krim also die besten Bedingungen, die es bekommen konnte, und es hat den Preis nicht verhindert.
+\ No newline at end of file
+-- 
+2.39.5
+

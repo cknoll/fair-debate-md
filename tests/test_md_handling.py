@@ -244,6 +244,25 @@ class TestMDHandling(unittest.TestCase):
         res = split_text_into_segments("Uses v12.3 here.")
         self.assertEqual(res, ["Uses v12.3 here."])
 
+    def test_206__split_text_dots_between_digits(self):
+        # A dot between digits groups them; splitting it tore "100.000" into
+        # "100." and "000 ...", which silently cut a segment in half and made
+        # every german thousands separator unusable in a debate source.
+        keep_together = [
+            "Der Krieg forderte 100.000 Tote.",
+            "Das sind 1.234.567 Menschen.",
+            "Pi ist etwa 3.14 gross.",
+            "Am 24.12.2026 war es soweit.",
+        ]
+        for text in keep_together:
+            with self.subTest(text=text):
+                self.assertEqual(split_text_into_segments(text), [text])
+
+        # ... but a sentence really ending in a digit still splits: there the
+        # whitespace after the dot is the only thing telling the cases apart.
+        text = "Es waren 2022. 500 Leute kamen."
+        self.assertEqual(split_text_into_segments(text), ["Es waren 2022.", " 500 Leute kamen."])
+
     def test_207__split_text_abbreviations_extended(self):
         # strong abbreviations (never split), including spaced variants
         cases = [

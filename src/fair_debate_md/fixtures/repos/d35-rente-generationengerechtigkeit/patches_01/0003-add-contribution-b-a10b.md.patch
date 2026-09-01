@@ -1,0 +1,26 @@
+From 370ec75049d806588f875274f042ec2b70c13cae Mon Sep 17 00:00:00 2001
+From: Reformkritische Person
+ <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
+Date: Tue, 21 Jul 2026 08:40:00 +0200
+Subject: [PATCH 03/13] add contribution b/a10b.md
+
+---
+ b/a10b.md | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 b/a10b.md
+
+diff --git a/b/a10b.md b/b/a10b.md
+new file mode 100644
+index 0000000..1a5abad
+--- /dev/null
++++ b/b/a10b.md
+@@ -0,0 +1,5 @@
++::a10b1 Das ist ein Autoritätsargument, und es trifft nicht einmal zu. ::a10b2 Einen Konsens der Ökonomen, wonach nur eine höhere Altersgrenze und mehr Kapitaldeckung bleiben, gibt es nicht. ::a10b3 Gewerkschaftsnahe Institute halten moderate Beitragssatzsteigerungen für tragbar, und ein Teil der Wissenschaft schlägt stattdessen eine Erwerbstätigenversicherung vor, in die auch Beamte und Selbstständige einzahlen.
++
++::a10b4 Bemerkenswert ist, dass die Kommission genau Letzteres selbst empfiehlt. ::a10b5 Wer sich auf ihre 33 Empfehlungen beruft und im selben Atemzug nur die Altersgrenze und die Aktienrente nennt, zitiert sie selektiv.
++
++::a10b6 Auch die Verhältniszahl direkt davor trägt nicht. ::a10b7 Wie viele Beitragszahler auf einen Rentner kommen, hängt stark von Annahmen zu Zuwanderung, Erwerbsbeteiligung und Produktivität ab, und ein unbestimmtes "schon bald" ist keine Jahreszahl. ::a10b8 Vor allem sagt der Rentnerquotient allein wenig über Finanzierbarkeit. ::a10b9 Entscheidend ist, was ein Beitragszahler erwirtschaftet, und nicht, wie viele es sind.
+\ No newline at end of file
+-- 
+2.39.5
+
