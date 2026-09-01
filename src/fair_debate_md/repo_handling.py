@@ -1,5 +1,8 @@
+import email.parser
+import email.policy
 import os
 import re
+import shlex
 import subprocess
 from . import utils
 import glob
@@ -61,13 +64,16 @@ def first_patch_date(patch_files: list) -> str | None:
     return match.group(1).strip() if match else None
 
 
-def amend_root_files(repo_dir: str, sign_args: list, filenames: list):
+def amend_head(repo_dir: str, sign_args: list, filenames: list = (), author: str = None):
     """
-    Add files to the commit that is currently HEAD.
+    Rewrite the commit that is currently HEAD: add files to it, correct its author, or both.
 
     The committer date is pinned to the author date of that commit, the same rule
     `git am --committer-date-is-author-date` follows -- an amend would otherwise stamp
-    "now" and make the rollout unreproducible again.
+    "now" and make the rollout unreproducible again. The author date needs no such care:
+    `--amend` keeps it unless `--reset-author` is given.
+
+    :param author:  "Name <address>", passed to `git commit --author`
     """
 
     author_date = subprocess.run(
@@ -76,12 +82,68 @@ def amend_root_files(repo_dir: str, sign_args: list, filenames: list):
     ).stdout.strip()
 
     env = dict(os.environ, GIT_COMMITTER_DATE=author_date)
-    subprocess.run(["git", "-C", repo_dir, "add", *filenames], check=True)
+    if filenames:
+        subprocess.run(["git", "-C", repo_dir, "add", *filenames], check=True)
     subprocess.run(
         ["git", "-C", repo_dir, *sign_args[:2], "commit", "--amend", "--no-edit",
+         *(["--author", author] if author else []),
          *(["-S"] if sign_args else []), "--no-verify"],
         check=True, env=env, capture_output=True,
     )
+
+
+def patch_author(patch_path: str) -> tuple:
+    """
+    The author a patch names, as (display name, address).
+
+    Read with the `email` package rather than by hand: `git format-patch` folds a long
+    `From:` header over two lines and writes non-ASCII names as RFC 2047 encoded words.
+    Both have to be undone before the name can be compared to anything.
+    """
+
+    with open(patch_path, "rb") as fp:
+        parser = email.parser.BytesParser(policy=email.policy.default)
+        header = parser.parse(fp, headersonly=True)["From"]
+
+    if header is None or not header.addresses:
+        return "", ""
+    address = header.addresses[0]
+    return address.display_name, address.addr_spec
+
+
+def restore_patch_author(repo_dir: str, patch_path: str, sign_args: list):
+    """
+    Put the author of the commit at HEAD back when `git am` dropped it.
+
+    `git mailinfo`, which `git am` parses the mail header with, discards a display name
+    longer than 60 characters and falls back to the bare address -- without a warning, and
+    for a header it wrote itself. The commit then reads as authored by
+    `d13-...-wiederstands_a@fair-debate-users.org` rather than by
+    `fair debate user d13-fragging-ist-valide-form-des-wiederstands a`.
+
+    That is not an exotic case here. A party's name is built from the debate key, so any
+    key beyond a few words crosses the line: four of the eleven fixture collections are
+    affected, and so were two of the four live debates. It is also invisible in the
+    rollout output, and the patches themselves are correct -- the loss happens entirely on
+    the reading side, which is why it survived this long.
+
+    The comparison IS the check, so no length threshold is hard-coded: a git that stops
+    truncating simply makes this a no-op.
+    """
+
+    name, address = patch_author(patch_path)
+    if not name:
+        # `git am` derives a name from the address in that case, and so would we
+        return
+
+    current = subprocess.run(
+        ["git", "-C", repo_dir, "log", "-1", "--format=%an"],
+        capture_output=True, text=True, check=True,
+    ).stdout.strip()
+    if current == name:
+        return
+
+    amend_head(repo_dir, sign_args, author=f"{name} <{address}>")
 
 
 @utils.preserve_cwd
@@ -103,7 +165,11 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
       through `/d/<key>/bundle`;
     * without `-S` nothing is signed, however carefully the patches were prepared;
     * without `--committer-date-is-author-date` the committer date is "now", so every
-      rollout produced different commit hashes for identical content.
+      rollout produced different commit hashes for identical content;
+    * `git am` keeps the author only if its display name is at most 60 characters long and
+      replaces it with the bare address otherwise, so the one thing a patch does carry got
+      lost for every party whose debate key is more than a few words -- see
+      `restore_patch_author()`, which puts it back.
 
     Two files are written here rather than taken from the patches, and both are amended
     INTO the root commit rather than added in one of their own -- that is where
@@ -152,10 +218,14 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
         sign_args = ["-c", f"user.signingkey={settings.signing_key_path}", "-S"]
 
     def apply(files):
+        # one `git am` per patch rather than one for the batch: a dropped author has to be
+        # put back before the next commit is built on top, see `restore_patch_author()`
         argv = ["git", *sign_args[:2], "am", "--committer-date-is-author-date"]
         if sign_args:
             argv.append("-S")
-        os.system(" ".join(argv) + " " + " ".join(files))
+        for path in files:
+            os.system(" ".join(argv) + " " + shlex.quote(path))
+            restore_patch_author(repo_dir, path, sign_args)
 
     if from_scratch and patch_files_limited:
         # apply the first patch, put the instance-dependent files into that same commit,
@@ -170,7 +240,7 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
         if settings.signing_key_path and write_allowed_signers(repo_dir, settings):
             root_files.append(ALLOWED_SIGNERS_FILENAME)
 
-        amend_root_files(repo_dir, sign_args, root_files)
+        amend_head(repo_dir, sign_args, filenames=root_files)
         apply(patch_files_limited[1:])
     else:
         apply(patch_files_limited)
