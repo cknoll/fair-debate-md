@@ -54,9 +54,9 @@ histories that contradict each other. Which of the two is the "real" one does no
 matter for that argument.
 
 A rewrite is not automatically an attack. Contributions sometimes have to be removed for
-legal reasons, and that cannot be done any other way. What separates the two cases is
-whether the event was announced and explained on the debate's integrity page, and whether
-the rest of the history still matches commit for commit.
+organisational or legal reasons, and that cannot be done any other way. What separates the
+two cases is whether the event was announced and explained on the debate's integrity page,
+and whether the rest of the history still matches commit for commit.
 
 ### Checking the signatures
 
