@@ -22,9 +22,12 @@ TEST_REPO1_DIR = pjoin(TEST_REPO_HOST_DIR, "d1-lorem_ipsum")
 # with a correct impression of what the platform is for -- placeholder text does not
 # qualify, however useful it is as a test.
 DEMO_DEBATE_KEYS = (
-    "d00-explanatory-example-debate",   # what the landing page links to
-    "d31-ice-cream",                    # a small dispute with nesting and several parties
-    "d33-wachstum-klimaschutz",         # the only fixture with real argumentative content
+    "d00-explanatory-example-debate",     # what the landing page links to
+    "d31-ice-cream",                      # a small dispute with nesting and several parties
+    "d33-wachstum-klimaschutz",           # a reconstructed radio debate on growth vs. climate
+    "d34-pazifismus-ukraine",             # pacifism and the war in Ukraine, from a podcast episode
+    "d35-rente-generationengerechtigkeit",  # pension reform, argued out, ends in a concession
+    "d36-handyverbot-schule",             # phone ban at schools, left unfinished for live demos
 )
 
 txt1_md_fpath = os.path.join(path, "txt1.md")
