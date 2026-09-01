@@ -1,0 +1,55 @@
+From 6782d0eaac4bae3891b1dde4b403d7ceb9269151 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erkl=C3=A4rer?=
+ <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
+Date: Mon, 24 Aug 2026 17:00:00 +0200
+Subject: [PATCH 02/18] add contribution a/a.md
+
+---
+ a/a.md | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 a/a.md
+
+diff --git a/a/a.md b/a/a.md
+new file mode 100644
+index 0000000..51636d8
+--- /dev/null
++++ b/a/a.md
+@@ -0,0 +1,34 @@
++# ::a1 Erklärende Beispiel-Debatte
++
++::a2 Dieses Dokument ist eine _Debatte_. ::a3 Es beschreibt die wichtigsten Eigenschaften von _Fair Debate_ — der Plattform, die du gerade vor dir hast — und begründet sie. ::a4 Dabei zweckentfremdet es die Funktionen der Plattform, nämlich die besondere Darstellung von Rede und Gegenrede, für Erklärungen. ::a5 Eigentlich ist Fair Debate nicht dafür gedacht, Dokumentation anzuzeigen, sondern als Werkzeug für sachliche und nachvollziehbare Verständigung über womöglich strittige Themen.
++
++::a6 Du liest gerade den eröffnenden _Beitrag_ dieser Debatte. ::a7 Er trägt den Beitragsschlüssel `a`. ::a8 Jeder Beitrag wird automatisch in _Segmente_ zerlegt — Überschriften, Sätze, Aufzählungspunkte. ::a9 Die Segmente eines Beitrags bekommen eigene Schlüssel wie `a1`, `a2` und so weiter. ::a10 Dadurch lässt sich jedes Segment genau benennen. ::a11 Und jedes Segment lässt sich einzeln beantworten. ::a12 Wenn du mit der Maus über ein Segment fährst, siehst du seinen Schlüssel; ein Klick oder Fingertipp erlaubt dir außerdem, seine URL zu kopieren und darauf zu antworten.
++
++::a13 Hervorgehobene Segmente sind bereits beantwortet worden. ::a14 Klicke auf ein solches Segment, um die Antworten darunter aufzuklappen. ::a15 Der größte Teil dieses Dokuments steckt in diesen Antworten, Aufklappen ist also die Art, es zu lesen.
++
++::a16 An einer Debatte können mehrere Parteien (Benutzerkonten) teilnehmen. ::a17 Parteien werden durch Buchstaben bezeichnet, vergeben in der Reihenfolge des Beitritts.
++
++- ::a18 `a` ist die Partei, die die Debatte eröffnet, hier also ich.
++- ::a19 `b` ist die Partei, die als erste antwortet.
++- ::a20 `c` ist die Partei, die als zweite antwortet.
++- ::a21 Weitere Parteien setzen das Alphabet fort und darüber hinaus (siehe unten).
++
++::a22 Eine Partei kann auch ein eigenes Segment beantworten. ::a23 So lässt sich ein Nachtrag in die Debatte einbringen, ohne das bereits Veröffentlichte umzuschreiben.
++
++::a24 Zwei Eigenschaften unterscheiden diese Plattform von einem gewöhnlichen Kommentarbereich oder Forum. ::a25 Sie werden in den Antworten erklärt.
++
++1. ::a26 Dauerhafte Antworten im Kontext.
++2. ::a27 Beweisbare Integrität der Inhalte.
++
++::a28 Wenn du diese beiden Eigenschaften verstanden hast, kannst du Fair Debate schon recht gut benutzen. ::a29 Es gibt allerdings noch einige Einzelheiten, die dich interessieren könnten.
++
++## ::a30 Häufige Fragen
++
++::a31 Jede dieser Fragen wird weiter unten in einer eigenen Antwort behandelt — was zugleich vorführt, was diese Plattform tut.
++
++- ::a32 Was passiert, wenn mehr Parteien an der Debatte teilnehmen, als das Alphabet Buchstaben hat?
++- ::a33 Können mehrere Segmente oder Teile von Segmenten beantwortet werden?
++- ::a34 Wie lässt sich die Integrität einer Debatte prüfen, also die Abwesenheit von Manipulation?
++- ::a35 Wie wird die Plattform moderiert?
++- ::a36 Wie sammelt das Projekt Rückmeldungen?
++- ::a37 Kann man das Projekt unterstützen?
+\ No newline at end of file
+-- 
+2.39.5
+

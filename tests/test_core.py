@@ -516,6 +516,66 @@ class TestSignedRollout(unittest.TestCase):
         ).split()
         self.assertNotIn(fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME, root_files)
 
+    def test_070__a_long_author_name_survives_the_rollout(self):
+        """
+        `git am` drops a display name longer than 60 characters and substitutes the bare
+        address, silently and for a header `git format-patch` wrote itself.
+
+        Party names are built from the debate key ("fair debate user <key> a"), so this is
+        the normal case rather than an edge one: any key beyond a few words produces a
+        name over the limit. The author is the only thing a patch actually carries, so
+        losing it defeats the purpose of the whole rollout path.
+
+        The name is spelled out here rather than taken from a fixture, so that the test
+        keeps testing the limit even if every fixture key gets shorter.
+        """
+
+        name = "fair debate user d13-fragging-ist-valide-form-des-wiederstands a"
+        address = "d13-fragging-ist-valide-form-des-wiederstands_a@fair-debate-users.org"
+        self.assertGreater(len(name), 60)
+
+        source = pjoin(self.tmpdir, "source")
+        patch_dir = pjoin(self.tmpdir, "long-name-patches")
+        os.makedirs(source)
+        subprocess.run(["git", "init", "-q"], cwd=source, check=True)
+        with open(pjoin(source, "a.md"), "w") as fp:
+            fp.write("a contribution\n")
+        subprocess.run(["git", "add", "a.md"], cwd=source, check=True)
+        subprocess.run(
+            ["git", "commit", "-q", "-m", "add contribution a/a.md"],
+            cwd=source, check=True, capture_output=True,
+            env=dict(
+                os.environ,
+                GIT_AUTHOR_NAME=name, GIT_AUTHOR_EMAIL=address,
+                GIT_COMMITTER_NAME="platform", GIT_COMMITTER_EMAIL="p@fair-debate.invalid",
+            ),
+        )
+        subprocess.run(
+            ["git", "format-patch", "--root", "-o", patch_dir, "HEAD"],
+            cwd=source, check=True, capture_output=True,
+        )
+
+        repo_dir = pjoin(self.tmpdir, "long-name-repo")
+        fdmd.repo_handling.rollout_patches(
+            repo_dir=repo_dir, patch_dir=patch_dir, settings=self.settings,
+            debate_key="d13-fragging-ist-valide-form-des-wiederstands",
+        )
+
+        self.assertEqual(self._git(repo_dir, "log -1 --format=%an").strip(), name)
+        self.assertEqual(self._git(repo_dir, "log -1 --format=%ae").strip(), address)
+
+        # the repair goes through `git commit --amend`, which must not disturb what the
+        # rest of this class establishes: the platform stays the committer, the commit
+        # stays signed, and both dates stay tied together
+        self.assertEqual(
+            self._git(repo_dir, "log -1 --format=%ce").strip(), self.settings.committer_email
+        )
+        self.assertEqual(self._git(repo_dir, "log -1 --format=%G?").strip(), "G")
+        self.assertEqual(
+            self._git(repo_dir, "log -1 --format=%aI").strip(),
+            self._git(repo_dir, "log -1 --format=%cI").strip(),
+        )
+
 
 class TestRolloutIsServable(unittest.TestCase):
     """

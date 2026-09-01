@@ -44,6 +44,14 @@ with its own `dNN` key, not a variant of another one:
 
 - `d00-explanatory-example-debate__plain/source.md` -- the debate a first-time visitor is
   pointed to (english).
+- `d01-erklaerende-beispieldebatte__plain/source.md` -- its german counterpart. Same
+  structure and the same anchor points, so the two produce almost the same contribution
+  keys; only the integrity contribution has more segments in german, which moves `a27b38c`
+  to `a27b41c`. It addresses the reader informally ("du"), like the german interface does.
+  A *debate* is a "Debatte" here, and so is it in the interface: the german texts were
+  changed over from "Diskussion" on 2026-09-01, by the user's decision. Keep new german
+  sources on "Debatte"; a compound that does not name the platform object (the standing
+  example is "Diskussionskultur") is the only reason to depart from it.
 - `d34-pazifismus-ukraine__plain/source.md` -- german, argumentative: a role play between
   two fictional persons on pacifism and the war in Ukraine, both referring to one podcast
   episode. Eleven contributions along three threads, deliberately unresolved.
