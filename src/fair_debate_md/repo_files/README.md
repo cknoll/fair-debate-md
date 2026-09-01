@@ -80,10 +80,6 @@ noted. Present means nothing before it was altered, missing means the history wa
 rewritten. That route needs you to have written something down at the right moment, which
 is why the clone is the better one -- but it keeps working after the platform is gone.
 
-`git fsck` answers none of these questions. It only checks that the stored data matches its
-own fingerprints, and a rewritten history passes that test, because the rewrite produces
-new and internally consistent fingerprints.
-
 ## What this does not prove
 
 - **Who wrote a contribution.** The commits are created and signed by the platform, not by
