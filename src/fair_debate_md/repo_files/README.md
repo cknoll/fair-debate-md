@@ -14,20 +14,16 @@ A platform that keeps debates in its own database can change them, and nobody ou
 tell. In contrast on {platform_name} every contribution is a commit, every commit carries a
 fingerprint computed over all the preceding ones, and every commit is signed by the platform.
 Altering an old contribution changes its fingerprint and everyone after it. The fingerprints
-make manipulation detectable while the signatures can proof that a commit history is "official"
+make manipulation detectable while the signatures can prove that a commit history is "official"
 (and not just staged by somebody who falsely accuses the platform of manipulation).
 
-
--- and the signatures already handed out do
-not go away, so anyone holding a copy of this repository can hold the two versions against
-each other.
-
 That is what your copy is for. You do not have to do anything with it. Having it is the
-point.
+point. It is only needed as reinsurance to detect and prove manipulation.
 
 ## How to check it
 
-The platform's public key is in `allowed_signers`, in the first commit of this repository.
+The platform's public key is in the file `allowed_signers`, added with the first commit of
+this repository.
 
     git -c gpg.ssh.allowedSignersFile=./allowed_signers log --show-signature
 
@@ -64,6 +60,7 @@ The integrity concept behind this repository is still being built, and no indepe
 expert has reviewed it. Two gaps worth naming, so you do not have to find them yourself:
 
 - There is **no procedure for renewing the signing key** yet. If the key ever changes,
-  nothing here says how old signatures relate to the new one.
+  nothing here says how old signatures relate to the new one. This is a solvable issue but
+  details need to be specified.
 - There is no public mirror and no external archive yet. The only independent copies of
   this history are the ones readers keep. Yours is one of them.
