@@ -47,6 +47,15 @@ with its own `dNN` key, not a variant of another one:
 - `d34-pazifismus-ukraine__plain/source.md` -- german, argumentative: a role play between
   two fictional persons on pacifism and the war in Ukraine, both referring to one podcast
   episode. Eleven contributions along three threads, deliberately unresolved.
+- `d35-rente-generationengerechtigkeit__plain/source.md` -- german, and the worked-out
+  case of the demo pair: a deliberately pointed opinion piece on pension reform, answered
+  along four threads down to level 4. One of them ends in an actual concession, which is
+  the point the fixture is meant to show.
+- `d36-handyverbot-schule__plain/source.md` -- german, deliberately shallow: the same kind
+  of opinion piece (phone ban at schools, minimum age for social media) with three
+  unanswered objections from two other parties. It is the live-demo counterpart of d35 --
+  an audience is supposed to add the next contribution, so most claims are left untouched
+  on purpose.
 
 Until 2026-08 that fixture was built by `fdmd process-content-dir` from one file per
 contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):
