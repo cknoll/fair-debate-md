@@ -1,0 +1,24 @@
+From a028c6cd6cb9cd3e2aae4bc910c771f8d40e351b Mon Sep 17 00:00:00 2001
+From: Reformkritische Person
+ <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
+Date: Tue, 21 Jul 2026 14:05:00 +0200
+Subject: [PATCH 04/13] add contribution b/a15b.md
+
+---
+ b/a15b.md | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 b/a15b.md
+
+diff --git a/b/a15b.md b/b/a15b.md
+new file mode 100644
+index 0000000..3382ad0
+--- /dev/null
++++ b/b/a15b.md
+@@ -0,0 +1,3 @@
++::a15b1 Dieser Schluss überspringt die Größe, auf die es ankommt. ::a15b2 Die Lebenserwartung steigt, die Zahl der gesunden Lebensjahre steigt aber deutlich langsamer, und sie ist sozial stark gespreizt. ::a15b3 Zwischen Geringverdienern und Gutverdienern liegen mehrere Jahre.
++
++::a15b4 Eine pauschale Anhebung der Altersgrenze wirkt deshalb nicht für alle gleich. ::a15b5 Für körperlich Arbeitende ist sie faktisch eine Rentenkürzung, weil viele von ihnen die Grenze gar nicht gesund erreichen. ::a15b6 Wer länger lebt, ist nicht automatisch länger arbeitsfähig.
+\ No newline at end of file
+-- 
+2.39.5
+

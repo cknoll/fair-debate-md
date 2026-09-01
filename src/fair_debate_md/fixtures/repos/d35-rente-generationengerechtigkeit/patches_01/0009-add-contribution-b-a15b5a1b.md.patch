@@ -1,0 +1,24 @@
+From db69ae22f4c4bda9a323ae0faa3c20adf649b48b Mon Sep 17 00:00:00 2001
+From: Reformkritische Person
+ <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
+Date: Thu, 23 Jul 2026 08:20:00 +0200
+Subject: [PATCH 09/13] add contribution b/a15b5a1b.md
+
+---
+ b/a15b5a1b.md | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 b/a15b5a1b.md
+
+diff --git a/b/a15b5a1b.md b/b/a15b5a1b.md
+new file mode 100644
+index 0000000..4fbefd3
+--- /dev/null
++++ b/b/a15b5a1b.md
+@@ -0,0 +1,3 @@
++::a15b5a1b1 Die Erwerbsminderungsrente ist kein Auffangnetz für Verschleißberufe. ::a15b5a1b2 Die Hürden sind hoch, die Verfahren lang, und die Abschläge sind erheblich. ::a15b5a1b3 Wer sie bekommt, ist meist schon aus dem Erwerbsleben gefallen, statt geordnet in den Ruhestand zu gehen.
++
++::a15b5a1b4 Und das Büro-Bild stimmt nicht. ::a15b5a1b5 Pflege, Bau, Logistik, Reinigung, Handwerk, Gastronomie, das sind zusammen keine Randgruppe, sondern Millionen Beschäftigte. ::a15b5a1b6 Der Ausdruck "die allermeisten" ist eine Behauptung, die der Text nicht belegt und die ich bestreite.
+\ No newline at end of file
+-- 
+2.39.5
+

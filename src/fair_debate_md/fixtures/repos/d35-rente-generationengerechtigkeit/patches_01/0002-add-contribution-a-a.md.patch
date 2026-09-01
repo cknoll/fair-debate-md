@@ -1,0 +1,48 @@
+From 01f02afa3fd94bc84398fa58c8315fe946ac2c61 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
+ <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
+Date: Mon, 20 Jul 2026 17:00:00 +0200
+Subject: [PATCH 02/13] add contribution a/a.md
+
+---
+ a/a.md | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 a/a.md
+
+diff --git a/a/a.md b/a/a.md
+new file mode 100644
+index 0000000..eed3322
+--- /dev/null
++++ b/a/a.md
+@@ -0,0 +1,27 @@
++# ::a1 Generationengerechtigkeit jetzt — die Empfehlungen der Rentenkommission gehören ohne Abstriche umgesetzt
++
++::a2 Vorbemerkung zur Einordnung. ::a3 Diese Debatte ist ein Rollenspiel zwischen zwei fiktiven Personen. ::a4 Der Eröffnungsbeitrag ist ein bewusst zugespitzter Meinungstext, wie er so in einer Zeitung stehen könnte, mitsamt der Schwächen, die solche Texte haben. ::a5 Er steht hier, damit sich zeigen lässt, was eine Fair-Debate mit ihm macht.
++
++::a6 Die Alterssicherungskommission hat im Juni ihre Empfehlungen vorgelegt, und der Koalitionsausschuss hat ihre Umsetzung zugesagt. ::a7 Das ist die letzte Chance für eine ehrliche Rentenpolitik. ::a8 Denn die Demografie ist unerbittlich. ::a9 Schon bald kommen auf einen Rentner nur noch zwei Beitragszahler. ::a10 Jeder Ökonom weiß, dass das heutige System so nicht finanzierbar ist. ::a11 Die Frage ist nicht, ob wir reformieren, sondern nur, ob wir es geordnet tun oder ob uns das System in zehn Jahren um die Ohren fliegt.
++
++## ::a12 Was jetzt zu tun ist
++
++1. ::a13 **Alle 33 Empfehlungen der Kommission umsetzen, noch in diesem Jahr.** Wer jetzt wieder einzelne Punkte herauslöst und weichspült, hat aus dem Rentenstreit vom letzten Dezember nichts gelernt.
++2. ::a14 **Die Regelaltersgrenze dauerhaft an die Lebenserwartung koppeln.** Die vorgeschlagene Anhebung auf 67,5 Jahre ist richtig, aber nur ein erster Schritt. ::a15 Wir leben immer länger, dann können wir auch länger arbeiten. ::a16 Wer hier von einer Rente mit 70 redet, betreibt Panikmache.
++3. ::a17 **Die 48-Prozent-Haltelinie auslaufen lassen und die Aktienrente massiv ausbauen.** Die Haltelinie kostet den Steuerzahler 15 Milliarden Euro jährlich, Geld, das bei Bildung und Infrastruktur fehlt. ::a18 Schweden hat mit der Aktienrente vorgemacht, wie es geht, und die Erfahrungen dort sind durchweg positiv.
++
++## ::a19 Die Zahlen sprechen für sich
++
++::a20 Das Rentenpaket vom Dezember war ein teurer Fehler auf Kosten der Jungen. ::a21 Die Junge Gruppe der Unionsfraktion hatte völlig recht, als sie es für nicht zustimmungsfähig erklärte, durchgedrückt wurde es trotzdem. ::a22 Das Ergebnis ist eine Politikergeneration, die sich die Zustimmung der Rentner gekauft und die Rechnung an die Enkel geschickt hat. ::a23 Meine Generation zahlt heute die höchsten Beiträge der Geschichte und wird selbst die niedrigsten Renten bekommen. ::a24 Das ist keine Meinung, das ist Mathematik.
++
++::a25 Dabei zeigt die seit Januar geltende Aktivrente doch, dass Reformen funktionieren. ::a26 Die steuerfreie Weiterarbeit im Alter ist ein voller Erfolg, überall hört man von Betrieben, die dankbar auf erfahrene Kräfte zurückgreifen. ::a27 Wer arbeiten will, soll arbeiten dürfen. ::a28 Genau diese Logik müssen wir auf das ganze System übertragen, also mehr Flexibilität, mehr Eigenverantwortung, weniger Vollkasko-Mentalität.
++
++## ::a29 Die Einwände überzeugen nicht
++
++::a30 Natürlich kommt jetzt wieder der Einwand, der Dachdecker könne nicht bis 68 aufs Dach. ::a31 Das ist ein Scheinargument. ::a32 Für die wenigen echten Härtefälle gibt es die Erwerbsminderungsrente, und die allermeisten Beschäftigten arbeiten heute im Büro und nicht auf dem Gerüst. ::a33 Die Gewerkschaften, die gegen jede Anhebung Sturm laufen, vertreten in Wahrheit die Interessen der rentennahen Jahrgänge und nicht die der Jungen, die das alles bezahlen.
++
++::a34 Auch das Argument, man könne stattdessen einfach die Beiträge erhöhen oder mehr Steuergeld zuschießen, führt nicht weiter. ::a35 Der Bundeszuschuss frisst schon heute ein Viertel des Bundeshaushalts. ::a36 Wer noch mehr hineinkippen will, will die Lasten unsichtbar machen und den Enkeln aufbürden. ::a37 Ehrlicher ist es, allen Bürgern zu sagen, dass die Lebensarbeitszeit steigt und ein Teil der Vorsorge künftig über den Kapitalmarkt läuft.
++
++## ::a38 Fazit
++
++::a39 Die Kommission hat geliefert, der Koalitionsausschuss hat zugesagt, jetzt zählt nur noch die Umsetzung bis Ende 2026. ::a40 Jede Verwässerung wäre ein Signal an die junge Generation, dass sich Leistung und Beitragszahlung in diesem Land nicht mehr lohnen. ::a41 Generationengerechtigkeit ist kein Nischenthema, sondern die soziale Frage unserer Zeit. ::a42 Wer jetzt zaudert, riskiert nicht weniger als den Generationenvertrag selbst.
+\ No newline at end of file
+-- 
+2.39.5
+
