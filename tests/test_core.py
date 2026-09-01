@@ -512,6 +512,82 @@ class TestSignedRollout(unittest.TestCase):
         self.assertNotIn(fdmd.repo_handling.ALLOWED_SIGNERS_FILENAME, root_files)
 
 
+class TestRolloutIsServable(unittest.TestCase):
+    """
+    A rolled-out repo must be cloneable right away.
+
+    The integrity page advertises `git clone <site>/d/<key>/repo.git`, which is git's
+    "dumb" HTTP protocol: there is no git process on the server side, so the client can
+    only read the static index `git update-server-info` writes into `info/refs`. That used
+    to happen in the publishing path only, so every repo that a deployment merely rolled
+    out stayed unclonable until somebody happened to publish a contribution to it.
+
+    Both halves are checked below, and the second one is the nastier: a *missing*
+    `info/refs` at least makes the clone fail loudly, while a *stale* one makes it succeed
+    and hand out an older state. On a page whose whole purpose is letting a reader check a
+    fingerprint, silently serving the wrong history is the worst failure available.
+    """
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp(prefix="fdmd-servable-rollout-")
+        self.key_path = pjoin(self.tmpdir, "test_key")
+        subprocess.run(
+            ["ssh-keygen", "-t", "ed25519", "-N", "", "-C", "fdmd test key",
+             "-f", self.key_path],
+            check=True, capture_output=True,
+        )
+        self.settings = fdmd.repo_handling.PlatformSettings()
+        self.settings.committer_name = "Test platform"
+        self.settings.committer_email = "platform@fair-debate.invalid"
+        self.settings.signing_key_path = self.key_path
+        self.patch_dir = pjoin(TEST_REPO1_DIR, "patches_01")
+
+    def tearDown(self):
+        fdmd.utils.tolerant_rmtree(self.tmpdir)
+
+    def _assert_info_refs_matches_head(self, repo_dir):
+        info_refs = pjoin(repo_dir, ".git", "info", "refs")
+        self.assertTrue(os.path.isfile(info_refs), f"no info/refs in {repo_dir}")
+
+        with open(info_refs) as fp:
+            content = fp.read()
+
+        head = fdmd.utils.get_cmd_output(f"git -C {repo_dir} rev-parse HEAD").strip()
+        # a stale index still lists *some* sha, so comparing against the current HEAD is
+        # the only check that catches it
+        self.assertIn(head, content, f"info/refs of {repo_dir} does not point at HEAD")
+
+    def test_010__a_signed_rollout_is_immediately_cloneable(self):
+        repo_dir = pjoin(self.tmpdir, "signed")
+        fdmd.repo_handling.rollout_patches(
+            repo_dir=repo_dir, patch_dir=self.patch_dir, settings=self.settings
+        )
+
+        # this path amends the root commit to fold in `allowed_signers`, which rewrites
+        # every commit hash -- an index written before that would be stale on arrival
+        self._assert_info_refs_matches_head(repo_dir)
+
+    def test_020__a_keyless_rollout_is_immediately_cloneable(self):
+        # running this library must not require a secret, and the keyless path takes a
+        # different branch through `rollout_patches`
+        self.settings.signing_key_path = None
+        repo_dir = pjoin(self.tmpdir, "unsigned")
+        fdmd.repo_handling.rollout_patches(
+            repo_dir=repo_dir, patch_dir=self.patch_dir, settings=self.settings
+        )
+
+        self._assert_info_refs_matches_head(repo_dir)
+
+    def test_030__the_deployment_rollout_is_immediately_cloneable(self):
+        # what a deployment actually runs; nothing else writes an index for these repos
+        # before the first contribution is published to them
+        target = pjoin(self.tmpdir, "content_repos")
+        fdmd.unpack_repos(target, demo_only=True)
+
+        for name in sorted(os.listdir(target)):
+            self._assert_info_refs_matches_head(pjoin(target, name))
+
+
 class TestKeyHelpers(unittest.TestCase):
     """Tests for key_regex widening and new key helper functions."""
 

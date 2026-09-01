@@ -110,6 +110,9 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
         settings = platform_settings
 
     patch_dir = os.path.abspath(patch_dir)
+    # resolved before the `chdir` below, after which a relative path would silently point
+    # somewhere else -- and the `git -C <repo_dir>` calls further down would follow it
+    repo_dir = os.path.abspath(repo_dir)
     os.makedirs(repo_dir, exist_ok=True)
     os.chdir(repo_dir)
 
@@ -144,19 +147,25 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
         from_scratch and settings.signing_key_path and patch_files_limited
         and build_allowed_signers_content(settings)
     )
-    if not add_signers:
+    if add_signers:
+        # `allowed_signers` belongs INTO the root commit, not into one of its own in front
+        # of it: `create_repo()` puts it there for a repo the platform creates itself, and
+        # a second metadata commit would show up on the integrity page as a second row
+        # without any contribution. So apply the first patch, amend the file into that
+        # commit, then apply the rest.
+        apply(patch_files_limited[:1])
+        write_allowed_signers(repo_dir, settings)
+        amend_root_with_allowed_signers(repo_dir, sign_args)
+        apply(patch_files_limited[1:])
+    else:
         apply(patch_files_limited)
-        return
 
-    # `allowed_signers` belongs INTO the root commit, not into one of its own in front of
-    # it: `create_repo()` puts it there for a repo the platform creates itself, and a
-    # second metadata commit would show up on the integrity page as a second row without
-    # any contribution. So apply the first patch, amend the file into that commit, then
-    # apply the rest.
-    apply(patch_files_limited[:1])
-    write_allowed_signers(repo_dir, settings)
-    amend_root_with_allowed_signers(repo_dir, sign_args)
-    apply(patch_files_limited[1:])
+    # A rolled-out repo is served exactly like a published one, so it needs the same dumb-HTTP
+    # index -- and it needs it here, because nothing else will write one until someone
+    # publishes a contribution to this debate. Until then the clone URL the integrity page
+    # advertises would simply fail. Note this must come after the amend above: it rewrites the
+    # root commit, and an `info/refs` written before that would point at a hash that is gone.
+    prepare_repo_for_serving(repo_dir)
 
 
 @utils.preserve_cwd
