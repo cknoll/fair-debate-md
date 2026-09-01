@@ -1,1 +1,2 @@
 recursive-include src/fair_debate_md/fixtures *
+recursive-include src/fair_debate_md/repo_files *

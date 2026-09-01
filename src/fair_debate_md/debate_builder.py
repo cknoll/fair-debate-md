@@ -118,18 +118,6 @@ FIELDS_RE = re.compile(
     r"^label=(?P<label>\S+)\s+party=(?P<party>[a-z]+)(?:\s+answers=(?P<answers>.+))?$"
 )
 
-# No `allowed_signers` next to it: that file names the signing key, and freezing a key
-# into checked-in patch data would invalidate every collection at once when it changes.
-# `repo_handling.rollout_patches()` adds it when the repo is actually created.
-README = """\
-# Debate "{debate_key}"
-
-This repository contains statements which are part of a formalized debate.
-
-Visit <debate_url> to view this debate and <background_url> for background information.
-"""
-
-
 # a contribution of this many characters gets the longest gap; longer ones are capped
 FULL_LENGTH = 1500
 
@@ -347,9 +335,14 @@ def build_debate_repo(
 
     run_git("init", "-b", "main")
     repo = Repo(repo_dir)
-    with open(pjoin(repo_dir, "README.md"), "w") as fp:
-        fp.write(README.format(debate_key=debate_key))
-    run_git("add", "README.md")
+    # The README written here is a placeholder that `rollout_patches()` replaces: it names
+    # the addresses of whichever instance serves the repo, and this build may run anywhere.
+    # `allowed_signers` is left out entirely for the same reason -- it names a key, and
+    # freezing one into checked-in patch data would invalidate every collection at once.
+    readme_path = pjoin(repo_dir, repo_handling.README_FILENAME)
+    with open(readme_path, "w") as fp:
+        fp.write(repo_handling.build_readme(debate_key))
+    run_git("add", repo_handling.README_FILENAME)
     commit("first commit", "fair debate system", "fair_debate_system@fair-debate-users.org",
            first_commit)
 

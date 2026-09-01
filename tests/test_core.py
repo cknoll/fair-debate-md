@@ -31,6 +31,7 @@ TEST_REPO1_DIR = fdmd.fixtures.TEST_REPO1_DIR
 TEST_REPO1_EXPECTED_TREE = twdd(
     """
     .
+    ├── README.md
     ├── a
     │   ├── a.md
     │   └── a2b1a.md
@@ -41,7 +42,7 @@ TEST_REPO1_EXPECTED_TREE = twdd(
         ├── a6b.md
         └── a7b.md
 
-    3 directories, 7 files
+    3 directories, 8 files
     """
 ).lstrip("\n")
 
@@ -433,9 +434,13 @@ class TestSignedRollout(unittest.TestCase):
         fdmd.utils.tolerant_rmtree(self.tmpdir)
 
     def _rollout(self, name):
+        # `debate_key` explicitly: it lands in the README, so leaving it to the directory
+        # name would make two rollouts of the same debate differ -- which is exactly what
+        # `test_040` is there to rule out
         repo_dir = pjoin(self.tmpdir, name)
         fdmd.repo_handling.rollout_patches(
-            repo_dir=repo_dir, patch_dir=self.patch_dir, settings=self.settings
+            repo_dir=repo_dir, patch_dir=self.patch_dir, settings=self.settings,
+            debate_key="d1-lorem_ipsum",
         )
         return repo_dir
 

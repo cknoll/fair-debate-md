@@ -1058,7 +1058,12 @@ def unpack_repos(target_dir, demo_only: bool = False):
         repo_workdir = pjoin(target_dir, repo_dir_name)
         utils.tolerant_rmtree(repo_workdir)
         patch_dir = pjoin(repo_dir_path, "patches_01")
-        repo_handling.rollout_patches(repo_dir=repo_workdir, patch_dir=patch_dir)
+        # the key explicitly, not left to the directory name: it goes into the README, and
+        # deriving it from the target path would make the same debate come out differently
+        # depending on where it was unpacked
+        repo_handling.rollout_patches(
+            repo_dir=repo_workdir, patch_dir=patch_dir, debate_key=repo_dir_name
+        )
 
 
 def main():

@@ -36,6 +36,13 @@ class PlatformSettings:
     committer_email = "platform@fair-debate.invalid"
     signing_key_path = None
 
+    # For the README that every repo carries. Like the committer address these default to
+    # `.invalid` (RFC 2606), so a repo built by an unconfigured instance is recognisably
+    # not from a real one instead of quietly naming somebody else's site.
+    platform_name = "Fair Debate"
+    debate_url_template = "https://fair-debate.invalid/d/{debate_key}"
+    background_url = "https://fair-debate.invalid/about"
+
 
 platform_settings = PlatformSettings()
 
@@ -54,9 +61,9 @@ def first_patch_date(patch_files: list) -> str | None:
     return match.group(1).strip() if match else None
 
 
-def amend_root_with_allowed_signers(repo_dir: str, sign_args: list):
+def amend_root_files(repo_dir: str, sign_args: list, filenames: list):
     """
-    Add the untracked `allowed_signers` to the commit that is currently HEAD.
+    Add files to the commit that is currently HEAD.
 
     The committer date is pinned to the author date of that commit, the same rule
     `git am --committer-date-is-author-date` follows -- an amend would otherwise stamp
@@ -69,7 +76,7 @@ def amend_root_with_allowed_signers(repo_dir: str, sign_args: list):
     ).stdout.strip()
 
     env = dict(os.environ, GIT_COMMITTER_DATE=author_date)
-    subprocess.run(["git", "-C", repo_dir, "add", ALLOWED_SIGNERS_FILENAME], check=True)
+    subprocess.run(["git", "-C", repo_dir, "add", *filenames], check=True)
     subprocess.run(
         ["git", "-C", repo_dir, *sign_args[:2], "commit", "--amend", "--no-edit",
          *(["-S"] if sign_args else []), "--no-verify"],
@@ -79,7 +86,7 @@ def amend_root_with_allowed_signers(repo_dir: str, sign_args: list):
 
 @utils.preserve_cwd
 def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
-                    settings: PlatformSettings = None):
+                    settings: PlatformSettings = None, debate_key: str = None):
     """
     Turn a patch collection into a real repo, committed and signed like a live one.
 
@@ -98,12 +105,19 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
     * without `--committer-date-is-author-date` the committer date is "now", so every
       rollout produced different commit hashes for identical content.
 
-    `allowed_signers` is amended INTO the root commit rather than added in one of its own:
-    that is where `create_repo()` puts it for a repo the platform creates itself, and a
-    separate metadata commit would appear on the integrity page as a second row carrying
-    no contribution. It must not sit in the checked-in patch data either, where a key
-    change would invalidate every collection at once. Without a signing key the file is
-    not written at all, so a run without secrets behaves exactly as before.
+    Two files are written here rather than taken from the patches, and both are amended
+    INTO the root commit rather than added in one of their own -- that is where
+    `create_repo()` puts them for a repo the platform opens itself, and a separate metadata
+    commit would show up on the integrity page as a row carrying no contribution:
+
+    * `allowed_signers`, which names the signing key. Frozen into checked-in patch data, a
+      key change would invalidate every collection at once. Written only when a key is
+      configured, so a run without secrets keeps working.
+    * `README.md`, whose addresses belong to the instance doing the serving. A fixture
+      built on a developer machine would otherwise tell every reader to visit localhost.
+
+    :param debate_key:  named in the README; defaults to the directory name, which is what
+                        `unpack_repos()` uses as the key anyway.
     """
 
     if settings is None:
@@ -143,19 +157,20 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
             argv.append("-S")
         os.system(" ".join(argv) + " " + " ".join(files))
 
-    add_signers = (
-        from_scratch and settings.signing_key_path and patch_files_limited
-        and build_allowed_signers_content(settings)
-    )
-    if add_signers:
-        # `allowed_signers` belongs INTO the root commit, not into one of its own in front
-        # of it: `create_repo()` puts it there for a repo the platform creates itself, and
-        # a second metadata commit would show up on the integrity page as a second row
-        # without any contribution. So apply the first patch, amend the file into that
-        # commit, then apply the rest.
+    if from_scratch and patch_files_limited:
+        # apply the first patch, put the instance-dependent files into that same commit,
+        # then apply the rest. Writing them before `git am` is not an option: the first
+        # patch creates `README.md` itself, and git refuses to overwrite an untracked file.
         apply(patch_files_limited[:1])
-        write_allowed_signers(repo_dir, settings)
-        amend_root_with_allowed_signers(repo_dir, sign_args)
+
+        with open(pjoin(repo_dir, README_FILENAME), "w") as fp:
+            fp.write(build_readme(debate_key or os.path.basename(repo_dir), settings))
+        root_files = [README_FILENAME]
+
+        if settings.signing_key_path and write_allowed_signers(repo_dir, settings):
+            root_files.append(ALLOWED_SIGNERS_FILENAME)
+
+        amend_root_files(repo_dir, sign_args, root_files)
         apply(patch_files_limited[1:])
     else:
         apply(patch_files_limited)
@@ -169,13 +184,20 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
 
 
 @utils.preserve_cwd
-def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, str]):
+def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, str] = None):
     """
     :param repo_host_dir:   str; absolute path
     :param debate_key:      str
-    :param initial_files:   dict; {fname: content, ...}
+    :param initial_files:   dict; {fname: content, ...}; defaults to just the README
 
+    The README is built here rather than passed in, so that a repo the platform opens and
+    a repo unpacked by `rollout_patches()` carry the same text. It used to be rendered from
+    a django template in the web app, which is how every existing repo ended up saying
+    "Visit <debate_url>" -- the placeholders were filled with their own names.
     """
+
+    if initial_files is None:
+        initial_files = {README_FILENAME: build_readme(debate_key)}
 
     repo_dir = pjoin(repo_host_dir, debate_key)
 
@@ -209,6 +231,39 @@ def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, st
 
 
 ALLOWED_SIGNERS_FILENAME = "allowed_signers"
+README_FILENAME = "README.md"
+
+# The one template. `create_repo()` uses it for a repo the platform opens itself and
+# `rollout_patches()` for one it unpacks, because a reader must not be able to tell the two
+# apart -- both are handed out through the same bundle and clone endpoints.
+README_TEMPLATE_PATH = pjoin(os.path.dirname(__file__), "repo_files", README_FILENAME)
+
+
+def build_readme(debate_key: str, settings: PlatformSettings = None) -> str:
+    """
+    The README a debate repo carries, filled in for this instance.
+
+    It is written by whoever creates the repo rather than shipped inside the patch
+    collections, for the same reason as `allowed_signers`: the addresses in it belong to
+    the instance doing the serving, and a fixture built on a developer machine would
+    otherwise tell every reader to visit localhost.
+
+    Correcting it later needs no history rewrite -- it is an ordinary commit on top, whose
+    message says why. Only the *first* version of the file is fixed, not the file.
+    """
+
+    if settings is None:
+        settings = platform_settings
+
+    with open(README_TEMPLATE_PATH) as fp:
+        template = fp.read()
+
+    return template.format(
+        debate_key=debate_key,
+        platform_name=settings.platform_name,
+        debate_url=settings.debate_url_template.format(debate_key=debate_key),
+        background_url=settings.background_url,
+    )
 
 
 def build_allowed_signers_content(settings: PlatformSettings = None) -> str:
