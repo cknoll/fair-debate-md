@@ -1,19 +1,19 @@
-From 4b44e36cf979a076cc534464cac9a0e277a2b3fb Mon Sep 17 00:00:00 2001
+From dfcf505970e34cc44000bc573666cc62ab3c75a0 Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 08:00:00 +0200
-Subject: [PATCH 01/18] first commit
+Subject: [PATCH 01/19] first commit
 
 ---
- README.md | 108 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
+ README.md | 104 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
  create mode 100644 README.md
 
 diff --git a/README.md b/README.md
 new file mode 100644
-index 0000000..23b474e
+index 0000000..ea4c88d
 --- /dev/null
 +++ b/README.md
-@@ -0,0 +1,108 @@
+@@ -0,0 +1,104 @@
 +# Debate "d00-explanatory-example-debate"
 +
 +This repository holds the contributions of one debate on Fair Debate, one plain
@@ -95,10 +95,6 @@ index 0000000..23b474e
 +noted. Present means nothing before it was altered, missing means the history was
 +rewritten. That route needs you to have written something down at the right moment, which
 +is why the clone is the better one -- but it keeps working after the platform is gone.
-+
-+`git fsck` answers none of these questions. It only checks that the stored data matches its
-+own fingerprints, and a rewritten history passes that test, because the rewrite produces
-+new and internally consistent fingerprints.
 +
 +## What this does not prove
 +

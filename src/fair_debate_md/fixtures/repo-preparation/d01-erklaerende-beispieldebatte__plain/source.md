@@ -18,6 +18,8 @@ Dieses Dokument ist eine *Debatte*. Es beschreibt die wichtigsten Eigenschaften 
 
 Du liest gerade den eröffnenden *Beitrag* dieser Debatte. Er trägt den Beitragsschlüssel `a`. Jeder Beitrag wird automatisch in *Segmente* zerlegt — Überschriften, Sätze, Aufzählungspunkte. Die Segmente eines Beitrags bekommen eigene Schlüssel wie `a1`, `a2` und so weiter. Dadurch lässt sich jedes Segment genau benennen. Und jedes Segment lässt sich einzeln beantworten. Wenn du mit der Maus über ein Segment fährst, siehst du seinen Schlüssel; ein Klick oder Fingertipp erlaubt dir außerdem, seine URL zu kopieren und darauf zu antworten.
 
+Oben rechts in der Kopfzeile sitzt ein Info-Symbol, ein `i` im Kreis. Es schaltet den Hilfemodus ein: Danach erklärt die Oberfläche ihre eigenen Bedienelemente. Klicke ein Element an, um seine Erklärung zu sehen, oder blättere mit den Pfeilen der Reihe nach durch alle Erklärungen. Die Taste `i` schaltet den Modus ebenso ein und wieder aus.
+
 Hervorgehobene Segmente sind bereits beantwortet worden. Klicke auf ein solches Segment, um die Antworten darunter aufzuklappen. Der größte Teil dieses Dokuments steckt in diesen Antworten, Aufklappen ist also die Art, es zu lesen.
 
 An einer Debatte können mehrere Parteien (Benutzerkonten) teilnehmen. Parteien werden durch Buchstaben bezeichnet, vergeben in der Reihenfolge des Beitritts.
@@ -36,6 +38,8 @@ Zwei Eigenschaften unterscheiden diese Plattform von einem gewöhnlichen Komment
 
 Wenn du diese beiden Eigenschaften verstanden hast, kannst du Fair Debate schon recht gut benutzen. Es gibt allerdings noch einige Einzelheiten, die dich interessieren könnten.
 
+Das Format allein macht allerdings noch keine gute Debatte. Wer hier schreibt, verpflichtet sich auf sechs Regeln — unter anderem darauf, sich klarzumachen, dass man sich irren kann, Beschreibung von Bewertung zu trennen und eigene Fehler zu korrigieren. Der vollständige Text steht als *Selbstverpflichtung zu konstruktiver Diskussionskultur* unter [/rules](/rules/).
+
 ## Häufige Fragen
 
 Jede dieser Fragen wird weiter unten in einer eigenen Antwort behandelt — was zugleich vorführt, was diese Plattform tut.
@@ -43,6 +47,7 @@ Jede dieser Fragen wird weiter unten in einer eigenen Antwort behandelt — was 
 - Was passiert, wenn mehr Parteien an der Debatte teilnehmen, als das Alphabet Buchstaben hat?
 - Können mehrere Segmente oder Teile von Segmenten beantwortet werden?
 - Wie lässt sich die Integrität einer Debatte prüfen, also die Abwesenheit von Manipulation?
+- Wozu dienen Signatur und Fingerabdruck, und was leistet welches davon?
 - Wie wird die Plattform moderiert?
 - Wie sammelt das Projekt Rückmeldungen?
 - Kann man das Projekt unterstützen?
@@ -170,6 +175,16 @@ Beides ist möglich, und der Schlüssel sagt, was gemeint ist. Eine Folge zusamm
 Jeder Beitrag trägt ein kleines Lupensymbol, das zur Integritätsseite seiner Debatte führt. Diese Seite listet den Fingerabdruck jedes Commits auf, nennt den Signaturschlüssel der Plattform, gibt das ganze Repository als git-Klon heraus und erklärt im Einzelnen, wie sich Fingerabdrücke und Signaturen prüfen lassen. Das Repository trägt dieselbe Anleitung in seiner eigenen README, eine Kopie davon erklärt sich also selbst.
 
 Die kurze Antwort lautet, dass du das Repository einmal klonst und bei jeder Rückkehr `git pull --ff-only` ausführst. Neue Beiträge kommen kommentarlos an; bei einer umgeschriebenen Vorgeschichte verweigert der Befehl den Dienst und sagt das auch. Umschreiben ist nicht automatisch ein Angriff, denn Beiträge müssen gelegentlich aus organisatorischen oder rechtlichen Gründen entfernt werden. Unsichtbar ist es aber nie, und ein solcher Vorgang soll auf der Integritätsseite angekündigt und begründet werden.
+
+<!-- !!== label=a-faq-signature party=a answers="Wozu dienen Signatur und Fingerabdruck" ==== -->
+
+Sie lösen zwei verschiedene Probleme, und keines von beiden ersetzt das andere.
+
+Der Fingerabdruck beantwortet die Frage, *ob sich etwas verändert hat*. Er wird aus dem Inhalt eines Commits und dem Fingerabdruck des vorhergehenden berechnet. Wird ein alter Beitrag nachträglich geändert, ändern sich alle Fingerabdrücke ab dieser Stelle, und die Kette passt nicht mehr zu der, die du vorher gesehen hast. Eine Veränderung wird dadurch zuverlässig sichtbar. Welche der beiden Fassungen die veröffentlichte ist, sagt der Fingerabdruck aber nicht.
+
+Die Signatur beantwortet die Frage, *wer dafür einsteht*. Mit ihr bezeugt die Plattform, dass genau diese Fassung die von ihr veröffentlichte ist. Ohne sie ist ein Fingerabdruck, den du dir notiert hast, nur deine eigene Behauptung, der die Plattform widersprechen kann. Mit ihr hältst du eine Aussage der Plattform in der Hand, die sie nicht mehr zurücknehmen kann.
+
+Erst zusammen ergeben sie ein Beweismittel: Der Fingerabdruck macht eine Veränderung sichtbar, die Signatur macht sie zurechenbar. Ausführlicher steht das im Beitrag über die beweisbare Integrität.
 
 <!-- !!== label=a-faq-moderation party=a answers="Wie wird die Plattform moderiert?" ==== -->
 

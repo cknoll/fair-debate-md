@@ -1,0 +1,35 @@
+From e9928161bb6e0cfed4b84bae619a9046b97e089d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erkl=C3=A4rer?=
+ <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
+Date: Thu, 27 Aug 2026 16:30:00 +0200
+Subject: [PATCH 11/19] add contribution a/a32b41c1a.md
+
+---
+ a/a32b41c1a.md | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 a/a32b41c1a.md
+
+diff --git a/a/a32b41c1a.md b/a/a32b41c1a.md
+new file mode 100644
+index 0000000..03523ea
+--- /dev/null
++++ b/a/a32b41c1a.md
+@@ -0,0 +1,14 @@
++::a32b41c1a1 Zurzeit gibt es die folgenden Schwachstellen.
++
++### ::a32b41c1a2 Bedienbarkeit
++
++- ::a32b41c1a3 Fingerabdrücke und Signaturen der Commits zu prüfen erfordert derzeit einige technische Kenntnisse, etwa das Ausführen von Befehlen auf der Kommandozeile. ::a32b41c1a4 Eigens dafür gebaute Software könnte das vereinfachen, aber diese Software müsste von einer unabhängigen Stelle betreut oder wenigstens geprüft werden. ::a32b41c1a5 Ein Prüfwerkzeug, das von derselben Stelle kontrolliert wird, die es prüfen soll, ist sinnlos.
++
++### ::a32b41c1a6 Tatsächliche Integrität
++
++- ::a32b41c1a7 Das Szenario für einen böswilligen Betreiber ist hier eher ein Abstreiten als ein Angriff. ::a32b41c1a8 Mit zwei signierten Fassungen derselben Vorgeschichte konfrontiert, könnte die Plattform behaupten, ihr Signaturschlüssel sei gestohlen worden und eine dieser Signaturen sei daher nicht von ihr. ::a32b41c1a9 Das Repository allein widerlegt das nicht. ::a32b41c1a10 Helfen würde eine Kopie des Repositories bei einer unabhängigen und vertrauenswürdigen dritten Stelle, und die gibt es noch nicht. ::a32b41c1a11 Die Gefahr selbst ist gering, denn dass ein Signaturschlüssel die Plattform verlässt, ist unwahrscheinlich. ::a32b41c1a12 Schlüsselwechsel können trotzdem aus gewöhnlichen Gründen nötig werden, und die sind harmlos. ::a32b41c1a13 Solange ein Schlüsselwechsel nicht mit einem Widerspruch in der Commit-Vorgeschichte zusammenfällt, gibt es nichts zu erklären.
++- ::a32b41c1a14 Es wird Fälle geben, in denen das Verändern der Commit-Vorgeschichte nötig ist. ::a32b41c1a15 Dieses erklärende Repository muss zum Beispiel gemeinsam mit der Software aktualisiert werden, oder rechtswidrige Beiträge müssen von der Plattform entfernt werden. ::a32b41c1a16 Ein sauberer Weg, solche Fälle zu behandeln und zu dokumentieren, ist derzeit noch nicht umgesetzt.
++- ::a32b41c1a17 Das Integritätskonzept und seine Umsetzung sind noch nicht von unabhängigen Fachleuten geprüft worden. ::a32b41c1a18 Es ist daher nicht unwahrscheinlich, dass Fair Debate Sicherheitslücken hat. ::a32b41c1a19 Das ist allerdings ein allgemeines Problem von Software, und sich dessen bewusst zu sein ist meist ein wichtiger Schritt, um schwerwiegende Vorfälle zu verhindern.
++- ::a32b41c1a20 Ein Fingerabdruck zeigt, dass ein Text seit seiner Veröffentlichung unverändert ist. ::a32b41c1a21 Er zeigt nicht, wer ihn geschrieben hat. ::a32b41c1a22 Die Commits werden von dieser Plattform erzeugt und signiert, nicht von den Verfassenden, die Plattform könnte also im Prinzip einen Beitrag unter fremdem Namen einstellen. ::a32b41c1a23 Signaturen der Beitragenden selbst würden diese Lücke schließen und gibt es hier noch nicht.
++- ::a32b41c1a24 Die Plattform könnte einer Leserin eine Vorgeschichte zeigen und einem anderen Leser eine abweichende, und beide signieren. ::a32b41c1a25 Das fällt erst auf, wenn die beiden sich austauschen — genau das würde ein öffentlicher Spiegel der Repositories selbsttätig erledigen. ::a32b41c1a26 Einen solchen gibt es noch nicht.
++- ::a32b41c1a27 Wer den Server kontrolliert, kontrolliert auch den Signaturschlüssel, und dazu zählen die Verwaltenden des Rechenzentrums. ::a32b41c1a28 Diese Gefahr bringt jede IT-Infrastruktur mit sich. ::a32b41c1a29 Was böswillige Akteure allerdings nicht können, ist bereits herausgegebene Signaturen zurückzunehmen. ::a32b41c1a30 Eine Manipulation bleibt daher erkennbar und lässt sich aufklären.
+\ No newline at end of file
+-- 
+2.39.5
+

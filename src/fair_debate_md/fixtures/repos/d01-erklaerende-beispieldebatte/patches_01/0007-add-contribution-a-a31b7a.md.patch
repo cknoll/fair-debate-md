@@ -1,0 +1,35 @@
+From 9f3beada7fbe2f42ce384faee2f231bd3cf29212 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erkl=C3=A4rer?=
+ <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
+Date: Wed, 26 Aug 2026 08:55:00 +0200
+Subject: [PATCH 07/19] add contribution a/a31b7a.md
+
+---
+ a/a31b7a.md | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 a/a31b7a.md
+
+diff --git a/a/a31b7a.md b/a/a31b7a.md
+new file mode 100644
+index 0000000..8c5ec0d
+--- /dev/null
++++ b/a/a31b7a.md
+@@ -0,0 +1,14 @@
++### ::a31b7a1 Ein Beispiel
++
++::a31b7a2 Stell dir eine Debatte mit drei Parteien vor.
++
++- ::a31b7a3 Partei `a` eröffnet sie mit dem ersten Beitrag `a`. ::a31b7a4 Seine Segmente heißen `a1`, `a2` und so weiter.
++- ::a31b7a5 Partei `b` widerspricht an zwei Stellen. ::a31b7a6 Sie beantwortet Segment 7 mit einem Beitrag namens `a7b` und Segment 10 mit einem weiteren namens `a10b`. ::a31b7a7 Die Segmente innerhalb dieser Beiträge heißen `a7b1`, `a7b2` sowie `a10b1`, `a10b2`. ::a31b7a8 Beachte, dass ein Beitragsschlüssel auf einen Buchstaben endet, ein Segmentschlüssel auf eine Zahl.
++- ::a31b7a9 Partei `c` kommt hinzu, liest den Wortwechsel und antwortet auf Segment 4 von `a7b`. ::a31b7a10 Ihr Beitrag heißt `a7b4c`.
++- ::a31b7a11 Partei `a` meldet sich zurück, um ein Missverständnis im zweiten Segment jener Antwort auszuräumen, woraus `a7b4c2a` wird.
++
++::a31b7a12 Ein Schlüssel ist ein Pfad. ::a31b7a13 Von links nach rechts gelesen benennt er jeden Schritt vom Eröffnungsbeitrag hinunter bis zu der Antwort, die vor dir steht. ::a31b7a14 Deshalb lässt sich keine Antwort von dem ablösen, worauf sie sich bezieht.
++
++### ::a31b7a15 Warum sich der Aufwand lohnt
++
++::a31b7a16 Eine Auseinandersetzung wird dadurch feinkörnig. ::a31b7a17 Ein einzelner Punkt lässt sich genau ansprechen, und eine Meinungsverschiedenheit lässt sich bis dorthin verfolgen, wo sie tatsächlich beginnt — oft bei einer Annahme, die keine der beiden Seiten ausgesprochen hatte. ::a31b7a18 Zugleich geht der größere Zusammenhang nie verloren, weil jeder Beitrag dort verankert bleibt, wo er hingehört. ::a31b7a19 Und da jedes Segment einen Schlüssel hat, kostet es nichts, sich genau auf etwas zu beziehen.
+\ No newline at end of file
+-- 
+2.39.5
+

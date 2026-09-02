@@ -1,0 +1,56 @@
+From 80dfbf302d80bc494587e6dffb72c8d8dd9e3594 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erg=C3=A4nzer?=
+ <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
+Date: Wed, 26 Aug 2026 21:25:00 +0200
+Subject: [PATCH 09/19] add contribution b/a32b.md
+
+---
+ b/a32b.md | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 b/a32b.md
+
+diff --git a/b/a32b.md b/b/a32b.md
+new file mode 100644
+index 0000000..32a0e27
+--- /dev/null
++++ b/b/a32b.md
+@@ -0,0 +1,35 @@
++### ::a32b1 Warum das wichtig ist
++
++::a32b2 Wie jede Infrastruktur wird auch eine Debattenplattform von Menschen betrieben. ::a32b3 In einer wirklich strittigen Auseinandersetzung besteht die Gefahr, dass der Betreiber in die Inhalte eingreift, indem er löscht oder verändert. ::a32b4 Eine zweite Gefahr weist in die Gegenrichtung — dass einem Betreiber genau das vorgeworfen wird, obwohl er es nicht getan hat, etwa nachdem eine Auseinandersetzung für die vorwerfende Seite schlecht ausgegangen ist.
++
++::a32b5 Indem diese Plattform technische Mittel für unabhängige Manipulationsprüfungen bereitstellt, kann sie zu einem neutralen Boden für strittige Debatten werden.
++
++### ::a32b6 Wie das gemacht wird
++
++::a32b7 _Fair Debate_ begegnet beiden Gefahren, indem es die Inhalte aus der eigenen Datenbank heraushält. ::a32b8 Jeder Beitrag ist eine einfache Textdatei, festgehalten in einem versionierten, öffentlich lesbaren Repository — eines je Debatte. ::a32b9 Die Plattform stellt eine Debatte dar, indem sie diese Dateien liest. ::a32b10 Veröffentlicht jemand einen Beitrag, entsteht dabei ein neuer Commit mit Zeitstempel, Fingerabdruck und kryptografischer Signatur. ::a32b11 Und weil jeder Fingerabdruck auch auf Basis des vorherigen berechnet wird, bilden die Commits eine Kette. ::a32b12 Wird ein alter Beitrag nachträglich verändert, ändern sich dadurch alle Fingerabdrücke ab dieser Stelle.
++
++::a32b13 Das mag nach nebensächlicher Technik klingen, aber signierte Commits in öffentlich lesbaren Repositories versetzen _jeden_ in die Lage, eine Manipulation zu erkennen (an den veränderten Fingerabdrücken) und sie zu beweisen (mit den kryptografischen Commit-Signaturen). ::a32b14 Das ist ein grundlegender Unterschied zum klassischen Veröffentlichen im Netz, wo derjenige, der den Server kontrolliert, auch kontrolliert, was dieser anzeigt, und es folglich ändern kann. ::a32b15 Nutzerinnen und Nutzer könnten zwar Bildschirmfotos aufheben, aber sie könnten nie beweisen, dass diese nicht gefälscht sind.
++
++### ::a32b16 Warum die Signatur nötig ist
++
++::a32b17 Ohne sie ist ein Fingerabdruck, den du dir gespeichert hast, nur deine eigene Behauptung, und der Betreiber kann entgegnen, du habest diese Datei selbst geschrieben. ::a32b18 Die Signatur macht daraus eine Aussage der Plattform. ::a32b19 Indem sie einen Commit signiert, bezeugt die Plattform, dass dies die Fassung ist, die sie veröffentlicht hat. ::a32b20 Tauchen also zwei unterschiedlich signierte Fassungen derselben Vorgeschichte auf, steht sie für beide ein, und eine davon muss falsch sein. ::a32b21 Als Ausrede bleibt dann nur noch, der Schlüssel sei gestohlen worden — ebenfalls keine bequeme Lage.
++
++::a32b22 Die Signatur reist mit dem Repository mit, wer es also klont, hat dieses Beweismittel in der Hand. ::a32b23 In einer strittigen Debatte hat die Gegenseite das allergrößte Interesse daran, eine solche Kopie zu behalten, und interessierte Beobachter wie Journalistinnen und Journalisten ebenso.
++
++### ::a32b24 Wo du nachschauen kannst
++
++::a32b25 Jeder Beitrag trägt einen Link zur Integritätsseite seiner Debatte, erreichbar über das Lupensymbol. ::a32b26 Dort sind die Fingerabdrücke aufgelistet, und das Repository mit den signierten Commits lässt sich als einzelne Datei herunterladen oder direkt mit git klonen. ::a32b27 Außerdem beschreibt diese Seite, wie sich Manipulationen an den Inhalten aufspüren lassen.
++
++::a32b28 Wer an einer Debatte teilnimmt, geht am kürzesten Weg, indem er dieses Repository einmal klont. ::a32b29 Von da an übernimmt ein einzelnes `git pull --ff-only` die Prüfung. ::a32b30 Es läuft still durch, solange die Debatte nur wächst, und es verweigert den Dienst in dem Moment, in dem die Vorgeschichte umgeschrieben wurde. ::a32b31 Du musst dir nichts notieren und nichts merken, und die Verweigerung lässt dich beide Fassungen zugleich in der Hand halten — das ist es, was aus einem Verdacht etwas Vorzeigbares macht.
++
++### ::a32b32 Was zugesagt wird und was nicht
++
++::a32b33 Die Plattform kann nicht zusagen, dass die Commit-Vorgeschichte niemals verändert wird. ::a32b34 Es kann Fälle geben, in denen Inhalte daraus entfernt werden müssen, etwa personenbezogene Angaben. ::a32b35 Zugesagt wird stattdessen, dass jede Änderung an der Vorgeschichte sichtbar ist. ::a32b36 Sie zerreißt die Kette der Fingerabdrücke, und sie wird auf der Integritätsseite der betroffenen Debatte vermerkt. ::a32b37 Eine zerrissene Kette ohne einen solchen Vermerk bedeutet Manipulation.
++
++::a32b38 Das genaue Verfahren für ein solches Entfernen ist allerdings noch nicht festgelegt.
++
++### ::a32b39 Aktueller Stand
++
++::a32b40 Ein wirklich wasserdichtes System für Integritätsprüfungen aufzubauen, das für die meisten Menschen trotzdem verständlich bleibt, ist tatsächlich nicht einfach. ::a32b41 Der jetzige Ansatz ist daher ein Kompromiss und noch in Arbeit. ::a32b42 Er bietet aber schon jetzt deutlich mehr Sicherheit als das, was sonst üblich ist.
++
++::a32b43 Diese Debatte ist, wie einige andere auch, ein Anschauungsstück. ::a32b44 Ihr Repository wird jedes Mal neu gebaut, wenn sich die Erklärung ändert. ::a32b45 Ihre Verfasser, ihre Commits, deren Zeitpunkte und Fingerabdrücke sind deshalb erfunden, obwohl die Integritätsseite sie so zeigt, wie sie es bei einer echten Debatte täte. ::a32b46 Für die Debatten, die hier tatsächlich geführt werden, gilt alles oben Beschriebene unverändert.
+\ No newline at end of file
+-- 
+2.39.5
+

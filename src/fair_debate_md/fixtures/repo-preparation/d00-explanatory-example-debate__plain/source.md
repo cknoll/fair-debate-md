@@ -18,6 +18,8 @@ This document is a *debate*. Its purpose is to describe and motivate the main fe
 
 You are reading the opening *contribution* of this debate. It has the contribution key `a`. Every contribution is split automatically into *segments* — headings, sentences, bullet points. The segments of a contribution carry keys of their own like `a1`, `a2`, etc. Therefore each segment can be precisely referenced. And each segment can be answered on its own. Hovering over a segment shows its key; clicking or tapping it also lets you copy its URL and answer it.
 
+Top right of the header sits an info symbol, an `i` in a circle. It switches on help mode: from then on the interface explains its own controls. Click an element to see its explanation, or step through all of them in turn with the arrows. The key `i` switches the mode on and off as well.
+
 Segments that are highlighted have been answered already. Click one such answered segment to unfold the answers below it. Most of this document lives in those answers, so unfolding them is how you read it.
 
 Multiple parties (users) can participate in a debate. Parties are identified by letters, assigned in the order in which they join a debate.
@@ -36,6 +38,8 @@ Two main features set this platform apart from an ordinary comment section or fo
 
 If you have understood those main features you can use Fair Debate pretty well. However, there are some more details you might be interested in.
 
+The format alone, though, does not make a debate a good one. Everybody who writes here commits themselves to six rules — among them keeping in mind that one may be wrong, separating description from judgement, and correcting one's own mistakes. The full text is published as the *self-commitment to a constructive debate culture* at [/rules](/rules/).
+
 ## FAQ
 
 Each of these is answered below, in an answer of its own — which is at the same time a small demonstration of what this platform does.
@@ -43,6 +47,7 @@ Each of these is answered below, in an answer of its own — which is at the sam
 - What happens if more parties join the debate than there are letters in the alphabet?
 - Is it possible to answer multiple segments or parts of segments?
 - How can the integrity of a debate (i.e. the absence of manipulation) be checked?
+- What do the signature and the fingerprint each achieve?
 - How is the platform moderated?
 - How does the project collect feedback?
 - Is it possible to help the project?
@@ -170,6 +175,16 @@ Both are possible, and the key says which one is meant. A range of consecutive s
 Every contribution carries a small magnifier symbol that leads to the integrity page of its debate. That page lists the fingerprint of every commit, names the signing key of the platform, hands out the whole repository as a git clone, and gives details on how to check fingerprints and signatures. The repository carries the same instructions in its own README, so a copy of it explains itself.
 
 The short answer is that you clone the repository once and run `git pull --ff-only` whenever you come back. New contributions arrive without comment; a rewritten history makes the command refuse and say so. Rewriting is not automatically an attack, since contributions occasionally have to be removed for organisational or legal reasons, but it is never invisible, and such an event is meant to be announced and explained on the integrity page.
+
+<!-- !!== label=a-faq-signature party=a answers="What do the signature and the fingerprint each achieve" ==== -->
+
+They solve two different problems, and neither replaces the other.
+
+The fingerprint answers the question *whether something has changed*. It is computed from the content of a commit and from the fingerprint of the preceding one. If an old contribution is altered afterwards, every fingerprint from that point on changes, and the chain no longer matches the one you saw before. A change thus becomes reliably visible. Which of the two versions is the published one, however, the fingerprint does not say.
+
+The signature answers the question *who vouches for it*. With it the platform testifies that this very version is the one it published. Without it a fingerprint you noted down is merely your own claim, which the platform can contradict. With it you hold a statement of the platform's own, and it cannot take that back.
+
+Only together do the two amount to evidence: the fingerprint makes a change visible, the signature makes it attributable. The contribution on provable integrity spells this out in more detail.
 
 <!-- !!== label=a-faq-moderation party=a answers="How is the platform moderated?" ==== -->
 

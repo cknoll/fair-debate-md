@@ -1,0 +1,30 @@
+From 340f7bec613361fa1f2c7dead7817a1eb8cb7020 Mon Sep 17 00:00:00 2001
+From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
+Date: Tue, 25 Aug 2026 19:35:00 +0200
+Subject: [PATCH 06/19] add contribution b/a31b.md
+
+---
+ b/a31b.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100644 b/a31b.md
+
+diff --git a/b/a31b.md b/b/a31b.md
+new file mode 100644
+index 0000000..2c00429
+--- /dev/null
++++ b/b/a31b.md
+@@ -0,0 +1,10 @@
++::a31b1 This answer is bound to the first entry of that list, and it is a contribution in its own right. ::a31b2 Because it refers to segment `a31`, its key is `a31b`, and its own segments are keyed `a31b1`, `a31b2`, and so on.
++
++::a31b3 What that arrangement enables:
++
++- ::a31b4 An answer appears directly underneath the segment it refers to. ::a31b5 **A segment is therefore tied to its context twice — by its key and by the place where it is shown.** Whole levels of answers can be folded away when a page gets crowded.
++- ::a31b6 An answer is set apart from the surrounding contribution by colour and indentation, such that readers always know the text of which party they are reading.
++- ::a31b7 Any number of parties can take part, each with its own letter. ::a31b8 By the way, that letter becomes part of the key of any contribution by that party (see the example below).
++- ::a31b9 Contributions may be written in Markdown.
++
++::a31b10 Because the context of an answer is by technical means tied to the segment, quoting any party out of context does not work. ::a31b11 The surrounding text (and thus the original context) is at most one click away.
+\ No newline at end of file
+-- 
+2.39.5
+

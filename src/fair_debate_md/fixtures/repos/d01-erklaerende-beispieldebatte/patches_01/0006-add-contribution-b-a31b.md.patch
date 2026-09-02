@@ -1,0 +1,31 @@
+From 504e228a75573e9514c5ec38e4bf45bc356b9d7d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erg=C3=A4nzer?=
+ <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
+Date: Tue, 25 Aug 2026 20:00:00 +0200
+Subject: [PATCH 06/19] add contribution b/a31b.md
+
+---
+ b/a31b.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100644 b/a31b.md
+
+diff --git a/b/a31b.md b/b/a31b.md
+new file mode 100644
+index 0000000..78357a1
+--- /dev/null
++++ b/b/a31b.md
+@@ -0,0 +1,10 @@
++::a31b1 Diese Antwort hängt am ersten Eintrag jener Liste und ist zugleich ein eigenständiger Beitrag. ::a31b2 Weil sie sich auf Segment `a31` bezieht, lautet ihr Schlüssel `a31b`, und ihre eigenen Segmente heißen `a31b1`, `a31b2` und so fort.
++
++::a31b3 Was diese Anordnung ermöglicht:
++
++- ::a31b4 Eine Antwort erscheint unmittelbar unter dem Segment, auf das sie sich bezieht. ::a31b5 **Ein Segment ist damit doppelt an seinen Zusammenhang gebunden — durch seinen Schlüssel und durch den Ort, an dem es steht.** Ganze Antwortebenen lassen sich zuklappen, wenn eine Seite unübersichtlich wird.
++- ::a31b6 Eine Antwort hebt sich durch Farbe und Einrückung vom umgebenden Beitrag ab, sodass immer erkennbar bleibt, wessen Text man gerade liest.
++- ::a31b7 Beliebig viele Parteien können teilnehmen, jede mit ihrem eigenen Buchstaben. ::a31b8 Dieser Buchstabe wird übrigens Teil des Schlüssels jedes Beitrags dieser Partei (siehe das Beispiel weiter unten).
++- ::a31b9 Beiträge können in Markdown geschrieben werden.
++
++::a31b10 Weil der Zusammenhang einer Antwort technisch an das Segment gebunden ist, funktioniert es nicht, eine Partei aus dem Zusammenhang gerissen zu zitieren. ::a31b11 Der umgebende Text, und damit der ursprüngliche Zusammenhang, ist höchstens einen Klick entfernt.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -1,0 +1,24 @@
+From 191702e272793f06e9c80d1d9b2f4b3d6ca4212c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Erkl=C3=A4rer?=
+ <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
+Date: Fri, 28 Aug 2026 20:55:00 +0200
+Subject: [PATCH 15/19] add contribution a/a42a.md
+
+---
+ a/a42a.md | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 a/a42a.md
+
+diff --git a/a/a42a.md b/a/a42a.md
+new file mode 100644
+index 0000000..e16a933
+--- /dev/null
++++ b/a/a42a.md
+@@ -0,0 +1,3 @@
++::a42a1 Jeder Beitrag trägt ein kleines Lupensymbol, das zur Integritätsseite seiner Debatte führt. ::a42a2 Diese Seite listet den Fingerabdruck jedes Commits auf, nennt den Signaturschlüssel der Plattform, gibt das ganze Repository als git-Klon heraus und erklärt im Einzelnen, wie sich Fingerabdrücke und Signaturen prüfen lassen. ::a42a3 Das Repository trägt dieselbe Anleitung in seiner eigenen README, eine Kopie davon erklärt sich also selbst.
++
++::a42a4 Die kurze Antwort lautet, dass du das Repository einmal klonst und bei jeder Rückkehr `git pull --ff-only` ausführst. ::a42a5 Neue Beiträge kommen kommentarlos an; bei einer umgeschriebenen Vorgeschichte verweigert der Befehl den Dienst und sagt das auch. ::a42a6 Umschreiben ist nicht automatisch ein Angriff, denn Beiträge müssen gelegentlich aus organisatorischen oder rechtlichen Gründen entfernt werden. ::a42a7 Unsichtbar ist es aber nie, und ein solcher Vorgang soll auf der Integritätsseite angekündigt und begründet werden.
+\ No newline at end of file
+-- 
+2.39.5
+
