@@ -420,8 +420,8 @@ class TestProvenance:
         it no longer came from, and nothing in the repo would show it. So the check is
         mechanical rather than a rule in a document.
 
-        Only the fixtures built by `build_debate_repo` are covered -- d31/d32/d33 have
-        their own build scripts and no REPO_INFO yet, see dev_notes.md.
+        Every fixture with a `source.md` is covered, which since 2026-09-02 is every
+        fixture that has a source at all -- d31/d32/d33 lost their own build scripts then.
         """
         prep_dir = pjoin(os.path.dirname(fixtures.__file__), "repo-preparation")
         sources = sorted(glob.glob(pjoin(prep_dir, "*__plain", "source.md")))

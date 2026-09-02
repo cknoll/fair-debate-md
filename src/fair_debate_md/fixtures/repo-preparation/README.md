@@ -83,31 +83,48 @@ with its own `dNN` key, not a variant of another one:
   unanswered objections from two other parties. It is the live-demo counterpart of d35 --
   an audience is supposed to add the next contribution, so most claims are left untouched
   on purpose.
+- `d31-ice-cream__plain/source.md` -- english, and a toy topic on purpose (which ice cream
+  flavour is best), so that its content never distracts from what it is for: judging
+  frontend decisions about nesting. Ten parties, 26 contributions, only five root segments
+  answered, one spine reaching level 8.
+- `d32-overlapping-refs__plain/source.md` -- english, the reference fixture: a toy dispute
+  about the office coffee machine whose replies deliberately overlap. It is the only
+  fixture using `answers_from`/`answers_to` and `answers_words`, and it exists so that the
+  *display* problem of overlapping references can be judged in the frontend rather than
+  argued about in the specification -- see `docs/flexible_references_concept.md`.
+- `d33-wachstum-klimaschutz__plain/source.md` -- german, and the only fixture with real
+  argumentative content: a heavily shortened reconstruction of a radio debate on whether
+  economic growth and climate protection are compatible (the root contribution names the
+  source). Three parties, 18 contributions, a spine down to level 5, and one contribution
+  that agrees with what it answers instead of objecting, which no other fixture does.
 
-Until 2026-08 that fixture was built by `fdmd process-content-dir` from one file per
+Until 2026-08 the first of these was built by `fdmd process-content-dir` from one file per
 contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):
 every inserted sentence forced a rename cascade, only two parties were possible, the
 deployment had to special-case the debate, and the patches here had silently fallen behind
 the sources.
 
 
-## Debate-specific build scripts
+## Removed: the debate-specific build scripts
 
-`d31-ice-cream__plain` is built by `build_d31_ice_cream.py`, because that fixture needs a
-nesting structure and per-party commits which the old `process-content-dir` did not
-provide. See the module docstring there.
+Gone since 2026-09-02: `build_d31_ice_cream.py`, `build_d32_overlapping_refs.py` and
+`build_d33_wachstum_klimaschutz.py`, together with the per-contribution plain files they
+read. The three debates are ordinary `source.md` files now.
 
-`d33-wachstum-klimaschutz__plain` follows the same pattern (`build_d33_wachstum_klimaschutz.py`).
-It is the only German-language fixture and the only one with real argumentative content: a
-reconstruction of a radio debate on economic growth vs. climate protection. Its anchors are
-still segment indices, so its build script prints, for every contribution, the sentence it
-answers -- editing a plain source can shift the indices its children are anchored to.
+They existed because the source format could not express what they needed. Each named its
+anchors as *indices* into the parent contribution's segment list, which is what the format
+avoids -- and d32 needed segment and word ranges, which the format did not offer at all
+until it learned `answers_from`/`answers_to` and `answers_words` on the same day.
 
-`d31` and `d33` could move to `fdmd build-debate-repo` if their sources were
-converted to the single-file format, which would remove their scripts entirely.
-`d32-overlapping-refs` could not: it exists to exercise segment ranges (`a3-6b`) and word
-ranges (`a7_7-12f`), and an `answers=` quote resolves to exactly one segment. The source
-format would have to grow a way of spelling a range first.
+The cost of keeping them had become visible twice: all three carried their own hardcoded
+README with the literal placeholders `<debate_url>`/`<background_url>` (dead duplication,
+since `rollout_patches()` replaces the README anyway), and each created its root commit
+itself, so none of them picked up `REPO_INFO.yaml` when that arrived -- their integrity
+page said "not recorded" while every other fixture named its origin.
+
+The rebuild kept every contribution key exactly as it was; what changed is the yaml front
+matter in each file, the added `REPO_INFO.yaml`, the commit dates (which now come from
+`first_commit` and `hours_between_contributions`) and, as with any rebuild, all hashes.
 
 
 ## Removed: `fdmd process-content-dir`

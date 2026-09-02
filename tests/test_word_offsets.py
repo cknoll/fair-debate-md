@@ -639,7 +639,7 @@ class TestWordOffsetsD32OverlappingRefsEndToEnd:
     """
     Group 3 (T3): end-to-end proof against a real reference in the
     `d32-overlapping-refs` fixture (see
-    `src/fair_debate_md/fixtures/repo-preparation/build_d32_overlapping_refs.py`).
+    `src/fair_debate_md/fixtures/repo-preparation/d32-overlapping-refs__plain/source.md`).
     Contributions "a7_7-12f" and "a7_10-16g" both carry a 1-based,
     end-inclusive word-range reference into segment "a7" (see
     `references.parse_key_unit` / `tests/test_references.py`). Slicing
