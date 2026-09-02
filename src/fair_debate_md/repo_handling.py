@@ -342,6 +342,24 @@ def source_fingerprint(source_path: str) -> str:
         return hashlib.sha256(fp.read()).hexdigest()
 
 
+def read_repo_info(repo_host_dir: str, debate_key: str) -> dict:
+    """
+    The `REPO_INFO.yaml` of one repo, or {} when it has none.
+
+    Absence is a normal answer and not an error: the patch collections predating this file
+    (`d02`..`d06`, `d1-lorem_ipsum` and the script-built fixtures) carry no provenance and
+    cannot be given one retroactively -- there is no source to name. A caller must be able
+    to say "not recorded" rather than having to guess.
+    """
+    path = pjoin(repo_host_dir, debate_key, REPO_INFO_FILENAME)
+    try:
+        with open(path) as fp:
+            data = yaml.safe_load(fp)
+    except (OSError, yaml.YAMLError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
 def build_repo_info(source_path: str = None, when: str = None,
                     settings: PlatformSettings = None) -> str:
     """

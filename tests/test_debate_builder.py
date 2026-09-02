@@ -289,3 +289,28 @@ def _repo_info_from_patch(patch_text: str) -> str | None:
         elif out:
             break
     return "\n".join(out)
+
+
+class TestReadRepoInfo:
+    def test_absent_file_is_a_normal_answer(self, tmp_path):
+        """The collections predating this file cannot be given provenance retroactively,
+        so the caller has to be able to say "not recorded" instead of guessing."""
+        assert repo_handling.read_repo_info(str(tmp_path), "d99-nothing-here") == {}
+
+    def test_roundtrip(self, tmp_path):
+        repo_dir = tmp_path / "d99-demo"
+        repo_dir.mkdir()
+        (repo_dir / repo_handling.REPO_INFO_FILENAME).write_text(
+            repo_handling.build_repo_info()
+        )
+        info = repo_handling.read_repo_info(str(tmp_path), "d99-demo")
+        assert info["kind"] == "opened"
+        assert info["fdmd_version"]
+
+    def test_damaged_file_does_not_propagate(self, tmp_path):
+        """A repo is handed out and cloned; a broken metadata file in one must not be able
+        to take down the page that lists it."""
+        repo_dir = tmp_path / "d99-demo"
+        repo_dir.mkdir()
+        (repo_dir / repo_handling.REPO_INFO_FILENAME).write_text("kind: [unclosed\n")
+        assert repo_handling.read_repo_info(str(tmp_path), "d99-demo") == {}
