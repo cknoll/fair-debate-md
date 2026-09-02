@@ -37,7 +37,7 @@ Auch das Argument, man könne stattdessen einfach die Beiträge erhöhen oder me
 
 ## Fazit
 
-Die Kommission hat geliefert, der Koalitionsausschuss hat zugesagt, jetzt zählt nur noch die Umsetzung bis Ende 2026. Jede Verwässerung wäre ein Signal an die junge Generation, dass sich Leistung und Beitragszahlung in diesem Land nicht mehr lohnen. Generationengerechtigkeit ist kein Nischenthema, sondern die soziale Frage unserer Zeit. Wer jetzt zaudert, riskiert nicht weniger als den Generationenvertrag selbst.
+Die Kommission hat geliefert, der Koalitionsausschuss hat zugesagt, jetzt zählt nur noch die Umsetzung bis Ende 2026\@. Jede Verwässerung wäre ein Signal an die junge Generation, dass sich Leistung und Beitragszahlung in diesem Land nicht mehr lohnen. Generationengerechtigkeit ist kein Nischenthema, sondern die soziale Frage unserer Zeit. Wer jetzt zaudert, riskiert nicht weniger als den Generationenvertrag selbst.
 
 <!-- !!== label=b-demografie party=b answers="Jeder Ökonom weiß, dass das heutige System so nicht finanzierbar ist." ==== -->
 

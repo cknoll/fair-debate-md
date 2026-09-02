@@ -1,4 +1,4 @@
-From c817a5ad3186b3f71c5f36877b6c4993c0edeb33 Mon Sep 17 00:00:00 2001
+From 8fc5653eda685d4f660e12e97b1e6ed399532be0 Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Tue, 21 Jul 2026 14:05:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 04/13] add contribution b/a15b.md
 
 diff --git a/b/a15b.md b/b/a15b.md
 new file mode 100644
-index 0000000..ab74b30
+index 0000000..41bef23
 --- /dev/null
 +++ b/b/a15b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a15b1 Dieser Schluss überspringt die Größe, auf die es ankommt. ::a15b2 Die Lebenserwartung steigt, die Zahl der gesunden Lebensjahre steigt aber deutlich langsamer, und sie ist sozial stark gespreizt. ::a15b3 Zwischen Geringverdienern und Gutverdienern liegen mehrere Jahre.
 +

@@ -1,4 +1,4 @@
-From 4368edd374797f3abacc3eaea42cf0def4ddd3f0 Mon Sep 17 00:00:00 2001
+From 399705982f63f32b6896d4a7150d69c995a9b18a Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
 Date: Mon, 20 Jul 2026 09:00:00 +0200
 Subject: [PATCH 01/13] first commit
@@ -138,7 +138,7 @@ index 0000000..5eb57b5
 +  this history are the ones readers keep. Yours is one of them.
 diff --git a/REPO_INFO.yaml b/REPO_INFO.yaml
 new file mode 100644
-index 0000000..24d3ff0
+index 0000000..81a809e
 --- /dev/null
 +++ b/REPO_INFO.yaml
 @@ -0,0 +1,9 @@
@@ -146,11 +146,11 @@ index 0000000..24d3ff0
 +# `kind: built` means the history is regenerated whenever the source changes;
 +# `kind: opened` means the debate grew into this repo by appending.
 +kind: built
-+date: '2026-09-02T12:56:49+00:00'
++date: '2026-09-02T20:09:21+00:00'
 +fdmd_version: 0.8.0
 +source:
 +  path: d35-rente-generationengerechtigkeit__plain/source.md
-+  sha256: ebd1a1485f675a7100871614834cd16cb68db73cbad684c5d96eb582ca094168
++  sha256: 58c381eba24842b7e4b7877d04f0d98ae42bc65bf6a6b1ce1c4df25f006aeeaa
 -- 
 2.39.5
 

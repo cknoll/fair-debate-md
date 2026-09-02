@@ -1,4 +1,4 @@
-From fdc0cca9397fe97c41f8cf7b659a89040a798f97 Mon Sep 17 00:00:00 2001
+From 6458805d35049cf308e322beec6b26890b13fb4b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
  <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
 Date: Thu, 23 Jul 2026 20:00:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 11/13] add contribution a/a15b5a1b5a.md
 
 diff --git a/a/a15b5a1b5a.md b/a/a15b5a1b5a.md
 new file mode 100644
-index 0000000..0046d78
+index 0000000..0d31d5c
 --- /dev/null
 +++ b/a/a15b5a1b5a.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a15b5a1b5a1 Hier gebe ich nach. ::a15b5a1b5a2 Die Formulierung war zu stark, und ich habe keinen Beleg dafür. ::a15b5a1b5a3 Die Berufe, die Sie aufzählen, sind keine Härtefälle, sondern ein erheblicher Teil der Beschäftigten.
 +

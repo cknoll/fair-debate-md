@@ -1,4 +1,4 @@
-From 0806180470312ddf87d57e5cf0d1decc950994c8 Mon Sep 17 00:00:00 2001
+From 7857f06df4c1f6df96cee09ef36fbb225ee1436a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
  <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
 Date: Mon, 20 Jul 2026 17:00:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 02/13] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..6546571
+index 0000000..5fbd191
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,30 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +# ::a1 Generationengerechtigkeit jetzt — die Empfehlungen der Rentenkommission gehören ohne Abstriche umgesetzt
 +
@@ -44,7 +44,7 @@ index 0000000..6546571
 +
 +## ::a38 Fazit
 +
-+::a39 Die Kommission hat geliefert, der Koalitionsausschuss hat zugesagt, jetzt zählt nur noch die Umsetzung bis Ende 2026. ::a40 Jede Verwässerung wäre ein Signal an die junge Generation, dass sich Leistung und Beitragszahlung in diesem Land nicht mehr lohnen. ::a41 Generationengerechtigkeit ist kein Nischenthema, sondern die soziale Frage unserer Zeit. ::a42 Wer jetzt zaudert, riskiert nicht weniger als den Generationenvertrag selbst.
++::a39 Die Kommission hat geliefert, der Koalitionsausschuss hat zugesagt, jetzt zählt nur noch die Umsetzung bis Ende 2026\@. ::a40 Jede Verwässerung wäre ein Signal an die junge Generation, dass sich Leistung und Beitragszahlung in diesem Land nicht mehr lohnen. ::a41 Generationengerechtigkeit ist kein Nischenthema, sondern die soziale Frage unserer Zeit. ::a42 Wer jetzt zaudert, riskiert nicht weniger als den Generationenvertrag selbst.
 \ No newline at end of file
 -- 
 2.39.5

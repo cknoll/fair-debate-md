@@ -93,6 +93,10 @@ Intentional consequences:
 - Inline markdown contributes its raw form: `[link text](url)` = 2 words (`[link`, `text](url)`).
 - Code-block segments have their code tokens (including the ` ``` ` fences) counted as words.
 - Whitespace-free scripts (CJK) effectively cannot use word references — accepted limitation.
+- A force-split marker (`key_management.FORCE_SPLIT_MARKER`, e.g. `2026\@.`) is part of the
+  word it sits in, exactly as `**bold**` is. It carries no whitespace, so it changes no word
+  *count* and no position — which is why segmentation could be given an opt-in marker at all
+  without touching this specification.
 
 Reference implementation and spec tests: `references.get_segment_words`,
 `tests/test_references.py::TestSegmentWords`. The frontend must implement the *identical*

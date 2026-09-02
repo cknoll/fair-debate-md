@@ -1,4 +1,4 @@
-From 70e4b13ec827fd0da4ab080ccbec4656c830e46f Mon Sep 17 00:00:00 2001
+From bd8cecbeb54c56d411e563ff0b7b742d2c047677 Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Wed, 22 Jul 2026 13:10:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 07/13] add contribution b/a17b.md
 
 diff --git a/b/a17b.md b/b/a17b.md
 new file mode 100644
-index 0000000..86aabc1
+index 0000000..df622de
 --- /dev/null
 +++ b/b/a17b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a17b1 Diese Zahl steht hier falsch. ::a17b2 Die 15 Milliarden Euro pro Jahr bezogen sich im Rentenstreit auf die Fortschreibung eines um einen Punkt höheren Rentenniveaus ab 2032, nicht auf die Haltelinie insgesamt und nicht auf heute.
 +

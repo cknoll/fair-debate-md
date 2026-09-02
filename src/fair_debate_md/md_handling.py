@@ -14,7 +14,7 @@ import markdown
 import markdownify as mdf
 
 from . import utils
-from .key_management import ProtoKeyAdder
+from .key_management import ProtoKeyAdder, SPLITTER_SYNTAX_VERSION
 
 
 def convert_tabs_to_spaces(input_string):
@@ -64,6 +64,7 @@ class MDHandler:
         md_with_real_keys: str = None,
         # store whether this is a data-base contribution (i.e. not yet committed)
         db_ctb: bool = None,
+        splitter_version: int = None,
     ):
         self.plain_md_src = plain_md
         self.additional_css_classes = []
@@ -71,6 +72,13 @@ class MDHandler:
 
         self.proto_key_prefix = proto_key_prefix
         self.key_prefix = key_prefix
+
+        # The segmentation ruleset that produces (or produced) this text's `::aN` markers.
+        # New text is segmented under the current default; text read back from a repo gets
+        # the version its front matter records, so re-rendering it cannot renumber it.
+        if splitter_version is None:
+            splitter_version = SPLITTER_SYNTAX_VERSION
+        self.splitter_version: int = splitter_version
 
         self.md_with_proto_keys: str = None
         self.md_with_real_keys = md_with_real_keys
@@ -132,7 +140,7 @@ class MDHandler:
         """
         Pipeline step 3: add proto-keys (e.g. `::k`) to the html source.
         """
-        pka = ProtoKeyAdder(html_src, prefix=prefix)
+        pka = ProtoKeyAdder(html_src, prefix=prefix, splitter_version=self.splitter_version)
         return pka.add_proto_keys_to_html()
 
     def _html_to_md_with_proto_keys(self, html_src: str) -> str:

@@ -1,4 +1,4 @@
-From 4fb5cfaaa831cce5516a368c4f0a5bbf2b463fac Mon Sep 17 00:00:00 2001
+From d6991203d455ba4bb0b6bbd7dbee8107f163a276 Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Thu, 23 Jul 2026 14:15:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 10/13] add contribution b/a18b.md
 
 diff --git a/b/a18b.md b/b/a18b.md
 new file mode 100644
-index 0000000..d91a4d5
+index 0000000..00be6f1
 --- /dev/null
 +++ b/b/a18b.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a18b1 Das schwedische System wird hier stark vereinfacht. ::a18b2 In die kapitalgedeckte Prämienrente fließen nur 2,5 Prozentpunkte des Beitrags, das System bleibt ganz überwiegend umlagefinanziert. ::a18b3 Als Beleg für einen massiven Ausbau taugt es deshalb nicht.
 +

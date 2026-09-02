@@ -1,4 +1,4 @@
-From 9f6e382d969d30df6a8cf7715eddee35eb158653 Mon Sep 17 00:00:00 2001
+From 21a300035cc31fe64cc87a70147651b2023ca944 Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Thu, 23 Jul 2026 08:20:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 09/13] add contribution b/a15b5a1b.md
 
 diff --git a/b/a15b5a1b.md b/b/a15b5a1b.md
 new file mode 100644
-index 0000000..f4bacf6
+index 0000000..5980ac3
 --- /dev/null
 +++ b/b/a15b5a1b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a15b5a1b1 Die Erwerbsminderungsrente ist kein Auffangnetz für Verschleißberufe. ::a15b5a1b2 Die Hürden sind hoch, die Verfahren lang, und die Abschläge sind erheblich. ::a15b5a1b3 Wer sie bekommt, ist meist schon aus dem Erwerbsleben gefallen, statt geordnet in den Ruhestand zu gehen.
 +

@@ -14,9 +14,15 @@ from bs4 import BeautifulSoup, element
 # they are while new ones use the current default.
 #
 # Raise this whenever the segmentation behaviour changes, and keep the previous behaviour
-# reachable. See `dev_notes.md`, section "splitter syntax", for the changes this was
-# introduced for and for what is still open.
-SPLITTER_SYNTAX_VERSION = 1
+# reachable (`split_text_into_segments` dispatches on the number). See `dev_notes.md`,
+# section "splitter syntax", for the changes each version was introduced for.
+#
+# Version history:
+#   1 -- every splitter character splits, regardless of what follows it.
+#   2 -- a splitter only splits when whitespace follows (or it ends the text); a dot
+#        directly after a digit does not split at all; `\@` immediately before a splitter
+#        forces a split that the rules would otherwise suppress.
+SPLITTER_SYNTAX_VERSION = 2
 
 # What a contribution without any recorded version was created under: everything written
 # before the field existed came from these rules.
@@ -24,6 +30,34 @@ DEFAULT_SPLITTER_SYNTAX_VERSION = 1
 
 # characters which end a sentence / segment
 SENTENCE_SPLITTERS = (".", "!", "?", ":")
+
+# Force-split marker (syntax version 2+): written directly in front of a splitter, it
+# makes that splitter split even where the rules would suppress it -- the only way to end
+# a segment on a number ("... bis Ende 2026\@. Jede Verwaesserung ..."), and it also
+# breaks a strong abbreviation ("... z.B\@. Der naechste Satz.").
+#
+# Why this spelling: LaTeX solves the same problem with `\@.`, with the same meaning, so
+# the notation reads correctly to anyone who has met it there. Two alternatives were
+# tried against the real pipeline and are not merely worse but unusable: `18\.` loses its
+# backslash in python-markdown, so at segmentation time it is indistinguishable from a
+# plain dot, and `18.\ ` moves the backslash into the *following* segment.
+#
+# The marker stays in the stored `.md`: it is what lets the recorded segmentation be
+# re-checked against the text (see `tests/test_splitter_versions.py`), and a reader of the
+# raw repo can see why a segment ends there. It is removed when the text is rendered
+# (`MDProcessor.get_html_with_segments`), so it never shows up in the debate. It carries
+# no whitespace and therefore does not shift any word position -- the frozen word
+# tokenizer counts `2026\@.` as the single word it already counted as `2026.`.
+FORCE_SPLIT_MARKER = "\\@"
+_FORCE_SPLIT_RE = re.compile(
+    re.escape(FORCE_SPLIT_MARKER) + r"(?=[" + re.escape("".join(SENTENCE_SPLITTERS)) + r"])"
+)
+
+
+def strip_force_split_markers(text: str) -> str:
+    """Remove every force-split marker that is in effect, i.e. that precedes a splitter."""
+    return _FORCE_SPLIT_RE.sub("", text)
+
 
 # Abbreviations whose trailing dot practically never ends a sentence.
 # A dot terminating (or lying inside) such an abbreviation never splits.
@@ -174,34 +208,45 @@ def _is_abbreviation_dot(text_so_far: str, text_rest: str) -> bool:
     return False
 
 
-def split_text_into_segments(text: str) -> list[str]:
+def split_text_into_segments(text: str, splitter_version: int = None) -> list[str]:
     """
     Split `text` at sentence splitters (``.``, ``!``, ``?``, ``:``) into
-    segments. Splitters stay attached to the preceding segment. Known
-    abbreviations (see `_STRONG_ABBREVIATIONS` / `_WEAK_ABBREVIATIONS`, e.g.
-    ``i.e.``, ``z.B.``, also in spaced form ``z. B.``), dots between digits
-    (``100.000``, ``3.14``, ``24.12.2026``) and version numbers (``v12.3``) do
-    NOT cause a split.
+    segments, under the ruleset `splitter_version` (default: the current
+    `SPLITTER_SYNTAX_VERSION`). Splitters stay attached to the preceding
+    segment, and the concatenation of the returned segments always equals the
+    input text -- including any force-split marker, which is removed only when
+    the text is rendered.
 
-    The concatenation of the returned segments equals the input text.
+    Common to all versions: known abbreviations (see `_STRONG_ABBREVIATIONS` /
+    `_WEAK_ABBREVIATIONS`, e.g. ``i.e.``, ``z.B.``, also in spaced form
+    ``z. B.``), dots between digits (``100.000``, ``3.14``, ``24.12.2026``) and
+    version numbers (``v12.3``) do NOT cause a split.
 
-    This is a pure function intended to replace the convoluted index-based
-    logic in `ProtoKeyAdder.insert_proto_keys` / `_abbreviation_handling`.
+    Version 1 splits at every other splitter character, whatever follows it.
+    Version 2 adds the two rules in `_split_v2` and the `\\@` escape.
     """
     if not text:
         return []
 
+    if splitter_version is None:
+        splitter_version = SPLITTER_SYNTAX_VERSION
+
+    try:
+        splitter = _SPLITTERS_BY_VERSION[splitter_version]
+    except KeyError:
+        raise ValueError(
+            f"unknown splitter syntax version: {splitter_version!r} "
+            f"(known: {sorted(_SPLITTERS_BY_VERSION)})"
+        ) from None
+
+    return splitter(text)
+
+
+def _assemble_segments(text: str, split_after: list[int]) -> list[str]:
+    """Cut `text` after each index in `split_after` (ascending, splitter inclusive)."""
     segments: list[str] = []
     start = 0
-    for i, ch in enumerate(text):
-        if ch not in SENTENCE_SPLITTERS:
-            continue
-        if ch == ".":
-            text_so_far = text[: i + 1]
-            text_rest = text[i + 1 :]
-            if _is_abbreviation_dot(text_so_far, text_rest):
-                continue
-        # commit segment [start .. i] (inclusive of splitter)
+    for i in split_after:
         segments.append(text[start : i + 1])
         start = i + 1
 
@@ -210,6 +255,71 @@ def split_text_into_segments(text: str) -> list[str]:
         segments.append(text[start:])
 
     return segments
+
+
+def _split_v1(text: str) -> list[str]:
+    """
+    Syntax version 1: every splitter character splits, regardless of what
+    follows it. Kept reachable because contributions written under it carry
+    materialized keys that only these rules reproduce.
+    """
+    split_after = []
+    for i, ch in enumerate(text):
+        if ch not in SENTENCE_SPLITTERS:
+            continue
+        if ch == "." and _is_abbreviation_dot(text[: i + 1], text[i + 1 :]):
+            continue
+        split_after.append(i)
+
+    return _assemble_segments(text, split_after)
+
+
+def _split_v2(text: str) -> list[str]:
+    """
+    Syntax version 2. Two rules on top of version 1, plus one escape:
+
+    * a splitter only splits when whitespace follows it, or when it ends the
+      text. This keeps the gender-inclusive colon ("User:innen"), clock times
+      ("14:30") and any punctuation glued to the next character in one segment,
+      while the useful colon ("Die Streitfrage lautet: Sind X und Y
+      vereinbar?") keeps its splitter function. "Ends the text" counts as
+      whitespace on purpose: `text` is one html text node, and what follows the
+      node boundary is a tag, whose rendered spacing we cannot see from here.
+
+    * a dot directly after a digit never splits. Ordinals ("15. August",
+      "3. Platz") are far more common than a sentence ending in a number, and
+      the weak-abbreviation rule cannot help -- it only suppresses a split
+      before a lowercase continuation, and "August" is uppercase.
+
+    * `FORCE_SPLIT_MARKER` directly in front of a splitter overrides all of
+      that, including the abbreviation tables. It is the opt-in for the rare
+      sentence that really does end on a number.
+    """
+    marker_len = len(FORCE_SPLIT_MARKER)
+    split_after = []
+    for i, ch in enumerate(text):
+        if ch not in SENTENCE_SPLITTERS:
+            continue
+
+        if text[max(0, i - marker_len) : i] != FORCE_SPLIT_MARKER:
+            text_rest = text[i + 1 :]
+            if text_rest and not text_rest[0].isspace():
+                continue
+            if ch == ".":
+                if text[i - 1 : i].isdigit():
+                    continue
+                if _is_abbreviation_dot(text[: i + 1], text_rest):
+                    continue
+
+        split_after.append(i)
+
+    return _assemble_segments(text, split_after)
+
+
+_SPLITTERS_BY_VERSION = {
+    1: _split_v1,
+    2: _split_v2,
+}
 
 
 class ProtoKeyAdder:
@@ -236,9 +346,10 @@ class ProtoKeyAdder:
     # child tags such as <ul>, <ol>, <p>, ... do NOT trigger a preceding key.
     INLINE_TAGS = ("em", "strong", "code", "i", "b", "a", "span")
 
-    def __init__(self, html_src: str, prefix: str):
+    def __init__(self, html_src: str, prefix: str, splitter_version: int = None):
         self.html_src = html_src
         self.prefix = prefix
+        self.splitter_version = splitter_version
         self.proto_key = f" ::{self.prefix} "
         self.soup = BeautifulSoup(html_src, "html.parser")
 
@@ -337,7 +448,7 @@ class ProtoKeyAdder:
                 continue
 
             assert isinstance(child, element.NavigableString)
-            segments = split_text_into_segments(str(child))
+            segments = split_text_into_segments(str(child), self.splitter_version)
             if not segments:
                 continue
 

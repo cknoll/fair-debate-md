@@ -20,6 +20,7 @@ from .key_management import (
     DEFAULT_SPLITTER_SYNTAX_VERSION,
     SPLITTER_SYNTAX_VERSION,
     ProtoKeyAdder,
+    strip_force_split_markers,
 )
 from .md_handling import MDHandler, KeyAdder, convert_tabs_to_spaces  # noqa: F401 (re-exported)
 from .references import (  # noqa: F401 (re-exported)
@@ -347,6 +348,7 @@ class MDProcessor(MDHandler):
         # store whether this is a data-base contribution (i.e. not yet committed)
         db_ctb: bool = None,
         convert_now=False,
+        splitter_version: int = None,
     ):
         super().__init__(
             plain_md=plain_md,
@@ -354,6 +356,7 @@ class MDProcessor(MDHandler):
             key_prefix=key_prefix,
             md_with_real_keys=md_with_real_keys,
             db_ctb=db_ctb,
+            splitter_version=splitter_version,
         )
 
         # html/segment/contribution related state
@@ -366,9 +369,6 @@ class MDProcessor(MDHandler):
         self.front_matter: dict = {}
         self.created: str | None = None
         self.order_hint = None
-        # the segmentation ruleset this contribution's `::aN` markers came from; set from
-        # the front matter when the text is read back from a repo
-        self.splitter_version: int = SPLITTER_SYNTAX_VERSION
 
         # convenience: save one line in the caller
         if convert_now:
@@ -389,6 +389,13 @@ class MDProcessor(MDHandler):
         # this is the second (and final) conversion from md to html
         # only here we should resolve placeholders
         html_src = self._md_to_html(self.md_with_real_keys)
+
+        # The force-split markers have done their work when the `::aN` keys were
+        # materialized; they stay in the stored `.md` (see `FORCE_SPLIT_MARKER`) but must
+        # not reach the reader. Removing them here and not earlier is what keeps them in
+        # the repo. Code blocks are placeholders at this point and are restored further
+        # down in `SpanAdder.convert_code_placeholders`, so their content is untouched.
+        html_src = strip_force_split_markers(html_src)
 
         if len(html_src) > 0:
             sa = SpanAdder(
@@ -555,14 +562,16 @@ class DebateDirLoader:
             with open(fpath, "r") as fp:
                 file_content = fp.read()
             front_matter, md_with_real_keys = split_front_matter(file_content)
-            mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys, db_ctb=False)
-            mdp.front_matter = front_matter
             # absent means the file predates the field, and everything written before it
             # came from ruleset 1 -- so the default is a statement about history, not a
             # fallback for a missing value
-            mdp.splitter_version = front_matter.get(
-                "splitter_version", DEFAULT_SPLITTER_SYNTAX_VERSION
+            mdp = MDProcessor(
+                key_prefix=base_name,
+                md_with_real_keys=md_with_real_keys,
+                db_ctb=False,
+                splitter_version=front_matter.get("splitter_version", DEFAULT_SPLITTER_SYNTAX_VERSION),
             )
+            mdp.front_matter = front_matter
             mdp.created = front_matter.get("created")
             if mdp.created is None:
                 mdp.created = _git_first_commit_iso(fpath)

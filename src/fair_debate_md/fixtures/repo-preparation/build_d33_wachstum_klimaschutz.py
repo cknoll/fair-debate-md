@@ -37,13 +37,16 @@ the segment indices in `STRUCTURE` refer to the *generated* segments, so editing
 can shift the anchors of its children -- the script prints the anchor sentence of every
 contribution so that such a shift is visible.
 
-Traps when editing the plain sources (the splitter also splits at ":" and at every "."):
+Traps when editing the plain sources (the splitter also splits at ":", not just at "."):
 
 * one paragraph must be one line -- a hard line break inside a paragraph puts the
   segment key on a line of its own;
-* a colon always starts a new segment, so use it only where a split is wanted;
-* dates like "15. August" or "15.08.2026" are torn into two or three segments; write
-  them without a period ("Mitte August 2026") or keep them out of the text.
+* a colon *followed by whitespace* starts a new segment, so use it that way only where a
+  split is wanted. A glued one ("User:innen", "14:30") is safe since syntax version 2;
+* a dot directly after a digit does not split since syntax version 2, so "15. August"
+  and "15.08.2026" stay in one segment. The other way round is now the case that needs
+  care: a sentence that really ends on a number keeps its boundary only with the
+  force-split marker, "... von CO2\\@. Bei Prozessemissionen ...".
 """
 
 import os

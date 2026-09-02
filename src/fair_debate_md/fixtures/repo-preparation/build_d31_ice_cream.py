@@ -17,7 +17,7 @@ Why a script instead of `fdmd process-content-dir` (removed 2026-08-31):
 
 * the answer structure has to be expressed somewhere. A contribution key encodes
   which *segment* it answers (`a4b` = party b answers segment `a4`), and segment
-  numbering cannot be predicted by hand -- the splitter also splits at ":". So
+  numbering cannot be predicted by hand -- the splitter also splits at ": ". So
   `STRUCTURE` names the anchor as (parent contribution, segment index) and the
   real key is resolved from the generated text.
 * the fixture should look like a debate the app itself produced: one commit per

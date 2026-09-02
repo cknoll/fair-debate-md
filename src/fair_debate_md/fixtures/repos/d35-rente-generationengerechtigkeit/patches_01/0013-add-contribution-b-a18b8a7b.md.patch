@@ -1,4 +1,4 @@
-From 016ccfce659157e26fad666fcd56ef74466b18f7 Mon Sep 17 00:00:00 2001
+From 0d1dd40f3a018ecfb5c582a6be300a15cf5b4d1c Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Fri, 24 Jul 2026 14:05:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 13/13] add contribution b/a18b8a7b.md
 
 diff --git a/b/a18b8a7b.md b/b/a18b8a7b.md
 new file mode 100644
-index 0000000..7974a41
+index 0000000..680d63f
 --- /dev/null
 +++ b/b/a18b8a7b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a18b8a7b1 Norwegen ist ein Ölfonds und keine Rentenversicherung. ::a18b8a7b2 Er wird aus Rohstofferlösen gespeist und nicht aus Beiträgen, und er zahlt keine individuellen Renten aus. ::a18b8a7b3 Als Beleg dafür, dass eine beitragsfinanzierte Aktienrente das Kursrisiko der Versicherten auffängt, taugt er nicht.
 +

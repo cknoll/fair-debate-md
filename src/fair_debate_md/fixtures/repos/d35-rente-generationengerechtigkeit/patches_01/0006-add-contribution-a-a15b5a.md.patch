@@ -1,4 +1,4 @@
-From 76e8acdbf590d928f7f0b9bacac790b8abd63806 Mon Sep 17 00:00:00 2001
+From ade6c5d1c145dd94ed0329d2386edb0b006c3e24 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
  <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
 Date: Wed, 22 Jul 2026 08:00:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 06/13] add contribution a/a15b5a.md
 
 diff --git a/a/a15b5a.md b/a/a15b5a.md
 new file mode 100644
-index 0000000..6bcb1fa
+index 0000000..aad4dc9
 --- /dev/null
 +++ b/a/a15b5a.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a15b5a1 Für die wenigen echten Härtefälle gibt es die Erwerbsminderungsrente. ::a15b5a2 Genau dafür ist sie da, und sie lässt sich ausbauen, ohne die Regelaltersgrenze für alle anderen niedrig zu halten.
 +

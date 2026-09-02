@@ -22,33 +22,40 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
 (2) concern `split_text_into_segments()` / `_is_abbreviation_dot()` in
 `key_management.py`.
 
-- [] **(1) a splitter only splits when whitespace follows it.**
-  Applies to both `.` and `:`. Currently every colon starts a new segment, which breaks
-  the gender-inclusive colon that some users write ("User:innen" -> two segments). The
-  same rule also fixes clock times ("14:30") and any dot glued to the next character.
-  A colon that *is* followed by whitespace keeps its splitter function, so the useful
-  case ("Die Streitfrage lautet: Sind X und Y vereinbar?" -> the thesis stays separately
-  referenceable) is unaffected. Only `:` is concerned among the gender forms -- `*` and
-  `_` are not splitters.
+- [x] **(1) a splitter only splits when whitespace follows it.**
+  -> done (2026-09-02), syntax version 2, `_split_v2` in `key_management.py`. It fixes
+  the gender-inclusive colon ("User:innen"), clock times ("14:30") and any punctuation
+  glued to the next character. A colon that *is* followed by whitespace keeps its
+  splitter function, so the useful case ("Die Streitfrage lautet: Sind X und Y
+  vereinbar?" -> the thesis stays separately referenceable) is unaffected. Only `:` is
+  concerned among the gender forms -- `*` and `_` are not splitters.
+  Applied to all four splitters, not just `.` and `:` -- there is no case where a glued
+  `!` or `?` should behave differently, and a uniform rule is one rule less to remember.
+  The end of the text counts as "whitespace follows" on purpose: the text handed to the
+  splitter is one html text node, and whether the following tag renders as a space is not
+  visible from there. That confines the change to the glued cases it was written for --
+  measured over every source and every built contribution, it changes no existing key.
 
-- [] **(2) a dot directly after a digit should not split by default.**
-  Ordinals ("15. August", "3. Platz") are far more frequent than a sentence ending in a
-  number, so the default should be "do not split". The existing weak-abbreviation rule
-  does not help here: it only suppresses the split when the continuation is lowercase,
-  and "August" is uppercase.
-  For the rare case where a split after a number *is* wanted, an explicit opt-in marker
-  is needed. Decided: the marker must NOT remain visible in the rendered text, so it is
-  an escape-like construct, not a literal punctuation character.
-  The concrete syntax is deliberately left open. Candidates:
-    * `18\. August` -- but a backslash conventionally means "take the next character
-      literally", while here it would mean "treat the dot as a splitter after all", i.e.
-      a different function for a familiar character;
-    * `18.\ August` -- backslash before the space instead of before the dot.
-  Worth knowing when deciding: LaTeX has exactly this problem and solves it in both
-  directions -- `\ ` suppresses a sentence-end after a dot, and `\@.` forces one where
-  the heuristic misses it. Our opt-in is the `\@.` direction, so a syntax borrowed from
-  `\ ` would read *inverted* to LaTeX-trained users. That argues for a marker glued to
-  the dot rather than to the space, or for a third character altogether.
+- [x] **(2) a dot directly after a digit does not split by default.**
+  -> done (2026-09-02), syntax version 2. Ordinals ("15. August", "3. Platz") are far
+  more frequent than a sentence ending in a number. The weak-abbreviation rule could not
+  help: it only suppresses the split when the continuation is lowercase, and "August" is
+  uppercase.
+  The opt-in for the rare real case is `FORCE_SPLIT_MARKER`, spelled **`\@` directly in
+  front of the splitter**: "... bis Ende 2026\@. Jede Verwaesserung ...". It is the same
+  notation LaTeX uses for the same purpose (`\@.` forces a sentence end), it is glued to
+  the dot rather than to the space, and it overrides the abbreviation tables too, which
+  is the only way to end a sentence on "z.B." at all.
+  The two candidates listed here before were not merely worse, they turned out unusable
+  when tried against the real pipeline: `18\.` loses its backslash inside
+  python-markdown, so by the time the splitter sees the text it is an ordinary dot; and
+  `18.\ ` leaves the backslash at the *start of the following segment*.
+  The marker stays in the stored `.md` (it is what
+  `TestStoredSegmentationIsReproducible` re-checks, and it tells a reader of the raw repo
+  why the segment ends there) and is removed in `MDProcessor.get_html_with_segments()`,
+  so it never reaches the debate. It carries no whitespace, so it shifts no word position.
+  Not built, and not needed so far: the opposite marker, one that *suppresses* a split
+  the rules do make (LaTeX's `\ `). Worth adding only when a text actually wants it.
 
 - [x] **(3) persist the splitter-syntax version per contribution.**
   → done (2026-09-02): `SPLITTER_SYNTAX_VERSION` in `key_management.py`, written as
@@ -56,10 +63,12 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
   (`core.write_ctb_to_file` for a live publication, `debate_builder` for a built fixture)
   and read back into `MDProcessor.splitter_version`. A file without the field counts as
   version 1, which is a statement about history rather than a fallback.
-  **Still missing, and the actual work of (1)/(2):** nothing yet *dispatches* on the
-  recorded version -- `split_text_into_segments()` has one behaviour. Recording had to come
-  first so that contributions written from now on can be re-rendered under their own rules;
-  the dispatch is written when the first alternative ruleset exists.
+  The dispatch followed with (1)/(2) (2026-09-02): `split_text_into_segments()` picks a
+  ruleset out of `_SPLITTERS_BY_VERSION`, and an unknown version is refused rather than
+  guessed. Its consumer is `tests/test_splitter_versions.py::TestStoredSegmentationIsReproducible`,
+  which strips the markers off every built fixture and requires re-segmentation under the
+  recorded version to put them back where they were -- that is what turns the recorded
+  number into a checkable statement.
   The original entry, for the reasoning:
   Items (1) and (2) change how existing text is segmented, and segment keys are the
   prefix of every answer key (`a14c5b` answers segment `a14c5`). Re-segmenting an
@@ -71,8 +80,28 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
   Decided: store it as yaml front matter in the contribution `.md` (`core.split_front_matter()`
   already exists), so the information stays inside the content repo and travels with it;
   explicitly not a db column, which the repo alone would not carry.
-  Still to be decided when (1)/(2) land: whether the existing fixtures are rebuilt under
-  the new version or pinned to the old one.
+  Decided when (1)/(2) landed (2026-09-02), after measuring instead of guessing: the
+  patterns were counted over every source and every built contribution first. Rule (1)
+  had **no** effect anywhere. Rule (2) touched exactly two split points, both genuine
+  sentence ends: "... Speicherung von CO2. Bei Prozessemissionen ..." in d33
+  (`b/b-instrumente.md`) and "... bis Ende 2026. Jede Verwaesserung ..." in d35
+  (`source.md`). Everything else matching `digit + dot` is markdown ordered-list syntax,
+  which becomes `<li>` and never reaches the splitter, or sits inside `**bold**`, which
+  is not segmented either.
+  d35 got the `\@` marker and was rebuilt: the segment keys come out byte-identical, and
+  the sentence keeps the boundary it should have. Every other fixture stays as it is and
+  keeps saying `splitter_version: 1`, which is true and which keeps the dispatch honest --
+  the fixture set now contains both rulesets.
+
+- [] **d33 still needs the `\@` marker.** The second of the two measured spots. It was
+  left out on purpose: a parallel line of work is converting d31/d32/d33 to single-file
+  sources, so editing `b/b-instrumente.md` now would only be overwritten.
+  Nothing is broken in the meantime -- d33 records `splitter_version: 1` and is rendered
+  under version 1. The damage happens the moment somebody rebuilds it under version 2
+  without the marker: `a14c5b8c6b10`, the last segment of that contribution and currently
+  unanswered, silently merges into `a14c5b8c6b9` and the sentence loses a boundary it
+  should have. So whoever lands the single-file d33 source writes
+  "... Speicherung von CO2\@. Bei Prozessemissionen ..." into it.
 
 
 ## repo provenance (added 2026-09-02)

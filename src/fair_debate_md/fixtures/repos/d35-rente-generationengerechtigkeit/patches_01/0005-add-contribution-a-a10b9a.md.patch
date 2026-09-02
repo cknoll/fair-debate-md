@@ -1,4 +1,4 @@
-From d2fbd45858fd6d0266bea44d009dbf0f22fecb69 Mon Sep 17 00:00:00 2001
+From 2688e74027e0f71377a2324acbcc50754025b69d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
  <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
 Date: Tue, 21 Jul 2026 19:55:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 05/13] add contribution a/a10b9a.md
 
 diff --git a/a/a10b9a.md b/a/a10b9a.md
 new file mode 100644
-index 0000000..9fdce65
+index 0000000..784bea1
 --- /dev/null
 +++ b/a/a10b9a.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a10b9a1 Den Punkt zur Produktivität nehme ich an. ::a10b9a2 Er ist richtig, und ich hätte ihn im Text nicht auslassen dürfen.
 +

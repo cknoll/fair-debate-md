@@ -1,4 +1,4 @@
-From 78227518d836a21ae02c69fcc28b93139adfc9e8 Mon Sep 17 00:00:00 2001
+From 28239433813b8f60a82801eed993fabfdf63da47 Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Wed, 22 Jul 2026 19:00:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 08/13] add contribution b/a10b9a5b.md
 
 diff --git a/b/a10b9a5b.md b/b/a10b9a5b.md
 new file mode 100644
-index 0000000..d40a14e
+index 0000000..3265a3a
 --- /dev/null
 +++ b/b/a10b9a5b.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a10b9a5b1 Das Risiko verschwindet in keinem der beiden Systeme, es wechselt nur den Träger. ::a10b9a5b2 Genau das ist mein Einwand gegen die Aktienrente, und er gilt symmetrisch.
 +

@@ -258,10 +258,21 @@ class TestMDHandling(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertEqual(split_text_into_segments(text), [text])
 
-        # ... but a sentence really ending in a digit still splits: there the
-        # whitespace after the dot is the only thing telling the cases apart.
+        # A sentence really ending in a digit is where the two rulesets differ. Under
+        # version 1 the whitespace after the dot was the only thing telling it apart from
+        # "100.000", so it split. Version 2 does not split after a digit at all --
+        # ordinals ("15. August") are far more common -- and asks for the marker instead.
         text = "Es waren 2022. 500 Leute kamen."
-        self.assertEqual(split_text_into_segments(text), ["Es waren 2022.", " 500 Leute kamen."])
+        self.assertEqual(
+            split_text_into_segments(text, splitter_version=1),
+            ["Es waren 2022.", " 500 Leute kamen."],
+        )
+        self.assertEqual(split_text_into_segments(text, splitter_version=2), [text])
+        marked = "Es waren 2022\\@. 500 Leute kamen."
+        self.assertEqual(
+            split_text_into_segments(marked, splitter_version=2),
+            ["Es waren 2022\\@.", " 500 Leute kamen."],
+        )
 
     def test_207__split_text_abbreviations_extended(self):
         # strong abbreviations (never split), including spaced variants
