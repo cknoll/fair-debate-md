@@ -1,20 +1,23 @@
-From 541fb5be8f645c11b8adc3ac1e9abe59580418b1 Mon Sep 17 00:00:00 2001
+From ec26b4bcd9e1db32097e0317567fcba6a02d1e17 Mon Sep 17 00:00:00 2001
 From: fair debate user d32-overlapping-refs a
  <d32-overlapping-refs_a@fair-debate-users.org>
-Date: Mon, 6 Apr 2026 09:00:00 +0200
+Date: Mon, 6 Apr 2026 08:00:00 +0200
 Subject: [PATCH 02/10] add contribution a/a.md
 
 ---
- a/a.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ a/a.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..c36f162
+index 0000000..65b857f
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +# ::a1 The office coffee machine should go
 +
 +::a2 I would like to propose that we get rid of the capsule machine in the kitchen and switch to a kettle and a French press. ::a3 The machine costs us around forty euros a month in capsules alone. ::a4 It breaks roughly twice a year, and every repair leaves us without coffee for a week. ::a5 The capsules are not recyclable in any practical sense, whatever the packaging says. ::a6 And the coffee it produces is, to be blunt, not very good.

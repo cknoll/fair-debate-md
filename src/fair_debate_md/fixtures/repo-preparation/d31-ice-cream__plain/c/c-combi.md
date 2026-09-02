@@ -1,1 +1,0 @@
-This is the point I want to push back on hardest, because I think it is backwards. Chocolate ends up in every mixed cup because it is the default, and being the default is not the same as combining well. Ask what it actually adds next to lemon, or next to a good yoghurt sorbet, and the honest answer is that it flattens both. What you are calling compatibility is mostly dominance.

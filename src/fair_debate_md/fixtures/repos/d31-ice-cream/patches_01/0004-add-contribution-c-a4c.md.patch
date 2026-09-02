@@ -1,19 +1,22 @@
-From ec378a8aa76e819a208af7b111fc93a8a1292cfd Mon Sep 17 00:00:00 2001
+From 2196c01478e3997e873949280f0aeeedeba3b658 Mon Sep 17 00:00:00 2001
 From: fair debate user d31-ice-cream c <d31-ice-cream_c@fair-debate-users.org>
-Date: Mon, 2 Mar 2026 16:26:00 +0100
+Date: Mon, 2 Mar 2026 15:10:00 +0100
 Subject: [PATCH 04/27] add contribution c/a4c.md
 
 ---
- c/a4c.md | 1 +
- 1 file changed, 1 insertion(+)
+ c/a4c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 c/a4c.md
 
 diff --git a/c/a4c.md b/c/a4c.md
 new file mode 100644
-index 0000000..be09b5d
+index 0000000..3ba0a28
 --- /dev/null
 +++ b/c/a4c.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a4c1 Nobody in this thread has said what "best" is supposed to mean. ::a4c2 Until that happens we are all just listing our own preferences with extra steps.
 \ No newline at end of file
 -- 

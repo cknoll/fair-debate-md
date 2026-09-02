@@ -1,20 +1,23 @@
-From 1d6408b7c84a1ca29f90f599a7add0adcd9cca3e Mon Sep 17 00:00:00 2001
-From: fair debate user d33-wachstum-klimaschutz c
+From 62ffa724e48015ea5e80ce3d25d23ad65aff6b86 Mon Sep 17 00:00:00 2001
+From: Wirtschaftsjournalistin
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
-Date: Mon, 17 Aug 2026 18:23:00 +0200
+Date: Wed, 19 Aug 2026 13:00:00 +0200
 Subject: [PATCH 13/19] add contribution c/a14c5b8c.md
 
 ---
- c/a14c5b8c.md | 3 +++
- 1 file changed, 3 insertions(+)
+ c/a14c5b8c.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 c/a14c5b8c.md
 
 diff --git a/c/a14c5b8c.md b/c/a14c5b8c.md
 new file mode 100644
-index 0000000..054f96d
+index 0000000..ec37ac3
 --- /dev/null
 +++ b/c/a14c5b8c.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a14c5b8c1 Bei der Wärmepumpe stimme ich ausdrücklich zu, und man sollte das auch deutlich sagen. ::a14c5b8c2 Die Wärmepumpe ist diejenige Umwelttechnologie, die tatsächlich effizienter ist als ihre fossile Variante, also als die Gas- oder die Ölheizung. ::a14c5b8c3 Dass ausgerechnet diese Technologie politisch verhetzt worden ist, war fahrlässig und hat den Umbau um Jahre zurückgeworfen.
 +
 +::a14c5b8c4 Nur muss man dann auch den Rest ansehen. ::a14c5b8c5 Die Wärmepumpe ist das einzige Beispiel dieser Art in der gesamten Umwelttechnologie. ::a14c5b8c6 Beim Elektroauto sind die Effizienzgewinne gegenüber dem Verbrenner bereits gering, und in der Chemieindustrie, beim Stahl, beim Fliegen und in der Schifffahrt gibt es sie gar nicht, dort wird die Umstellung auf grüne Energie sehr viel teurer. ::a14c5b8c7 Man darf sich deshalb nicht die schönen Fälle heraussuchen, wenn es um den Umbau des Gesamtsystems geht.

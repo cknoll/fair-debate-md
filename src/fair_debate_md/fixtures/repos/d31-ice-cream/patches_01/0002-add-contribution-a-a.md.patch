@@ -1,19 +1,22 @@
-From 8649d88ed2e1f2926b598cb3b7f30b04211c13bf Mon Sep 17 00:00:00 2001
+From 3bd79bd3960737a0b61a68e62562b16af7b3361e Mon Sep 17 00:00:00 2001
 From: fair debate user d31-ice-cream a <d31-ice-cream_a@fair-debate-users.org>
-Date: Mon, 2 Mar 2026 09:00:00 +0100
+Date: Mon, 2 Mar 2026 08:00:00 +0100
 Subject: [PATCH 02/27] add contribution a/a.md
 
 ---
- a/a.md | 7 +++++++
- 1 file changed, 7 insertions(+)
+ a/a.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..f0dc64a
+index 0000000..6ddcb56
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,10 @@
++---
++splitter_version: 1
++---
 +# ::a1 The best ice cream flavour is chocolate
 +
 +::a2 Every summer the same argument breaks out in our office kitchen, and every summer it ends without anyone changing their mind. ::a3 I would like to make the case properly this time. ::a4 Chocolate is the best ice cream flavour, and the reasons for it are not purely a matter of taste. ::a5 A flavour can be judged by three things, namely whether it is reliable, whether it combines well with others, and whether it survives the walk home from the shop. ::a6 Chocolate wins on all three counts, and I will take them in turn.

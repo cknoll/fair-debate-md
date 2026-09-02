@@ -1,1 +1,0 @@
-This sentence does a lot of work for one sentence. It contains a price estimate, a space claim and a durability claim, and I would like to take them one at a time rather than accept them as a package.

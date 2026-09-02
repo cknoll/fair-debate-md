@@ -1,19 +1,22 @@
-From a63bac2488d4f846e2619bc2b10e867eb5c53123 Mon Sep 17 00:00:00 2001
+From 01675088660e515e526a2e919ed85ab7a9b6cf72 Mon Sep 17 00:00:00 2001
 From: fair debate user d31-ice-cream j <d31-ice-cream_j@fair-debate-users.org>
-Date: Mon, 9 Mar 2026 12:25:00 +0100
+Date: Sat, 7 Mar 2026 15:05:00 +0100
 Subject: [PATCH 27/27] add contribution j/a16j.md
 
 ---
- j/a16j.md | 1 +
- 1 file changed, 1 insertion(+)
+ j/a16j.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 j/a16j.md
 
 diff --git a/j/a16j.md b/j/a16j.md
 new file mode 100644
-index 0000000..e3bd307
+index 0000000..286c238
 --- /dev/null
 +++ b/j/a16j.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a16j1 The melting argument is the only one here that can actually be tested, so I tested it. ::a16j2 Two scoops, same cup, same table on the balcony, twenty-five degrees: ::a16j3 the chocolate held its shape for about eleven minutes, the raspberry sorbet for four. ::a16j4 That is a real difference and it does match your claim. ::a16j5 It is also the least interesting property I can imagine ranking a dessert by.
 \ No newline at end of file
 -- 

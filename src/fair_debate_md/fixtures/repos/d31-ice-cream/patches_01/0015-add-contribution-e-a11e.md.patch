@@ -1,19 +1,22 @@
-From 13f72d64632880759cb53095606aad8f77c79860 Mon Sep 17 00:00:00 2001
+From ca1da8d203c7026000df2b726ec45eb64a2335e7 Mon Sep 17 00:00:00 2001
 From: fair debate user d31-ice-cream e <d31-ice-cream_e@fair-debate-users.org>
-Date: Thu, 5 Mar 2026 18:49:00 +0100
+Date: Thu, 5 Mar 2026 08:20:00 +0100
 Subject: [PATCH 15/27] add contribution e/a11e.md
 
 ---
- e/a11e.md | 3 +++
- 1 file changed, 3 insertions(+)
+ e/a11e.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 e/a11e.md
 
 diff --git a/e/a11e.md b/e/a11e.md
 new file mode 100644
-index 0000000..cd2818e
+index 0000000..6855f03
 --- /dev/null
 +++ b/e/a11e.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a11e1 As the resident pistachio partisan I have to accept the premise and reject the conclusion. ::a11e2 Most of what is sold as pistachio is indeed dyed almond paste with a little flavouring, and the bright green colour is a reliable warning sign rather than a selling point. ::a11e3 But this is an argument about the market, not about the flavour.
 +
 +::a11e4 Judge a flavour by what it is at its best and pistachio is nowhere near being beaten. ::a11e5 A proper Sicilian pistachio is savoury, slightly resinous and salty in a way that no chocolate ever manages, and it does not need sugar to carry it. ::a11e6 That it is hard to find is a fact about shops. ::a11e7 Chocolate is easy to find because it is easy to make passably, which is not the compliment you seem to think it is.

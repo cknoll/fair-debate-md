@@ -1,20 +1,23 @@
-From 0529d24722c38fe442384eb2dee57392f8d7eec6 Mon Sep 17 00:00:00 2001
+From 335502f7759e7a0d3740f8c2b98e0231ccfb4b80 Mon Sep 17 00:00:00 2001
 From: fair debate user d32-overlapping-refs h
  <d32-overlapping-refs_h@fair-debate-users.org>
-Date: Tue, 7 Apr 2026 17:16:00 +0200
+Date: Tue, 7 Apr 2026 18:50:00 +0200
 Subject: [PATCH 10/10] add contribution h/a3-6b1-2h.md
 
 ---
- h/a3-6b1-2h.md | 1 +
- 1 file changed, 1 insertion(+)
+ h/a3-6b1-2h.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 h/a3-6b1-2h.md
 
 diff --git a/h/a3-6b1-2h.md b/h/a3-6b1-2h.md
 new file mode 100644
-index 0000000..66e1c2f
+index 0000000..d19cbd0
 --- /dev/null
 +++ b/h/a3-6b1-2h.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a3-6b1-2h1 Both of these sentences rest on the same move, so I will answer them together. ::a3-6b1-2h2 Calling four objections "not independent" does not dispose of them; it only says they share a cause. ::a3-6b1-2h3 A shared cause is a reason to expect that one decision fixes several of them, which is an argument for replacing the machine, not for keeping it.
 \ No newline at end of file
 -- 

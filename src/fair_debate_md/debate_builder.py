@@ -51,13 +51,38 @@ confines the commits to a daily window -- a gap that would land outside it is pu
 the next morning instead, which keeps a fixture from claiming that somebody published at
 four in the morning.
 
-Marker fields:
+Marker fields, in any order; a value containing spaces goes in double quotes:
 
 * ``label``   -- a name for the contribution, used in messages and in the build output;
 * ``party``   -- the role-token, which is also the directory the file lands in;
 * ``answers`` -- the text this contribution answers, quoted literally from an EARLIER
-  contribution. Must be the last field, and is absent exactly once: on the opening
-  contribution, which answers nothing.
+  contribution; it must match exactly one segment.
+
+Exactly one contribution carries no reference at all: the opening one, which answers
+nothing.
+
+A contribution can also answer a RANGE. Ranges are spelled with quotes as well, for the
+same reason the plain anchor is (see below)::
+
+    <!-- !!== label=b-block party=b
+         answers_from="The machine costs us around forty euros"
+         answers_to="the coffee it produces is" ==== -->
+
+* ``answers_from`` / ``answers_to`` -- a SEGMENT RANGE, used instead of ``answers``. Both
+  quotes must resolve to segments of the SAME contribution, `answers_to` to a later one
+  than `answers_from`. The key then reads `a3-6b`.
+* ``answers_words`` -- a WORD RANGE within one segment, used together with ``answers``:
+  the words actually meant, quoted as a run of whole words of that segment. The key then
+  reads `a7_7-12b`, or `a7_7b` for a single word.
+
+The two forms cannot be combined -- a word reference always targets exactly one segment.
+The grammar is `docs/flexible_references_concept.md`, which also fixes how words are
+counted: on the markdown as it is stored in the repo, 1-based, `str.split()`, markup
+staying attached to its word. That rule is FROZEN; the quotes here are resolved through
+`references.get_segment_words()` rather than counting words a second time.
+
+A marker may span several lines -- everything up to the closing `==== -->` belongs to it,
+which is what keeps a marker with two long quotes readable.
 
 The markers are html comments, so the source stays valid markdown and can be written,
 read and previewed as one document -- which is how a debate is actually written.
@@ -72,6 +97,11 @@ An anchor is resolved by searching its quote in the segments of all contribution
 far; it must match exactly one, otherwise the build aborts and lists the candidates.
 Rewording a contribution therefore does not move the anchors of its answers, and a quote
 that no longer matches says so instead of silently anchoring the answer somewhere else.
+
+The same holds for range ends and for word ranges, which is why they are quotes too:
+segment indices shift when a sentence is inserted, and word positions shift when a single
+word is added -- an index-spelled range would move silently, and a word range would end up
+covering a different phrase than the one it was written for.
 
 The predecessor of this tool, `fdmd process-content-dir` (removed 2026-08-31), kept
 every contribution in a
@@ -102,22 +132,52 @@ import re
 import shutil
 import subprocess
 import tempfile
+import typing
 
 from git import Actor, Repo
 
-from . import repo_handling
+from . import references, repo_handling
 from .core import MDProcessor, build_front_matter, split_front_matter
 from .key_management import SPLITTER_SYNTAX_VERSION
 
 pjoin = os.path.join
 
-SEGMENT_KEY_RE = re.compile(r"::([a-zA-Z0-9]+)")
-SEGMENT_RE = re.compile(r"::([a-zA-Z0-9]+)\s*(.*?)(?=::[a-zA-Z0-9]+|\Z)", re.DOTALL)
+# segment keys may carry references themselves (`a3-6b1`), so "-" and "_" belong to the
+# character class -- without them the segments of a range-referencing contribution are
+# invisible here and nothing can be anchored inside it
+SEGMENT_KEY_RE = re.compile(r"::([a-zA-Z0-9_-]+)")
+SEGMENT_RE = re.compile(r"::([a-zA-Z0-9_-]+)\s*(.*?)(?=::[a-zA-Z0-9_-]+|\Z)", re.DOTALL)
 
-MARKER_RE = re.compile(r"^<!--\s*!!==\s*(?P<head>.*?)\s*=+\s*-->\s*$")
-FIELDS_RE = re.compile(
-    r"^label=(?P<label>\S+)\s+party=(?P<party>[a-z]+)(?:\s+answers=(?P<answers>.+))?$"
-)
+MARKER_START_RE = re.compile(r"^<!--\s*!!==")
+MARKER_RE = re.compile(r"^<!--\s*!!==\s*(?P<head>.*?)\s*=+\s*-->\s*$", re.DOTALL)
+# one `name=value` pair of a marker head; unquoted values must not contain spaces
+FIELD_RE = re.compile(r"(?P<name>[a-z_]+)=(?:\"(?P<quoted>[^\"]*)\"|(?P<bare>\S+))")
+
+MARKER_FIELDS = ("label", "party", "answers", "answers_from", "answers_to", "answers_words")
+
+
+class Contribution(typing.NamedTuple):
+    """One contribution as the source spells it -- what it answers, not yet where."""
+
+    label: str
+    party: str
+    answers: str | None = None
+    answers_from: str | None = None
+    answers_to: str | None = None
+    answers_words: str | None = None
+    body: str = ""
+
+    @property
+    def is_opening(self) -> bool:
+        return self.answers is None and self.answers_from is None
+
+
+class Built(typing.NamedTuple):
+    """A contribution that is already in the repo, as later ones can refer to it."""
+
+    segment_keys: list
+    segment_texts: list   # whitespace-normalized, for matching the anchor quotes
+    md: str               # the keyed markdown, which is what word positions are counted on
 
 # a contribution of this many characters gets the longest gap; longer ones are capped
 FULL_LENGTH = 1500
@@ -153,9 +213,62 @@ def normalize(text: str) -> str:
     return " ".join(text.split())
 
 
+def parse_marker_fields(head: str, where: str) -> dict:
+    """
+    Read the `name=value` pairs of a marker head into a dict, in any order.
+
+    The fields used to be matched by one regex with a fixed order, which could not grow a
+    second reference field without turning into a case distinction over orderings.
+    """
+    fields = {}
+    pos = 0
+    for match in FIELD_RE.finditer(head):
+        if head[pos:match.start()].strip():
+            raise SystemExit(
+                f"{where}: cannot read the marker fields, stray text before "
+                f"'{match.group('name')}=':\n    {head[pos:match.start()].strip()}"
+            )
+        name = match.group("name")
+        if name not in MARKER_FIELDS:
+            raise SystemExit(
+                f"{where}: unknown marker field '{name}'\n"
+                f"    known fields: {', '.join(MARKER_FIELDS)}"
+            )
+        if name in fields:
+            raise SystemExit(f"{where}: marker field '{name}' is given twice")
+        quoted, bare = match.group("quoted"), match.group("bare")
+        fields[name] = quoted if quoted is not None else bare
+        pos = match.end()
+
+    if head[pos:].strip():
+        raise SystemExit(
+            f"{where}: cannot read the marker fields, trailing text:\n    {head[pos:].strip()}"
+        )
+    for name in ("label", "party"):
+        if name not in fields:
+            raise SystemExit(f"{where}: the marker lacks the field '{name}'")
+
+    if "answers" in fields and "answers_from" in fields:
+        raise SystemExit(
+            f"{where}: 'answers' and 'answers_from' exclude each other -- a contribution "
+            "answers either one segment or a range of them"
+        )
+    if ("answers_from" in fields) != ("answers_to" in fields):
+        raise SystemExit(
+            f"{where}: a segment range needs both 'answers_from' and 'answers_to'"
+        )
+    if "answers_words" in fields and "answers" not in fields:
+        raise SystemExit(
+            f"{where}: 'answers_words' needs 'answers' -- a word range names the words "
+            "inside the ONE segment that 'answers' quotes, and cannot span a segment range"
+        )
+    return fields
+
+
 def read_source(fpath: str) -> tuple:
     """
-    Return (metadata, [(label, party, anchor_quote_or_None, body), ...]).
+    Return (metadata, [Contribution, ...]) -- the source as written, without resolving
+    any of its quotes.
     """
     with open(fpath) as fp:
         raw = fp.read()
@@ -168,58 +281,64 @@ def read_source(fpath: str) -> tuple:
     # the front matter is stripped, so line numbers in messages must be shifted back
     offset = len(raw.splitlines()) - len(body_src.splitlines())
 
+    lines = body_src.splitlines()
     contributions = []
     current = None
+    i = 0
 
-    for lineno, line in enumerate(body_src.splitlines(), start=1 + offset):
-        match = MARKER_RE.match(line)
-        if match is None:
+    while i < len(lines):
+        line = lines[i]
+        lineno = i + 1 + offset
+        if not MARKER_START_RE.match(line):
             if current is None and line.strip():
                 raise SystemExit(
                     f"{fpath}:{lineno}: text before the first contribution marker:\n    {line}"
                 )
             if current is not None:
                 current["lines"].append(line)
+            i += 1
             continue
 
-        fields = FIELDS_RE.match(match.group("head"))
-        if fields is None:
-            raise SystemExit(
-                f"{fpath}:{lineno}: cannot read the marker fields:\n"
-                f"    {match.group('head')}\n"
-                "    expected: label=<name> party=<token> [answers=<quoted text>]"
-            )
-        party = fields.group("party")
+        # a marker may be spread over several lines; it ends at the closing `==== -->`
+        chunk = [line]
+        while MARKER_RE.match("\n".join(chunk)) is None:
+            i += 1
+            if i >= len(lines):
+                raise SystemExit(
+                    f"{fpath}:{lineno}: this marker is never closed with `==== -->`:\n"
+                    f"    {line}"
+                )
+            chunk.append(lines[i])
+        head = MARKER_RE.match("\n".join(chunk)).group("head")
+
+        fields = parse_marker_fields(head, f"{fpath}:{lineno}")
+        party = fields["party"]
         if party not in meta["parties"]:
             raise SystemExit(
                 f"{fpath}:{lineno}: party '{party}' is not declared in the front matter "
                 f"(declared: {', '.join(sorted(meta['parties']))})"
             )
-        anchor = fields.group("answers")
-        if anchor is not None:
-            anchor = anchor.strip().strip('"')
-        current = {
-            "label": fields.group("label"),
-            "party": party,
-            "anchor": anchor,
-            "lines": [],
-        }
+        current = {"fields": fields, "lines": []}
         contributions.append(current)
+        i += 1
 
     if not contributions:
         raise SystemExit(f"{fpath}: no contribution marker found")
 
-    opening = [c for c in contributions if c["anchor"] is None]
-    if len(opening) != 1 or opening[0] is not contributions[0]:
-        raise SystemExit(
-            f"{fpath}: exactly one contribution must have no `answers=` field, and it must "
-            f"be the first one (found: {[c['label'] for c in opening]})"
-        )
-
     parsed = [
-        (c["label"], c["party"], c["anchor"], "\n".join(c["lines"]).strip() + "\n")
+        Contribution(
+            body="\n".join(c["lines"]).strip() + "\n",
+            **{name: c["fields"].get(name) for name in MARKER_FIELDS},
+        )
         for c in contributions
     ]
+
+    opening = [c for c in parsed if c.is_opening]
+    if len(opening) != 1 or opening[0] is not parsed[0]:
+        raise SystemExit(
+            f"{fpath}: exactly one contribution must have no `answers=` field, and it must "
+            f"be the first one (found: {[c.label for c in opening]})"
+        )
     return meta, parsed
 
 
@@ -230,38 +349,107 @@ def add_keys(plain_md: str, key_prefix: str) -> str:
     return mdp.md_with_real_keys
 
 
-def resolve_anchor(quote: str, label: str, segments: dict) -> tuple:
+def resolve_anchor(quote: str, label: str, segments: dict, field: str = "answers") -> tuple:
     """
-    Return (segment_key, segment_text) of the single segment containing `quote`, searched
-    across every contribution built so far. Raising here is the point of quote anchors: an
-    anchor that shifted or vanished must stop the build, not move an answer elsewhere.
+    Return (contribution_key, segment_key, segment_text) of the single segment containing
+    `quote`, searched across every contribution built so far. Raising here is the point of
+    quote anchors: an anchor that shifted or vanished must stop the build, not move an
+    answer elsewhere.
 
-    `segments` maps a contribution key to (segment_keys, segment_texts).
+    `segments` maps a contribution key to a `Built`.
     """
     needle = normalize(quote)
     hits = [
-        (seg_key, text)
-        for seg_keys, texts in segments.values()
-        for seg_key, text in zip(seg_keys, texts)
+        (ctb_key, seg_key, text)
+        for ctb_key, built in segments.items()
+        for seg_key, text in zip(built.segment_keys, built.segment_texts)
         if needle in text
     ]
     if len(hits) == 1:
         return hits[0]
 
     what = "matches no segment" if not hits else f"matches {len(hits)} segments"
-    lines = [f"the anchor of '{label}' {what} of the preceding contributions:",
+    lines = [f"`{field}` of '{label}' {what} of the preceding contributions:",
              f"    {needle!r}", ""]
     if hits:
         lines.append("candidates -- make the quote longer to pick one:")
-        lines += [f"    {k}  {t[:100]}" for k, t in hits]
+        lines += [f"    {k}  {t[:100]}" for _, k, t in hits]
     else:
         lines.append("segments available at this point:")
         lines += [
             f"    {k}  {t[:100]}"
-            for seg_keys, texts in segments.values()
-            for k, t in zip(seg_keys, texts)
+            for built in segments.values()
+            for k, t in zip(built.segment_keys, built.segment_texts)
         ]
     raise SystemExit("\n".join(lines))
+
+
+def resolve_word_range(quote: str, label: str, parent_md: str, segment_key: str) -> tuple:
+    """
+    Return the 1-based, inclusive word range `(start, end)` that `quote` covers in
+    `segment_key`.
+
+    The words are those of the FROZEN tokenizer (`references.get_segment_words`), so the
+    quote must be a run of whole words as the markdown source spells them -- markup and
+    punctuation included ("once," is one word, "once" does not match it). That strictness
+    is deliberate: the positions written into the key are read back against the very same
+    tokenizer, and a quote that "almost" matches would silently cover other words.
+    """
+    words = references.get_segment_words(parent_md, segment_key)
+    needle = quote.split()
+    if not needle:
+        raise SystemExit(f"`answers_words` of '{label}' is empty")
+
+    hits = [i for i in range(len(words) - len(needle) + 1) if words[i:i + len(needle)] == needle]
+    if len(hits) == 1:
+        return hits[0] + 1, hits[0] + len(needle)
+
+    what = "matches no run of words" if not hits else f"matches {len(hits)} runs of words"
+    numbered = " ".join(f"{i}:{w}" for i, w in enumerate(words, start=1))
+    raise SystemExit(
+        f"`answers_words` of '{label}' {what} in segment {segment_key}:\n"
+        f"    {' '.join(needle)!r}\n\n"
+        "the words of that segment, as the frozen tokenizer counts them:\n"
+        f"    {numbered}"
+    )
+
+
+def resolve_reference(ctb: Contribution, segments: dict) -> tuple:
+    """
+    Turn the quotes of one contribution into the key unit that encodes its reference.
+
+    Returns (key_unit, anchor_segment_key, anchored_text) -- the unit being `a7`, `a3-6`
+    or `a7_7-12`, and the anchor the segment the contribution is rendered below (the LAST
+    referenced one, see `docs/flexible_references_concept.md`).
+    """
+    if ctb.answers_from is not None:
+        start_ctb, start_key, _ = resolve_anchor(
+            ctb.answers_from, ctb.label, segments, "answers_from")
+        end_ctb, end_key, end_text = resolve_anchor(
+            ctb.answers_to, ctb.label, segments, "answers_to")
+        if start_ctb != end_ctb:
+            raise SystemExit(
+                f"the range of '{ctb.label}' spans two contributions ({start_key} and "
+                f"{end_key}) -- a reference stays within one contribution"
+            )
+        start_no = int(start_key[len(start_ctb):])
+        end_no = int(end_key[len(end_ctb):])
+        if end_no <= start_no:
+            raise SystemExit(
+                f"the range of '{ctb.label}' ends at {end_key}, which is not after its "
+                f"start {start_key} -- `answers_to` must quote a LATER segment "
+                "(a range over a single segment is spelled with `answers` alone)"
+            )
+        return f"{start_ctb}{start_no}-{end_no}", end_key, end_text
+
+    parent_ctb, seg_key, seg_text = resolve_anchor(ctb.answers, ctb.label, segments)
+    if ctb.answers_words is None:
+        return seg_key, seg_key, seg_text
+
+    start, end = resolve_word_range(
+        ctb.answers_words, ctb.label, segments[parent_ctb].md, seg_key)
+    unit = f"{seg_key}_{start}" if start == end else f"{seg_key}_{start}-{end}"
+    return unit, seg_key, " ".join(ctb.answers_words.split())
 
 
 def build_debate_repo(
@@ -305,7 +493,7 @@ def build_debate_repo(
         os.makedirs(repo_dir)
         keep_repo = True
 
-    segments = {}   # contribution key -> (segment keys, segment texts), in document order
+    segments = {}   # contribution key -> Built, in document order
     keys = {}       # label -> contribution key
     anchor_of = {}  # label -> the text this contribution answers
 
@@ -361,21 +549,34 @@ def build_debate_repo(
            first_commit)
 
     when = first_commit
-    for label, party, anchor_quote, body in contributions:
-        if anchor_quote is None:
+    for ctb in contributions:
+        label, party, body = ctb.label, ctb.party, ctb.body
+        if ctb.is_opening:
             ctb_key, anchor_key = party, ""
         else:
-            anchor_key, anchor_text = resolve_anchor(anchor_quote, label, segments)
-            ctb_key = anchor_key + party
+            key_unit, anchor_key, anchor_text = resolve_reference(ctb, segments)
+            ctb_key = key_unit + party
             anchor_of[label] = anchor_text
+            if not references.is_valid_key(ctb_key):
+                raise SystemExit(
+                    f"the reference of '{label}' produced the invalid key '{ctb_key}'"
+                )
+            try:
+                # the same check the loader runs on every repo it opens, run here so that
+                # a broken reference cannot reach a patch collection in the first place
+                references.validate_reference(
+                    ctb_key, segments[references.get_parent_contribution_key(ctb_key)].md)
+            except ValueError as err:
+                raise SystemExit(f"the reference of '{label}' is inconsistent: {err}")
 
         # the texts talk about their own keys, which are only known here
         body = body.replace("{{key}}", ctb_key).replace("{{anchor}}", anchor_key)
 
         keyed = add_keys(body, key_prefix=ctb_key)
-        segments[ctb_key] = (
-            SEGMENT_KEY_RE.findall(keyed),
-            [normalize(t) for _, t in SEGMENT_RE.findall(keyed)],
+        segments[ctb_key] = Built(
+            segment_keys=SEGMENT_KEY_RE.findall(keyed),
+            segment_texts=[normalize(t) for _, t in SEGMENT_RE.findall(keyed)],
+            md=keyed,
         )
         keys[label] = ctb_key
 
@@ -405,7 +606,7 @@ def build_debate_repo(
         return len(re.findall(r"[a-z]+[0-9]*", key)) - 1
 
     print(f"{debate_key}: {len(keys)} contributions, "
-          f"{len({p for _, p, _, _ in contributions})} parties, "
+          f"{len({c.party for c in contributions})} parties, "
           f"max level {max(level(k) for k in keys.values())}")
     for label, key in keys.items():
         print(f"  L{level(key)}  {key:<24} ({label})")

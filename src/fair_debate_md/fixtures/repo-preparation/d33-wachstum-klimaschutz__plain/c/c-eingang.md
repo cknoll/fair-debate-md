@@ -1,5 +1,0 @@
-Aus meiner Sicht ist beides nicht vereinbar. Wenn man sich klarmacht, was Klimaschutz konkret bedeutet, dann heißt es, dass kein CO2 mehr emittiert werden darf, und das wiederum heißt, dass das gesamte Energiesystem auf Wind und Sonne umgestellt werden muss. Nicht nur der Strom, den wir heute schon nutzen, sondern auch der Verkehr, die Heizungen und die gesamte Industrie.
-
-Und dann sind die Zahlen erschütternd. Nach Zahlen des Umweltbundesamtes haben Wind- und Solarenergie im Jahr 2025 nur rund zehn Prozent des deutschen Endenergiebedarfs gedeckt, und das nach 25 Jahren Förderung. Wir stehen also weder am Ende noch in der Mitte der Energiewende, sondern ganz an ihrem Anfang, denn 90 Prozent der Volkswirtschaft müssen noch umgestellt werden.
-
-Daraus folgt für mich zwingend, dass Ökoenergie knapp und teuer bleiben wird. Sie wird nicht im Überfluss zur Verfügung stehen, und sie wird deshalb nicht für den bestehenden Kapitalismus plus zusätzliches Wachstum reichen. Wir werden auf grünes Schrumpfen setzen müssen, also darauf, klimaneutral zu leben, indem wir weniger produzieren.

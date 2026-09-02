@@ -1,20 +1,23 @@
-From 0043ac977e8026d0b902a9ae2ffb1c6e86919dd6 Mon Sep 17 00:00:00 2001
-From: fair debate user d33-wachstum-klimaschutz b
+From 6202700763d1c1cf85bbb46b7cf1b25e20ef7c02 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=96konom?=
  <d33-wachstum-klimaschutz_b@fair-debate-users.org>
-Date: Sun, 16 Aug 2026 21:52:00 +0200
+Date: Mon, 17 Aug 2026 15:55:00 +0200
 Subject: [PATCH 06/19] add contribution b/a16b.md
 
 ---
- b/a16b.md | 3 +++
- 1 file changed, 3 insertions(+)
+ b/a16b.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 b/a16b.md
 
 diff --git a/b/a16b.md b/b/a16b.md
 new file mode 100644
-index 0000000..5bb1011
+index 0000000..e059a1b
 --- /dev/null
 +++ b/b/a16b.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a16b1 Nein, das halte ich nicht für den richtigen Weg. ::a16b2 Wir haben inzwischen hinreichend erlebt, dass Ziele definiert und anschließend nicht erreicht wurden, und auch das Bundesverfassungsgericht hat sich zu dieser Frage bereits geäußert. ::a16b3 Wir brauchen keine neuen Verfassungsregeln, wir brauchen eine kluge Umsetzung der Ziele, die wir längst haben.
 +
 +::a16b4 Was tatsächlich fehlt, ist Verlässlichkeit gegenüber denjenigen, die investieren sollen, also gegenüber den privaten Haushalten und den Unternehmen. ::a16b5 Das jüngste Heizungsgesetz ist dafür ein Lehrstück, denn es hat die Elektrifizierung der Wärmeversorgung nicht näher gebracht, sondern in weitere Ferne gerückt. ::a16b6 Man darf im Übrigen auch fragen, worin eigentlich der Freiheitseingriff liegen soll, wenn man beim Neubau den Einbau klimaschädlicher Heizungsanlagen von vornherein ausschließt.

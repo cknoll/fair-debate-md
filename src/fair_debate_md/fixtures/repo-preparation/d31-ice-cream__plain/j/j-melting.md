@@ -1,1 +1,0 @@
-The melting argument is the only one here that can actually be tested, so I tested it. Two scoops, same cup, same table on the balcony, twenty-five degrees: the chocolate held its shape for about eleven minutes, the raspberry sorbet for four. That is a real difference and it does match your claim. It is also the least interesting property I can imagine ranking a dessert by.

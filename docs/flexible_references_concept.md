@@ -175,10 +175,20 @@ What a frontend session needs to cover (scope to be decided there):
 
 ## Test fixtures
 
-No new fixture repo was added in `fair-debate-md` yet (adding one changes the fixture set
-that `fair-debate-web`'s `initializefixtures` and test counters depend on — coordinate with
-the web repo when frontend work starts). The md-side integration tests build temporary
-debates instead, see `tests/test_references.py::TestDebateIntegration`.
+`d32-overlapping-refs` is the fixture for this concept: a toy dispute whose replies
+deliberately overlap, covering a segment range (`a3-6b`), a narrow reply inside a range
+(`a4c`), two partially overlapping ranges (`a5-8d`), full-segment and word-range replies
+to the same segment (`a7e`, `a7_7-12f`, `a7_10-16g`) and a range one level down
+(`a3-6b1-2h`). The md-side integration tests additionally build temporary debates, see
+`tests/test_references.py::TestDebateIntegration`.
+
+Its source is `fixtures/repo-preparation/d32-overlapping-refs__plain/source.md`. Since
+2026-09-02 the references are written there as quotes rather than as indices: the source
+format spells a segment range as `answers_from=`/`answers_to=` and a word range as
+`answers=` plus `answers_words=`, and derives the positions through
+`references.get_segment_words()`, i.e. through the tokenizer frozen below. Adding a
+fixture changes the fixture set that `fair-debate-web`'s `initializefixtures` and test
+counters depend on — coordinate with the web repo.
 
 ## Word offset table
 

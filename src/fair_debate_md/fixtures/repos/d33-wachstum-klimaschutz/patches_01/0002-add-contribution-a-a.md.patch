@@ -1,20 +1,22 @@
-From f613dbcc585efe455b27b00aa09cc925bec3ba21 Mon Sep 17 00:00:00 2001
-From: fair debate user d33-wachstum-klimaschutz a
- <d33-wachstum-klimaschutz_a@fair-debate-users.org>
-Date: Sun, 16 Aug 2026 09:00:00 +0200
+From e815c2e9a576b0e858e9651c97745e141f044ed8 Mon Sep 17 00:00:00 2001
+From: Redaktion <d33-wachstum-klimaschutz_a@fair-debate-users.org>
+Date: Sun, 16 Aug 2026 13:00:00 +0200
 Subject: [PATCH 02/19] add contribution a/a.md
 
 ---
- a/a.md | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ a/a.md | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..0ec65f3
+index 0000000..5dbfe7f
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,20 @@
++---
++splitter_version: 1
++---
 +# ::a1 Ist Wirtschaftswachstum mit Klimaschutz vereinbar?
 +
 +::a2 Diese Debatte ist die Nachbildung eines Radio-Streitgesprächs, das Mitte August 2026 in der Sendung "Streitkultur" im Deutschlandfunk gesendet wurde. ::a3 Die Originalsendung findet sich unter <https://www.deutschlandfunk.de/ist-wirtschaftswachstum-mit-klimaschutz-vereinbar-u-herrmann-vs-m-huether-100.html>. ::a4 Die Argumente der beiden Gäste wurden sinngemäß übernommen, stark gekürzt und in die Beitragsform dieser Plattform gebracht. ::a5 Es handelt sich ausdrücklich nicht um wörtliche Zitate, und Abweichungen, Verkürzungen und Fehler sind möglich. ::a6 Die Beiträge sind deshalb nicht namentlich zugeordnet, sondern nur nach Rolle unterschieden, nämlich als Ökonom eines wirtschaftsnahen Forschungsinstituts und als Wirtschaftsjournalistin.

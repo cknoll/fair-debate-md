@@ -1,19 +1,22 @@
-From cd5a980dbb004bfac2241a6d8b5f613356594d6f Mon Sep 17 00:00:00 2001
+From 540f9a6d6c7ae42f1292342b766fb74e41f68870 Mon Sep 17 00:00:00 2001
 From: fair debate user d31-ice-cream e <d31-ice-cream_e@fair-debate-users.org>
-Date: Tue, 3 Mar 2026 11:52:00 +0100
+Date: Tue, 3 Mar 2026 08:05:00 +0100
 Subject: [PATCH 06/27] add contribution e/a4b2e.md
 
 ---
- e/a4b2e.md | 1 +
- 1 file changed, 1 insertion(+)
+ e/a4b2e.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 e/a4b2e.md
 
 diff --git a/e/a4b2e.md b/e/a4b2e.md
 new file mode 100644
-index 0000000..bbf08d3
+index 0000000..dcbf663
 --- /dev/null
 +++ b/e/a4b2e.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a4b2e1 The scoreboard objection is fair, but it cuts both ways. ::a4b2e2 Any argument about a "best" flavour has to fix its criteria first, and there is no neutral place to stand while doing it. ::a4b2e3 What would you propose instead, a criterion that strawberry satisfies and chocolate does not? ::a4b2e4 I suspect that list is shorter than you would like it to be.
 \ No newline at end of file
 -- 
