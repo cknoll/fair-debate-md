@@ -1,20 +1,23 @@
-From f4eb26ab7912c4eb1c46f1d4d99d046713b20247 Mon Sep 17 00:00:00 2001
+From b0f9d0b1968f1a5827d6d5be5e1e84c4c36d095d Mon Sep 17 00:00:00 2001
 From: fair debate user d33-wachstum-klimaschutz b
  <d33-wachstum-klimaschutz_b@fair-debate-users.org>
-Date: Sun, 16 Aug 2026 12:13:00 +0200
+Date: Sun, 16 Aug 2026 17:45:00 +0200
 Subject: [PATCH 03/19] add contribution b/a14b.md
 
 ---
- b/a14b.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ b/a14b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 b/a14b.md
 
 diff --git a/b/a14b.md b/b/a14b.md
 new file mode 100644
-index 0000000..695cdd8
+index 0000000..4e57132
 --- /dev/null
 +++ b/b/a14b.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +::a14b1 Was wir hier lösen müssen, ist im Kern ein ökonomisches Problem, denn es geht um eine Knappheit. ::a14b2 Wir können das, was wir bisher gemacht haben, nicht mehr machen, und wir müssen mit CO2 und den übrigen klimaschädlichen Gasen so verfahren, dass wir zur Mitte des Jahrhunderts auf eine Netto-Null kommen. ::a14b3 Umstritten ist deshalb nicht das Ob, sondern das Wie, und die Antwort darauf besteht vor allem aus Strukturen und aus Preissignalen.
 +
 +::a14b4 Dieser Umbau hat allerdings eine Eigenschaft, die ihn von allem unterscheidet, was Volkswirtschaften sonst durchlaufen. ::a14b5 Er ist ein staatlich gesteuerter Strukturwandel per Termin. ::a14b6 Er ist kein Strukturwandel, der aus einer neuen Basistechnologie entsteht und sich dann über veränderte Präferenzen und Investitionen von selbst Bahn bricht. ::a14b7 Wir brauchen sehr viele Innovationen, um ihn zu bewältigen, aber vorgegeben wird er dem ökonomischen Prozess vom politischen System. ::a14b8 Daraus folgt die zentrale Anforderung an die Politik, nämlich Verlässlichkeit über Legislaturperioden hinweg. ::a14b9 Klimapolitik lässt sich nicht in Vier-Jahres-Rhythmen organisieren.

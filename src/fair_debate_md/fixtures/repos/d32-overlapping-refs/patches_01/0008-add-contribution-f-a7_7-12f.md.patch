@@ -1,20 +1,23 @@
-From 2e340171a80a03071ff2540975b384173ec3336e Mon Sep 17 00:00:00 2001
+From 1ece8350f1b18232a25fef4a65a06ff336e1f9bf Mon Sep 17 00:00:00 2001
 From: fair debate user d32-overlapping-refs f
  <d32-overlapping-refs_f@fair-debate-users.org>
-Date: Tue, 7 Apr 2026 12:42:00 +0200
+Date: Tue, 7 Apr 2026 12:10:00 +0200
 Subject: [PATCH 08/10] add contribution f/a7_7-12f.md
 
 ---
- f/a7_7-12f.md | 1 +
- 1 file changed, 1 insertion(+)
+ f/a7_7-12f.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 f/a7_7-12f.md
 
 diff --git a/f/a7_7-12f.md b/f/a7_7-12f.md
 new file mode 100644
-index 0000000..a1918fc
+index 0000000..f737a80
 --- /dev/null
 +++ b/f/a7_7-12f.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a7_7-12f1 Sixty euros buys a kettle and a press, but not a grinder, and pre-ground coffee in a press is worse than the capsules we are complaining about. ::a7_7-12f2 The honest figure is closer to a hundred and forty.
 \ No newline at end of file
 -- 

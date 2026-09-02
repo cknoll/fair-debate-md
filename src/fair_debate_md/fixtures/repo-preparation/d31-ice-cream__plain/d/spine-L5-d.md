@@ -1,1 +1,0 @@
-That is a cheap dismissal, and I say that as the person who called the point decorative in the first place. There is a difference between a premise that is merely unstated and one that is unstated because stating it would give the game away. Whether this one is of the second kind is worth ten minutes, even if it is not worth the whole thread.

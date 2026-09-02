@@ -1,1 +1,0 @@
-An diesem Punkt sind wir uns einig, und ich halte ihn für wichtiger, als er hier klingt. Wenn der Umbau der Infrastruktur vor allem künftigen Generationen zugutekommt, dann ist es richtig, ihn über Kredite zu finanzieren und ihn nicht dem Korsett der Schuldenbremse zu unterwerfen. Das gilt unabhängig davon, ob man am Ende bei Wachstum oder bei Schrumpfen herauskommt.

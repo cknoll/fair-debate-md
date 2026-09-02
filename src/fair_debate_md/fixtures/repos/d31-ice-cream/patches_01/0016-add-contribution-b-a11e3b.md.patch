@@ -1,19 +1,22 @@
-From 11d7449f2497c4ee699606e7890fd02d78bfda12 Mon Sep 17 00:00:00 2001
+From 59120312308138c5680c59ff30dd6dede1765027 Mon Sep 17 00:00:00 2001
 From: fair debate user d31-ice-cream b <d31-ice-cream_b@fair-debate-users.org>
-Date: Fri, 6 Mar 2026 10:02:00 +0100
+Date: Thu, 5 Mar 2026 11:50:00 +0100
 Subject: [PATCH 16/27] add contribution b/a11e3b.md
 
 ---
- b/a11e3b.md | 1 +
- 1 file changed, 1 insertion(+)
+ b/a11e3b.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 b/a11e3b.md
 
 diff --git a/b/a11e3b.md b/b/a11e3b.md
 new file mode 100644
-index 0000000..38a80a5
+index 0000000..740320a
 --- /dev/null
 +++ b/b/a11e3b.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a11e3b1 I do not think that distinction survives contact with reality. ::a11e3b2 If nine out of ten scoops sold under a name are bad, then the flavour at its best is something most people will never taste, and a ranking built on it describes a menu nobody can order from. ::a11e3b3 Availability is part of what makes a flavour good, in the same way that a car which only works on a test track is not a good car.
 \ No newline at end of file
 -- 

@@ -1,20 +1,23 @@
-From 4925f6d7b86c34fbd618114a5fef7480fa497d73 Mon Sep 17 00:00:00 2001
+From 3a28136b461965034b7bd5d3af6fab51bfc3e58d Mon Sep 17 00:00:00 2001
 From: fair debate user d33-wachstum-klimaschutz c
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
-Date: Mon, 17 Aug 2026 03:18:00 +0200
+Date: Tue, 18 Aug 2026 08:25:00 +0200
 Subject: [PATCH 08/19] add contribution c/a19c.md
 
 ---
- c/a19c.md | 3 +++
- 1 file changed, 3 insertions(+)
+ c/a19c.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 c/a19c.md
 
 diff --git a/c/a19c.md b/c/a19c.md
 new file mode 100644
-index 0000000..2ac71ec
+index 0000000..e2dcf09
 --- /dev/null
 +++ b/c/a19c.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a19c1 Das Ziel wäre eine Kreislaufwirtschaft, in der nur noch so viel verbraucht wird, wie sich recyceln lässt, und in der die Ökoenergie für das Gesamtsystem reicht. ::a19c2 Die eigentliche Schwierigkeit liegt aber nicht im Ziel, sondern im Weg dorthin. ::a19c3 Wir müssten von einem sehr großen Kapitalismus auf eine deutlich kleinere Kreislaufwirtschaft herunterkommen, ohne dabei eine schwere Wirtschaftskrise mit sehr vielen Arbeitslosen auszulösen.
 +
 +::a19c4 Ein historisches Vorbild dafür gibt es, nämlich die britische Kriegswirtschaft im Zweiten Weltkrieg. ::a19c5 Die Briten mussten ihre Zivilwirtschaft damals aus ganz anderen Gründen schrumpfen, und sie haben es in einer Form getan, die man als demokratische private Planwirtschaft beschreiben kann. ::a19c6 Es wurde nichts verstaatlicht, das Eigentum blieb privat, aber der Staat gab vor, was noch produziert wird, und die knappen Güter wurden rationiert, so dass Arm und Reich dasselbe bekamen. ::a19c7 Eine Mischung aus Privatbesitz, staatlicher Planung und Rationierung knapper Güter wie Wasser und Lebensmitteln werden wir ohnehin bekommen, und mit ihr ließe sich der Übergang gestalten.

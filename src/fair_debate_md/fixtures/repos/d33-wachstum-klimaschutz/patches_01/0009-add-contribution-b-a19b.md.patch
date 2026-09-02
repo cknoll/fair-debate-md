@@ -1,20 +1,23 @@
-From e2a5c34d59f26d9641c0d801fed2e78158c7e7bc Mon Sep 17 00:00:00 2001
+From 3cbb61974206b7dd2c5ca5d69f50a98d4459b248 Mon Sep 17 00:00:00 2001
 From: fair debate user d33-wachstum-klimaschutz b
  <d33-wachstum-klimaschutz_b@fair-debate-users.org>
-Date: Mon, 17 Aug 2026 06:31:00 +0200
+Date: Tue, 18 Aug 2026 12:00:00 +0200
 Subject: [PATCH 09/19] add contribution b/a19b.md
 
 ---
- b/a19b.md | 1 +
- 1 file changed, 1 insertion(+)
+ b/a19b.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 b/a19b.md
 
 diff --git a/b/a19b.md b/b/a19b.md
 new file mode 100644
-index 0000000..bfab19e
+index 0000000..cafaf97
 --- /dev/null
 +++ b/b/a19b.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a19b1 Damit die Gesellschaft diesen Umbau mitträgt, braucht er eine begleitende Sozialpolitik, und darüber wird deutlich zu selten gesprochen. ::a19b2 Ein pauschales Klimageld halte ich dafür allerdings nicht für das richtige Instrument. ::a19b3 Gestützt werden sollte sehr gezielt dort, wo der Austausch einer noch funktionierenden Heizungsanlage die Haushalte finanziell überfordert, wo er technisch also gar nicht zwingend wäre, klimapolitisch aber gewollt ist.
 \ No newline at end of file
 -- 

@@ -1,1 +1,0 @@
-Both of these sentences rest on the same move, so I will answer them together. Calling four objections "not independent" does not dispose of them; it only says they share a cause. A shared cause is a reason to expect that one decision fixes several of them, which is an argument for replacing the machine, not for keeping it.

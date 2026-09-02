@@ -1,20 +1,23 @@
-From 43521dc7c035b6f166cbe4faffd2574311c3ea91 Mon Sep 17 00:00:00 2001
+From 7960873cda823dbce61b41be6f9d8c628fd6902f Mon Sep 17 00:00:00 2001
 From: fair debate user d33-wachstum-klimaschutz c
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
-Date: Mon, 17 Aug 2026 00:05:00 +0200
+Date: Mon, 17 Aug 2026 19:55:00 +0200
 Subject: [PATCH 07/19] add contribution c/a17c.md
 
 ---
- c/a17c.md | 3 +++
- 1 file changed, 3 insertions(+)
+ c/a17c.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 c/a17c.md
 
 diff --git a/c/a17c.md b/c/a17c.md
 new file mode 100644
-index 0000000..3ed7f8f
+index 0000000..dd32e0a
 --- /dev/null
 +++ b/c/a17c.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a17c1 Ich habe diese Studien gelesen, und sie funktionieren fast alle nach demselben Muster. ::a17c2 Im Vorwort steht, dass grünes Wachstum möglich sei. ::a17c3 Im Hauptteil folgt eine lange Reihe technischer Lösungen, von Wasserstoff über Windräder bis zur Kreislaufführung von Material. ::a17c4 Und ganz hinten findet sich dann ein kleiner Satz oder auch nur eine Anmerkung, in der eingeräumt wird, dass die ökonomischen Folgen der technischen Vorschläge nicht modelliert wurden. ::a17c5 Das Wachstum wird also behauptet, aber nicht durchgerechnet.
 +
 +::a17c6 Dafür gibt es auch einen Grund. ::a17c7 Wer diese Vorschläge tatsächlich makroökonomisch modellieren würde, käme sofort darauf, dass sie auf Schrumpfen hinauslaufen. ::a17c8 Grünes Wachstum funktioniert als Behauptung, aber nicht im Beweis.

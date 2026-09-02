@@ -1,20 +1,23 @@
-From 56a0ace0b3e81d5ddcf36d44d86ba1076da2f19d Mon Sep 17 00:00:00 2001
+From 07c75a74d350bb42739cbce9e439e9b715a2e180 Mon Sep 17 00:00:00 2001
 From: fair debate user d32-overlapping-refs b
  <d32-overlapping-refs_b@fair-debate-users.org>
-Date: Mon, 6 Apr 2026 11:17:00 +0200
+Date: Mon, 6 Apr 2026 11:40:00 +0200
 Subject: [PATCH 03/10] add contribution b/a3-6b.md
 
 ---
- b/a3-6b.md | 3 +++
- 1 file changed, 3 insertions(+)
+ b/a3-6b.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 b/a3-6b.md
 
 diff --git a/b/a3-6b.md b/b/a3-6b.md
 new file mode 100644
-index 0000000..db49b6c
+index 0000000..2e2d109
 --- /dev/null
 +++ b/b/a3-6b.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a3-6b1 Taken together these four points are weaker than they look, because they are not four independent arguments. ::a3-6b2 Cost, breakage, packaging and taste all follow from the same decision to buy the cheapest capsule machine on the market, and none of them says anything about capsule machines as such.
 +
 +::a3-6b3 A better machine would fix three of the four, and the fourth is a matter of taste. ::a3-6b4 What you are actually proposing is that we replace a bad appliance with a different category of appliance, and that step needs its own justification.
