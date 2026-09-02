@@ -1,19 +1,22 @@
-From 4e60e054f0ade46d5fc8cfa22e6a89e28a21ac7d Mon Sep 17 00:00:00 2001
+From b4533e2b277893b0f548160093043f4695833db9 Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
 Date: Mon, 6 Jul 2026 21:55:00 +0200
 Subject: [PATCH 12/12] add contribution a/a37b2a10b5a.md
 
 ---
- a/a37b2a10b5a.md | 7 +++++++
- 1 file changed, 7 insertions(+)
+ a/a37b2a10b5a.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
  create mode 100644 a/a37b2a10b5a.md
 
 diff --git a/a/a37b2a10b5a.md b/a/a37b2a10b5a.md
 new file mode 100644
-index 0000000..114d2e5
+index 0000000..45282c4
 --- /dev/null
 +++ b/a/a37b2a10b5a.md
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,10 @@
++---
++splitter_version: 1
++---
 +::a37b2a10b5a1 Mit dieser Klausel, ja. ::a37b2a10b5a2 Nur stand sie nicht von Anfang an im Entwurf.
 +
 +::a37b2a10b5a3 Es gab zwei Fassungen. ::a37b2a10b5a4 In dem Text, den die russische Seite zunächst als Verhandlungsgrundlage akzeptierte, war von einem solchen Vorbehalt keine Rede, und es gibt Hinweise darauf, dass Putin zu diesem Zeitpunkt auf Beschleunigung drängte. ::a37b2a10b5a5 Der Beratungsvorbehalt kam erst im April dazu. ::a37b2a10b5a6 Die ukrainischen Verhandler selbst haben das damals als das eingeordnet, was beim Verhandeln üblich ist, nämlich als taktisches Zurücknehmen eines Zugeständnisses. ::a37b2a10b5a7 Sie hielten ein belastbares Ergebnis weiterhin für erreichbar.

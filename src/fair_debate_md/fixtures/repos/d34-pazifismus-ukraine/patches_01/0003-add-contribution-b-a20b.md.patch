@@ -1,20 +1,23 @@
-From 13fe052c8a053ca7cd0748a44734ffc09919ac38 Mon Sep 17 00:00:00 2001
+From cea526a7c887a06c84cf8c5b4fb7dcdc2ccefd82 Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
 Date: Fri, 3 Jul 2026 08:20:00 +0200
 Subject: [PATCH 03/12] add contribution b/a20b.md
 
 ---
- b/a20b.md | 7 +++++++
- 1 file changed, 7 insertions(+)
+ b/a20b.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
  create mode 100644 b/a20b.md
 
 diff --git a/b/a20b.md b/b/a20b.md
 new file mode 100644
-index 0000000..f748ce0
+index 0000000..8ff12b6
 --- /dev/null
 +++ b/b/a20b.md
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,10 @@
++---
++splitter_version: 1
++---
 +::a20b1 Hier liegt der Kern unserer Meinungsverschiedenheit, und ich halte Ihre Annahme über den Menschen für zu optimistisch.
 +
 +::a20b2 Die historische Forschung kennt genau diesen Fall. ::a20b3 Zu einem Hamburger Polizeibataillon, das im besetzten Osteuropa eingesetzt wurde, gibt es sehr genaue Untersuchungen. ::a20b4 Es waren keine Ideologen und keine ausgesuchten Fanatiker, sondern, so der Titel der bekanntesten Darstellung, ganz normale Männer. ::a20b5 Sie haben an wehrlosen Menschen Massenmorde begangen. ::a20b6 Wer also sagt, so etwas lasse sich nicht organisieren, muss erklären, warum es damals organisiert werden konnte.

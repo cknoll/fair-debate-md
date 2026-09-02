@@ -1,20 +1,23 @@
-From d178bd0268197998923c529f5ec0deb3953b2290 Mon Sep 17 00:00:00 2001
+From 91654868fa4da7b277f2d5eb67b7dd08137a0849 Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
 Date: Sat, 4 Jul 2026 14:10:00 +0200
 Subject: [PATCH 06/12] add contribution b/a34b.md
 
 ---
- b/a34b.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ b/a34b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 b/a34b.md
 
 diff --git a/b/a34b.md b/b/a34b.md
 new file mode 100644
-index 0000000..ae2eeee
+index 0000000..6ecab27
 --- /dev/null
 +++ b/b/a34b.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +::a34b1 Diesem Satz stimme ich sogar zu, und ich finde es richtig, dass Sie auf dieses Risiko hinweisen.
 +
 +::a34b2 Je öfter man würfelt, desto größer die Wahrscheinlichkeit, dass irgendwann die Sechs fällt. ::a34b3 Über einen langen Zeitraum nähert sich diese Wahrscheinlichkeit der Gewissheit. ::a34b4 Dass es vierzig Jahre gut gegangen ist, beweist nichts über die nächsten vierzig.

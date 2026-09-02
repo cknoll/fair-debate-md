@@ -1,20 +1,23 @@
-From 1c390a2cbb926d72f71a0e134769863561281b88 Mon Sep 17 00:00:00 2001
+From b0a59c0409377b6c2b9acdddb5aaa5fd0dbfc90a Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
 Date: Sun, 5 Jul 2026 08:55:00 +0200
 Subject: [PATCH 08/12] add contribution b/a34b8a7b.md
 
 ---
- b/a34b8a7b.md | 3 +++
- 1 file changed, 3 insertions(+)
+ b/a34b8a7b.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 b/a34b8a7b.md
 
 diff --git a/b/a34b8a7b.md b/b/a34b8a7b.md
 new file mode 100644
-index 0000000..7137720
+index 0000000..8791ac9
 --- /dev/null
 +++ b/b/a34b8a7b.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a34b8a7b1 Angenommen, das stimmt, dann bleibt die Frage, was auf der anderen Seite der Waage liegt.
 +
 +::a34b8a7b2 Ihr Vorschlag senkt ein Risiko, dessen Eintrittswahrscheinlichkeit niemand kennt, und er bezahlt dafür mit einer Folge, die ziemlich sicher eintritt. ::a34b8a7b3 Wenn eine Großmacht erfährt, dass Grenzverschiebungen mit Gewalt funktionieren, solange sie nur entschlossen genug vorgeht, dann ist die nächste Grenze nicht weit. ::a34b8a7b4 Georgien und die Ukraine waren die naheliegenden Kandidaten, und die Menschen im Baltikum und in Polen stellen sich diese Frage nicht aus Nervosität.

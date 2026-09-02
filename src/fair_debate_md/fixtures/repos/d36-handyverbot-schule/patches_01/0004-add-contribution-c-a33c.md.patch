@@ -1,19 +1,22 @@
-From 25895cc99750cc8a8f46f03871573425e9d4e9d7 Mon Sep 17 00:00:00 2001
+From c3ef1f1dea075b73ef8d9c357e93bcbdbb3a152c Mon Sep 17 00:00:00 2001
 From: Nachfragende Person <d36-handyverbot-schule_c@fair-debate-users.org>
 Date: Thu, 13 Aug 2026 14:35:00 +0200
 Subject: [PATCH 4/5] add contribution c/a33c.md
 
 ---
- c/a33c.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ c/a33c.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 c/a33c.md
 
 diff --git a/c/a33c.md b/c/a33c.md
 new file mode 100644
-index 0000000..f5d8338
+index 0000000..06a721d
 --- /dev/null
 +++ b/c/a33c.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +::a33c1 Ich frage hier als jemand, der das Ziel teilt und nur wissen will, wie es gehen soll. ::a33c2 Der Vergleich mit den Banken trägt nämlich nicht. ::a33c3 Ein Bankkonto setzt ohnehin voraus, dass die Bank weiß, wer ich bin, dort ist die Identifizierung kein Zusatz, sondern der Zweck.
 +
 +::a33c4 Auf soziale Medien übertragen hieße das eine Ausweispflicht für alle Nutzer, auch für Erwachsene. ::a33c5 Wer sein Alter nachweisen muss, kann sich nicht mehr anonym äußern, und das trifft Betroffene in Beratungsforen, Hinweisgeber und politisch Verfolgte zuerst.

@@ -1,20 +1,23 @@
-From 5366f03f37298377f91ef238d812de66c27b40c6 Mon Sep 17 00:00:00 2001
+From a3ddb2567993e9dab432b62d0b75a605de7afbe2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Sun, 30 Aug 2026 08:05:00 +0200
 Subject: [PATCH 19/19] add contribution a/a46a.md
 
 ---
- a/a46a.md | 1 +
- 1 file changed, 1 insertion(+)
+ a/a46a.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 a/a46a.md
 
 diff --git a/a/a46a.md b/a/a46a.md
 new file mode 100644
-index 0000000..0328cf0
+index 0000000..0562bc8
 --- /dev/null
 +++ b/a/a46a.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a46a1 Ja. ::a46a2 Verbesserungsvorschläge und Ideen sind immer willkommen. ::a46a3 Benutze die Plattform für echte Auseinandersetzungen und melde, wo sie dir im Weg stand. ::a46a4 Beachte allerdings, dass die Plattform sich vorbehält zu moderieren, was öffentlich sichtbar wird — siehe die Frage zur Moderation. ::a46a5 Darüber hinaus ist der Quelltext öffentlich, und die Möglichkeiten reichen vom Beheben eines Tippfehlers in genau diesen Texten bis zum Prüfen des Integritätskonzepts.
 \ No newline at end of file
 -- 

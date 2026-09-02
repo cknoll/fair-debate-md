@@ -1,20 +1,23 @@
-From 9ca5a5996483a9410ee7f2a387c58daeb049c1eb Mon Sep 17 00:00:00 2001
+From 70e4b13ec827fd0da4ab080ccbec4656c830e46f Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Wed, 22 Jul 2026 13:10:00 +0200
 Subject: [PATCH 07/13] add contribution b/a17b.md
 
 ---
- b/a17b.md | 3 +++
- 1 file changed, 3 insertions(+)
+ b/a17b.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 b/a17b.md
 
 diff --git a/b/a17b.md b/b/a17b.md
 new file mode 100644
-index 0000000..b01eb32
+index 0000000..86aabc1
 --- /dev/null
 +++ b/b/a17b.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a17b1 Diese Zahl steht hier falsch. ::a17b2 Die 15 Milliarden Euro pro Jahr bezogen sich im Rentenstreit auf die Fortschreibung eines um einen Punkt höheren Rentenniveaus ab 2032, nicht auf die Haltelinie insgesamt und nicht auf heute.
 +
 +::a17b3 Ich nenne das nicht, um kleinlich zu sein. ::a17b4 Eine Zahl ohne Bezugsjahr und ohne Quelle lässt sich nicht prüfen, und wer sie übernimmt, gibt sie ungeprüft weiter. ::a17b5 Der Satz braucht eine Quelle, oder er sollte verschwinden.

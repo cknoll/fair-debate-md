@@ -16,7 +16,11 @@ from ipydex import IPS
 from . import utils
 from . import repo_handling
 from . import references
-from .key_management import ProtoKeyAdder
+from .key_management import (
+    DEFAULT_SPLITTER_SYNTAX_VERSION,
+    SPLITTER_SYNTAX_VERSION,
+    ProtoKeyAdder,
+)
 from .md_handling import MDHandler, KeyAdder, convert_tabs_to_spaces  # noqa: F401 (re-exported)
 from .references import (  # noqa: F401 (re-exported)
     key_regex,
@@ -362,6 +366,9 @@ class MDProcessor(MDHandler):
         self.front_matter: dict = {}
         self.created: str | None = None
         self.order_hint = None
+        # the segmentation ruleset this contribution's `::aN` markers came from; set from
+        # the front matter when the text is read back from a repo
+        self.splitter_version: int = SPLITTER_SYNTAX_VERSION
 
         # convenience: save one line in the caller
         if convert_now:
@@ -468,6 +475,19 @@ def split_front_matter(text: str) -> tuple[dict, str]:
     return data, body
 
 
+def build_front_matter(**fields) -> str:
+    """
+    The yaml header a contribution file carries, or "" when there is nothing to record.
+
+    The counterpart of `split_front_matter()`, and the one place that decides how the
+    header is spelled -- it is written from two places (a live publication and the fixture
+    builder) which must produce byte-identical files for identical content.
+    """
+    if not fields:
+        return ""
+    return "---\n" + yaml.safe_dump(fields, sort_keys=False, allow_unicode=True) + "---\n"
+
+
 class DBContribution:
     """
     Represents a contribution wich is not yet stored in a file but comes from the database
@@ -537,6 +557,12 @@ class DebateDirLoader:
             front_matter, md_with_real_keys = split_front_matter(file_content)
             mdp = MDProcessor(key_prefix=base_name, md_with_real_keys=md_with_real_keys, db_ctb=False)
             mdp.front_matter = front_matter
+            # absent means the file predates the field, and everything written before it
+            # came from ruleset 1 -- so the default is a statement about history, not a
+            # fallback for a missing value
+            mdp.splitter_version = front_matter.get(
+                "splitter_version", DEFAULT_SPLITTER_SYNTAX_VERSION
+            )
             mdp.created = front_matter.get("created")
             if mdp.created is None:
                 mdp.created = _git_first_commit_iso(fpath)
@@ -821,8 +847,15 @@ def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
     mdp._early_placeholder_replacement = True
     md_with_real_keys = mdp.convert_plain_md_to_md_with_real_keys()
 
-    front_matter = {"created": datetime.now(timezone.utc).isoformat()}
-    header = "---\n" + yaml.safe_dump(front_matter, sort_keys=False) + "---\n"
+    # `splitter_version` says which segmentation ruleset produced the `::aN` markers just
+    # written into the body. It has to travel with the file rather than sit in a database
+    # column: the repo is handed out on its own, and whoever renders it later needs to
+    # know which rules to apply -- segment keys are the prefix of every answer key, so
+    # re-segmenting under changed rules breaks every reference into this contribution.
+    header = build_front_matter(
+        created=datetime.now(timezone.utc).isoformat(),
+        splitter_version=SPLITTER_SYNTAX_VERSION,
+    )
     with open(ctb.fpath, "w") as fp:
         fp.write(header)
         fp.write(md_with_real_keys)

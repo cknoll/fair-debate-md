@@ -1,19 +1,21 @@
-From 7676ecd3e168f48f0564724cc733efca59896e3d Mon Sep 17 00:00:00 2001
+From 7202a4272322a2dca92e931a9b396a060d14e0a2 Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 09:00:00 +0200
 Subject: [PATCH 01/19] first commit
 
 ---
- README.md | 104 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
+ README.md      | 120 +++++++++++++++++++++++++++++++++++++++++++++++++
+ REPO_INFO.yaml |   9 ++++
+ 2 files changed, 129 insertions(+)
  create mode 100644 README.md
+ create mode 100644 REPO_INFO.yaml
 
 diff --git a/README.md b/README.md
 new file mode 100644
-index 0000000..36eb5d8
+index 0000000..aa89187
 --- /dev/null
 +++ b/README.md
-@@ -0,0 +1,104 @@
+@@ -0,0 +1,120 @@
 +# Debate "d01-erklaerende-beispieldebatte"
 +
 +This repository holds the contributions of one debate on Fair Debate, one plain
@@ -23,6 +25,22 @@ index 0000000..36eb5d8
 +It was published at https://fair-debate.invalid/d/d01-erklaerende-beispieldebatte. If that address no longer answers, the debate may have
 +moved or the instance may be gone; the repository in your hands is unaffected either way.
 +Background on the project: https://fair-debate.invalid/about
++
++## Where this comes from
++
++`REPO_INFO.yaml`, next to this file, says what made the repository. Its `kind` field
++distinguishes the two cases, and the difference matters for how much the fingerprints
++below are worth:
++
++- **`kind: opened`** -- a debate that people held. The repository was created once and
++  grew by appending, so its history is the history of the debate. Everything described
++  below applies to it without reservation.
++- **`kind: built`** -- a demonstration piece, generated from a single source document.
++  Its whole history is regenerated whenever that source changes: the authors, the dates
++  and every fingerprint are then replaced, and the previous ones are gone. The file names
++  the source and the date of the build, so at least the replacement is datable. A
++  fingerprint you noted from such a debate can disappear without anything having gone
++  wrong.
 +
 +## Why this repository exists
 +
@@ -118,6 +136,21 @@ index 0000000..36eb5d8
 +  details need to be specified.
 +- There is no public mirror and no external archive yet. The only independent copies of
 +  this history are the ones readers keep. Yours is one of them.
+diff --git a/REPO_INFO.yaml b/REPO_INFO.yaml
+new file mode 100644
+index 0000000..7055fbf
+--- /dev/null
++++ b/REPO_INFO.yaml
+@@ -0,0 +1,9 @@
++# What made this repository. See README.md, section "Where this comes from".
++# `kind: built` means the history is regenerated whenever the source changes;
++# `kind: opened` means the debate grew into this repo by appending.
++kind: built
++date: '2026-09-02T12:56:46+00:00'
++fdmd_version: 0.8.0
++source:
++  path: d01-erklaerende-beispieldebatte__plain/source.md
++  sha256: 40ab278efedaef4e0fa69365ca549a4b81afa378298da0f8d7f3265509ef8603
 -- 
 2.39.5
 

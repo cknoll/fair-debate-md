@@ -1,5 +1,7 @@
+import datetime
 import email.parser
 import email.policy
+import hashlib
 import os
 import re
 import shlex
@@ -7,6 +9,9 @@ import subprocess
 from . import utils
 import glob
 import git
+import yaml
+
+from .release import __version__ as fdmd_version
 
 from ipydex import IPS
 
@@ -45,6 +50,11 @@ class PlatformSettings:
     platform_name = "Fair Debate"
     debate_url_template = "https://fair-debate.invalid/d/{debate_key}"
     background_url = "https://fair-debate.invalid/about"
+
+    # The version of the web application, recorded in `REPO_INFO.yaml` of a repo this
+    # instance opens itself. None means "not a platform", which is what a repo built by
+    # the library alone should say -- see `build_repo_info()`.
+    platform_version = None
 
 
 platform_settings = PlatformSettings()
@@ -267,7 +277,14 @@ def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, st
     """
 
     if initial_files is None:
-        initial_files = {README_FILENAME: build_readme(debate_key)}
+        initial_files = {
+            README_FILENAME: build_readme(debate_key),
+            # `kind: opened` -- written once, here, and never rewritten. It is what tells a
+            # reader (and the integrity page) that this history grew rather than being
+            # regenerated, which is the difference that decides how much its fingerprints
+            # are worth.
+            REPO_INFO_FILENAME: build_repo_info(),
+        }
 
     repo_dir = pjoin(repo_host_dir, debate_key)
 
@@ -307,6 +324,85 @@ README_FILENAME = "README.md"
 # `rollout_patches()` for one it unpacks, because a reader must not be able to tell the two
 # apart -- both are handed out through the same bundle and clone endpoints.
 README_TEMPLATE_PATH = pjoin(os.path.dirname(__file__), "repo_files", README_FILENAME)
+
+REPO_INFO_FILENAME = "REPO_INFO.yaml"
+
+
+def source_fingerprint(source_path: str) -> str:
+    """
+    The sha256 of a source file's bytes.
+
+    Deliberately the content hash and not the git commit the file sat in: a debate is
+    usually rebuilt from a source that has just been edited and not committed yet, so at
+    build time HEAD names the state *before* the change. The content hash has no such
+    ordering problem, needs no repository around the file, and can be recomputed by anyone
+    holding the source.
+    """
+    with open(source_path, "rb") as fp:
+        return hashlib.sha256(fp.read()).hexdigest()
+
+
+def build_repo_info(source_path: str = None, when: str = None,
+                    settings: PlatformSettings = None) -> str:
+    """
+    The content of `REPO_INFO.yaml`: what made this repository.
+
+    Every repo carries it, and the `kind` field says which of the two kinds this is:
+
+    * ``opened`` -- a live debate. The platform created the repo once and the debate grew
+      into it by appending. This is the normal case and the one the integrity page can
+      take at face value.
+    * ``built`` -- an artifact. A fixture debate is generated from a single-file source by
+      `fdmd build-debate-repo`, and every rebuild replaces the whole commit chain: new
+      fingerprints, new signatures, and the previous ones gone. Without this file the
+      integrity page presents that chain as the history of the debate, and a fingerprint
+      somebody noted resolves to nothing with no explanation on offer. Recording the
+      source and the build date does not make old fingerprints resolvable -- that is a
+      separate and larger question -- but it stops the page claiming more than it knows.
+
+    Note what is NOT in here for a built repo: nothing that depends on the instance
+    serving it. `rollout_patches()` keeps hashes reproducible across rollouts
+    (`--committer-date-is-author-date`), so a platform version in checked-in patch data
+    would give every fixture debate a fresh chain of fingerprints on every deploy -- which
+    is the very damage this file exists to document. `platform_version` therefore appears
+    only in the ``opened`` case, where the repo is written once and never rebuilt.
+
+    :param source_path: the single-file source, for a built repo; None for an opened one
+    :param when:        ISO timestamp, defaults to now (UTC)
+    """
+
+    if settings is None:
+        settings = platform_settings
+
+    if when is None:
+        now = datetime.datetime.now(datetime.timezone.utc)
+        when = now.replace(microsecond=0).isoformat()
+
+    info = {
+        "kind": "built" if source_path else "opened",
+        "date": when,
+        "fdmd_version": fdmd_version,
+    }
+
+    if source_path:
+        # the last two components, not the bare basename: every source file is called
+        # `source.md` and the directory above it is what names the debate
+        source_path = os.path.abspath(source_path)
+        rel_name = pjoin(os.path.basename(os.path.dirname(source_path)),
+                         os.path.basename(source_path))
+        info["source"] = {
+            "path": rel_name,
+            "sha256": source_fingerprint(source_path),
+        }
+    elif settings.platform_version:
+        info["platform_version"] = settings.platform_version
+
+    header = (
+        "# What made this repository. See README.md, section \"Where this comes from\".\n"
+        "# `kind: built` means the history is regenerated whenever the source changes;\n"
+        "# `kind: opened` means the debate grew into this repo by appending.\n"
+    )
+    return header + yaml.safe_dump(info, sort_keys=False, allow_unicode=True)
 
 
 def build_readme(debate_key: str, settings: PlatformSettings = None) -> str:

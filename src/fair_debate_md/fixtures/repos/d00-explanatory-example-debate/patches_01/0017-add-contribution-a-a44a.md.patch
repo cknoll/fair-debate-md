@@ -1,19 +1,22 @@
-From 1f4b50c7c2182e0d3ba34a0ab202f2cbf0bf1fe4 Mon Sep 17 00:00:00 2001
+From 4e908c9a89040d82a55d42988c3d1a14c2013340 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Sat, 29 Aug 2026 13:55:00 +0200
 Subject: [PATCH 17/19] add contribution a/a44a.md
 
 ---
- a/a44a.md | 1 +
- 1 file changed, 1 insertion(+)
+ a/a44a.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 a/a44a.md
 
 diff --git a/a/a44a.md b/a/a44a.md
 new file mode 100644
-index 0000000..9b013f4
+index 0000000..584f1d1
 --- /dev/null
 +++ b/a/a44a.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a44a1 A debate has three visibility levels: ::a44a2 _public_ (listed and readable by everyone), _hidden_ (readable only with the link, listed nowhere) and _private_ (readable only by the participants and moderators). ::a44a3 Changing the visibility of a debate might require approval both from moderators and participants. ::a44a4 E.g. public contributions of new users start hidden and have to be approved by a moderator; and a public debate can only be taken private if all parties agree (or if a moderator enforces it). ::a44a5 Otherwise a party which lost an argument could simply "erase" a debate from the public record. ::a44a6 Parts of this are still being built. ::a44a7 Today a moderation decision is made through the administration.
 \ No newline at end of file
 -- 

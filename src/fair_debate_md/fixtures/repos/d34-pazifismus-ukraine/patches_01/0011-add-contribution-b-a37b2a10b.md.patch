@@ -1,20 +1,23 @@
-From 92c37b4f8398c175fa2797c02ebd141bcac72e30 Mon Sep 17 00:00:00 2001
+From 11fb17004a9f6fe38851f385529a9051676c91ef Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
 Date: Mon, 6 Jul 2026 14:45:00 +0200
 Subject: [PATCH 11/12] add contribution b/a37b2a10b.md
 
 ---
- b/a37b2a10b.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ b/a37b2a10b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 b/a37b2a10b.md
 
 diff --git a/b/a37b2a10b.md b/b/a37b2a10b.md
 new file mode 100644
-index 0000000..56a2d87
+index 0000000..1555aa5
 --- /dev/null
 +++ b/b/a37b2a10b.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +::a37b2a10b1 Dieser Automatismus stand aber nicht unangefochten im Text, und Sie zitieren Foreign Affairs an dieser Stelle nur zur Hälfte.
 +
 +::a37b2a10b2 Dort steht auch, dass die russische Seite die Sicherheitsgarantien unter einen Beratungsvorbehalt der Garantiemächte stellen wollte. ::a37b2a10b3 Übersetzt heißt das, Moskau hätte mitentschieden, ob der Ukraine im Falle eines Angriffs geholfen werden darf. ::a37b2a10b4 Eine Garantie, über deren Auslösung der potentielle Angreifer mitbestimmt, ist keine Garantie. ::a37b2a10b5 Mit dieser Klausel wäre das Papier wertlos gewesen.

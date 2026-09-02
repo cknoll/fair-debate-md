@@ -1,19 +1,22 @@
-From 6624c9e6b5309b493f56f70c63bfe3bef6e63932 Mon Sep 17 00:00:00 2001
+From 4e29d34393482467df1b959dd139bbc904fa156a Mon Sep 17 00:00:00 2001
 From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 20:30:00 +0200
 Subject: [PATCH 09/19] add contribution b/a32b.md
 
 ---
- b/a32b.md | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ b/a32b.md | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
  create mode 100644 b/a32b.md
 
 diff --git a/b/a32b.md b/b/a32b.md
 new file mode 100644
-index 0000000..d493c59
+index 0000000..9852c41
 --- /dev/null
 +++ b/b/a32b.md
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,38 @@
++---
++splitter_version: 1
++---
 +### ::a32b1 Why this matters
 +
 +::a32b2 Like any infrastructure, a discussion platform is run by people. ::a32b3 In a genuinely contested debate there is a risk that whoever operates the platform interferes with the content, by deleting or by altering it. ::a32b4 A second risk points the other way — that an operator is accused of having done so although they did not, for instance after an argument turned out badly for the side making the accusation.

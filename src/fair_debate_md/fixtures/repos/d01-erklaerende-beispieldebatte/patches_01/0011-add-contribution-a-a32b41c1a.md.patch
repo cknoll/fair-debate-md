@@ -1,20 +1,23 @@
-From e9928161bb6e0cfed4b84bae619a9046b97e089d Mon Sep 17 00:00:00 2001
+From ab29dc383ee2180956f19f8f18269df3cdf4f2f6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Thu, 27 Aug 2026 16:30:00 +0200
 Subject: [PATCH 11/19] add contribution a/a32b41c1a.md
 
 ---
- a/a32b41c1a.md | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ a/a32b41c1a.md | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
  create mode 100644 a/a32b41c1a.md
 
 diff --git a/a/a32b41c1a.md b/a/a32b41c1a.md
 new file mode 100644
-index 0000000..03523ea
+index 0000000..0fe5347
 --- /dev/null
 +++ b/a/a32b41c1a.md
-@@ -0,0 +1,14 @@
+@@ -0,0 +1,17 @@
++---
++splitter_version: 1
++---
 +::a32b41c1a1 Zurzeit gibt es die folgenden Schwachstellen.
 +
 +### ::a32b41c1a2 Bedienbarkeit

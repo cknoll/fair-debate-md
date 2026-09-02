@@ -1,20 +1,23 @@
-From 5124f40a28f11d4377f5c68e29c5126fe181d259 Mon Sep 17 00:00:00 2001
+From de6fef4fb13e098c6d3d6cf3c2cb75e5c77b7958 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Sat, 29 Aug 2026 19:55:00 +0200
 Subject: [PATCH 18/19] add contribution a/a45a.md
 
 ---
- a/a45a.md | 1 +
- 1 file changed, 1 insertion(+)
+ a/a45a.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 a/a45a.md
 
 diff --git a/a/a45a.md b/a/a45a.md
 new file mode 100644
-index 0000000..52307b2
+index 0000000..08fd083
 --- /dev/null
 +++ b/a/a45a.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a45a1 Über die [Kontaktseite](/contact/) dieser Website, die auf die Betreuung des Projekts und auf das öffentliche Quelltext-Repository verweist, wo sich Fehlermeldungen und Vorschläge einreichen lassen. ::a45a2 Ein Rückmeldeformular innerhalb der Plattform selbst gibt es noch nicht.
 \ No newline at end of file
 -- 

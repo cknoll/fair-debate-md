@@ -1,20 +1,23 @@
-From eca4a5a003bc8200344448bef8f54f1372801d09 Mon Sep 17 00:00:00 2001
+From 253c59edd22b8d2e7d7a282b16b5169150d2b90c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Sat, 29 Aug 2026 08:55:00 +0200
 Subject: [PATCH 16/19] add contribution a/a43a.md
 
 ---
- a/a43a.md | 7 +++++++
- 1 file changed, 7 insertions(+)
+ a/a43a.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
  create mode 100644 a/a43a.md
 
 diff --git a/a/a43a.md b/a/a43a.md
 new file mode 100644
-index 0000000..e7c75b6
+index 0000000..1346dbb
 --- /dev/null
 +++ b/a/a43a.md
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,10 @@
++---
++splitter_version: 1
++---
 +::a43a1 Sie lösen zwei verschiedene Probleme, und keines von beiden ersetzt das andere.
 +
 +::a43a2 Der Fingerabdruck beantwortet die Frage, _ob sich etwas verändert hat_. ::a43a3 Er wird aus dem Inhalt eines Commits und dem Fingerabdruck des vorhergehenden berechnet. ::a43a4 Wird ein alter Beitrag nachträglich geändert, ändern sich alle Fingerabdrücke ab dieser Stelle, und die Kette passt nicht mehr zu der, die du vorher gesehen hast. ::a43a5 Eine Veränderung wird dadurch zuverlässig sichtbar. ::a43a6 Welche der beiden Fassungen die veröffentlichte ist, sagt der Fingerabdruck aber nicht.

@@ -1,19 +1,22 @@
-From c7e7810795dc17077578b44d966717246d30f481 Mon Sep 17 00:00:00 2001
+From dbbd03a09868f9160ebde878394ab1aac9c1e561 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 12:30:00 +0200
 Subject: [PATCH 08/19] add contribution a/a31b9a.md
 
 ---
- a/a31b9a.md | 1 +
- 1 file changed, 1 insertion(+)
+ a/a31b9a.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 a/a31b9a.md
 
 diff --git a/a/a31b9a.md b/a/a31b9a.md
 new file mode 100644
-index 0000000..95ec639
+index 0000000..50d1646
 --- /dev/null
 +++ b/a/a31b9a.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a31b9a1 Markdown adds formatting through a handful of plain characters — `**bold**` produces **bold**, for instance. ::a31b9a2 A short introduction is at <https://en.wikipedia.org/wiki/Markdown>.
 \ No newline at end of file
 -- 

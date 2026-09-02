@@ -50,7 +50,17 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
   `\ ` would read *inverted* to LaTeX-trained users. That argues for a marker glued to
   the dot rather than to the space, or for a third character altogether.
 
-- [] **(3) persist the splitter-syntax version per contribution.**
+- [x] **(3) persist the splitter-syntax version per contribution.**
+  → done (2026-09-02): `SPLITTER_SYNTAX_VERSION` in `key_management.py`, written as
+  `splitter_version` into the yaml front matter of every contribution by both write paths
+  (`core.write_ctb_to_file` for a live publication, `debate_builder` for a built fixture)
+  and read back into `MDProcessor.splitter_version`. A file without the field counts as
+  version 1, which is a statement about history rather than a fallback.
+  **Still missing, and the actual work of (1)/(2):** nothing yet *dispatches* on the
+  recorded version -- `split_text_into_segments()` has one behaviour. Recording had to come
+  first so that contributions written from now on can be re-rendered under their own rules;
+  the dispatch is written when the first alternative ruleset exists.
+  The original entry, for the reasoning:
   Items (1) and (2) change how existing text is segmented, and segment keys are the
   prefix of every answer key (`a14c5b` answers segment `a14c5`). Re-segmenting an
   existing debate under new rules therefore does not just renumber segments, it breaks
@@ -63,6 +73,28 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
   explicitly not a db column, which the repo alone would not carry.
   Still to be decided when (1)/(2) land: whether the existing fixtures are rebuilt under
   the new version or pinned to the old one.
+
+
+## repo provenance (added 2026-09-02)
+
+Every repo now carries `REPO_INFO.yaml` in its first commit, saying what made it
+(`repo_handling.build_repo_info()`): `kind: opened` for a debate the platform opened and
+that grew by appending, `kind: built` for a fixture generated from a `source.md`, with the
+source name, its sha256 and the build date. The point is the built case: a rebuild
+discards the whole commit chain, and without this the integrity page presents the new one
+as the history of the debate while a fingerprint somebody noted resolves to nothing.
+
+- [] **the three script-built fixtures have no `REPO_INFO.yaml`.** `d31-ice-cream`,
+  `d32-overlapping-refs` and `d33-wachstum-klimaschutz` are built by their own scripts
+  (`build_d3*.py`), which create the root commit themselves instead of going through
+  `build_debate_repo()`. They therefore missed the change. The older patch collections
+  (`d02`..`d06`, `d1-lorem_ipsum`) cannot get one at all -- they have no source to name --
+  so the reading side has to tolerate absence anyway; this is about consistency of the
+  demo set, not about correctness.
+Guarded by `test_every_built_fixture_matches_its_source`: the hash recorded in a fixture's
+patch collection must equal the hash of its `source.md`. That is what keeps the record
+honest -- editing a source without rebuilding the repo now fails the suite instead of
+leaving the repo claiming a source it no longer came from.
 
 
 ## whitespace around inline elements (backlog, added 2026-08-28)

@@ -1,20 +1,23 @@
-From 3e1edd80cf7ef50e9b0191cba6834a6581a41386 Mon Sep 17 00:00:00 2001
+From 3a3b8c24c26fd79ec5fc9808df08ce6a20765f87 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 21:10:00 +0200
 Subject: [PATCH 03/19] add contribution b/a24b.md
 
 ---
- b/a24b.md | 1 +
- 1 file changed, 1 insertion(+)
+ b/a24b.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 b/a24b.md
 
 diff --git a/b/a24b.md b/b/a24b.md
 new file mode 100644
-index 0000000..ab68957
+index 0000000..9f83487
 --- /dev/null
 +++ b/b/a24b.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a24b1 Das bin ich. ::a24b2 Meine Rolle in dieser Debatte ist es, Einzelheiten zu ergänzen.
 \ No newline at end of file
 -- 

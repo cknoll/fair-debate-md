@@ -1,20 +1,23 @@
-From 760c14b04a2b9b55a8642389ffff9c9e6da30259 Mon Sep 17 00:00:00 2001
+From 016ccfce659157e26fad666fcd56ef74466b18f7 Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Fri, 24 Jul 2026 14:05:00 +0200
 Subject: [PATCH 13/13] add contribution b/a18b8a7b.md
 
 ---
- b/a18b8a7b.md | 3 +++
- 1 file changed, 3 insertions(+)
+ b/a18b8a7b.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 b/a18b8a7b.md
 
 diff --git a/b/a18b8a7b.md b/b/a18b8a7b.md
 new file mode 100644
-index 0000000..c73b8a3
+index 0000000..7974a41
 --- /dev/null
 +++ b/b/a18b8a7b.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a18b8a7b1 Norwegen ist ein Ölfonds und keine Rentenversicherung. ::a18b8a7b2 Er wird aus Rohstofferlösen gespeist und nicht aus Beiträgen, und er zahlt keine individuellen Renten aus. ::a18b8a7b3 Als Beleg dafür, dass eine beitragsfinanzierte Aktienrente das Kursrisiko der Versicherten auffängt, taugt er nicht.
 +
 +::a18b8a7b4 Damit stehen wir an dem Punkt, an dem die Debatte eigentlich anfangen müsste. ::a18b8a7b5 Wie viel Risiko soll kollektiv getragen werden und wie viel individuell. ::a18b8a7b6 Der Eröffnungstext behandelt diese Frage als entschieden. ::a18b8a7b7 Sie ist es nicht.

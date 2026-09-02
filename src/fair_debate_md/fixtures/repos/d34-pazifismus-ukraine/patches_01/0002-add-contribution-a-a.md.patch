@@ -1,19 +1,22 @@
-From d0f35101123fd56934eeb1794f72a524d21cc68b Mon Sep 17 00:00:00 2001
+From a5f55854150104679521374e5970aecdd5b15f5f Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
 Date: Thu, 2 Jul 2026 17:00:00 +0200
 Subject: [PATCH 02/12] add contribution a/a.md
 
 ---
- a/a.md | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ a/a.md | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..61cbd28
+index 0000000..fb3a270
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,26 @@
++---
++splitter_version: 1
++---
 +# ::a1 Wäre gewaltfreier Widerstand die bessere Antwort auf den russischen Angriff gewesen?
 +
 +::a2 Vorbemerkung zur Einordnung. ::a3 Diese Debatte ist ein Rollenspiel zwischen zwei fiktiven Personen. ::a4 Beide beziehen sich auf dieselbe Quelle, nämlich die Podcast-Episode "Lage der Nation" Nummer 490, in der die beiden Hosts mit dem Philosophen Olaf Müller über Pazifismus gesprochen haben. ::a5 Ich gebe die Position des Gastes in eigenen Worten wieder, die Gegenseite die der beiden Hosts. ::a6 Wörtliche Zitate sind gekennzeichnet und bleiben die Ausnahme.

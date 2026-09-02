@@ -8,6 +8,7 @@ from fair_debate_md.core import (
     split_front_matter,
     write_ctb_to_file,
 )
+from fair_debate_md.key_management import SPLITTER_SYNTAX_VERSION
 
 
 def test_yaml_roundtrip():
@@ -44,3 +45,19 @@ def test_split_front_matter_dict_order_hint_default():
     # ensure order_hint default does not break existing callers
     ctb = DBContribution(ctb_key="a1b", body="x")
     assert ctb.order_hint is None
+
+
+def test_live_publication_records_the_splitter_version():
+    """
+    The rules that decided where the `::aN` markers sit have to travel with the file:
+    the repo is handed out on its own, and segment keys are the prefix of every answer
+    key, so re-segmenting under changed rules breaks every reference into the text.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        ctb = DBContribution(ctb_key="a1b", body="Hello world. And a second sentence.\n")
+        write_ctb_to_file(tmp, ctb)
+        with open(ctb.fpath) as fp:
+            fm, body = split_front_matter(fp.read())
+
+    assert fm["splitter_version"] == SPLITTER_SYNTAX_VERSION
+    assert body.startswith("::a1b1 Hello world.")

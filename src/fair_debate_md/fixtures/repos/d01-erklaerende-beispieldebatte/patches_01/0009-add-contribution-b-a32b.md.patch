@@ -1,20 +1,23 @@
-From 80dfbf302d80bc494587e6dffb72c8d8dd9e3594 Mon Sep 17 00:00:00 2001
+From 4f0851eca7370c98235c9e22480408d687cfa011 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 21:25:00 +0200
 Subject: [PATCH 09/19] add contribution b/a32b.md
 
 ---
- b/a32b.md | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ b/a32b.md | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
  create mode 100644 b/a32b.md
 
 diff --git a/b/a32b.md b/b/a32b.md
 new file mode 100644
-index 0000000..32a0e27
+index 0000000..30e556d
 --- /dev/null
 +++ b/b/a32b.md
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,38 @@
++---
++splitter_version: 1
++---
 +### ::a32b1 Warum das wichtig ist
 +
 +::a32b2 Wie jede Infrastruktur wird auch eine Debattenplattform von Menschen betrieben. ::a32b3 In einer wirklich strittigen Auseinandersetzung besteht die Gefahr, dass der Betreiber in die Inhalte eingreift, indem er löscht oder verändert. ::a32b4 Eine zweite Gefahr weist in die Gegenrichtung — dass einem Betreiber genau das vorgeworfen wird, obwohl er es nicht getan hat, etwa nachdem eine Auseinandersetzung für die vorwerfende Seite schlecht ausgegangen ist.

@@ -1,20 +1,23 @@
-From 56d3c076cee828e933a7b70e2282c302e0e563b8 Mon Sep 17 00:00:00 2001
+From 819babdd99e2a5c675157bb9d6caaa5158e6d436 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 17:00:00 +0200
 Subject: [PATCH 02/19] add contribution a/a.md
 
 ---
- a/a.md | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ a/a.md | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..9fc4336
+index 0000000..119199b
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,42 @@
++---
++splitter_version: 1
++---
 +# ::a1 Erklärende Beispiel-Debatte
 +
 +::a2 Dieses Dokument ist eine _Debatte_. ::a3 Es beschreibt die wichtigsten Eigenschaften von _Fair Debate_ — der Plattform, die du gerade vor dir hast — und begründet sie. ::a4 Dabei zweckentfremdet es die Funktionen der Plattform, nämlich die besondere Darstellung von Rede und Gegenrede, für Erklärungen. ::a5 Eigentlich ist Fair Debate nicht dafür gedacht, Dokumentation anzuzeigen, sondern als Werkzeug für sachliche und nachvollziehbare Verständigung über womöglich strittige Themen.

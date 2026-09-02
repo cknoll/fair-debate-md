@@ -1,19 +1,22 @@
-From 30ea075ca34b32f82b68af3e277c8d1c6e4cf536 Mon Sep 17 00:00:00 2001
+From 6c817c829f4a9b125b526cafe5fd275a653803d5 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 16:00:00 +0200
 Subject: [PATCH 02/19] add contribution a/a.md
 
 ---
- a/a.md | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ a/a.md | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..426a5ca
+index 0000000..acfe768
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,42 @@
++---
++splitter_version: 1
++---
 +# ::a1 Explanatory Example Debate
 +
 +::a2 This document is a _debate_. ::a3 Its purpose is to describe and motivate the main features of _Fair Debate_ — the platform you are looking at. ::a4 Please be aware that this document kind of abuses the platform's functionality (i.e. the special way to display a stream of speech and counter-speech) for explanations. ::a5 Actually Fair Debate is not meant for displaying documentation but as tool for constructive and reliable communication about possibly controversial topics.

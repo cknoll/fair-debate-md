@@ -1,20 +1,23 @@
-From c875ad1e6dcdef32c830830c1179f25ef97b6059 Mon Sep 17 00:00:00 2001
+From 28b2f41863a36e3926479d4477bf830a3d49c17c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Verbotsbef=C3=BCrwortende=20Person?=
  <d36-handyverbot-schule_a@fair-debate-users.org>
 Date: Wed, 12 Aug 2026 17:00:00 +0200
 Subject: [PATCH 2/5] add contribution a/a.md
 
 ---
- a/a.md | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ a/a.md | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..e3cb177
+index 0000000..9d60220
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,31 @@
+@@ -0,0 +1,34 @@
++---
++splitter_version: 1
++---
 +# ::a1 Schluss mit dem Zögern — handyfreie Schulen und ein Social-Media-Mindestalter von 16 Jahren
 +
 +::a2 Vorbemerkung zur Einordnung. ::a3 Diese Debatte ist ein Rollenspiel zwischen fiktiven Personen. ::a4 Der Eröffnungsbeitrag ist ein bewusst zugespitzter Meinungstext, wie er so in einer Zeitung stehen könnte, mitsamt der Schwächen, die solche Texte haben. ::a5 Bisher stehen nur drei Einwände darunter, und zu den meisten Behauptungen im Text ist noch gar nichts gesagt. ::a6 Diese Debatte ist ausdrücklich unfertig.

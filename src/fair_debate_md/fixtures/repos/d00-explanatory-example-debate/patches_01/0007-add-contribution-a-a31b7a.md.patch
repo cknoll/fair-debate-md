@@ -1,19 +1,22 @@
-From d60b217c6f0519ede5d144899131f4fe77d2df01 Mon Sep 17 00:00:00 2001
+From 1f17bb23c663858ad08413ac77cca00f47d8868e Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 08:00:00 +0200
 Subject: [PATCH 07/19] add contribution a/a31b7a.md
 
 ---
- a/a31b7a.md | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ a/a31b7a.md | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
  create mode 100644 a/a31b7a.md
 
 diff --git a/a/a31b7a.md b/a/a31b7a.md
 new file mode 100644
-index 0000000..3ae553b
+index 0000000..cc8c2f9
 --- /dev/null
 +++ b/a/a31b7a.md
-@@ -0,0 +1,14 @@
+@@ -0,0 +1,17 @@
++---
++splitter_version: 1
++---
 +### ::a31b7a1 An example
 +
 +::a31b7a2 Consider a debate with three parties.

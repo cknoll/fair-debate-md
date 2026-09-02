@@ -106,7 +106,8 @@ import tempfile
 from git import Actor, Repo
 
 from . import repo_handling
-from .core import MDProcessor, split_front_matter
+from .core import MDProcessor, build_front_matter, split_front_matter
+from .key_management import SPLITTER_SYNTAX_VERSION
 
 pjoin = os.path.join
 
@@ -343,6 +344,19 @@ def build_debate_repo(
     with open(readme_path, "w") as fp:
         fp.write(repo_handling.build_readme(debate_key))
     run_git("add", repo_handling.README_FILENAME)
+
+    # `REPO_INFO.yaml`, unlike the README, is NOT replaced at rollout: it describes this
+    # build, and the build is what a reader needs to know about. It says `kind: built`,
+    # names the source and its content hash, and carries the date -- which is the point,
+    # because every rebuild discards the previous commit chain and nothing else in the
+    # repo would say that this happened. It goes into the patch collection so it travels;
+    # anything instance-dependent must stay out of it, or a deploy would rewrite the root
+    # commit of every fixture repo (see `build_repo_info()`).
+    repo_info_path = pjoin(repo_dir, repo_handling.REPO_INFO_FILENAME)
+    with open(repo_info_path, "w") as fp:
+        fp.write(repo_handling.build_repo_info(source_path=source_path))
+    run_git("add", repo_handling.REPO_INFO_FILENAME)
+
     commit("first commit", "fair debate system", "fair_debate_system@fair-debate-users.org",
            first_commit)
 
@@ -369,6 +383,10 @@ def build_debate_repo(
         repo_path = pjoin(repo_dir, rel_path)
         os.makedirs(os.path.dirname(repo_path), exist_ok=True)
         with open(repo_path, "w") as fp:
+            # the same header a live publication writes, minus `created`: a fixture's
+            # chronology is invented and lives in the commit dates, and a second copy of
+            # it in the file could only ever disagree with them
+            fp.write(build_front_matter(splitter_version=SPLITTER_SYNTAX_VERSION))
             fp.write(keyed)
 
         when = into_active_hours(when + scaled_gap(len(body), gap_min, gap_max), active_hours)

@@ -1,19 +1,22 @@
-From c09215487dda96e761f043305c97a810eabacea8 Mon Sep 17 00:00:00 2001
+From d8f10eb3df9a4cadab89dafc6e382f2bb4275dbc Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
 Date: Sat, 4 Jul 2026 20:25:00 +0200
 Subject: [PATCH 07/12] add contribution a/a34b8a.md
 
 ---
- a/a34b8a.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ a/a34b8a.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 a/a34b8a.md
 
 diff --git a/a/a34b8a.md b/a/a34b8a.md
 new file mode 100644
-index 0000000..4cfcf73
+index 0000000..b7f4392
 --- /dev/null
 +++ b/a/a34b8a.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +::a34b8a1 Doch, genau daran ändert es etwas, und dieser Punkt ist mir wichtig genug, um ihn auszubuchstabieren.
 +
 +::a34b8a2 Beide Beinahe-Katastrophen, die wir eben genannt haben, fielen nicht in ruhige Zeiten. ::a34b8a3 Die Kubakrise war der Höhepunkt einer Konfrontation, und 1983 lagen die Nerven blank, weil die sowjetische Führung ernsthaft glaubte, der Westen bereite einen Erstschlag vor. ::a34b8a4 Fehlinterpretationen entstehen nicht zufällig gleichverteilt über die Jahrzehnte. ::a34b8a5 Sie häufen sich dort, wo die Spannung hoch ist und wo beide Seiten die Logik der anderen nicht mehr verstehen.

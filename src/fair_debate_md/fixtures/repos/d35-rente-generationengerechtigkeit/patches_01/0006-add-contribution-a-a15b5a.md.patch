@@ -1,20 +1,23 @@
-From 2e5b565c469f0938daeb9bb58de520989c95bc9f Mon Sep 17 00:00:00 2001
+From 76e8acdbf590d928f7f0b9bacac790b8abd63806 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
  <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
 Date: Wed, 22 Jul 2026 08:00:00 +0200
 Subject: [PATCH 06/13] add contribution a/a15b5a.md
 
 ---
- a/a15b5a.md | 3 +++
- 1 file changed, 3 insertions(+)
+ a/a15b5a.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
  create mode 100644 a/a15b5a.md
 
 diff --git a/a/a15b5a.md b/a/a15b5a.md
 new file mode 100644
-index 0000000..a406597
+index 0000000..6bcb1fa
 --- /dev/null
 +++ b/a/a15b5a.md
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,6 @@
++---
++splitter_version: 1
++---
 +::a15b5a1 Für die wenigen echten Härtefälle gibt es die Erwerbsminderungsrente. ::a15b5a2 Genau dafür ist sie da, und sie lässt sich ausbauen, ohne die Regelaltersgrenze für alle anderen niedrig zu halten.
 +
 +::a15b5a3 Hinzu kommt, dass sich die Arbeitswelt verändert hat. ::a15b5a4 Die allermeisten Beschäftigten arbeiten heute im Büro und nicht auf dem Gerüst, und in vielen Berufen ist die Belastung eine ganz andere als vor dreißig Jahren.

@@ -1,19 +1,22 @@
-From f7784ab08356044c8bbc1d4656d7be2070284eaa Mon Sep 17 00:00:00 2001
+From 41f6a058fa0cad528085c469e8b3541a3b03fc26 Mon Sep 17 00:00:00 2001
 From: Questioner <d00-explanatory-example-debate_c@fair-debate-users.org>
 Date: Tue, 25 Aug 2026 08:00:00 +0200
 Subject: [PATCH 04/19] add contribution c/a25c.md
 
 ---
- c/a25c.md | 1 +
- 1 file changed, 1 insertion(+)
+ c/a25c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 c/a25c.md
 
 diff --git a/c/a25c.md b/c/a25c.md
 new file mode 100644
-index 0000000..959ab76
+index 0000000..23c393d
 --- /dev/null
 +++ b/c/a25c.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a25c1 And that is me. ::a25c2 I ask (sometimes critical) questions and try to find flaws. ::a25c3 By the way, one thing does not add up here. ::a25c4 The opening contribution already knows that there will be a party `b` and a party `c`, and speaks of us before either of us had written a word. ::a25c5 So this debate was not held, it was composed.
 \ No newline at end of file
 -- 

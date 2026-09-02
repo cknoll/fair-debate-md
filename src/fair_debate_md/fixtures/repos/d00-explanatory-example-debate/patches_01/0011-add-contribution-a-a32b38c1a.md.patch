@@ -1,19 +1,22 @@
-From 6441bb3d86f166ec9bc11c896c984db21a3702f7 Mon Sep 17 00:00:00 2001
+From 32ae176cf806c4466e93fe58f47edf02d9dfe891 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Thu, 27 Aug 2026 16:35:00 +0200
 Subject: [PATCH 11/19] add contribution a/a32b38c1a.md
 
 ---
- a/a32b38c1a.md | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ a/a32b38c1a.md | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
  create mode 100644 a/a32b38c1a.md
 
 diff --git a/a/a32b38c1a.md b/a/a32b38c1a.md
 new file mode 100644
-index 0000000..71eb463
+index 0000000..1562729
 --- /dev/null
 +++ b/a/a32b38c1a.md
-@@ -0,0 +1,14 @@
+@@ -0,0 +1,17 @@
++---
++splitter_version: 1
++---
 +::a32b38c1a1 Currently there are the following weak points:
 +
 +### ::a32b38c1a2 Usability

@@ -8,6 +8,22 @@ It was published at {debate_url}. If that address no longer answers, the debate 
 moved or the instance may be gone; the repository in your hands is unaffected either way.
 Background on the project: {background_url}
 
+## Where this comes from
+
+`REPO_INFO.yaml`, next to this file, says what made the repository. Its `kind` field
+distinguishes the two cases, and the difference matters for how much the fingerprints
+below are worth:
+
+- **`kind: opened`** -- a debate that people held. The repository was created once and
+  grew by appending, so its history is the history of the debate. Everything described
+  below applies to it without reservation.
+- **`kind: built`** -- a demonstration piece, generated from a single source document.
+  Its whole history is regenerated whenever that source changes: the authors, the dates
+  and every fingerprint are then replaced, and the previous ones are gone. The file names
+  the source and the date of the build, so at least the replacement is datable. A
+  fingerprint you noted from such a debate can disappear without anything having gone
+  wrong.
+
 ## Why this repository exists
 
 A platform that keeps debates in its own database can change them, and nobody outside can

@@ -1,19 +1,22 @@
-From 08e7d1dd51d1a6bc0b1b1957573dec1ac8b40877 Mon Sep 17 00:00:00 2001
+From bb33007d25fed60bec8dc39a36aab67c303df217 Mon Sep 17 00:00:00 2001
 From: Verbotskritische Person <d36-handyverbot-schule_b@fair-debate-users.org>
 Date: Thu, 13 Aug 2026 20:35:00 +0200
 Subject: [PATCH 5/5] add contribution b/a16b.md
 
 ---
- b/a16b.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ b/a16b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 b/a16b.md
 
 diff --git a/b/a16b.md b/b/a16b.md
 new file mode 100644
-index 0000000..d1db208
+index 0000000..4f436ac
 --- /dev/null
 +++ b/b/a16b.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +::a16b1 Der Bund kann dieses Verbot gar nicht anordnen. ::a16b2 Schulrecht ist Ländersache, und das ist kein Detail, sondern Kern der Kompetenzordnung. ::a16b3 Der Text fordert also eine Maßnahme von einer Ebene, die dafür nicht zuständig ist, und nennt den Flickenteppich als Grund, ohne zu sagen, wie er ihn rechtlich beseitigen will.
 +
 +::a16b4 Das ist mehr als ein formaler Einwand. ::a16b5 Wer eine Forderung an die falsche Adresse richtet, bekommt keine Umsetzung, sondern eine Debatte über Zuständigkeiten, und genau die beklagt der letzte Absatz.

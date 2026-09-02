@@ -1,20 +1,23 @@
-From 4a974df67684af93c87a1c012ea96b15e8c7b899 Mon Sep 17 00:00:00 2001
+From 4fb5cfaaa831cce5516a368c4f0a5bbf2b463fac Mon Sep 17 00:00:00 2001
 From: Reformkritische Person
  <d35-rente-generationengerechtigkeit_b@fair-debate-users.org>
 Date: Thu, 23 Jul 2026 14:15:00 +0200
 Subject: [PATCH 10/13] add contribution b/a18b.md
 
 ---
- b/a18b.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ b/a18b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
  create mode 100644 b/a18b.md
 
 diff --git a/b/a18b.md b/b/a18b.md
 new file mode 100644
-index 0000000..f744bc5
+index 0000000..d91a4d5
 --- /dev/null
 +++ b/b/a18b.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
++---
++splitter_version: 1
++---
 +::a18b1 Das schwedische System wird hier stark vereinfacht. ::a18b2 In die kapitalgedeckte Prämienrente fließen nur 2,5 Prozentpunkte des Beitrags, das System bleibt ganz überwiegend umlagefinanziert. ::a18b3 Als Beleg für einen massiven Ausbau taugt es deshalb nicht.
 +
 +::a18b4 Durchweg positiv waren die Erfahrungen auch nicht. ::a18b5 Die Prämienrente hatte Skandale mit unseriösen Fonds, und das Kursrisiko trägt der Einzelne. ::a18b6 Wer kurz vor der Rente in einen Einbruch gerät, hat Pech gehabt.

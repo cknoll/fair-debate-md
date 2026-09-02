@@ -1,20 +1,23 @@
-From 01f02afa3fd94bc84398fa58c8315fe946ac2c61 Mon Sep 17 00:00:00 2001
+From 0806180470312ddf87d57e5cf0d1decc950994c8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Reformbef=C3=BCrwortende=20Person?=
  <d35-rente-generationengerechtigkeit_a@fair-debate-users.org>
 Date: Mon, 20 Jul 2026 17:00:00 +0200
 Subject: [PATCH 02/13] add contribution a/a.md
 
 ---
- a/a.md | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ a/a.md | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..eed3322
+index 0000000..6546571
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,30 @@
++---
++splitter_version: 1
++---
 +# ::a1 Generationengerechtigkeit jetzt — die Empfehlungen der Rentenkommission gehören ohne Abstriche umgesetzt
 +
 +::a2 Vorbemerkung zur Einordnung. ::a3 Diese Debatte ist ein Rollenspiel zwischen zwei fiktiven Personen. ::a4 Der Eröffnungsbeitrag ist ein bewusst zugespitzter Meinungstext, wie er so in einer Zeitung stehen könnte, mitsamt der Schwächen, die solche Texte haben. ::a5 Er steht hier, damit sich zeigen lässt, was eine Fair-Debate mit ihm macht.

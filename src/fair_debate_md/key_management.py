@@ -2,6 +2,26 @@ import re
 from bs4 import BeautifulSoup, element
 
 
+# The version of the segmentation ruleset below -- everything in this module that decides
+# where one segment ends and the next begins (`SENTENCE_SPLITTERS`, the abbreviation
+# tables, `_is_abbreviation_dot`, `split_text_into_segments`).
+#
+# It is recorded per contribution, in the yaml front matter of the stored `.md`, because
+# segment keys are the prefix of every answer key: `a14c5b` answers segment `a14c5`.
+# Re-segmenting an existing text under changed rules therefore does not renumber it, it
+# breaks every reference into it. A contribution that says which ruleset produced its
+# `::aN` markers can be rendered under exactly that ruleset later, so old debates stay as
+# they are while new ones use the current default.
+#
+# Raise this whenever the segmentation behaviour changes, and keep the previous behaviour
+# reachable. See `dev_notes.md`, section "splitter syntax", for the changes this was
+# introduced for and for what is still open.
+SPLITTER_SYNTAX_VERSION = 1
+
+# What a contribution without any recorded version was created under: everything written
+# before the field existed came from these rules.
+DEFAULT_SPLITTER_SYNTAX_VERSION = 1
+
 # characters which end a sentence / segment
 SENTENCE_SPLITTERS = (".", "!", "?", ":")
 

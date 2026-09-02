@@ -1,20 +1,23 @@
-From 49bd39287692812a2b8f7693a9b346c7c9a3733b Mon Sep 17 00:00:00 2001
+From 8e916a742d15e7354335d76c030417e64b114949 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 13:25:00 +0200
 Subject: [PATCH 08/19] add contribution a/a31b9a.md
 
 ---
- a/a31b9a.md | 1 +
- 1 file changed, 1 insertion(+)
+ a/a31b9a.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 a/a31b9a.md
 
 diff --git a/a/a31b9a.md b/a/a31b9a.md
 new file mode 100644
-index 0000000..0b5eec0
+index 0000000..96300f6
 --- /dev/null
 +++ b/a/a31b9a.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a31b9a1 Markdown fügt Formatierungen über eine Handvoll gewöhnlicher Zeichen hinzu — `**fett**` ergibt zum Beispiel **fett**. ::a31b9a2 Eine kurze Einführung findest du unter <https://de.wikipedia.org/wiki/Markdown>.
 \ No newline at end of file
 -- 

@@ -6,12 +6,22 @@ user-facing texts and get rewritten, so asserting on their content would tie the
 to editorial decisions (see `testdata/builder_demo_source_README.md`).
 """
 
+import glob
+import hashlib
 import os
 import subprocess
 
 import pytest
+import yaml
 
+from fair_debate_md import fixtures, repo_handling
+from fair_debate_md.core import split_front_matter
 from fair_debate_md.debate_builder import build_debate_repo, read_source
+from fair_debate_md.key_management import (
+    DEFAULT_SPLITTER_SYNTAX_VERSION,
+    SPLITTER_SYNTAX_VERSION,
+)
+from fair_debate_md.release import __version__ as fdmd_version
 
 pjoin = os.path.join
 
@@ -150,3 +160,132 @@ class TestBuild:
         finally:
             os.chdir(cwd)
         assert (tmp_path / "d97-builder-demo" / "patches_01" / "0001-first-commit.patch").exists()
+
+
+class TestProvenance:
+    """
+    `REPO_INFO.yaml` and the per-contribution `splitter_version`: what a repo says about
+    the software and the source that made it. See `repo_handling.build_repo_info()`.
+    """
+
+    def test_built_repo_records_its_source(self, tmp_path):
+        source_path = write_source(tmp_path)
+        build_debate_repo(
+            source_path,
+            patches_into=str(tmp_path / "patches"),
+            repo_into=str(tmp_path / "repo"),
+        )
+
+        info = yaml.safe_load((tmp_path / "repo" / "REPO_INFO.yaml").read_text())
+        assert info["kind"] == "built"
+        assert info["fdmd_version"] == fdmd_version
+        # the directory above the file is what names the debate -- every source is
+        # called `source.md`, so a bare basename would say nothing
+        assert info["source"]["path"].endswith("source.md")
+        assert os.path.dirname(info["source"]["path"])
+
+        expected = hashlib.sha256(open(source_path, "rb").read()).hexdigest()
+        assert info["source"]["sha256"] == expected
+
+    def test_built_repo_records_no_instance_state(self, tmp_path):
+        """
+        A built repo goes into a checked-in patch collection and is rolled out unchanged
+        on every deploy. Anything instance-dependent in it would give the debate a fresh
+        chain of fingerprints whenever the platform is updated -- which is the damage this
+        file exists to document, not to cause.
+        """
+        settings = repo_handling.PlatformSettings()
+        settings.platform_version = "9.9.9"
+        content = repo_handling.build_repo_info(
+            source_path=write_source(tmp_path), settings=settings
+        )
+        assert "9.9.9" not in content
+        assert "platform_version" not in content
+
+    def test_opened_repo_records_the_platform(self, tmp_path):
+        """The other half: a repo the platform opens for a live debate is written once and
+        never rebuilt, so naming the platform version there costs nothing and says which
+        software created the history."""
+        settings = repo_handling.PlatformSettings()
+        settings.platform_version = "9.9.9"
+        info = yaml.safe_load(repo_handling.build_repo_info(settings=settings))
+        assert info["kind"] == "opened"
+        assert info["platform_version"] == "9.9.9"
+        assert "source" not in info
+
+    def test_contributions_record_the_splitter_version(self, tmp_path):
+        build_debate_repo(
+            write_source(tmp_path),
+            patches_into=str(tmp_path / "patches"),
+            repo_into=str(tmp_path / "repo"),
+        )
+        front_matter, body = split_front_matter((tmp_path / "repo" / "a" / "a.md").read_text())
+        assert front_matter["splitter_version"] == SPLITTER_SYNTAX_VERSION
+        # the body must be untouched by the header -- the keys are what answers point at
+        assert body.startswith("# ::a1 Demo")
+        # a fixture's chronology lives in its commit dates; a second copy in the file
+        # could only ever disagree with them
+        assert "created" not in front_matter
+
+    def test_a_file_without_a_version_counts_as_version_one(self, tmp_path):
+        """Everything written before the field existed came from ruleset 1, so the default
+        is a statement about history rather than a fallback for a missing value."""
+        front_matter, _ = split_front_matter("# ::a1 no header here\n")
+        assert front_matter == {}
+        assert DEFAULT_SPLITTER_SYNTAX_VERSION == 1
+
+    def test_every_built_fixture_matches_its_source(self):
+        """
+        The recorded hash is only worth something if it is kept current: editing a
+        `source.md` without rebuilding the repo would leave the collection naming a source
+        it no longer came from, and nothing in the repo would show it. So the check is
+        mechanical rather than a rule in a document.
+
+        Only the fixtures built by `build_debate_repo` are covered -- d31/d32/d33 have
+        their own build scripts and no REPO_INFO yet, see dev_notes.md.
+        """
+        prep_dir = pjoin(os.path.dirname(fixtures.__file__), "repo-preparation")
+        sources = sorted(glob.glob(pjoin(prep_dir, "*__plain", "source.md")))
+        assert sources, f"no fixture sources found below {prep_dir}"
+
+        checked = 0
+        for source_path in sources:
+            meta, _ = read_source(source_path)
+            patch = pjoin(fixtures.TEST_REPO_HOST_DIR, meta["debate_key"],
+                          "patches_01", "0001-first-commit.patch")
+            if not os.path.exists(patch):
+                continue
+
+            info_src = _repo_info_from_patch(open(patch).read())
+            if info_src is None:
+                continue
+
+            info = yaml.safe_load(info_src)
+            expected = hashlib.sha256(open(source_path, "rb").read()).hexdigest()
+            assert info["source"]["sha256"] == expected, (
+                f"{meta['debate_key']}: the patch collection records a different source "
+                f"than {os.path.relpath(source_path, prep_dir)} currently is -- rebuild it "
+                f"with `fdmd build-debate-repo ... --into-fixtures`"
+            )
+            checked += 1
+
+        assert checked, "no built fixture carried a REPO_INFO.yaml -- did the build change?"
+
+
+def _repo_info_from_patch(patch_text: str) -> str | None:
+    """The content of REPO_INFO.yaml as the given patch creates it, or None."""
+    lines = patch_text.splitlines()
+    try:
+        start = lines.index(f"+++ b/{repo_handling.REPO_INFO_FILENAME}")
+    except ValueError:
+        return None
+
+    out = []
+    for line in lines[start + 1:]:
+        if line.startswith("+"):
+            out.append(line[1:])
+        elif line.startswith("@@"):
+            continue
+        elif out:
+            break
+    return "\n".join(out)

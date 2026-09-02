@@ -1,19 +1,22 @@
-From 04ffb42835c31251dba8285ec6f990a01970fad1 Mon Sep 17 00:00:00 2001
+From 6763712bdb88999b82108e12fe54c053e01dcf73 Mon Sep 17 00:00:00 2001
 From: Fragesteller <d01-erklaerende-beispieldebatte_c@fair-debate-users.org>
 Date: Tue, 25 Aug 2026 08:05:00 +0200
 Subject: [PATCH 04/19] add contribution c/a25c.md
 
 ---
- c/a25c.md | 1 +
- 1 file changed, 1 insertion(+)
+ c/a25c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
  create mode 100644 c/a25c.md
 
 diff --git a/c/a25c.md b/c/a25c.md
 new file mode 100644
-index 0000000..eb83261
+index 0000000..5281d5e
 --- /dev/null
 +++ b/c/a25c.md
-@@ -0,0 +1 @@
+@@ -0,0 +1,4 @@
++---
++splitter_version: 1
++---
 +::a25c1 Und das bin ich. ::a25c2 Ich stelle (mitunter kritische) Fragen und suche nach Schwachstellen. ::a25c3 Übrigens geht hier etwas nicht auf. ::a25c4 Der Eröffnungsbeitrag weiß bereits, dass es eine Partei `b` und eine Partei `c` geben wird, und spricht von uns, bevor eine von uns beiden ein Wort geschrieben hatte. ::a25c5 Diese Debatte wurde also nicht geführt, sie wurde verfasst.
 \ No newline at end of file
 -- 
