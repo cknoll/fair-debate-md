@@ -1,4 +1,4 @@
-From e815c2e9a576b0e858e9651c97745e141f044ed8 Mon Sep 17 00:00:00 2001
+From 6f0c74c60173b64470e74cf3fe158b619a97fd61 Mon Sep 17 00:00:00 2001
 From: Redaktion <d33-wachstum-klimaschutz_a@fair-debate-users.org>
 Date: Sun, 16 Aug 2026 13:00:00 +0200
 Subject: [PATCH 02/19] add contribution a/a.md
@@ -10,12 +10,12 @@ Subject: [PATCH 02/19] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..5dbfe7f
+index 0000000..beda382
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,20 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +# ::a1 Ist Wirtschaftswachstum mit Klimaschutz vereinbar?
 +

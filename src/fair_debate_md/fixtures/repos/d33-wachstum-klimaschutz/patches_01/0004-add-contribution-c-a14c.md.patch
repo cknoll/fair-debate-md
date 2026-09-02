@@ -1,4 +1,4 @@
-From e672ab2f431c194da599552740d7af997875e936 Mon Sep 17 00:00:00 2001
+From 863383b65aaccfab8780b9c1409c3b726652e62f Mon Sep 17 00:00:00 2001
 From: Wirtschaftsjournalistin
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
 Date: Mon, 17 Aug 2026 08:10:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 04/19] add contribution c/a14c.md
 
 diff --git a/c/a14c.md b/c/a14c.md
 new file mode 100644
-index 0000000..3ea5219
+index 0000000..c184b78
 --- /dev/null
 +++ b/c/a14c.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a14c1 Aus meiner Sicht ist beides nicht vereinbar. ::a14c2 Wenn man sich klarmacht, was Klimaschutz konkret bedeutet, dann heißt es, dass kein CO2 mehr emittiert werden darf, und das wiederum heißt, dass das gesamte Energiesystem auf Wind und Sonne umgestellt werden muss. ::a14c3 Nicht nur der Strom, den wir heute schon nutzen, sondern auch der Verkehr, die Heizungen und die gesamte Industrie.
 +

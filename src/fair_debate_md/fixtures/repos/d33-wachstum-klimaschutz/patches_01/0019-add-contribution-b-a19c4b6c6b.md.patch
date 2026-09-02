@@ -1,4 +1,4 @@
-From f2f2254350f1534da1d15415bee04afb239a1ae2 Mon Sep 17 00:00:00 2001
+From 04be81c7c13fccb03a7d6383e644b8d4d7368f63 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=C3=96konom?=
  <d33-wachstum-klimaschutz_b@fair-debate-users.org>
 Date: Thu, 20 Aug 2026 20:25:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 19/19] add contribution b/a19c4b6c6b.md
 
 diff --git a/b/a19c4b6c6b.md b/b/a19c4b6c6b.md
 new file mode 100644
-index 0000000..17b5ff6
+index 0000000..60e76ca
 --- /dev/null
 +++ b/b/a19c4b6c6b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a19c4b6c6b1 Mit dieser Rede vom Kapitalismus, der ohnehin keine Zukunft habe, habe ich Schwierigkeiten. ::a19c4b6c6b2 Dieselbe Wirtschaftsordnung hat einen beispiellosen medizinischen und technischen Fortschritt hervorgebracht, und das muss man mitdenken, bevor man sie so abstrakt verabschiedet. ::a19c4b6c6b3 Sonst ist man sehr schnell bei der großen Kapitalismusschelte der späten sechziger Jahre, und die hat zu nichts geführt.
 +

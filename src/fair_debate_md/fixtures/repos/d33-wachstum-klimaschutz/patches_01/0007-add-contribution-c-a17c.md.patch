@@ -1,4 +1,4 @@
-From 649c8c75ad3c95b124c9f08ab960c5951ad00aff Mon Sep 17 00:00:00 2001
+From 96a910902f09290b6fa8d2a78c8027616a8b7219 Mon Sep 17 00:00:00 2001
 From: Wirtschaftsjournalistin
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
 Date: Mon, 17 Aug 2026 19:55:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 07/19] add contribution c/a17c.md
 
 diff --git a/c/a17c.md b/c/a17c.md
 new file mode 100644
-index 0000000..dd32e0a
+index 0000000..daf813f
 --- /dev/null
 +++ b/c/a17c.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a17c1 Ich habe diese Studien gelesen, und sie funktionieren fast alle nach demselben Muster. ::a17c2 Im Vorwort steht, dass grünes Wachstum möglich sei. ::a17c3 Im Hauptteil folgt eine lange Reihe technischer Lösungen, von Wasserstoff über Windräder bis zur Kreislaufführung von Material. ::a17c4 Und ganz hinten findet sich dann ein kleiner Satz oder auch nur eine Anmerkung, in der eingeräumt wird, dass die ökonomischen Folgen der technischen Vorschläge nicht modelliert wurden. ::a17c5 Das Wachstum wird also behauptet, aber nicht durchgerechnet.
 +

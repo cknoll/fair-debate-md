@@ -1,4 +1,4 @@
-From 62ffa724e48015ea5e80ce3d25d23ad65aff6b86 Mon Sep 17 00:00:00 2001
+From 558a7a73400fd85469001b74520ed636b61e7ff6 Mon Sep 17 00:00:00 2001
 From: Wirtschaftsjournalistin
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
 Date: Wed, 19 Aug 2026 13:00:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 13/19] add contribution c/a14c5b8c.md
 
 diff --git a/c/a14c5b8c.md b/c/a14c5b8c.md
 new file mode 100644
-index 0000000..ec37ac3
+index 0000000..22f3872
 --- /dev/null
 +++ b/c/a14c5b8c.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a14c5b8c1 Bei der Wärmepumpe stimme ich ausdrücklich zu, und man sollte das auch deutlich sagen. ::a14c5b8c2 Die Wärmepumpe ist diejenige Umwelttechnologie, die tatsächlich effizienter ist als ihre fossile Variante, also als die Gas- oder die Ölheizung. ::a14c5b8c3 Dass ausgerechnet diese Technologie politisch verhetzt worden ist, war fahrlässig und hat den Umbau um Jahre zurückgeworfen.
 +

@@ -1,4 +1,4 @@
-From 7ec6b2213c56c0e06f1cb37fa885fb2c65a1be3b Mon Sep 17 00:00:00 2001
+From 8e2f4f0f5536531586682726e0abe178ba6de238 Mon Sep 17 00:00:00 2001
 From: Wirtschaftsjournalistin
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
 Date: Thu, 20 Aug 2026 16:25:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 18/19] add contribution c/a19c4b6c.md
 
 diff --git a/c/a19c4b6c.md b/c/a19c4b6c.md
 new file mode 100644
-index 0000000..ffeef58
+index 0000000..fa064cb
 --- /dev/null
 +++ b/c/a19c4b6c.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a19c4b6c1 Ich mache hier keine Wunschliste, sondern eine Analyse, wie es kommen wird und was funktionieren würde. ::a19c4b6c2 Und diese Analyse führt zu dem Schluss, dass die Natur uns das Schrumpfen aufzwingen wird, wenn wir nicht rechtzeitig und geordnet darauf umstellen.
 +

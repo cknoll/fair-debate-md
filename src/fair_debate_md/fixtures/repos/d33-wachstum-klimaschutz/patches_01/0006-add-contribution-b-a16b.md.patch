@@ -1,4 +1,4 @@
-From 6202700763d1c1cf85bbb46b7cf1b25e20ef7c02 Mon Sep 17 00:00:00 2001
+From afd2d4337d286aa4a0494dd8a0471d5a29a79aee Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=C3=96konom?=
  <d33-wachstum-klimaschutz_b@fair-debate-users.org>
 Date: Mon, 17 Aug 2026 15:55:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 06/19] add contribution b/a16b.md
 
 diff --git a/b/a16b.md b/b/a16b.md
 new file mode 100644
-index 0000000..e059a1b
+index 0000000..93eb304
 --- /dev/null
 +++ b/b/a16b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a16b1 Nein, das halte ich nicht für den richtigen Weg. ::a16b2 Wir haben inzwischen hinreichend erlebt, dass Ziele definiert und anschließend nicht erreicht wurden, und auch das Bundesverfassungsgericht hat sich zu dieser Frage bereits geäußert. ::a16b3 Wir brauchen keine neuen Verfassungsregeln, wir brauchen eine kluge Umsetzung der Ziele, die wir längst haben.
 +

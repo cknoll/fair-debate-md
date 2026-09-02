@@ -1,4 +1,4 @@
-From a2a5587981c8c06829bf7c9082ecb4ad798e6088 Mon Sep 17 00:00:00 2001
+From 18044d81fb3eed1ca27cd5bd2e4d130048df3e19 Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
 Date: Sun, 16 Aug 2026 08:00:00 +0200
 Subject: [PATCH 01/19] first commit
@@ -138,7 +138,7 @@ index 0000000..8f86e95
 +  this history are the ones readers keep. Yours is one of them.
 diff --git a/REPO_INFO.yaml b/REPO_INFO.yaml
 new file mode 100644
-index 0000000..d200438
+index 0000000..b6c4cb0
 --- /dev/null
 +++ b/REPO_INFO.yaml
 @@ -0,0 +1,9 @@
@@ -146,11 +146,11 @@ index 0000000..d200438
 +# `kind: built` means the history is regenerated whenever the source changes;
 +# `kind: opened` means the debate grew into this repo by appending.
 +kind: built
-+date: '2026-09-02T22:23:54+00:00'
++date: '2026-09-02T22:48:54+00:00'
 +fdmd_version: 0.9.0
 +source:
 +  path: d33-wachstum-klimaschutz__plain/source.md
-+  sha256: 65bea8526e2d67ee6c7fc79bda59b599837a82af675625eb805e45a00f90d279
++  sha256: 5af34cb18f586eaf480b3987501fe25d61f9bbe2623281d4fa3a6636a99ca145
 -- 
 2.39.5
 

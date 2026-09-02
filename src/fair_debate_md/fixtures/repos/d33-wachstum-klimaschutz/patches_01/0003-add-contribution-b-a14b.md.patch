@@ -1,4 +1,4 @@
-From 89081e13253e34318625ff4b6d5ac96c3e6e1512 Mon Sep 17 00:00:00 2001
+From dc947fbe2448a55f0b27e1998a214e3367b8d6c0 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=C3=96konom?=
  <d33-wachstum-klimaschutz_b@fair-debate-users.org>
 Date: Sun, 16 Aug 2026 17:45:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 03/19] add contribution b/a14b.md
 
 diff --git a/b/a14b.md b/b/a14b.md
 new file mode 100644
-index 0000000..4e57132
+index 0000000..0a57111
 --- /dev/null
 +++ b/b/a14b.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a14b1 Was wir hier lösen müssen, ist im Kern ein ökonomisches Problem, denn es geht um eine Knappheit. ::a14b2 Wir können das, was wir bisher gemacht haben, nicht mehr machen, und wir müssen mit CO2 und den übrigen klimaschädlichen Gasen so verfahren, dass wir zur Mitte des Jahrhunderts auf eine Netto-Null kommen. ::a14b3 Umstritten ist deshalb nicht das Ob, sondern das Wie, und die Antwort darauf besteht vor allem aus Strukturen und aus Preissignalen.
 +

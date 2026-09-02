@@ -1,4 +1,4 @@
-From 7652e0a980b35c4e3001c059ed491f8148becd65 Mon Sep 17 00:00:00 2001
+From 2597978417acc8ce3b77e78be7c66d34f9d093b4 Mon Sep 17 00:00:00 2001
 From: Wirtschaftsjournalistin
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
 Date: Tue, 18 Aug 2026 15:50:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 10/19] add contribution c/a14b7c.md
 
 diff --git a/c/a14b7c.md b/c/a14b7c.md
 new file mode 100644
-index 0000000..945d7a4
+index 0000000..56fda00
 --- /dev/null
 +++ b/c/a14b7c.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a14b7c1 Ich bin weder gegen Technik noch gegen Innovationen, aber an dieser Stelle gibt es ein Zeitproblem, das sich nicht wegdiskutieren lässt. ::a14b7c2 Bis 2045 sind es weniger als zwanzig Jahre. ::a14b7c3 Aus der Technikgeschichte weiß man, dass Innovationszyklen, also der Weg von einer Erfindung bis zu einer breit wirksamen Effizienzsteigerung, länger dauern als zwanzig Jahre.
 +

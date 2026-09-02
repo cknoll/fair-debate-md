@@ -1,4 +1,4 @@
-From ff065c50766f5fe3af77b2a7ae99ef3c4e9af033 Mon Sep 17 00:00:00 2001
+From 456f7d4b13c2134833e2e9e6dae817549d2ef6d3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=C3=96konom?=
  <d33-wachstum-klimaschutz_b@fair-debate-users.org>
 Date: Wed, 19 Aug 2026 08:55:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 12/19] add contribution b/a14c5b.md
 
 diff --git a/b/a14c5b.md b/b/a14c5b.md
 new file mode 100644
-index 0000000..1b2c79e
+index 0000000..c3e0672
 --- /dev/null
 +++ b/b/a14c5b.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a14c5b1 Ich halte den Ausbau der Primärenergieerzeugung für darstellbar, denn die Potenziale sind bei weitem nicht ausgeschöpft. ::a14c5b2 Der entscheidende Hebel liegt allerdings gar nicht bei den Windrädern und Solarpaneelen selbst, sondern bei den Infrastrukturvoraussetzungen, also beim Netz- und Speicherausbau und vor allem bei der netzdienlichen Platzierung der Speicher.
 +

@@ -116,10 +116,10 @@ Dass es teuer wird, bestreite ich gar nicht, und der Punkt ist richtig beschrieb
 
 Dazu gehört erstens, dass die Infrastruktursysteme umgebaut werden müssen, und das ist Sache des Staates. Er finanziert damit nicht nur die Gegenwart, sondern auch künftige Generationen, und deshalb darf er das auch über Kredite tun. Zweitens brauchen Grundstoffindustrien wie Chemie, Stahl, Papier und Glas Sprunginvestitionen, die sich nicht aus dem laufenden Geschäft finanzieren lassen, es braucht also zusätzlich eine industriepolitische Strategie. Drittens muss der CO2-Preis einen verlässlichen Pfad haben, denn sonst erschöpfen sich finanziell genau diejenigen Vorreiter, die bei der Klimaneutralität vorangehen.
 
-Und wir sollten den Instrumentenkasten nicht aus ideologischen Gründen verkleinern. Zur Klimaneutralität gehört nicht nur die Vermeidung von Emissionen, sondern auch ihre Entnahme, also die Abscheidung und Speicherung von CO2. Bei Prozessemissionen wie im Zement gibt es dazu gar keine Alternative, und genau deshalb heißt das Ziel netto null und nicht null.
+Und wir sollten den Instrumentenkasten nicht aus ideologischen Gründen verkleinern. Zur Klimaneutralität gehört nicht nur die Vermeidung von Emissionen, sondern auch ihre Entnahme, also die Abscheidung und Speicherung von CO2\@. Bei Prozessemissionen wie im Zement gibt es dazu gar keine Alternative, und genau deshalb heißt das Ziel netto null und nicht null.
 
 <!-- !!== label=c-cdr party=c
-     answers="Zur Klimaneutralität gehört nicht nur die Vermeidung von Emissionen, sondern auch ihre Entnahme, also die Abscheidung und Speicherung von CO2." ==== -->
+     answers="Zur Klimaneutralität gehört nicht nur die Vermeidung von Emissionen, sondern auch ihre Entnahme, also die Abscheidung und Speicherung von CO2\@." ==== -->
 
 Dass man CO2 wieder aus der Luft holen kann, ist unbestritten. Nur ist das ein typischer Fall, in dem technische Machbarkeit mit ökonomischer Effizienz verwechselt wird. Es ist sehr teuer, CO2 zurückzugewinnen, und genau deshalb macht es im Augenblick praktisch niemand.
 

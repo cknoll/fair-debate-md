@@ -88,20 +88,17 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
   (`source.md`). Everything else matching `digit + dot` is markdown ordered-list syntax,
   which becomes `<li>` and never reaches the splitter, or sits inside `**bold**`, which
   is not segmented either.
-  d35 got the `\@` marker and was rebuilt: the segment keys come out byte-identical, and
-  the sentence keeps the boundary it should have. Every other fixture stays as it is and
-  keeps saying `splitter_version: 1`, which is true and which keeps the dispatch honest --
-  the fixture set now contains both rulesets.
-
-- [] **d33 still needs the `\@` marker.** The second of the two measured spots. It was
-  left out on purpose: a parallel line of work is converting d31/d32/d33 to single-file
-  sources, so editing `b/b-instrumente.md` now would only be overwritten.
-  Nothing is broken in the meantime -- d33 records `splitter_version: 1` and is rendered
-  under version 1. The damage happens the moment somebody rebuilds it under version 2
-  without the marker: `a14c5b8c6b10`, the last segment of that contribution and currently
-  unanswered, silently merges into `a14c5b8c6b9` and the sentence loses a boundary it
-  should have. So whoever lands the single-file d33 source writes
-  "... Speicherung von CO2\@. Bei Prozessemissionen ..." into it.
+  Both got the `\@` marker and were rebuilt: the segment keys come out byte-identical, and
+  the two sentences keep the boundary they should have. d33 waited for the single-file
+  sources to land first, so that the marker went into the source that survives. Every
+  other fixture stays as it is and keeps saying `splitter_version: 1`, which is true and
+  which keeps the dispatch honest -- the fixture set now contains both rulesets.
+  Worth knowing before putting the marker anywhere else in a single-file source: an
+  `answers=` anchor is matched as a substring of the *keyed segment text*, so a quote
+  ending on the marked sentence has to carry the marker too. In d33 the same sentence
+  appears twice for that reason. Getting it wrong stops the build with "matches no
+  segment" rather than moving the answer somewhere else, which is why this is a note and
+  not a trap.
 
 
 ## repo provenance (added 2026-09-02)

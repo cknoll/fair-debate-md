@@ -1,4 +1,4 @@
-From df1f45a0e392f36be7de5603cf7d2036eb6b792c Mon Sep 17 00:00:00 2001
+From b8ff3aaeb2772e9501979d33a0b39189b074a005 Mon Sep 17 00:00:00 2001
 From: Wirtschaftsjournalistin
  <d33-wachstum-klimaschutz_c@fair-debate-users.org>
 Date: Mon, 17 Aug 2026 11:50:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 05/19] add contribution c/a15c.md
 
 diff --git a/c/a15c.md b/c/a15c.md
 new file mode 100644
-index 0000000..5988c30
+index 0000000..fe6618e
 --- /dev/null
 +++ b/c/a15c.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a15c1 Gegen eine solche Ergänzung des Grundgesetzes habe ich nichts, das kann man dort gerne hineinschreiben. ::a15c2 Nur muss dabei zweierlei klar sein. ::a15c3 Erstens müssen wir uns tatsächlich an den Klimawandel anpassen, das ist unstrittig. ::a15c4 Zweitens wird die Anpassung nicht gelingen, solange wir den Klimawandel nicht stoppen, denn es handelt sich um einen dynamischen Prozess, in dem sich die Lage permanent verschlimmert. ::a15c5 Das Zentrale bleibt deshalb, bei den Emissionen auf netto null zu kommen.
 \ No newline at end of file
