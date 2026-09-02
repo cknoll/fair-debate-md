@@ -16,6 +16,7 @@ import os
 import re
 
 import pytest
+from bs4 import BeautifulSoup
 
 from fair_debate_md import core, references
 from fair_debate_md.core import MDProcessor, get_base_name, split_front_matter
@@ -157,6 +158,24 @@ class TestForceSplitMarker:
         words_plain = references.get_segment_words(plain.md_with_real_keys, "a1")
         assert len(words_marked) == len(words_plain)
         assert words_marked[-1] == "2026\\@."
+
+    def test_a_word_carrying_it_still_aligns_with_its_rendered_form(self):
+        """The other half of the word story, and the part that is not obvious: word
+        references are highlighted by aligning the *raw* words against the *rendered*
+        text, and the marker exists in only one of the two. `get_rendered_word_offsets`
+        skips raw characters the renderer drops (it has to, for `**bold**` and
+        `[text](url)`), so `2026\\@.` lands on `2026.` -- but that is worth pinning down
+        rather than inferring."""
+        mdp = MDProcessor("Die Umsetzung läuft bis Ende 2026\\@. Jede Verwässerung folgt.")
+        mdp.convert()
+
+        words = references.get_segment_words(mdp.md_with_real_keys, "a1")
+        rendered = BeautifulSoup(mdp.segmented_html, "html.parser").find(id="a1").get_text()
+        offsets = references.get_rendered_word_offsets(rendered, words)
+
+        assert words[-1] == "2026\\@."
+        start, end = offsets[-2], offsets[-1]
+        assert rendered[start:end] == "2026."
 
 
 class TestVersionDispatch:
