@@ -95,8 +95,10 @@ with its own `dNN` key, not a variant of another one:
 - `d33-wachstum-klimaschutz__plain/source.md` -- german, and the only fixture with real
   argumentative content: a heavily shortened reconstruction of a radio debate on whether
   economic growth and climate protection are compatible (the root contribution names the
-  source). Three parties, 18 contributions, a spine down to level 5, and one contribution
-  that agrees with what it answers instead of objecting, which no other fixture does.
+  source). Three parties -- `a` is the editorial frame (Redaktion), `b` the economist and
+  `c` the journalist, the same roles the root contribution announces -- 18 contributions,
+  a spine down to level 5, and one contribution that agrees with what it answers instead
+  of objecting, which no other fixture does.
 
 Until 2026-08 the first of these was built by `fdmd process-content-dir` from one file per
 contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):

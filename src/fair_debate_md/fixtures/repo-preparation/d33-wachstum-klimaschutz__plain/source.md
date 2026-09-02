@@ -2,9 +2,9 @@
 debate_key: d33-wachstum-klimaschutz
 language: de
 parties:
-  a: fair debate user d33-wachstum-klimaschutz a
-  b: fair debate user d33-wachstum-klimaschutz b
-  c: fair debate user d33-wachstum-klimaschutz c
+  a: Redaktion
+  b: Ökonom
+  c: Wirtschaftsjournalistin
 first_commit: 2026-08-16T08:00:00+02:00
 hours_between_contributions: [3, 5]
 active_hours: [8, 22]
