@@ -39,6 +39,25 @@ candidates, if it matches none or several. Rewording a contribution therefore do
 the anchors of its answers. The order of the contributions in the file is the chronology of
 the debate. See the module docstring for the full format.
 
+A contribution can also answer a *range*, and a range is quoted as well -- an index would
+move when a sentence is inserted, which is exactly what this format exists to avoid. A
+marker may span several lines, which is what keeps two long quotes readable:
+
+```
+<!-- !!== label=b-block party=b
+     answers_from="The machine costs us around forty euros"
+     answers_to="the coffee it produces is" ==== -->            ->  a3-6b
+
+<!-- !!== label=f-words party=f
+     answers="A kettle and a press"
+     answers_words="cost us maybe sixty euros once," ==== -->   ->  a7_7-12f
+```
+
+`answers_words` quotes whole words as the *markdown source* spells them -- punctuation and
+markup stay attached to the word, so "once," is one word and "once" does not match it. The
+counting rule behind that is frozen (`docs/flexible_references_concept.md`); a quote that
+matches no run of words aborts the build and prints the segment's words with their numbers.
+
 Debates built this way, one directory per debate -- a translation is a debate of its own,
 with its own `dNN` key, not a variant of another one:
 
