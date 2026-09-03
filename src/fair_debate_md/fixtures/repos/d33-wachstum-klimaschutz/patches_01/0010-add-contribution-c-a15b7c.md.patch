@@ -1,0 +1,26 @@
+From a13eebfebe4461f28bb20ec2f0083d5dca49670e Mon Sep 17 00:00:00 2001
+From: Geographie-Studentin <d33-wachstum-klimaschutz_c@fair-debate-users.org>
+Date: Tue, 18 Aug 2026 15:50:00 +0200
+Subject: [PATCH 10/19] add contribution c/a15b7c.md
+
+---
+ c/a15b7c.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 c/a15b7c.md
+
+diff --git a/c/a15b7c.md b/c/a15b7c.md
+new file mode 100644
+index 0000000..178d5aa
+--- /dev/null
++++ b/c/a15b7c.md
+@@ -0,0 +1,6 @@
++---
++splitter_version: 2
++---
++::a15b7c1 Ich bin weder gegen Technik noch gegen Innovationen, aber an dieser Stelle gibt es ein Zeitproblem, das sich nicht wegdiskutieren lässt. ::a15b7c2 Bis 2045 sind es weniger als zwanzig Jahre. ::a15b7c3 Aus der Technikgeschichte weiß man, dass Innovationszyklen, also der Weg von einer Erfindung bis zu einer breit wirksamen Effizienzsteigerung, länger dauern als zwanzig Jahre.
++
++::a15b7c4 Wenn wir Klimaschutz machen wollen, müssen wir ihn deshalb mit der Technik machen, die wir bereits haben. ::a15b7c5 Und mit dieser Technik lässt sich nicht genug Energie ökologisch erzeugen, um das bestehende System und zusätzliches Wachstum zu befeuern.
+\ No newline at end of file
+-- 
+2.39.5
+

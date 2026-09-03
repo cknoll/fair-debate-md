@@ -1,0 +1,28 @@
+From 2bc26bd1712db0c17a7d8d2def9614bf412ac252 Mon Sep 17 00:00:00 2001
+From: WiWi-Student <d33-wachstum-klimaschutz_b@fair-debate-users.org>
+Date: Wed, 19 Aug 2026 17:00:00 +0200
+Subject: [PATCH 14/19] add contribution b/a15c5b8c6b.md
+
+---
+ b/a15c5b8c6b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 b/a15c5b8c6b.md
+
+diff --git a/b/a15c5b8c6b.md b/b/a15c5b8c6b.md
+new file mode 100644
+index 0000000..922bfe7
+--- /dev/null
++++ b/b/a15c5b8c6b.md
+@@ -0,0 +1,8 @@
++---
++splitter_version: 2
++---
++::a15c5b8c6b1 Dass es teuer wird, bestreite ich gar nicht, und der Punkt ist richtig beschrieben. ::a15c5b8c6b2 Angestoßen wird dieser Umbau ja nicht von einer neuen Basistechnologie, sondern von dem Rahmen, den wir ihm setzen, vor allem über den CO2-Preis im europäischen Zertifikatehandel. ::a15c5b8c6b3 Was bei dieser Erzählung zu lange nicht mitgeliefert wurde, ist die Einsicht, dass ein Preissignal allein nicht genügt, sondern eine begleitende Politik braucht.
++
++::a15c5b8c6b4 Dazu gehört erstens, dass die Infrastruktursysteme umgebaut werden müssen, und das ist Sache des Staates. ::a15c5b8c6b5 Er finanziert damit nicht nur die Gegenwart, sondern auch künftige Generationen, und deshalb darf er das auch über Kredite tun. ::a15c5b8c6b6 Zweitens brauchen Grundstoffindustrien wie Chemie, Stahl, Papier und Glas Sprunginvestitionen, die sich nicht aus dem laufenden Geschäft finanzieren lassen, es braucht also zusätzlich eine industriepolitische Strategie. ::a15c5b8c6b7 Drittens muss der CO2-Preis einen verlässlichen Pfad haben, denn sonst erschöpfen sich finanziell genau diejenigen Vorreiter, die bei der Klimaneutralität vorangehen.
++
++::a15c5b8c6b8 Und wir sollten den Instrumentenkasten nicht aus ideologischen Gründen verkleinern. ::a15c5b8c6b9 Zur Klimaneutralität gehört nicht nur die Vermeidung von Emissionen, sondern auch ihre Entnahme, also die Abscheidung und Speicherung von CO2\@. ::a15c5b8c6b10 Bei Prozessemissionen wie im Zement gibt es dazu gar keine Alternative, und genau deshalb heißt das Ziel netto null und nicht null.
+\ No newline at end of file
+-- 
+2.39.5
+

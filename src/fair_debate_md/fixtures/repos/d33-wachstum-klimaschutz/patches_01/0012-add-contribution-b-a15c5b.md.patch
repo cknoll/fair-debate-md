@@ -1,0 +1,28 @@
+From 1ac0a6d402c48fb0a3d65a757c3a4cdeffd27d42 Mon Sep 17 00:00:00 2001
+From: WiWi-Student <d33-wachstum-klimaschutz_b@fair-debate-users.org>
+Date: Wed, 19 Aug 2026 08:00:00 +0200
+Subject: [PATCH 12/19] add contribution b/a15c5b.md
+
+---
+ b/a15c5b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 b/a15c5b.md
+
+diff --git a/b/a15c5b.md b/b/a15c5b.md
+new file mode 100644
+index 0000000..aa8460d
+--- /dev/null
++++ b/b/a15c5b.md
+@@ -0,0 +1,8 @@
++---
++splitter_version: 2
++---
++::a15c5b1 Die Primärenergieerzeugung weiter auszubauen halte ich für machbar, denn die Potenziale sind bei weitem nicht ausgeschöpft. ::a15c5b2 Der entscheidende Hebel liegt allerdings gar nicht bei den Windrädern und Solarpaneelen selbst, sondern bei den Infrastrukturvoraussetzungen, also beim Netz- und Speicherausbau und vor allem bei der netzdienlichen Platzierung der Speicher.
++
++::a15c5b3 Genau das ist über mehr als zehn Jahre liegen geblieben. ::a15c5b4 Der Ausbau kommt dadurch erheblich später und wird unterm Strich deutlich teurer, was sich an den Redispatch-Kosten im System ablesen lässt. ::a15c5b5 Ausgerechnet dort also, wo der Staat die zentrale Verantwortung trägt, nämlich beim Energiesystem, hat er seine selbst gesteckten Ziele verfehlt. ::a15c5b6 Die zehn Prozent sind deshalb kein Beleg für eine technische Grenze, sondern für ein Umsetzungsversagen.
++
++::a15c5b7 Auf der Nachfrageseite gilt dasselbe. ::a15c5b8 Bei der Elektrifizierung der Wärmeversorgung ist die Wärmepumpe längst die überlegene Technik, und wir hätten mit einfachen Regeln beim Neubau schon vor fünfzehn Jahren eine ganz andere Ausgangslage schaffen können.
+\ No newline at end of file
+-- 
+2.39.5
+
