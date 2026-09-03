@@ -1,0 +1,26 @@
+From 2d88ff662427f85da3b7de69a4d750a407abb39e Mon Sep 17 00:00:00 2001
+From: WiWi-Student <d33-wachstum-klimaschutz_b@fair-debate-users.org>
+Date: Mon, 17 Aug 2026 15:55:00 +0200
+Subject: [PATCH 06/19] add contribution b/a18b.md
+
+---
+ b/a18b.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 b/a18b.md
+
+diff --git a/b/a18b.md b/b/a18b.md
+new file mode 100644
+index 0000000..eabbc86
+--- /dev/null
++++ b/b/a18b.md
+@@ -0,0 +1,6 @@
++---
++splitter_version: 2
++---
++::a18b1 Nein, das halte ich nicht für den richtigen Weg. ::a18b2 Wir haben inzwischen hinreichend erlebt, dass Ziele definiert und anschließend nicht erreicht wurden, und auch das Bundesverfassungsgericht hat sich zu dieser Frage bereits geäußert. ::a18b3 Was fehlt, sind nicht weitere Regeln im Grundgesetz, sondern eine kluge Umsetzung dessen, was längst beschlossen ist.
++
++::a18b4 Was tatsächlich fehlt, ist Verlässlichkeit gegenüber denjenigen, die investieren sollen, also gegenüber den privaten Haushalten und den Unternehmen. ::a18b5 Das jüngste Heizungsgesetz ist dafür ein Lehrstück, denn es hat die Elektrifizierung der Wärmeversorgung nicht näher gebracht, sondern in weitere Ferne gerückt. ::a18b6 Man darf im Übrigen auch fragen, worin eigentlich der Freiheitseingriff liegen soll, wenn man beim Neubau den Einbau klimaschädlicher Heizungsanlagen von vornherein ausschließt.
+\ No newline at end of file
+-- 
+2.39.5
+

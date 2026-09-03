@@ -1,0 +1,28 @@
+From 89f7956dc1f32dcc38a3fc997b4a50af9295a599 Mon Sep 17 00:00:00 2001
+From: WiWi-Student <d33-wachstum-klimaschutz_b@fair-debate-users.org>
+Date: Sun, 16 Aug 2026 17:45:00 +0200
+Subject: [PATCH 03/19] add contribution b/a16b.md
+
+---
+ b/a16b.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 b/a16b.md
+
+diff --git a/b/a16b.md b/b/a16b.md
+new file mode 100644
+index 0000000..9ffc925
+--- /dev/null
++++ b/b/a16b.md
+@@ -0,0 +1,8 @@
++---
++splitter_version: 2
++---
++::a16b1 Im Kern haben wir es mit einer Knappheit zu tun, und damit ist die Aufgabe eine ökonomische. ::a16b2 Die bisherige Art zu wirtschaften steht nicht länger zur Verfügung, denn CO2 und die übrigen klimaschädlichen Gase müssen bis zur Jahrhundertmitte auf netto null gebracht werden. ::a16b3 Strittig ist deshalb nicht, ob dieser Umbau kommt, sondern auf welchem Weg, und die Antwort darauf besteht vor allem aus Strukturen und aus Preissignalen.
++
++::a16b4 Dieser Umbau hat allerdings eine Eigenschaft, die ihn von allem unterscheidet, was Volkswirtschaften sonst durchlaufen. ::a16b5 Er ist ein Strukturwandel, den der Staat steuert und dem er zugleich ein Enddatum setzt. ::a16b6 Er ist kein Strukturwandel, der aus einer neuen Basistechnologie entsteht und sich dann über veränderte Präferenzen und Investitionen von selbst Bahn bricht. ::a16b7 Wir brauchen sehr viele Innovationen, um ihn zu bewältigen, aber vorgegeben wird er dem ökonomischen Prozess vom politischen System. ::a16b8 Daraus folgt die zentrale Anforderung an die Politik, nämlich Verlässlichkeit über Legislaturperioden hinweg. ::a16b9 Klimapolitik lässt sich nicht in Vier-Jahres-Rhythmen organisieren.
++
++::a16b10 Und schließlich muss es international gelingen. ::a16b11 Gegen gegenläufige Trends in anderen Ländern kommen wir nicht an, wir können es nur umso besser machen und uns Koalitionäre in der Welt suchen, etwa über Klimaclubs.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -1,0 +1,26 @@
+From 307092c6f03a39bfdb90d8b84c899f8c1d7285bf Mon Sep 17 00:00:00 2001
+From: Geographie-Studentin <d33-wachstum-klimaschutz_c@fair-debate-users.org>
+Date: Mon, 17 Aug 2026 19:55:00 +0200
+Subject: [PATCH 07/19] add contribution c/a19c.md
+
+---
+ c/a19c.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 c/a19c.md
+
+diff --git a/c/a19c.md b/c/a19c.md
+new file mode 100644
+index 0000000..962db3d
+--- /dev/null
++++ b/c/a19c.md
+@@ -0,0 +1,6 @@
++---
++splitter_version: 2
++---
++::a19c1 Ich habe diese Studien gelesen, und sie funktionieren fast alle nach demselben Muster. ::a19c2 Im Vorwort steht, dass grünes Wachstum möglich sei. ::a19c3 Im Hauptteil folgt eine lange Reihe technischer Lösungen, von Wasserstoff über Windräder bis zur Kreislaufführung von Material. ::a19c4 Und ganz am Ende steht dann ein Nebensatz oder eine Fußnote, in der eingeräumt wird, dass die volkswirtschaftlichen Konsequenzen dieser Technikpfade nie durchgerechnet worden sind. ::a19c5 Das Wachstum wird also behauptet, aber nicht gezeigt.
++
++::a19c6 Dafür gibt es auch einen Grund. ::a19c7 Wer diese Vorschläge tatsächlich makroökonomisch modellieren würde, käme sofort darauf, dass sie auf Schrumpfen hinauslaufen. ::a19c8 Grünes Wachstum lässt sich behaupten, aber nicht belegen.
+\ No newline at end of file
+-- 
+2.39.5
+

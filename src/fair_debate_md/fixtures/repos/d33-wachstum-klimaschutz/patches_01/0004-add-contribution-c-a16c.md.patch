@@ -1,0 +1,28 @@
+From c8124648f16f8b6a61c0ea6f98ae7da45879fdd1 Mon Sep 17 00:00:00 2001
+From: Geographie-Studentin <d33-wachstum-klimaschutz_c@fair-debate-users.org>
+Date: Mon, 17 Aug 2026 08:10:00 +0200
+Subject: [PATCH 04/19] add contribution c/a16c.md
+
+---
+ c/a16c.md | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 c/a16c.md
+
+diff --git a/c/a16c.md b/c/a16c.md
+new file mode 100644
+index 0000000..95588ac
+--- /dev/null
++++ b/c/a16c.md
+@@ -0,0 +1,8 @@
++---
++splitter_version: 2
++---
++::a16c1 Aus meiner Sicht ist beides nicht vereinbar. ::a16c2 Wenn man sich klarmacht, was Klimaschutz konkret bedeutet, dann heißt es, dass kein CO2 mehr emittiert werden darf, und das wiederum heißt, dass das gesamte Energiesystem auf Wind und Sonne umgestellt werden muss. ::a16c3 Nicht nur der Strom, den wir heute schon nutzen, sondern auch der Verkehr, die Heizungen und die gesamte Industrie.
++
++::a16c4 Und dann sind die Zahlen erschütternd. ::a16c5 Nach Zahlen des Umweltbundesamtes deckten Wind und Sonne 2025 nur etwa zehn Prozent des deutschen Endenergiebedarfs, und zwar nach einem Vierteljahrhundert Förderung. ::a16c6 Die Energiewende ist damit weder abgeschlossen noch halb geschafft, sie steht an ihrem Anfang, denn neun Zehntel der Volkswirtschaft warten noch auf die Umstellung.
++
++::a16c7 Für mich folgt daraus zwingend, dass Ökoenergie ein knappes und teures Gut bleibt. ::a16c8 Im Überfluss wird sie nicht vorhanden sein, und deshalb reicht sie nicht für den bestehenden Kapitalismus und zusätzliches Wachstum obendrauf. ::a16c9 Wir werden auf grünes Schrumpfen setzen müssen, also darauf, klimaneutral zu leben, indem wir weniger produzieren.
+\ No newline at end of file
+-- 
+2.39.5
+

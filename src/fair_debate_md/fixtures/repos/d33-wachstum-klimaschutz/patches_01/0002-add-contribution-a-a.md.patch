@@ -1,5 +1,5 @@
-From 6f0c74c60173b64470e74cf3fe158b619a97fd61 Mon Sep 17 00:00:00 2001
-From: Redaktion <d33-wachstum-klimaschutz_a@fair-debate-users.org>
+From f04efa041919cbb76f9660f31ac9e2bff5dbf847 Mon Sep 17 00:00:00 2001
+From: Soziologie-Studentin <d33-wachstum-klimaschutz_a@fair-debate-users.org>
 Date: Sun, 16 Aug 2026 13:00:00 +0200
 Subject: [PATCH 02/19] add contribution a/a.md
 
@@ -10,7 +10,7 @@ Subject: [PATCH 02/19] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..beda382
+index 0000000..45f1931
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,20 @@
@@ -19,21 +19,21 @@ index 0000000..beda382
 +---
 +# ::a1 Ist Wirtschaftswachstum mit Klimaschutz vereinbar?
 +
-+::a2 Diese Debatte ist die Nachbildung eines Radio-Streitgesprächs, das Mitte August 2026 in der Sendung "Streitkultur" im Deutschlandfunk gesendet wurde. ::a3 Die Originalsendung findet sich unter <https://www.deutschlandfunk.de/ist-wirtschaftswachstum-mit-klimaschutz-vereinbar-u-herrmann-vs-m-huether-100.html>. ::a4 Die Argumente der beiden Gäste wurden sinngemäß übernommen, stark gekürzt und in die Beitragsform dieser Plattform gebracht. ::a5 Es handelt sich ausdrücklich nicht um wörtliche Zitate, und Abweichungen, Verkürzungen und Fehler sind möglich. ::a6 Die Beiträge sind deshalb nicht namentlich zugeordnet, sondern nur nach Rolle unterschieden, nämlich als Ökonom eines wirtschaftsnahen Forschungsinstituts und als Wirtschaftsjournalistin.
++::a2 Vorbemerkung zur Einordnung. ::a3 Wir sind drei Studierende und haben uns gemeinsam ein Streitgespräch angehört, das Mitte August 2026 unter dem Titel "Ist Wirtschaftswachstum mit Klimaschutz vereinbar?" in der Sendung "Streitkultur" im Deutschlandfunk lief und unter <https://www.deutschlandfunk.de/ist-wirtschaftswachstum-mit-klimaschutz-vereinbar-u-herrmann-vs-m-huether-100.html> nachzuhören ist. ::a4 Die Argumente, die uns dort beschäftigt haben, tragen wir hier selbst vor, jede und jeder in eigenen Worten. ::a5 Wir geben also nicht wieder, was die beiden Gäste der Sendung gesagt haben, und wörtliche Zitate enthält diese Debatte nicht. ::a6 Verkürzungen und Fehler gehen deshalb zu unseren Lasten, nicht zu Lasten der Sendung. ::a7 Ich studiere Soziologie und trage im Folgenden nur zusammen, worüber gestritten wird. ::a8 Die Wachstumsposition vertritt ein Kommilitone aus den Wirtschaftswissenschaften, die Gegenposition eine Kommilitonin aus der Geographie.
 +
 +---
 +
-+::a7 Der Sommer 2026 hat die Folgen der Erderwärmung in Deutschland sichtbarer gemacht als jeder Sommer zuvor. ::a8 Seit Tagen brennen Wälder in der Eifel, der Bauernverband befürchtet gebietsweise totale Ernteausfälle, Rhein und Elbe führen Niedrigwasser. ::a9 Die volkswirtschaftlichen Schäden werden inzwischen mit rund 25 Milliarden Euro pro Jahr veranschlagt, von Ernteausfällen über steigende Wasserpreise bis hin zu unterbrochenen Lieferketten.
++::a9 Der Sommer 2026 hat die Folgen der Erderwärmung in Deutschland sichtbarer gemacht als jeder Sommer zuvor. ::a10 Seit Tagen stehen Wälder in der Eifel in Flammen, die Landwirtschaft rechnet gebietsweise mit Totalverlusten, Rhein und Elbe führen Niedrigwasser. ::a11 Die volkswirtschaftlichen Schäden liegen inzwischen bei geschätzten 25 Milliarden Euro jährlich, von verlorenen Ernten über teureres Wasser bis zu Lieferketten, die abreißen.
 +
-+::a10 Die Reaktion der Bundesregierung ist bisher verhalten und bewegt sich zwischen drei Zielen, die sie gleichzeitig verfolgen will. ::a11 Sie will den Umbau der Volkswirtschaft auf Klimaneutralität nicht verlangsamen, sie will die Anpassung an eine wärmere Welt organisieren, und sie will dabei die Wirtschaft stabil halten. ::a12 Gesetzlich festgelegt ist, dass Deutschland bis 2045 klimaneutral sein soll.
++::a12 Die Reaktion der Bundesregierung ist bisher verhalten und bewegt sich zwischen drei Zielen, die sie gleichzeitig verfolgen will. ::a13 Sie will den Umbau der Volkswirtschaft auf Klimaneutralität nicht verlangsamen, sie will die Anpassung an eine wärmere Welt organisieren, und sie will dabei die Wirtschaft stabil halten. ::a14 Gesetzlich festgelegt ist, dass Deutschland bis 2045 klimaneutral sein soll.
 +
-+::a13 Daraus ergibt sich die Streitfrage dieser Debatte. ::a14 Sind Wirtschaftswachstum und Klimaschutz miteinander vereinbar?
++::a15 Daraus ergibt sich die Streitfrage dieser Debatte. ::a16 Sind Wirtschaftswachstum und Klimaschutz miteinander vereinbar?
 +
-+::a15 Ein aktueller Vorschlag des Bundesumweltministers will die Anpassung an die Erderwärmung als Staatsziel ins Grundgesetz schreiben. ::a16 Ist das ein probates Mittel?
++::a17 Ein aktueller Vorschlag des Bundesumweltministers will die Anpassung an die Erderwärmung als Staatsziel ins Grundgesetz schreiben. ::a18 Ist das ein probates Mittel?
 +
-+::a17 Mehrere wirtschaftswissenschaftliche Studien der vergangenen Jahre, etwa vom Leibniz-Institut für Wirtschaftsforschung und vom Potsdam-Institut für Klimafolgenforschung, kommen zu dem Ergebnis, dass Industrienationen ihr Bruttoinlandsprodukt steigern und gleichzeitig ihre Emissionen senken können. ::a18 Wirtschaftswachstum ohne zusätzliches CO2 wäre demnach bereits heute möglich.
++::a19 Mehrere wirtschaftswissenschaftliche Studien der vergangenen Jahre, etwa vom Leibniz-Institut für Wirtschaftsforschung und vom Potsdam-Institut für Klimafolgenforschung, kommen zu dem Ergebnis, dass Industrienationen ihr Bruttoinlandsprodukt steigern und gleichzeitig ihre Emissionen senken können. ::a20 Wirtschaftswachstum ohne zusätzliches CO2 wäre demnach bereits heute möglich.
 +
-+::a19 Offen ist schließlich, wie sich ein Umbau dieser Größenordnung sozial verträglich gestalten lässt, ohne an den Kosten für die privaten Haushalte zu scheitern.
++::a21 Offen ist schließlich, wie sich ein Umbau dieser Größenordnung sozial verträglich gestalten lässt, ohne an den Kosten für die privaten Haushalte zu scheitern.
 \ No newline at end of file
 -- 
 2.39.5

@@ -1,0 +1,26 @@
+From 748c8ca5375777a1aa32943602b236a488b92f5d Mon Sep 17 00:00:00 2001
+From: Geographie-Studentin <d33-wachstum-klimaschutz_c@fair-debate-users.org>
+Date: Tue, 18 Aug 2026 19:35:00 +0200
+Subject: [PATCH 11/19] add contribution c/a16b10c.md
+
+---
+ c/a16b10c.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 c/a16b10c.md
+
+diff --git a/c/a16b10c.md b/c/a16b10c.md
+new file mode 100644
+index 0000000..b85cea7
+--- /dev/null
++++ b/c/a16b10c.md
+@@ -0,0 +1,6 @@
++---
++splitter_version: 2
++---
++::a16b10c1 Dass es global gelingen muss, ist völlig richtig, denn das CO2-Molekül kennt keine Grenzen. ::a16b10c2 Wenn wir hier schrumpfen und anderswo weiterhin Kohlekraftwerke gebaut werden, ändert sich am Ergebnis genau gar nichts.
++
++::a16b10c3 Unter global sollte man sich allerdings nicht die Beteiligung sämtlicher Staaten vorstellen. ::a16b10c4 Es gibt viele Länder, vor allem in Afrika, die praktisch kein CO2 emittieren. ::a16b10c5 Entscheidend sind die großen Industrienationen und die aufstrebenden Schwellenländer, und das ist eine deutlich kleinere Runde, als das Wort global nahelegt.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -93,12 +93,15 @@ with its own `dNN` key, not a variant of another one:
   *display* problem of overlapping references can be judged in the frontend rather than
   argued about in the specification -- see `docs/flexible_references_concept.md`.
 - `d33-wachstum-klimaschutz__plain/source.md` -- german, and the only fixture with real
-  argumentative content: a heavily shortened reconstruction of a radio debate on whether
-  economic growth and climate protection are compatible (the root contribution names the
-  source). Three parties -- `a` is the editorial frame (Redaktion), `b` the economist and
-  `c` the journalist, the same roles the root contribution announces -- 18 contributions,
-  a spine down to level 5, and one contribution that agrees with what it answers instead
-  of objecting, which no other fixture does.
+  argumentative content: three students argue out whether economic growth and climate
+  protection are compatible, after listening to a radio debate on the question. The root
+  contribution names that broadcast as their source and says what the setup is, namely a
+  role play: the students make the arguments in their own words rather than reporting what
+  the two guests said, and the text deliberately holds no verbatim quote from it (checked
+  against the transcript kept in `source_transcripts__gitignore__/`). Three parties -- `a`
+  poses the questions and never argues, `b` holds the growth position and `c` the degrowth
+  one -- 18 contributions, a spine down to level 5, and one contribution that agrees with
+  what it answers instead of objecting, which no other fixture does.
 
 Until 2026-08 the first of these was built by `fdmd process-content-dir` from one file per
 contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14 of `a`):

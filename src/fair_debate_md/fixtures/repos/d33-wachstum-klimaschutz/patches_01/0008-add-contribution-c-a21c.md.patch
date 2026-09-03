@@ -1,0 +1,26 @@
+From 4163d38756332d126931a5fd2756253427529ee8 Mon Sep 17 00:00:00 2001
+From: Geographie-Studentin <d33-wachstum-klimaschutz_c@fair-debate-users.org>
+Date: Tue, 18 Aug 2026 08:25:00 +0200
+Subject: [PATCH 08/19] add contribution c/a21c.md
+
+---
+ c/a21c.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 c/a21c.md
+
+diff --git a/c/a21c.md b/c/a21c.md
+new file mode 100644
+index 0000000..ba7fd61
+--- /dev/null
++++ b/c/a21c.md
+@@ -0,0 +1,6 @@
++---
++splitter_version: 2
++---
++::a21c1 Das Ziel wäre eine Kreislaufwirtschaft, in der nur noch so viel verbraucht wird, wie sich recyceln lässt, und in der die Ökoenergie für das Gesamtsystem reicht. ::a21c2 Die eigentliche Schwierigkeit liegt aber nicht im Ziel, sondern im Weg dorthin. ::a21c3 Wir müssten von einem sehr großen Kapitalismus auf eine deutlich kleinere Kreislaufwirtschaft herunterkommen, ohne dabei eine schwere Wirtschaftskrise mit sehr vielen Arbeitslosen auszulösen.
++
++::a21c4 Ein historisches Vorbild dafür gibt es, nämlich die britische Kriegswirtschaft im Zweiten Weltkrieg. ::a21c5 Die Briten mussten ihre Zivilwirtschaft damals aus ganz anderen Gründen schrumpfen, und sie haben es in einer Form getan, die man als demokratische private Planwirtschaft beschreiben kann. ::a21c6 Es wurde nichts verstaatlicht, das Eigentum blieb privat, aber der Staat bestimmte, welche Güter überhaupt noch hergestellt wurden, und was knapp war, wurde rationiert, so dass Arm und Reich dasselbe bekamen. ::a21c7 Eine Mischung aus Privatbesitz, staatlicher Planung und Rationierung knapper Güter wie Wasser und Lebensmitteln werden wir ohnehin bekommen, und mit ihr ließe sich der Übergang gestalten.
+\ No newline at end of file
+-- 
+2.39.5
+

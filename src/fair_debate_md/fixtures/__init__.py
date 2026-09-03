@@ -25,7 +25,7 @@ DEMO_DEBATE_KEYS = (
     "d00-explanatory-example-debate",       # what the landing page links to (english)
     "d01-erklaerende-beispieldebatte",      # its german counterpart
     "d31-ice-cream",                        # a small dispute with nesting and several parties
-    "d33-wachstum-klimaschutz",             # a reconstructed radio debate on growth vs. climate
+    "d33-wachstum-klimaschutz",             # students argue growth vs. climate, after a radio debate
     "d34-pazifismus-ukraine",               # pacifism and the war in Ukraine, from a podcast episode
     "d35-rente-generationengerechtigkeit",  # pension reform, argued out, ends in a concession
     "d36-handyverbot-schule",               # phone ban at schools, left unfinished for live demos

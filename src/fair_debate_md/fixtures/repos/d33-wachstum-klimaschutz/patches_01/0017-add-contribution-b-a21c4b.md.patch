@@ -1,0 +1,26 @@
+From 00a6f193a3c38cc28c355f468456206b11d489be Mon Sep 17 00:00:00 2001
+From: WiWi-Student <d33-wachstum-klimaschutz_b@fair-debate-users.org>
+Date: Thu, 20 Aug 2026 12:35:00 +0200
+Subject: [PATCH 17/19] add contribution b/a21c4b.md
+
+---
+ b/a21c4b.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 b/a21c4b.md
+
+diff --git a/b/a21c4b.md b/b/a21c4b.md
+new file mode 100644
+index 0000000..d2c5e3e
+--- /dev/null
++++ b/b/a21c4b.md
+@@ -0,0 +1,6 @@
++---
++splitter_version: 2
++---
++::a21c4b1 Das ist für mich keine Utopie, sondern eine Dystopie, und mir schaudert davor. ::a21c4b2 Man muss dafür nicht einmal in die Geschichte schauen, es genügt der Blick auf Russland, das ebenfalls eine Kriegswirtschaft betreibt. ::a21c4b3 Der Vorgang wird nicht dadurch sympathischer, dass man ihn auf das Vereinigte Königreich der vierziger Jahre bezieht.
++
++::a21c4b4 Der eigentliche Dissens liegt aber tiefer. ::a21c4b5 Die Gegenposition geht davon aus, dass die marktwirtschaftliche, dezentrale Steuerung die nötige Innovationskraft nicht aufbringt. ::a21c4b6 Meine These ist, dass sie es sehr wohl tut, sofern sie eine verlässliche Rahmensetzung und Konsequenz in der Zeit bekommt. ::a21c4b7 Hinzu kommt ein praktischer Einwand. ::a21c4b8 Mit einem Kriegswirtschaftsszenario wird uns international niemand folgen, und die eigene Gesellschaft ebenso wenig.
+\ No newline at end of file
+-- 
+2.39.5
+
