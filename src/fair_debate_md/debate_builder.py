@@ -142,11 +142,22 @@ from .key_management import SPLITTER_SYNTAX_VERSION
 
 pjoin = os.path.join
 
-# segment keys may carry references themselves (`a3-6b1`), so "-" and "_" belong to the
+# Segment keys may carry references themselves (`a3-6b1`), so "-" and "_" belong to the
 # character class -- without them the segments of a range-referencing contribution are
-# invisible here and nothing can be anchored inside it
-SEGMENT_KEY_RE = re.compile(r"::([a-zA-Z0-9_-]+)")
-SEGMENT_RE = re.compile(r"::([a-zA-Z0-9_-]+)\s*(.*?)(?=::[a-zA-Z0-9_-]+|\Z)", re.DOTALL)
+# invisible here and nothing can be anchored inside it.
+#
+# Keys are lowercase by construction, so `A-Z` has no business here (it was only ever
+# generosity). The class stays deliberately looser than `references.CONTRIBUTION_KEY_PATTERN`
+# though, and that is not the same oversight as the one fixed in `core`: that regex
+# recognizes file names this library wrote itself, where exactness is free, while these
+# two read markers out of text. A marker the grammar rejects would not be reported here,
+# it would silently merge into the preceding segment's body -- so a malformed key is
+# better matched and then found wrong than not matched at all.
+_SEGMENT_KEY_CHARS = r"[a-z0-9_-]+"
+SEGMENT_KEY_RE = re.compile(r"::(" + _SEGMENT_KEY_CHARS + r")")
+SEGMENT_RE = re.compile(
+    r"::(" + _SEGMENT_KEY_CHARS + r")\s*(.*?)(?=::" + _SEGMENT_KEY_CHARS + r"|\Z)", re.DOTALL
+)
 
 MARKER_START_RE = re.compile(r"^<!--\s*!!==")
 MARKER_RE = re.compile(r"^<!--\s*!!==\s*(?P<head>.*?)\s*=+\s*-->\s*$", re.DOTALL)
