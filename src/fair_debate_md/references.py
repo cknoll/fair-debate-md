@@ -63,7 +63,20 @@ from dataclasses import dataclass
 
 # lenient unit pattern: used to decompose keys into units. Strict semantic
 # checks (start < end, no range+word combination) happen in `parse_key_unit`.
-key_regex = re.compile(r"[a-z]+\d+(?:-\d+)?(?:_\d+(?:-\d+)?)?")
+KEY_UNIT_PATTERN = r"[a-z]+\d+(?:-\d+)?(?:_\d+(?:-\d+)?)?"
+key_regex = re.compile(KEY_UNIT_PATTERN)
+
+# A complete contribution key: the units naming what is answered, then the bare
+# role-token of the answering party -- "a" (an opening), "a5b", "a3-6b", "a7_7-12f",
+# "a3-6b1-2h".
+#
+# This is the ONE place the shape of a key is written down. Anything that has to
+# recognize a key composes it from here instead of spelling out a character class of
+# its own: `core._ctb_rel_path_regex` used to say `[a-z0-9]+`, which silently excluded
+# every range-referencing key, and nothing noticed because such a key then looks like a
+# file that is none of the reader's business. Keys are lowercase by construction, so the
+# class is `a-z` and not `a-zA-Z`.
+CONTRIBUTION_KEY_PATTERN = r"(?:" + KEY_UNIT_PATTERN + r")*[a-z]+"
 
 _STRICT_UNIT_RE = re.compile(r"([a-z]+)(\d+)(?:-(\d+))?(?:_(\d+)(?:-(\d+))?)?$")
 _BARE_TOKEN_RE = re.compile(r"[a-z]+$")

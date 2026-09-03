@@ -111,6 +111,86 @@ def test_contribution_commit_hashes_maps_every_contribution(tmp_path):
     assert hashes["a1b"] == sha_b
 
 
+def test_contribution_commit_hashes_covers_range_referencing_keys(tmp_path):
+    """
+    The regression test for the bug that made this whole area worth revisiting: the path
+    regex described a key as `[a-z0-9]+`, so every key carrying a range (`a3-6b`) or a
+    word range (`a7_7-12f`) fell into the branch meant for README.md and vanished from
+    the hash map -- on `d32-overlapping-refs` that was 4 of 9 contributions.
+
+    It stayed unnoticed because nothing counted contributions on a debate that has such
+    keys: the integrity page simply showed fewer rows, and a `?ctb=a3-6b` link resolved
+    to nothing, which the view treats as "no focus" and thus looks merely outdated.
+
+    The keys below are the ones that repo actually contains, nested case included.
+    """
+    host_dir = str(tmp_path)
+    _make_debate_repo(host_dir)
+
+    fdmd.commit_ctb(
+        host_dir, "d-hashes", DBContribution("a", " ".join(f"::a{i} S{i}." for i in range(1, 13)))
+    )
+    range_keys = ["a3-6b", "a5-8d", "a7_7-12f", "a7_10-16g", "a3-6b1-2h"]
+    expected = {"a"}
+    for ctb_key in range_keys:
+        fdmd.commit_ctb(host_dir, "d-hashes", DBContribution(ctb_key, f"::{ctb_key}1 Reply."))
+        expected.add(ctb_key)
+
+    hashes = contribution_commit_hashes(host_dir, "d-hashes")
+    assert set(hashes) == expected
+
+    # the commit log has to agree about what a contribution is -- the two functions
+    # share the path regex, and a divergence here means one of them lies
+    logged_keys = {
+        key
+        for entry in debate_commit_log(host_dir, "d-hashes")
+        for key in entry["contribution_keys"]
+    }
+    assert logged_keys == expected
+
+
+def test_repo_level_files_are_skipped_without_a_warning(caplog):
+    """
+    The counterpart to the check below: what a repo legitimately carries at its root
+    must not produce noise, otherwise the warning is ignored within a fortnight.
+    """
+    from fair_debate_md.core import _ctb_key_from_rel_path
+
+    unexpected = set()
+    with caplog.at_level("WARNING"):
+        for rel_path in ["README.md", "REPO_INFO.yaml", "allowed_signers"]:
+            assert _ctb_key_from_rel_path(rel_path, unexpected) is None
+
+    assert unexpected == set()
+    assert caplog.records == []
+
+
+def test_an_unrecognized_path_is_reported_once(tmp_path, caplog):
+    """
+    A path that is neither a contribution nor a known repo-level file used to share the
+    silent branch with both. It now says so -- once per call, not once per commit that
+    touched the file, since git names a path in every commit that changed it.
+    """
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+    fdmd.commit_ctb(host_dir, "d-hashes", DBContribution("a", "::a1 First."))
+
+    stray = pjoin(repo_dir, "a", "NOT_A_KEY.md")
+    for round_no in range(2):
+        with open(stray, "w") as fp:
+            fp.write(f"stray {round_no}\n")
+        _git(repo_dir, "add", "a/NOT_A_KEY.md")
+        _git(repo_dir, "commit", "-q", "-m", f"stray {round_no}")
+
+    with caplog.at_level("WARNING"):
+        hashes = contribution_commit_hashes(host_dir, "d-hashes")
+
+    assert set(hashes) == {"a"}, "the stray file must not become a contribution"
+    warnings = [rec for rec in caplog.records if rec.levelname == "WARNING"]
+    assert len(warnings) == 1, "two commits touched it, but the report is per call"
+    assert "a/NOT_A_KEY.md" in warnings[0].getMessage()
+
+
 def test_contribution_commit_hashes_follows_the_last_change(tmp_path):
     """
     The point of the whole feature: a changed contribution must get a changed hash.

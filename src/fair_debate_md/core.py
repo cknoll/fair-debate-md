@@ -881,9 +881,74 @@ def commit_ctb(repo_host_dir: str, debate_key: str, ctb: DBContribution) -> str:
     return commit_ctb_list(repo_host_dir, debate_key, ctb_list)
 
 
-# a contribution file lives at "<role_token>/<contribution_key>.md" inside a debate repo
-_ctb_rel_path_regex = re.compile(r"^([a-z]+)/([a-z0-9]+)\.md$")
+# A contribution file lives at "<role_token>/<contribution_key>.md" inside a debate repo.
+# The key part comes from `references.CONTRIBUTION_KEY_PATTERN` rather than being spelled
+# out again here -- a second, independently written description of what a key looks like
+# is exactly what went wrong before: this regex said `[a-z0-9]+` and therefore excluded
+# every range-referencing key (`a3-6b`, `a7_7-12f`), which dropped those contributions
+# from the integrity page and the hash export without a trace.
+_ctb_rel_path_regex = re.compile(r"^([a-z]+)/(" + references.CONTRIBUTION_KEY_PATTERN + r")\.md$")
 _git_log_header_regex = re.compile(r"^([0-9a-f]{40})\t(.+)$")
+
+# What legitimately sits in a debate repo without being a contribution. Kept as an
+# explicit set so that a path which is neither a contribution nor one of these can be
+# reported instead of silently skipped -- see `_ctb_key_from_rel_path`.
+_repo_level_filenames = frozenset(
+    {
+        repo_handling.README_FILENAME,
+        repo_handling.REPO_INFO_FILENAME,
+        repo_handling.ALLOWED_SIGNERS_FILENAME,
+    }
+)
+
+
+def _ctb_key_from_rel_path(rel_path: str, unexpected_paths: set) -> str | None:
+    """
+    The contribution key a repo-relative path carries, or None if it carries none.
+
+    :param rel_path:            path as `git log --name-only` reports it
+    :param unexpected_paths:    collects paths that are neither a contribution nor a
+                                known repo-level file; the caller reports them once
+    :return:                    the contribution key, or None
+
+    Why the collecting set instead of warning right here: git reports a path once per
+    commit that touched it, so warning at the match site would repeat the same message
+    for the whole history of the file.
+    """
+
+    match = _ctb_rel_path_regex.match(rel_path)
+    if match is not None:
+        return match.group(2)
+
+    if rel_path not in _repo_level_filenames:
+        unexpected_paths.add(rel_path)
+    return None
+
+
+def _warn_about_unexpected_paths(repo_dir: str, unexpected_paths: set) -> None:
+    """
+    Report paths that fell through the contribution match without being expected to.
+
+    The bug this exists for was invisible precisely because "does not look like a
+    contribution" and "is a repo-level file" shared one silent branch. A contribution
+    that stops being recognized -- a key grammar that grew, a repo written by a newer
+    version -- now says so in the log instead of just shrinking the integrity page.
+
+    Deliberately a warning and not an exception: a content repo may legitimately gain
+    files later, and a library that refuses to serve a debate over an unknown filename
+    would turn a cosmetic surprise into an outage.
+    """
+
+    if not unexpected_paths:
+        return
+
+    logger.warning(
+        "%s: %d path(s) in the git log are neither a contribution nor a known "
+        "repo-level file and were skipped: %s",
+        repo_dir,
+        len(unexpected_paths),
+        ", ".join(sorted(unexpected_paths)),
+    )
 
 
 def _read_git_log(repo_dir: str, with_signature_status: bool = False) -> list[tuple]:
@@ -973,15 +1038,13 @@ def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str,
     repo_dir = pjoin(repo_host_dir, debate_key)
 
     hashes = {}
+    unexpected_paths = set()
     # newest commit first -> the first mention of a path is its most recent change
     for commit_hash, _, rel_paths, _status in _read_git_log(repo_dir):
         for rel_path in rel_paths:
-            match = _ctb_rel_path_regex.match(rel_path)
-            if match is None:
-                # repo-level files (README.md, data.toml, ...) and anything not shaped
-                # like a contribution are none of this function's business
+            ctb_key = _ctb_key_from_rel_path(rel_path, unexpected_paths)
+            if ctb_key is None:
                 continue
-            ctb_key = match.group(2)
             if ctb_key in hashes:
                 continue
             if not os.path.isfile(pjoin(repo_dir, rel_path)):
@@ -989,6 +1052,7 @@ def contribution_commit_hashes(repo_host_dir: str, debate_key: str) -> dict[str,
                 continue
             hashes[ctb_key] = commit_hash
 
+    _warn_about_unexpected_paths(repo_dir, unexpected_paths)
     return hashes
 
 
@@ -1012,14 +1076,15 @@ def debate_commit_log(
     repo_dir = pjoin(repo_host_dir, debate_key)
 
     commit_log = []
+    unexpected_paths = set()
     for commit_hash, timestamp, rel_paths, signature in _read_git_log(
         repo_dir, with_signature_status=with_signature_status
     ):
         ctb_keys = []
         for rel_path in rel_paths:
-            match = _ctb_rel_path_regex.match(rel_path)
-            if match is not None:
-                ctb_keys.append(match.group(2))
+            ctb_key = _ctb_key_from_rel_path(rel_path, unexpected_paths)
+            if ctb_key is not None:
+                ctb_keys.append(ctb_key)
         commit_log.append(
             {
                 "hash": commit_hash,
@@ -1032,6 +1097,7 @@ def debate_commit_log(
             }
         )
 
+    _warn_about_unexpected_paths(repo_dir, unexpected_paths)
     return commit_log
 
 
