@@ -1,7 +1,7 @@
-From bc1d1805ab2823f1a4e79c66220fb1b36e8e5337 Mon Sep 17 00:00:00 2001
+From 06416634fbe8f7e57ade3977948c6d7798a66033 Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 08:00:00 +0200
-Subject: [PATCH 01/19] first commit
+Subject: [PATCH 01/20] first commit
 
 ---
  README.md      | 120 +++++++++++++++++++++++++++++++++++++++++++++++++
@@ -138,7 +138,7 @@ index 0000000..27fec6a
 +  this history are the ones readers keep. Yours is one of them.
 diff --git a/REPO_INFO.yaml b/REPO_INFO.yaml
 new file mode 100644
-index 0000000..9613e6c
+index 0000000..80d8e14
 --- /dev/null
 +++ b/REPO_INFO.yaml
 @@ -0,0 +1,9 @@
@@ -146,11 +146,11 @@ index 0000000..9613e6c
 +# `kind: built` means the history is regenerated whenever the source changes;
 +# `kind: opened` means the debate grew into this repo by appending.
 +kind: built
-+date: '2026-09-03T17:13:05+00:00'
-+fdmd_version: 0.9.2
++date: '2026-09-03T23:14:59+00:00'
++fdmd_version: 0.9.3
 +source:
 +  path: d00-explanatory-example-debate__plain/source.md
-+  sha256: 1305f2d6b0d84bdfdcd5f5f9b48eaa8c4bfceba391827184a89e6fb871a82e32
++  sha256: 5d5db16c7b8a28e967bacf1fd1db95048c24eb7ac25eb7dc43c51e19482216f7
 -- 
 2.39.5
 

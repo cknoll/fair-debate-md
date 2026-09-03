@@ -1,0 +1,24 @@
+From 569f2a6e2691fe9213cb5f0d9c151c60ab321e2a Mon Sep 17 00:00:00 2001
+From: Questioner <d00-explanatory-example-debate_c@fair-debate-users.org>
+Date: Sun, 30 Aug 2026 15:00:00 +0200
+Subject: [PATCH 20/20] add contribution c/a43a11c.md
+
+---
+ c/a43a11c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 c/a43a11c.md
+
+diff --git a/c/a43a11c.md b/c/a43a11c.md
+new file mode 100644
+index 0000000..391ca14
+--- /dev/null
++++ b/c/a43a11c.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a43a11c1 Strictly speaking, that is not quite true. ::a43a11c2 The signing key can still end up in the wrong hands, e.g. through human error or through a security hole in the underlying system (which the platform has no influence over). ::a43a11c3 There can then be two contradicting _signed_ fingerprints. ::a43a11c4 Which of them is the real one is no longer decidable in that case. ::a43a11c5 But that something went wrong is very much detectable, because two valid signatures over contradicting versions cannot occur in normal operation. ::a43a11c6 Besides, for a malicious actor the effort of bringing that situation about is far higher than on a system without a public version history. ::a43a11c7 There it is enough to alter something quietly as the operator, or to simply claim an alteration as a user. ::a43a11c8 And with the forums and blogs in common use today, that is the normal case.
+\ No newline at end of file
+-- 
+2.39.5
+

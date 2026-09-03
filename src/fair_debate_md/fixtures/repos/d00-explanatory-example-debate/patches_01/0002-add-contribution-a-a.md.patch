@@ -1,7 +1,7 @@
-From 05ee90c31941c2bd2c239fa252f288c11390b499 Mon Sep 17 00:00:00 2001
+From d1ab6b01ab347fea8bd05fecfec622fc8b6a128f Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 16:00:00 +0200
-Subject: [PATCH 02/19] add contribution a/a.md
+Subject: [PATCH 02/20] add contribution a/a.md
 
 ---
  a/a.md | 42 ++++++++++++++++++++++++++++++++++++++++++

@@ -180,9 +180,9 @@ The short answer is that you clone the repository once and run `git pull --ff-on
 
 They solve two different problems, and neither replaces the other.
 
-The fingerprint answers the question *whether something has changed*. It is computed from the content of a commit and from the fingerprint of the preceding one. If an old contribution is altered afterwards, every fingerprint from that point on changes, and the chain no longer matches the one you saw before. A change thus becomes reliably visible. Which of the two versions is the published one, however, the fingerprint does not say.
+The **fingerprint** answers the question *whether something has changed*. It is computed from the content of a commit and from the fingerprint of the preceding one. If an old contribution is altered afterwards, every fingerprint from that point on changes, and the chain no longer matches the one you saw before. A change thus becomes reliably visible. Which of the two versions is the published one, however, the fingerprint does not say.
 
-The signature answers the question *who vouches for it*. With it the platform testifies that this very version is the one it published. Without it a fingerprint you noted down is merely your own claim, which the platform can contradict. With it you hold a statement of the platform's own, and it cannot take that back.
+The **signature** answers the question *who vouches for it*. With it the platform testifies that this very version is the one it published. Without it you could tell differing fingerprints apart for yourself, but you could not demonstrate them to anyone else. It would be claim against claim. With a signature you hold a statement of the platform's own, and it cannot take that back.
 
 Only together do the two amount to evidence: the fingerprint makes a change visible, the signature makes it attributable. The contribution on provable integrity spells this out in more detail.
 
@@ -198,3 +198,6 @@ Through the [contact page](/contact/) of this site, which points to the maintain
 
 Yes. We are always interested in improvement suggestions and ideas. Use the platform for real discussions and report where it got in the way. However, note that the platform reserves the right to moderate what becomes publicly visible — see the question about moderation. Beyond that the source code is public, and the ways in range from fixing a typo in these very texts to reviewing the integrity concept.
 
+<!-- !!== label=c-key-corruption party=c answers="With a signature you hold a statement of the platform's own, and it cannot take that back." ==== -->
+
+Strictly speaking, that is not quite true. The signing key can still end up in the wrong hands, e.g. through human error or through a security hole in the underlying system (which the platform has no influence over). There can then be two contradicting *signed* fingerprints. Which of them is the real one is no longer decidable in that case. But that something went wrong is very much detectable, because two valid signatures over contradicting versions cannot occur in normal operation. Besides, for a malicious actor the effort of bringing that situation about is far higher than on a system without a public version history. There it is enough to alter something quietly as the operator, or to simply claim an alteration as a user. And with the forums and blogs in common use today, that is the normal case.
