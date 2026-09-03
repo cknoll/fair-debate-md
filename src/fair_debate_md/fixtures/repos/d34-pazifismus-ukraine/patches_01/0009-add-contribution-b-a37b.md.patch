@@ -1,4 +1,4 @@
-From 008d33b45835b1679ef811cb4c22d5ead41c3e58 Mon Sep 17 00:00:00 2001
+From 544c2d0a8222267f25c8a86700d341ef6aa5fedb Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
 Date: Sun, 5 Jul 2026 15:20:00 +0200
@@ -11,7 +11,7 @@ Subject: [PATCH 09/12] add contribution b/a37b.md
 
 diff --git a/b/a37b.md b/b/a37b.md
 new file mode 100644
-index 0000000..1a057bb
+index 0000000..0e39cac
 --- /dev/null
 +++ b/b/a37b.md
 @@ -0,0 +1,8 @@
@@ -20,7 +20,7 @@ index 0000000..1a057bb
 +---
 +::a37b1 An diesem Punkt kommt eine Erfahrung ins Spiel, die schwerer wiegt als ein einzelner Vertragsentwurf.
 +
-+::a37b2 München 1938 ist das Lehrstück. ::a37b3 Chamberlain kam mit einem Abkommen zurück und sprach von "peace in our time". ::a37b4 Tatsächlich konnte sich Hitler-Deutschland die Tschechoslowakei ohne militärische Gegenwehr der Westalliierten einverleiben, und die Geschichtswissenschaft ist sich weitgehend einig, dass dieser Nichtwiderstand den Beginn des Zweiten Weltkriegs ein Jahr später wahrscheinlicher gemacht hat. ::a37b5 Eine Politik, die davor zurückschreckt, einen Aggressor rechtzeitig in die Schranken zu weisen, kann also selbst schreckliche Folgen haben.
++::a37b2 München 1938 ist das Lehrstück. ::a37b3 Chamberlain kam mit einem Abkommen zurück und sprach von "peace in our time". ::a37b4 Tatsächlich konnte sich Hitler-Deutschland die Tschechoslowakei ohne militärische Gegenwehr der Westalliierten einverleiben, und die Geschichtswissenschaft ist sich weitgehend einig, dass dieser Nichtwiderstand den Beginn des Zweiten Weltkriegs ein Jahr später wahrscheinlicher gemacht hat. ::a37b5 Eine Politik, die davor zurückschreckt, einem Angreifer beizeiten Grenzen zu setzen, kann also selbst schreckliche Folgen haben.
 +
 +::a37b6 Man muss dafür aber gar nicht so weit zurückgehen. ::a37b7 Nach der Annexion der Krim 2014 haben wir genau den Weg gewählt, den Sie empfehlen. ::a37b8 Wir haben die Landnahme mit minimalen Sanktionen hingenommen. ::a37b9 Was 2022 folgte, war die Vollinvasion. ::a37b10 Das ist keine Spekulation, sondern eine ziemlich starke Empirie.
 \ No newline at end of file

@@ -1,4 +1,4 @@
-From 43ba4dc675e6572403eb66929598052ff410f0cb Mon Sep 17 00:00:00 2001
+From 4617b6661a268fcfaafbeb3eafa7ed9576bb2ac8 Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
 Date: Thu, 2 Jul 2026 09:00:00 +0200
 Subject: [PATCH 01/12] first commit
@@ -138,7 +138,7 @@ index 0000000..5b593ee
 +  this history are the ones readers keep. Yours is one of them.
 diff --git a/REPO_INFO.yaml b/REPO_INFO.yaml
 new file mode 100644
-index 0000000..0492c36
+index 0000000..961542d
 --- /dev/null
 +++ b/REPO_INFO.yaml
 @@ -0,0 +1,9 @@
@@ -146,11 +146,11 @@ index 0000000..0492c36
 +# `kind: built` means the history is regenerated whenever the source changes;
 +# `kind: opened` means the debate grew into this repo by appending.
 +kind: built
-+date: '2026-09-03T21:57:04+00:00'
++date: '2026-09-03T22:28:59+00:00'
 +fdmd_version: 0.9.3
 +source:
 +  path: d34-pazifismus-ukraine__plain/source.md
-+  sha256: f3a2b0cf59bf13a2a72b32ed9e380dc22a2ac89ab20ac71476a080b989c110ed
++  sha256: 79cb2c741f1cc88db9e81f26ec8c633ade35bab5d71929f049b4df2db2eb3f9a
 -- 
 2.39.5
 
