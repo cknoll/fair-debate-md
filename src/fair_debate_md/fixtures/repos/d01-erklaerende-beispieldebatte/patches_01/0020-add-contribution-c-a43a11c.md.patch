@@ -1,0 +1,24 @@
+From 6c1f69aec4d6f27aa0e2f8c1032b7f0cfe37f836 Mon Sep 17 00:00:00 2001
+From: Fragesteller <d01-erklaerende-beispieldebatte_c@fair-debate-users.org>
+Date: Sun, 30 Aug 2026 14:40:00 +0200
+Subject: [PATCH 20/20] add contribution c/a43a11c.md
+
+---
+ c/a43a11c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 c/a43a11c.md
+
+diff --git a/c/a43a11c.md b/c/a43a11c.md
+new file mode 100644
+index 0000000..88c8c25
+--- /dev/null
++++ b/c/a43a11c.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a43a11c1 Wenn man es genau nimmt, stimmt das so nicht. ::a43a11c2 Es kann immer noch vorkommen, dass der Signatur-Schlüssel in die falschen Hände gerät, z.B. durch menschliche Fehler oder Sicherheitslücken im Grundsystem (worauf die Plattform keinen Einfluss hat). ::a43a11c3 Dann kann es zwei widersprüchliche _signierte_ Fingerabdrücke geben. ::a43a11c4 Welcher davon der echte ist, lässt sich in dem Fall nicht mehr entscheiden. ::a43a11c5 Aber dass etwas schiefgegangen ist, ist sehr wohl feststellbar, denn zwei gültige Signaturen über einander widersprechende Fassungen kann es im Normalbetrieb nicht geben. ::a43a11c6 Außerdem ist für einen böswilligen Akteur der Aufwand, diesen Zustand herbeizuführen, ungleich höher als bei einem System ohne öffentliche Versionsverwaltung. ::a43a11c7 Dort genügt es, als Betreiber still zu manipulieren oder als Nutzer eine Manipulation einfach zu behaupten. ::a43a11c8 Und das ist bei den heute verbreiteten Foren und Blogs der Normalfall.
+\ No newline at end of file
+-- 
+2.39.5
+

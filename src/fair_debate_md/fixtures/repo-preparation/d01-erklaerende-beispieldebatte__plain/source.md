@@ -180,9 +180,9 @@ Die kurze Antwort lautet, dass du das Repository einmal klonst und bei jeder Rü
 
 Sie lösen zwei verschiedene Probleme, und keines von beiden ersetzt das andere.
 
-Der Fingerabdruck beantwortet die Frage, *ob sich etwas verändert hat*. Er wird aus dem Inhalt eines Commits und dem Fingerabdruck des vorhergehenden berechnet. Wird ein alter Beitrag nachträglich geändert, ändern sich alle Fingerabdrücke ab dieser Stelle, und die Kette passt nicht mehr zu der, die du vorher gesehen hast. Eine Veränderung wird dadurch zuverlässig sichtbar. Welche der beiden Fassungen die veröffentlichte ist, sagt der Fingerabdruck aber nicht.
+Der **Fingerabdruck** beantwortet die Frage, *ob sich etwas verändert hat*. Er wird aus dem Inhalt eines Commits und dem Fingerabdruck des vorhergehenden berechnet. Wird ein alter Beitrag nachträglich geändert, ändern sich alle Fingerabdrücke ab dieser Stelle, und die Kette passt nicht mehr zu der, die du vorher gesehen hast. Eine Veränderung wird dadurch zuverlässig sichtbar. Welche der beiden Fassungen die veröffentlichte ist, sagt der Fingerabdruck aber nicht.
 
-Die Signatur beantwortet die Frage, *wer dafür einsteht*. Mit ihr bezeugt die Plattform, dass genau diese Fassung die von ihr veröffentlichte ist. Ohne sie ist ein Fingerabdruck, den du dir notiert hast, nur deine eigene Behauptung, der die Plattform widersprechen kann. Mit ihr hältst du eine Aussage der Plattform in der Hand, die sie nicht mehr zurücknehmen kann.
+Die **Signatur** beantwortet die Frage, *wer dafür einsteht*. Mit ihr bezeugt die Plattform, dass genau diese Fassung die von ihr veröffentlichte ist. Ohne sie könntest du unterschiedliche Fingerabdrücke zwar (für dich) feststellen, aber gegenüber anderen nicht nachweisen. Es würde Behauptung gegen Behauptung stehen. Mit Signatur hältst du eine Aussage der Plattform in der Hand, die sie nicht mehr zurücknehmen kann.
 
 Erst zusammen ergeben sie ein Beweismittel: Der Fingerabdruck macht eine Veränderung sichtbar, die Signatur macht sie zurechenbar. Ausführlicher steht das im Beitrag über die beweisbare Integrität.
 
@@ -197,3 +197,7 @@ Eine Debatte hat drei Stufen der Auffindbarkeit. *Öffentlich* bedeutet gelistet
 <!-- !!== label=a-faq-help party=a answers="Kann man das Projekt unterstützen?" ==== -->
 
 Ja. Verbesserungsvorschläge und Ideen sind immer willkommen. Benutze die Plattform für echte Auseinandersetzungen und melde, wo sie dir im Weg stand. Beachte allerdings, dass die Plattform sich vorbehält zu moderieren, was öffentlich sichtbar wird — siehe die Frage zur Moderation. Darüber hinaus ist der Quelltext öffentlich, und die Möglichkeiten reichen vom Beheben eines Tippfehlers in genau diesen Texten bis zum Prüfen des Integritätskonzepts.
+
+<!-- !!== label=c-key-corruption party=c answers="Mit Signatur hältst du eine Aussage der Plattform in der Hand, die sie nicht mehr zurücknehmen kann." ==== -->
+
+Wenn man es genau nimmt, stimmt das so nicht. Es kann immer noch vorkommen, dass der Signatur-Schlüssel in die falschen Hände gerät, z.B. durch menschliche Fehler oder Sicherheitslücken im Grundsystem (worauf die Plattform keinen Einfluss hat). Dann kann es zwei widersprüchliche *signierte* Fingerabdrücke geben. Welcher davon der echte ist, lässt sich in dem Fall nicht mehr entscheiden. Aber dass etwas schiefgegangen ist, ist sehr wohl feststellbar, denn zwei gültige Signaturen über einander widersprechende Fassungen kann es im Normalbetrieb nicht geben. Außerdem ist für einen böswilligen Akteur der Aufwand, diesen Zustand herbeizuführen, ungleich höher als bei einem System ohne öffentliche Versionsverwaltung. Dort genügt es, als Betreiber still zu manipulieren oder als Nutzer eine Manipulation einfach zu behaupten. Und das ist bei den heute verbreiteten Foren und Blogs der Normalfall.
