@@ -1,4 +1,4 @@
-From 5ffec757bc0df7760cda06860f224ac1b1596d78 Mon Sep 17 00:00:00 2001
+From 018d2276a72ece861fe14832cf7fba5895445e09 Mon Sep 17 00:00:00 2001
 From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
 Date: Fri, 28 Aug 2026 08:40:00 +0200
 Subject: [PATCH 13/19] add contribution b/a40b.md
@@ -10,12 +10,12 @@ Subject: [PATCH 13/19] add contribution b/a40b.md
 
 diff --git a/b/a40b.md b/b/a40b.md
 new file mode 100644
-index 0000000..9ca09b5
+index 0000000..d361667
 --- /dev/null
 +++ b/b/a40b.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a40b1 The letters simply keep going. ::a40b2 After `z` the tokens continue with two letters, `aa`, `ab` and so on, in the order in which the parties joined. ::a40b3 So there is no upper limit built into the key system, and a key like `a5aa` is a perfectly ordinary key — party `aa` answering segment 5 of the opening contribution. ::a40b4 In practice a debate with 26 active parties will have other problems first.
 \ No newline at end of file

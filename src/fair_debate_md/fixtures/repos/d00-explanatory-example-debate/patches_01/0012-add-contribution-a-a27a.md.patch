@@ -1,4 +1,4 @@
-From 8a0c85fbde04f0f208fe70d304127596a84b5cf0 Mon Sep 17 00:00:00 2001
+From 277d9e75bad5e077aaa29f773604cfef4efb0270 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Thu, 27 Aug 2026 21:40:00 +0200
 Subject: [PATCH 12/19] add contribution a/a27a.md
@@ -10,12 +10,12 @@ Subject: [PATCH 12/19] add contribution a/a27a.md
 
 diff --git a/a/a27a.md b/a/a27a.md
 new file mode 100644
-index 0000000..35cf21e
+index 0000000..4510241
 --- /dev/null
 +++ b/a/a27a.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a27a1 This is one. ::a27a2 It was written by party `a` and answers a segment of party `a`, and the platform marks it as a self-answer so that nobody mistakes it for somebody else's. ::a27a3 The useful case is not this demonstration but the correction. ::a27a4 An addition or an admission of error ends up right next to the sentence it concerns, instead of somewhere far below where nobody reading the original will see it.
 \ No newline at end of file

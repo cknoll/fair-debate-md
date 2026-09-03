@@ -1,7 +1,7 @@
-From 68d07c47cf42fec901863cc8e74e5463336b9ca4 Mon Sep 17 00:00:00 2001
+From 52a1bb7c2e3bf52ab92bf83f483d03fb31ae3bb0 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
-Date: Sat, 29 Aug 2026 15:10:00 +0200
+Date: Sat, 29 Aug 2026 14:15:00 +0200
 Subject: [PATCH 17/19] add contribution a/a44a.md
 
 ---
@@ -11,12 +11,12 @@ Subject: [PATCH 17/19] add contribution a/a44a.md
 
 diff --git a/a/a44a.md b/a/a44a.md
 new file mode 100644
-index 0000000..ba37be5
+index 0000000..0669548
 --- /dev/null
 +++ b/a/a44a.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a44a1 Eine Debatte hat drei Stufen der Auffindbarkeit. ::a44a2 _Öffentlich_ bedeutet gelistet und für alle lesbar, _versteckt_ bedeutet nur über den Link lesbar und nirgends gelistet, _privat_ bedeutet nur für die Teilnehmenden und die Moderation lesbar. ::a44a3 Die Auffindbarkeit einer Debatte zu ändern kann die Zustimmung sowohl der Moderation als auch der Teilnehmenden erfordern. ::a44a4 Öffentliche Beiträge neuer Konten starten zum Beispiel versteckt und müssen von der Moderation freigegeben werden. ::a44a5 Und eine öffentliche Debatte kann nur dann auf privat gestellt werden, wenn alle Parteien zustimmen oder die Moderation es durchsetzt. ::a44a6 Andernfalls könnte eine Partei, die eine Auseinandersetzung verloren hat, eine Debatte einfach aus der Öffentlichkeit tilgen. ::a44a7 Teile davon werden noch gebaut. ::a44a8 Heute wird eine Moderationsentscheidung über die Verwaltungsoberfläche getroffen.
 \ No newline at end of file

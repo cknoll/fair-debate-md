@@ -1,4 +1,4 @@
-From 935eb9a1f2690848432c49718f425161da78f17b Mon Sep 17 00:00:00 2001
+From 868c1a2dc563dfad86871cac1961231f1019bc43 Mon Sep 17 00:00:00 2001
 From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
 Date: Fri, 28 Aug 2026 14:05:00 +0200
 Subject: [PATCH 14/19] add contribution b/a41b.md
@@ -10,12 +10,12 @@ Subject: [PATCH 14/19] add contribution b/a41b.md
 
 diff --git a/b/a41b.md b/b/a41b.md
 new file mode 100644
-index 0000000..bd7a7a9
+index 0000000..b4d1917
 --- /dev/null
 +++ b/b/a41b.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a41b1 Both are possible, and the key says which one is meant. ::a41b2 A range of consecutive segments is written `a5-7b`, which reads as party `b` answering segments 5 to 7 of contribution `a`. ::a41b3 Single words inside one segment are written `a7_4-8b`, meaning words 4 to 8 of segment `a7`. ::a41b4 Words are counted on the plain text file in the repository, not on the rendered page, and the counting rule is deliberately simple and frozen. ::a41b5 That way anyone can verify what a word reference points at by reading the file, without trusting the platform to tell them.
 \ No newline at end of file

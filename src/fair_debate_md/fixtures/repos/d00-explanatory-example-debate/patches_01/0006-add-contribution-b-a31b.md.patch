@@ -1,4 +1,4 @@
-From e1b55dd175e265197101123df4b3279d14d3ad04 Mon Sep 17 00:00:00 2001
+From ab363c7a2de10c568d760e045bc58101e7be8ff1 Mon Sep 17 00:00:00 2001
 From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
 Date: Tue, 25 Aug 2026 19:35:00 +0200
 Subject: [PATCH 06/19] add contribution b/a31b.md
@@ -10,12 +10,12 @@ Subject: [PATCH 06/19] add contribution b/a31b.md
 
 diff --git a/b/a31b.md b/b/a31b.md
 new file mode 100644
-index 0000000..9771945
+index 0000000..a9ea312
 --- /dev/null
 +++ b/b/a31b.md
 @@ -0,0 +1,13 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a31b1 This answer is bound to the first entry of that list, and it is a contribution in its own right. ::a31b2 Because it refers to segment `a31`, its key is `a31b`, and its own segments are keyed `a31b1`, `a31b2`, and so on.
 +

@@ -1,4 +1,4 @@
-From 3a3b8c24c26fd79ec5fc9808df08ce6a20765f87 Mon Sep 17 00:00:00 2001
+From fd7bde180e886bcc66602c6f1be7813dc4b1d9a7 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 21:10:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 03/19] add contribution b/a24b.md
 
 diff --git a/b/a24b.md b/b/a24b.md
 new file mode 100644
-index 0000000..9f83487
+index 0000000..868b1f7
 --- /dev/null
 +++ b/b/a24b.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a24b1 Das bin ich. ::a24b2 Meine Rolle in dieser Debatte ist es, Einzelheiten zu ergänzen.
 \ No newline at end of file

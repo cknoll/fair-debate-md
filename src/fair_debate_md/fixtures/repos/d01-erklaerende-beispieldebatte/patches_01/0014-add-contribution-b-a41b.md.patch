@@ -1,4 +1,4 @@
-From 27a4bf77ed63ef6176c85424888f0abdeb1ab45b Mon Sep 17 00:00:00 2001
+From 1688d80570fb713936da89414026501f3a2dc6ab Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
 Date: Fri, 28 Aug 2026 14:25:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 14/19] add contribution b/a41b.md
 
 diff --git a/b/a41b.md b/b/a41b.md
 new file mode 100644
-index 0000000..7672232
+index 0000000..fbf25f5
 --- /dev/null
 +++ b/b/a41b.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a41b1 Beides ist möglich, und der Schlüssel sagt, was gemeint ist. ::a41b2 Eine Folge zusammenhängender Segmente wird `a5-7b` geschrieben, zu lesen als Partei `b` beantwortet die Segmente 5 bis 7 des Beitrags `a`. ::a41b3 Einzelne Wörter innerhalb eines Segments werden `a7_4-8b` geschrieben, also die Wörter 4 bis 8 des Segments `a7`. ::a41b4 Gezählt wird dabei auf der Textdatei im Repository, nicht auf der dargestellten Seite, und die Zählregel ist bewusst einfach und unveränderlich. ::a41b5 So kann jeder durch Lesen der Datei nachprüfen, worauf eine Wortangabe zeigt, ohne der Plattform glauben zu müssen.
 \ No newline at end of file

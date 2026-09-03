@@ -1,4 +1,4 @@
-From 819babdd99e2a5c675157bb9d6caaa5158e6d436 Mon Sep 17 00:00:00 2001
+From 2d9aecc7d6e963f0aad4f59de43aaf46ace6f0d1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 17:00:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 02/19] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..119199b
+index 0000000..47b83f4
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,42 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +# ::a1 Erklärende Beispiel-Debatte
 +
@@ -24,7 +24,7 @@ index 0000000..119199b
 +
 +::a6 Du liest gerade den eröffnenden _Beitrag_ dieser Debatte. ::a7 Er trägt den Beitragsschlüssel `a`. ::a8 Jeder Beitrag wird automatisch in _Segmente_ zerlegt — Überschriften, Sätze, Aufzählungspunkte. ::a9 Die Segmente eines Beitrags bekommen eigene Schlüssel wie `a1`, `a2` und so weiter. ::a10 Dadurch lässt sich jedes Segment genau benennen. ::a11 Und jedes Segment lässt sich einzeln beantworten. ::a12 Wenn du mit der Maus über ein Segment fährst, siehst du seinen Schlüssel; ein Klick oder Fingertipp erlaubt dir außerdem, seine URL zu kopieren und darauf zu antworten.
 +
-+::a13 Oben rechts in der Kopfzeile sitzt ein Info-Symbol, ein `i` im Kreis. ::a14 Es schaltet den Hilfemodus ein: ::a15 Danach erklärt die Oberfläche ihre eigenen Bedienelemente. ::a16 Klicke ein Element an, um seine Erklärung zu sehen, oder blättere mit den Pfeilen der Reihe nach durch alle Erklärungen. ::a17 Die Taste `i` schaltet den Modus ebenso ein und wieder aus.
++::a13 Oben rechts in der Kopfzeile sitzt ein Info-Symbol ![](/static/img/info-icon.svg) — ein `i` im Kreis. ::a14 Es schaltet den Hilfemodus ein: ::a15 Danach erklärt die Oberfläche ihre eigenen Bedienelemente. ::a16 Klicke ein Element an, um seine Erklärung zu sehen, oder blättere mit den Pfeilen der Reihe nach durch alle Erklärungen. ::a17 Die Taste `i` schaltet den Modus ebenso ein und wieder aus.
 +
 +::a18 Hervorgehobene Segmente sind bereits beantwortet worden. ::a19 Klicke auf ein solches Segment, um die Antworten darunter aufzuklappen. ::a20 Der größte Teil dieses Dokuments steckt in diesen Antworten, Aufklappen ist also die Art, es zu lesen.
 +

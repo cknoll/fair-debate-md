@@ -1,4 +1,4 @@
-From ab29dc383ee2180956f19f8f18269df3cdf4f2f6 Mon Sep 17 00:00:00 2001
+From 606d4652be344f732947887e7e9783704ca032a2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Thu, 27 Aug 2026 16:30:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 11/19] add contribution a/a32b41c1a.md
 
 diff --git a/a/a32b41c1a.md b/a/a32b41c1a.md
 new file mode 100644
-index 0000000..0fe5347
+index 0000000..7eae6a8
 --- /dev/null
 +++ b/a/a32b41c1a.md
 @@ -0,0 +1,17 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a32b41c1a1 Zurzeit gibt es die folgenden Schwachstellen.
 +

@@ -1,4 +1,4 @@
-From 61abeaa263c09a4f7de75cbf43775c134f35524b Mon Sep 17 00:00:00 2001
+From 1d474248a4f5543dd9ee10dfb86754752df04957 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Tue, 25 Aug 2026 12:50:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 05/19] add contribution a/a25c5a.md
 
 diff --git a/a/a25c5a.md b/a/a25c5a.md
 new file mode 100644
-index 0000000..7852a11
+index 0000000..636470b
 --- /dev/null
 +++ b/a/a25c5a.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a25c5a1 Das stimmt, und es gehört ausgesprochen. ::a25c5a2 Der Eröffnungsbeitrag sagt schon ganz am Anfang, dass dieses Dokument die Funktionen der Plattform für Erklärungen zweckentfremdet, und genau hier zeigt sich das. ::a25c5a3 Eine echte Debatte wächst nach vorn, und niemand darin weiß, wer als Nächstes antwortet.
 \ No newline at end of file

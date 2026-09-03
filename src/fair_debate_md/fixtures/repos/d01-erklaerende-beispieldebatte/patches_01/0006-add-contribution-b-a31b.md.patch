@@ -1,4 +1,4 @@
-From 3f039236429852e4325f1686d0d89b9b161ba247 Mon Sep 17 00:00:00 2001
+From 9c3601801b943201648c7adc6d6e6cd379b2796d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
 Date: Tue, 25 Aug 2026 20:00:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 06/19] add contribution b/a31b.md
 
 diff --git a/b/a31b.md b/b/a31b.md
 new file mode 100644
-index 0000000..49e6364
+index 0000000..811b5b4
 --- /dev/null
 +++ b/b/a31b.md
 @@ -0,0 +1,13 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a31b1 Diese Antwort hängt am ersten Eintrag jener Liste und ist zugleich ein eigenständiger Beitrag. ::a31b2 Weil sie sich auf Segment `a31` bezieht, lautet ihr Schlüssel `a31b`, und ihre eigenen Segmente heißen `a31b1`, `a31b2` und so fort.
 +

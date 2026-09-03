@@ -18,7 +18,7 @@ This document is a *debate*. Its purpose is to describe and motivate the main fe
 
 You are reading the opening *contribution* of this debate. It has the contribution key `a`. Every contribution is split automatically into *segments* — headings, sentences, bullet points. The segments of a contribution carry keys of their own like `a1`, `a2`, etc. Therefore each segment can be precisely referenced. And each segment can be answered on its own. Hovering over a segment shows its key; clicking or tapping it also lets you copy its URL and answer it.
 
-Top right of the header sits an info symbol, an `i` in a circle. It switches on help mode: from then on the interface explains its own controls. Click an element to see its explanation, or step through all of them in turn with the arrows. The key `i` switches the mode on and off as well.
+Top right of the header sits an ![info](/static/img/info-icon.svg) symbol, an `i` in a circle. It switches on help mode: from then on the interface explains its own controls. Click an element to see its explanation, or step through all of them in turn with the arrows. The key `i` switches the mode on and off as well.
 
 Segments that are highlighted have been answered already. Click one such answered segment to unfold the answers below it. Most of this document lives in those answers, so unfolding them is how you read it.
 
@@ -120,7 +120,7 @@ The signature travels with the repository, so anyone who clones it holds that ev
 
 ### Where to look
 
-Every contribution carries a link (click the magnifier symbol) to the integrity page of the debate. There the fingerprints are listed, and the repository with the signed commits can be downloaded as a single file or cloned directly with git. Additionally, that page describes how to check for manipulation of the content.
+Every contribution carries a link (click the ![magnifier](/static/img/integrity-magnifier.svg) symbol) to the integrity page of the debate. There the fingerprints are listed, and the repository with the signed commits can be downloaded as a single file or cloned directly with git. Additionally, that page describes how to check for manipulation of the content.
 
 For anyone taking part in a debate the shortest route is to clone that repository once. From then on a single `git pull --ff-only` does the checking. It passes quietly while the debate merely grows, and it refuses to run the moment the history was rewritten. Nothing has to be noted down and nothing has to be remembered, and the refusal leaves the reader holding both versions at once, which is what turns a suspicion into something showable.
 
@@ -172,7 +172,7 @@ Both are possible, and the key says which one is meant. A range of consecutive s
 
 <!-- !!== label=a-faq-integrity party=a answers="How can the integrity of a debate" ==== -->
 
-Every contribution carries a small magnifier symbol that leads to the integrity page of its debate. That page lists the fingerprint of every commit, names the signing key of the platform, hands out the whole repository as a git clone, and gives details on how to check fingerprints and signatures. The repository carries the same instructions in its own README, so a copy of it explains itself.
+Every contribution carries a small ![magnifier](/static/img/integrity-magnifier.svg) symbol that leads to the integrity page of its debate. That page lists the fingerprint of every commit, names the signing key of the platform, hands out the whole repository as a git clone, and gives details on how to check fingerprints and signatures. The repository carries the same instructions in its own README, so a copy of it explains itself.
 
 The short answer is that you clone the repository once and run `git pull --ff-only` whenever you come back. New contributions arrive without comment; a rewritten history makes the command refuse and say so. Rewriting is not automatically an attack, since contributions occasionally have to be removed for organisational or legal reasons, but it is never invisible, and such an event is meant to be announced and explained on the integrity page.
 

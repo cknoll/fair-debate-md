@@ -1,4 +1,4 @@
-From 75229149833333bba39e6a4ef05b9532a4a34264 Mon Sep 17 00:00:00 2001
+From 50756276bb0fddbcf6f0ffd4acc79da40c1149f8 Mon Sep 17 00:00:00 2001
 From: Questioner <d00-explanatory-example-debate_c@fair-debate-users.org>
 Date: Thu, 27 Aug 2026 08:35:00 +0200
 Subject: [PATCH 10/19] add contribution c/a32b38c.md
@@ -10,12 +10,12 @@ Subject: [PATCH 10/19] add contribution c/a32b38c.md
 
 diff --git a/c/a32b38c.md b/c/a32b38c.md
 new file mode 100644
-index 0000000..ce634db
+index 0000000..40299e3
 --- /dev/null
 +++ b/c/a32b38c.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a32b38c1 What are the weak points of this approach?
 \ No newline at end of file

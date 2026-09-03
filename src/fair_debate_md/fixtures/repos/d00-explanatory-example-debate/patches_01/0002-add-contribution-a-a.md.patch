@@ -1,4 +1,4 @@
-From 6c817c829f4a9b125b526cafe5fd275a653803d5 Mon Sep 17 00:00:00 2001
+From 05ee90c31941c2bd2c239fa252f288c11390b499 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 16:00:00 +0200
 Subject: [PATCH 02/19] add contribution a/a.md
@@ -10,12 +10,12 @@ Subject: [PATCH 02/19] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..acfe768
+index 0000000..24a6c5d
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,42 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +# ::a1 Explanatory Example Debate
 +
@@ -23,7 +23,7 @@ index 0000000..acfe768
 +
 +::a6 You are reading the opening _contribution_ of this debate. ::a7 It has the contribution key `a`. ::a8 Every contribution is split automatically into _segments_ — headings, sentences, bullet points. ::a9 The segments of a contribution carry keys of their own like `a1`, `a2`, etc. ::a10 Therefore each segment can be precisely referenced. ::a11 And each segment can be answered on its own. ::a12 Hovering over a segment shows its key; clicking or tapping it also lets you copy its URL and answer it.
 +
-+::a13 Top right of the header sits an info symbol, an `i` in a circle. ::a14 It switches on help mode: ::a15 from then on the interface explains its own controls. ::a16 Click an element to see its explanation, or step through all of them in turn with the arrows. ::a17 The key `i` switches the mode on and off as well.
++::a13 Top right of the header sits an ![info](/static/img/info-icon.svg) symbol, an `i` in a circle. ::a14 It switches on help mode: ::a15 from then on the interface explains its own controls. ::a16 Click an element to see its explanation, or step through all of them in turn with the arrows. ::a17 The key `i` switches the mode on and off as well.
 +
 +::a18 Segments that are highlighted have been answered already. ::a19 Click one such answered segment to unfold the answers below it. ::a20 Most of this document lives in those answers, so unfolding them is how you read it.
 +

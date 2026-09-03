@@ -1,4 +1,4 @@
-From 66a8a03cf2b10e39295a0283c6244ecddb72d6ed Mon Sep 17 00:00:00 2001
+From 7ccbc279d52f4a6919b2e45b8e66920267b03bb3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
 Date: Fri, 28 Aug 2026 08:55:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 13/19] add contribution b/a40b.md
 
 diff --git a/b/a40b.md b/b/a40b.md
 new file mode 100644
-index 0000000..ee77b5a
+index 0000000..fcf911e
 --- /dev/null
 +++ b/b/a40b.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a40b1 Die Buchstaben laufen einfach weiter. ::a40b2 Nach `z` gehen die Bezeichner zweistellig weiter, mit `aa`, `ab` und so fort, in der Reihenfolge des Beitritts. ::a40b3 Es gibt also keine Obergrenze im Schlüsselsystem, und ein Schlüssel wie `a5aa` ist ein ganz gewöhnlicher Schlüssel — Partei `aa` antwortet auf Segment 5 des Eröffnungsbeitrags. ::a40b4 In der Praxis wird eine Debatte mit 26 aktiven Parteien allerdings andere Probleme zuerst haben.
 \ No newline at end of file

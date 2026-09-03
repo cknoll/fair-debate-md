@@ -1,4 +1,4 @@
-From 38670553cbdfd4c023cefca11a42172659d51586 Mon Sep 17 00:00:00 2001
+From 61653c1cb11fc76a50691eae39cb1f26c587bb87 Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Tue, 25 Aug 2026 12:45:00 +0200
 Subject: [PATCH 05/19] add contribution a/a25c5a.md
@@ -10,12 +10,12 @@ Subject: [PATCH 05/19] add contribution a/a25c5a.md
 
 diff --git a/a/a25c5a.md b/a/a25c5a.md
 new file mode 100644
-index 0000000..5becf99
+index 0000000..62e3ef2
 --- /dev/null
 +++ b/a/a25c5a.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a25c5a1 That is correct, and it is worth saying out loud. ::a25c5a2 The opening contribution says at the very beginning that this document abuses the platform's functionality for explanations, and this is where that shows. ::a25c5a3 A real debate grows forwards and nobody in it knows who will answer next.
 \ No newline at end of file

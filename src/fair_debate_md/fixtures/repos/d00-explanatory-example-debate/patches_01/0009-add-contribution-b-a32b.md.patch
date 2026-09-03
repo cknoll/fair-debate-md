@@ -1,4 +1,4 @@
-From 4e29d34393482467df1b959dd139bbc904fa156a Mon Sep 17 00:00:00 2001
+From bece145c4f9781312822fc897a788ae1d5e5ebd9 Mon Sep 17 00:00:00 2001
 From: Elaborator <d00-explanatory-example-debate_b@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 20:30:00 +0200
 Subject: [PATCH 09/19] add contribution b/a32b.md
@@ -10,12 +10,12 @@ Subject: [PATCH 09/19] add contribution b/a32b.md
 
 diff --git a/b/a32b.md b/b/a32b.md
 new file mode 100644
-index 0000000..9852c41
+index 0000000..4cc7dcf
 --- /dev/null
 +++ b/b/a32b.md
 @@ -0,0 +1,38 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +### ::a32b1 Why this matters
 +
@@ -37,7 +37,7 @@ index 0000000..9852c41
 +
 +### ::a32b21 Where to look
 +
-+::a32b22 Every contribution carries a link (click the magnifier symbol) to the integrity page of the debate. ::a32b23 There the fingerprints are listed, and the repository with the signed commits can be downloaded as a single file or cloned directly with git. ::a32b24 Additionally, that page describes how to check for manipulation of the content.
++::a32b22 Every contribution carries a link (click the ![magnifier](/static/img/integrity-magnifier.svg) symbol) to the integrity page of the debate. ::a32b23 There the fingerprints are listed, and the repository with the signed commits can be downloaded as a single file or cloned directly with git. ::a32b24 Additionally, that page describes how to check for manipulation of the content.
 +
 +::a32b25 For anyone taking part in a debate the shortest route is to clone that repository once. ::a32b26 From then on a single `git pull --ff-only` does the checking. ::a32b27 It passes quietly while the debate merely grows, and it refuses to run the moment the history was rewritten. ::a32b28 Nothing has to be noted down and nothing has to be remembered, and the refusal leaves the reader holding both versions at once, which is what turns a suspicion into something showable.
 +

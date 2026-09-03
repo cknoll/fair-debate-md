@@ -1,4 +1,4 @@
-From 4f0851eca7370c98235c9e22480408d687cfa011 Mon Sep 17 00:00:00 2001
+From ca7b5cca81adc7e6bd32413d39916087fb37b62f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erg=C3=A4nzer?=
  <d01-erklaerende-beispieldebatte_b@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 21:25:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 09/19] add contribution b/a32b.md
 
 diff --git a/b/a32b.md b/b/a32b.md
 new file mode 100644
-index 0000000..30e556d
+index 0000000..19b083e
 --- /dev/null
 +++ b/b/a32b.md
 @@ -0,0 +1,38 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +### ::a32b1 Warum das wichtig ist
 +
@@ -38,7 +38,7 @@ index 0000000..30e556d
 +
 +### ::a32b24 Wo du nachschauen kannst
 +
-+::a32b25 Jeder Beitrag trägt einen Link zur Integritätsseite seiner Debatte, erreichbar über das Lupensymbol. ::a32b26 Dort sind die Fingerabdrücke aufgelistet, und das Repository mit den signierten Commits lässt sich als einzelne Datei herunterladen oder direkt mit git klonen. ::a32b27 Außerdem beschreibt diese Seite, wie sich Manipulationen an den Inhalten aufspüren lassen.
++::a32b25 Jeder Beitrag trägt über das Lupensymbol ![](/static/img/integrity-magnifier.svg) einen Link zur Integritätsseite seiner Debatte. ::a32b26 Dort sind die Fingerabdrücke aufgelistet, und das Repository mit den signierten Commits lässt sich als einzelne Datei herunterladen oder direkt mit git klonen. ::a32b27 Außerdem beschreibt diese Seite, wie sich Manipulationen an den Inhalten aufspüren lassen.
 +
 +::a32b28 Wer an einer Debatte teilnimmt, geht am kürzesten Weg, indem er dieses Repository einmal klont. ::a32b29 Von da an übernimmt ein einzelnes `git pull --ff-only` die Prüfung. ::a32b30 Es läuft still durch, solange die Debatte nur wächst, und es verweigert den Dienst in dem Moment, in dem die Vorgeschichte umgeschrieben wurde. ::a32b31 Du musst dir nichts notieren und nichts merken, und die Verweigerung lässt dich beide Fassungen zugleich in der Hand halten — das ist es, was aus einem Verdacht etwas Vorzeigbares macht.
 +

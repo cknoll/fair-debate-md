@@ -18,7 +18,7 @@ Dieses Dokument ist eine *Debatte*. Es beschreibt die wichtigsten Eigenschaften 
 
 Du liest gerade den eröffnenden *Beitrag* dieser Debatte. Er trägt den Beitragsschlüssel `a`. Jeder Beitrag wird automatisch in *Segmente* zerlegt — Überschriften, Sätze, Aufzählungspunkte. Die Segmente eines Beitrags bekommen eigene Schlüssel wie `a1`, `a2` und so weiter. Dadurch lässt sich jedes Segment genau benennen. Und jedes Segment lässt sich einzeln beantworten. Wenn du mit der Maus über ein Segment fährst, siehst du seinen Schlüssel; ein Klick oder Fingertipp erlaubt dir außerdem, seine URL zu kopieren und darauf zu antworten.
 
-Oben rechts in der Kopfzeile sitzt ein Info-Symbol, ein `i` im Kreis. Es schaltet den Hilfemodus ein: Danach erklärt die Oberfläche ihre eigenen Bedienelemente. Klicke ein Element an, um seine Erklärung zu sehen, oder blättere mit den Pfeilen der Reihe nach durch alle Erklärungen. Die Taste `i` schaltet den Modus ebenso ein und wieder aus.
+Oben rechts in der Kopfzeile sitzt ein Info-Symbol ![](/static/img/info-icon.svg) — ein `i` im Kreis. Es schaltet den Hilfemodus ein: Danach erklärt die Oberfläche ihre eigenen Bedienelemente. Klicke ein Element an, um seine Erklärung zu sehen, oder blättere mit den Pfeilen der Reihe nach durch alle Erklärungen. Die Taste `i` schaltet den Modus ebenso ein und wieder aus.
 
 Hervorgehobene Segmente sind bereits beantwortet worden. Klicke auf ein solches Segment, um die Antworten darunter aufzuklappen. Der größte Teil dieses Dokuments steckt in diesen Antworten, Aufklappen ist also die Art, es zu lesen.
 
@@ -120,7 +120,7 @@ Die Signatur reist mit dem Repository mit, wer es also klont, hat dieses Beweism
 
 ### Wo du nachschauen kannst
 
-Jeder Beitrag trägt einen Link zur Integritätsseite seiner Debatte, erreichbar über das Lupensymbol. Dort sind die Fingerabdrücke aufgelistet, und das Repository mit den signierten Commits lässt sich als einzelne Datei herunterladen oder direkt mit git klonen. Außerdem beschreibt diese Seite, wie sich Manipulationen an den Inhalten aufspüren lassen.
+Jeder Beitrag trägt über das Lupensymbol ![](/static/img/integrity-magnifier.svg) einen Link zur Integritätsseite seiner Debatte. Dort sind die Fingerabdrücke aufgelistet, und das Repository mit den signierten Commits lässt sich als einzelne Datei herunterladen oder direkt mit git klonen. Außerdem beschreibt diese Seite, wie sich Manipulationen an den Inhalten aufspüren lassen.
 
 Wer an einer Debatte teilnimmt, geht am kürzesten Weg, indem er dieses Repository einmal klont. Von da an übernimmt ein einzelnes `git pull --ff-only` die Prüfung. Es läuft still durch, solange die Debatte nur wächst, und es verweigert den Dienst in dem Moment, in dem die Vorgeschichte umgeschrieben wurde. Du musst dir nichts notieren und nichts merken, und die Verweigerung lässt dich beide Fassungen zugleich in der Hand halten — das ist es, was aus einem Verdacht etwas Vorzeigbares macht.
 
@@ -172,7 +172,7 @@ Beides ist möglich, und der Schlüssel sagt, was gemeint ist. Eine Folge zusamm
 
 <!-- !!== label=a-faq-integrity party=a answers="Wie lässt sich die Integrität einer Debatte prüfen" ==== -->
 
-Jeder Beitrag trägt ein kleines Lupensymbol, das zur Integritätsseite seiner Debatte führt. Diese Seite listet den Fingerabdruck jedes Commits auf, nennt den Signaturschlüssel der Plattform, gibt das ganze Repository als git-Klon heraus und erklärt im Einzelnen, wie sich Fingerabdrücke und Signaturen prüfen lassen. Das Repository trägt dieselbe Anleitung in seiner eigenen README, eine Kopie davon erklärt sich also selbst.
+Jeder Beitrag trägt ein kleines Lupensymbol ![](/static/img/integrity-magnifier.svg) als Link zur Integritätsseite seiner Debatte. Diese Seite listet den Fingerabdruck jedes Commits auf, nennt den Signaturschlüssel der Plattform, gibt das ganze Repository als git-Klon heraus und erklärt im Einzelnen, wie sich Fingerabdrücke und Signaturen prüfen lassen. Das Repository trägt dieselbe Anleitung in seiner eigenen README, eine Kopie davon erklärt sich also selbst.
 
 Die kurze Antwort lautet, dass du das Repository einmal klonst und bei jeder Rückkehr `git pull --ff-only` ausführst. Neue Beiträge kommen kommentarlos an; bei einer umgeschriebenen Vorgeschichte verweigert der Befehl den Dienst und sagt das auch. Umschreiben ist nicht automatisch ein Angriff, denn Beiträge müssen gelegentlich aus organisatorischen oder rechtlichen Gründen entfernt werden. Unsichtbar ist es aber nie, und ein solcher Vorgang soll auf der Integritätsseite angekündigt und begründet werden.
 

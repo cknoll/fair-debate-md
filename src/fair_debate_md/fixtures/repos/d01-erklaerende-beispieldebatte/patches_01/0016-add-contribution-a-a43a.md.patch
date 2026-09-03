@@ -1,7 +1,7 @@
-From 253c59edd22b8d2e7d7a282b16b5169150d2b90c Mon Sep 17 00:00:00 2001
+From 87f009e478667ef36a2ba640d6e361009de3d3f4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
-Date: Sat, 29 Aug 2026 08:55:00 +0200
+Date: Sat, 29 Aug 2026 08:00:00 +0200
 Subject: [PATCH 16/19] add contribution a/a43a.md
 
 ---
@@ -11,12 +11,12 @@ Subject: [PATCH 16/19] add contribution a/a43a.md
 
 diff --git a/a/a43a.md b/a/a43a.md
 new file mode 100644
-index 0000000..1346dbb
+index 0000000..82798d0
 --- /dev/null
 +++ b/a/a43a.md
 @@ -0,0 +1,10 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a43a1 Sie lösen zwei verschiedene Probleme, und keines von beiden ersetzt das andere.
 +

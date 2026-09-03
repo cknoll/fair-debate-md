@@ -1,4 +1,4 @@
-From 21092ad8ae9360cdf4f9f10467954bf28a5c0666 Mon Sep 17 00:00:00 2001
+From 0f168f3dcdeda1869d606e5877dee9ea0235da99 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Wed, 26 Aug 2026 08:55:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 07/19] add contribution a/a31b7a.md
 
 diff --git a/a/a31b7a.md b/a/a31b7a.md
 new file mode 100644
-index 0000000..5cb3dbb
+index 0000000..0418fcb
 --- /dev/null
 +++ b/a/a31b7a.md
 @@ -0,0 +1,17 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +### ::a31b7a1 Ein Beispiel
 +

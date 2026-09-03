@@ -1,6 +1,6 @@
-From b73f0147cdf838b21461ad6a7ad3b877c26f1926 Mon Sep 17 00:00:00 2001
+From eeab8de948887962a54f63295d5cb1b26daeb45e Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
-Date: Sat, 29 Aug 2026 18:30:00 +0200
+Date: Sat, 29 Aug 2026 18:35:00 +0200
 Subject: [PATCH 18/19] add contribution a/a45a.md
 
 ---
@@ -10,12 +10,12 @@ Subject: [PATCH 18/19] add contribution a/a45a.md
 
 diff --git a/a/a45a.md b/a/a45a.md
 new file mode 100644
-index 0000000..bc1aff2
+index 0000000..ac7ea24
 --- /dev/null
 +++ b/a/a45a.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a45a1 Through the [contact page](/contact/) of this site, which points to the maintainer and to the public source repository, where issues and suggestions can be filed. ::a45a2 There is no feedback form inside the platform itself yet.
 \ No newline at end of file
