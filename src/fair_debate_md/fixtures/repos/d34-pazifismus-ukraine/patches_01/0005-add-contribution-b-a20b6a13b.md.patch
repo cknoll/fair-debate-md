@@ -1,4 +1,4 @@
-From e6f10dacbb876ad2206b06028f4383b46de85998 Mon Sep 17 00:00:00 2001
+From 7b0a15c2c2118b7651910b2be05544f2a2b1f461 Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
 Date: Sat, 4 Jul 2026 08:10:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 05/12] add contribution b/a20b6a13b.md
 
 diff --git a/b/a20b6a13b.md b/b/a20b6a13b.md
 new file mode 100644
-index 0000000..a81e5d2
+index 0000000..e90f43c
 --- /dev/null
 +++ b/b/a20b6a13b.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a20b6a13b1 Damit rechnen Sie aber eine Größe heraus, die für die Betroffenen die entscheidende ist.
 +

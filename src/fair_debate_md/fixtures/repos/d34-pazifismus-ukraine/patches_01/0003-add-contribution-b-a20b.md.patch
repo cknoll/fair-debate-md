@@ -1,4 +1,4 @@
-From cea526a7c887a06c84cf8c5b4fb7dcdc2ccefd82 Mon Sep 17 00:00:00 2001
+From 0ade6458708a80d796526d397a2815cdf61eb016 Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
 Date: Fri, 3 Jul 2026 08:20:00 +0200
@@ -11,12 +11,12 @@ Subject: [PATCH 03/12] add contribution b/a20b.md
 
 diff --git a/b/a20b.md b/b/a20b.md
 new file mode 100644
-index 0000000..8ff12b6
+index 0000000..63a38e7
 --- /dev/null
 +++ b/b/a20b.md
 @@ -0,0 +1,10 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a20b1 Hier liegt der Kern unserer Meinungsverschiedenheit, und ich halte Ihre Annahme über den Menschen für zu optimistisch.
 +

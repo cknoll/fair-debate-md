@@ -1,4 +1,4 @@
-From a5f55854150104679521374e5970aecdd5b15f5f Mon Sep 17 00:00:00 2001
+From 518db9f7fe4bcbe71c66146c609d76d116565a59 Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
 Date: Thu, 2 Jul 2026 17:00:00 +0200
 Subject: [PATCH 02/12] add contribution a/a.md
@@ -10,12 +10,12 @@ Subject: [PATCH 02/12] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..fb3a270
+index 0000000..d97063b
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,26 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +# ::a1 Wäre gewaltfreier Widerstand die bessere Antwort auf den russischen Angriff gewesen?
 +
@@ -33,7 +33,7 @@ index 0000000..fb3a270
 +
 +::a28 Meine zweite These betrifft das, was mich eigentlich umtreibt, nämlich das Risiko eines Atomkriegs. ::a29 Seit dem russischen Überfall ist die Wahrscheinlichkeit, dass zwischen den Atommächten auch nur aus Versehen ein Krieg ausbricht, erheblich gestiegen. ::a30 Wir kennen die Beinahe-Katastrophen. ::a31 In der Kubakrise bezifferte Robert Kennedy die Wahrscheinlichkeit des Knalls im Nachhinein auf fünfzig zu fünfzig. ::a32 Im Jahr 1983 sah der sowjetische Oberst Petrow anfliegende Raketen auf seinem Schirm und entschied sich gegen alle Vorschriften, die Meldung nicht weiterzugeben.
 +
-+::a33 Heute kommt hinzu, dass die Frühwarnsysteme mit KI-gestützter Mustererkennung arbeiten und ein Mensch unter extremem Zeitdruck interpretieren muss, was die Maschine ausspuckt. ::a34 Wir können einmal Glück haben, wir können achtmal Glück haben, aber das ist keine nachhaltige Politik. ::a35 Wenn im Herbst 2022 tatsächlich, wie US-Geheimdienstberichte nahelegen, der Einsatz taktischer Atomwaffen erwogen wurde, dann stand mehr auf dem Spiel als eine Frontlinie. ::a36 Dann stand das seit Hiroshima mühsam gehaltene Tabu auf dem Spiel, und mit seinem Fall beginnt die Epoche der Atomkriege im Plural.
++::a33 Heute kommt hinzu, dass die Frühwarnsysteme mit KI-gestützter Mustererkennung arbeiten und ein Mensch unter extremem Zeitdruck interpretieren muss, was die Maschine ausspuckt. ::a34 "Wir können einmal Glück haben, wir können achtmal Glück haben, aber das ist keine nachhaltige Politik", wie Müller es treffend ausgedrückt hat. ::a35 Wenn im Herbst 2022 tatsächlich, wie US-Geheimdienstberichte nahelegen, der Einsatz taktischer Atomwaffen erwogen wurde, dann stand mehr auf dem Spiel als eine Frontlinie. ::a36 Dann stand das seit Hiroshima mühsam gehaltene Tabu auf dem Spiel, und mit seinem Fall beginnt die Epoche der Atomkriege im Plural.
 +
 +::a37 Meine dritte These ist, dass es ein Verhandlungsfenster gab und dass es nicht genutzt wurde. ::a38 Im Frühjahr 2022 haben Russen und Ukrainer ernsthaft verhandelt, die Dokumente liegen vor. ::a39 Beteiligte auf ukrainischer Seite und der damalige israelische Premier Naftali Bennett haben gesagt, man sei nah an einem Abschluss gewesen. ::a40 Den Ukrainern ging es dabei weniger um Territorium als um belastbare Sicherheitsgarantien. ::a41 Das Fachjournal Foreign Affairs, gewiss kein pazifistisches Blatt, hat seine Rekonstruktion mit "The talks that could have ended the war" überschrieben.
 +

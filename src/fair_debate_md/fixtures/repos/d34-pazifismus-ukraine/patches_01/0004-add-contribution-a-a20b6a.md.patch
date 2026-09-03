@@ -1,4 +1,4 @@
-From 7e630938a047e3a9dcca5be5dd003322db2a289a Mon Sep 17 00:00:00 2001
+From 2928bb3b62f1899886f577e182cea434d15f6824 Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
 Date: Fri, 3 Jul 2026 15:55:00 +0200
 Subject: [PATCH 04/12] add contribution a/a20b6a.md
@@ -10,12 +10,12 @@ Subject: [PATCH 04/12] add contribution a/a20b6a.md
 
 diff --git a/a/a20b6a.md b/a/a20b6a.md
 new file mode 100644
-index 0000000..0444f23
+index 0000000..02e07a5
 --- /dev/null
 +++ b/a/a20b6a.md
 @@ -0,0 +1,10 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a20b6a1 Ich verstehe den Einwand, aber ich möchte zwei Dinge dagegenhalten.
 +

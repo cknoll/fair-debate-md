@@ -1,6 +1,6 @@
-From 623b2807adf2acd62bfa2b51fa82a7915806f33e Mon Sep 17 00:00:00 2001
+From 30217aeafdeef07b3a3bb93b49f9ee497f57c022 Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
-Date: Mon, 6 Jul 2026 08:15:00 +0200
+Date: Mon, 6 Jul 2026 08:10:00 +0200
 Subject: [PATCH 10/12] add contribution a/a37b2a.md
 
 ---
@@ -10,12 +10,12 @@ Subject: [PATCH 10/12] add contribution a/a37b2a.md
 
 diff --git a/a/a37b2a.md b/a/a37b2a.md
 new file mode 100644
-index 0000000..19aaba0
+index 0000000..542685d
 --- /dev/null
 +++ b/a/a37b2a.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a37b2a1 Über München ist kürzlich ein Buch erschienen, das die Verhandlungen zwischen Chamberlain und Hitler minutiös rekonstruiert, und sein Schlusswort finde ich bedenkenswert.
 +

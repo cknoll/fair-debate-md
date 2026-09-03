@@ -1,6 +1,6 @@
-From d8f10eb3df9a4cadab89dafc6e382f2bb4275dbc Mon Sep 17 00:00:00 2001
+From 9a8b49ecfe07f7a2217bec80313ae865788dc6c2 Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
-Date: Sat, 4 Jul 2026 20:25:00 +0200
+Date: Sat, 4 Jul 2026 20:20:00 +0200
 Subject: [PATCH 07/12] add contribution a/a34b8a.md
 
 ---
@@ -10,12 +10,12 @@ Subject: [PATCH 07/12] add contribution a/a34b8a.md
 
 diff --git a/a/a34b8a.md b/a/a34b8a.md
 new file mode 100644
-index 0000000..b7f4392
+index 0000000..06786f7
 --- /dev/null
 +++ b/a/a34b8a.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a34b8a1 Doch, genau daran ändert es etwas, und dieser Punkt ist mir wichtig genug, um ihn auszubuchstabieren.
 +

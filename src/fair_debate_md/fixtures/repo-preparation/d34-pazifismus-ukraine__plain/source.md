@@ -27,7 +27,7 @@ Ein Beispiel aus den ersten Kriegswochen stützt das. In Slawutytsch, einer Stad
 
 Meine zweite These betrifft das, was mich eigentlich umtreibt, nämlich das Risiko eines Atomkriegs. Seit dem russischen Überfall ist die Wahrscheinlichkeit, dass zwischen den Atommächten auch nur aus Versehen ein Krieg ausbricht, erheblich gestiegen. Wir kennen die Beinahe-Katastrophen. In der Kubakrise bezifferte Robert Kennedy die Wahrscheinlichkeit des Knalls im Nachhinein auf fünfzig zu fünfzig. Im Jahr 1983 sah der sowjetische Oberst Petrow anfliegende Raketen auf seinem Schirm und entschied sich gegen alle Vorschriften, die Meldung nicht weiterzugeben.
 
-Heute kommt hinzu, dass die Frühwarnsysteme mit KI-gestützter Mustererkennung arbeiten und ein Mensch unter extremem Zeitdruck interpretieren muss, was die Maschine ausspuckt. Wir können einmal Glück haben, wir können achtmal Glück haben, aber das ist keine nachhaltige Politik. Wenn im Herbst 2022 tatsächlich, wie US-Geheimdienstberichte nahelegen, der Einsatz taktischer Atomwaffen erwogen wurde, dann stand mehr auf dem Spiel als eine Frontlinie. Dann stand das seit Hiroshima mühsam gehaltene Tabu auf dem Spiel, und mit seinem Fall beginnt die Epoche der Atomkriege im Plural.
+Heute kommt hinzu, dass die Frühwarnsysteme mit KI-gestützter Mustererkennung arbeiten und ein Mensch unter extremem Zeitdruck interpretieren muss, was die Maschine ausspuckt. "Wir können einmal Glück haben, wir können achtmal Glück haben, aber das ist keine nachhaltige Politik", wie Müller es treffend ausgedrückt hat. Wenn im Herbst 2022 tatsächlich, wie US-Geheimdienstberichte nahelegen, der Einsatz taktischer Atomwaffen erwogen wurde, dann stand mehr auf dem Spiel als eine Frontlinie. Dann stand das seit Hiroshima mühsam gehaltene Tabu auf dem Spiel, und mit seinem Fall beginnt die Epoche der Atomkriege im Plural.
 
 Meine dritte These ist, dass es ein Verhandlungsfenster gab und dass es nicht genutzt wurde. Im Frühjahr 2022 haben Russen und Ukrainer ernsthaft verhandelt, die Dokumente liegen vor. Beteiligte auf ukrainischer Seite und der damalige israelische Premier Naftali Bennett haben gesagt, man sei nah an einem Abschluss gewesen. Den Ukrainern ging es dabei weniger um Territorium als um belastbare Sicherheitsgarantien. Das Fachjournal Foreign Affairs, gewiss kein pazifistisches Blatt, hat seine Rekonstruktion mit "The talks that could have ended the war" überschrieben.
 
@@ -63,11 +63,11 @@ Selbst wenn ich Ihnen die Zahlen zugestehe, bleibt die Ukraine in Ihrem Szenario
 
 Und was Slawutytsch angeht, ist die ehrlichste Bemerkung dazu von Ihnen selbst gekommen. Ein Fall gegen einen anderen Fall beweist keine Kausalität. Die Russen sind dort aus übergeordneten militärischen Gründen abgezogen, nicht weil jemand gesungen hat.
 
-<!-- !!== label=b-atom party=b answers="Wir können einmal Glück haben, wir können achtmal Glück haben, aber das ist keine nachhaltige Politik." ==== -->
+<!-- !!== label=b-atom party=b answers="aber das ist keine nachhaltige Politik" ==== -->
 
 Diesem Satz stimme ich sogar zu, und ich finde es richtig, dass Sie auf dieses Risiko hinweisen.
 
-Je öfter man würfelt, desto größer die Wahrscheinlichkeit, dass irgendwann die Sechs fällt. Über einen langen Zeitraum nähert sich diese Wahrscheinlichkeit der Gewissheit. Dass es vierzig Jahre gut gegangen ist, beweist nichts über die nächsten vierzig.
+Wer oft genug würfelt, bekommt irgendwann die Sechs. Über einen langen Zeitraum nähert sich die Wahrscheinlichkeit dafür der Gewissheit. Dass es vierzig Jahre gut gegangen ist, beweist nichts über die nächsten vierzig.
 
 Nur trägt Ihr Argument die Schlussfolgerung nicht, die Sie daraus ziehen. Die Kubakrise und der Fall Petrow konnten sich ereignen, ohne dass irgendjemand Waffen an eine angegriffene Nation lieferte. Das Risiko entsteht daraus, dass es diese Waffen gibt und dass die Systeme fehleranfällig sind. Es besteht in Friedenszeiten genauso. Ob wir liefern oder nicht liefern, ändert daran nichts.
 

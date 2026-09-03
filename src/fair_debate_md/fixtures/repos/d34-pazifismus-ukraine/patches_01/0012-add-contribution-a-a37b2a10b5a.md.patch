@@ -1,6 +1,6 @@
-From b4533e2b277893b0f548160093043f4695833db9 Mon Sep 17 00:00:00 2001
+From 26c4da77f24f10f49f3a6ada4ef444ef5b0a1316 Mon Sep 17 00:00:00 2001
 From: Pazifistische Person <d34-pazifismus-ukraine_a@fair-debate-users.org>
-Date: Mon, 6 Jul 2026 21:55:00 +0200
+Date: Mon, 6 Jul 2026 21:50:00 +0200
 Subject: [PATCH 12/12] add contribution a/a37b2a10b5a.md
 
 ---
@@ -10,12 +10,12 @@ Subject: [PATCH 12/12] add contribution a/a37b2a10b5a.md
 
 diff --git a/a/a37b2a10b5a.md b/a/a37b2a10b5a.md
 new file mode 100644
-index 0000000..45282c4
+index 0000000..d059d2b
 --- /dev/null
 +++ b/a/a37b2a10b5a.md
 @@ -0,0 +1,10 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a37b2a10b5a1 Mit dieser Klausel, ja. ::a37b2a10b5a2 Nur stand sie nicht von Anfang an im Entwurf.
 +

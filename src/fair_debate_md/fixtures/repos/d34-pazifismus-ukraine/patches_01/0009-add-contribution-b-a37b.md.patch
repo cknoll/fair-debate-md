@@ -1,7 +1,7 @@
-From 82f6884e9a854839c63557a8bfb474268c2a9e63 Mon Sep 17 00:00:00 2001
+From 008d33b45835b1679ef811cb4c22d5ead41c3e58 Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
-Date: Sun, 5 Jul 2026 15:25:00 +0200
+Date: Sun, 5 Jul 2026 15:20:00 +0200
 Subject: [PATCH 09/12] add contribution b/a37b.md
 
 ---
@@ -11,12 +11,12 @@ Subject: [PATCH 09/12] add contribution b/a37b.md
 
 diff --git a/b/a37b.md b/b/a37b.md
 new file mode 100644
-index 0000000..8cb037c
+index 0000000..1a057bb
 --- /dev/null
 +++ b/b/a37b.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a37b1 An diesem Punkt kommt eine Erfahrung ins Spiel, die schwerer wiegt als ein einzelner Vertragsentwurf.
 +

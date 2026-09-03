@@ -1,7 +1,7 @@
-From b0a59c0409377b6c2b9acdddb5aaa5fd0dbfc90a Mon Sep 17 00:00:00 2001
+From 76fb8478372c61642edae066e0aaec3fa4cdf801 Mon Sep 17 00:00:00 2001
 From: Nicht-Pazifistische Person
  <d34-pazifismus-ukraine_b@fair-debate-users.org>
-Date: Sun, 5 Jul 2026 08:55:00 +0200
+Date: Sun, 5 Jul 2026 08:50:00 +0200
 Subject: [PATCH 08/12] add contribution b/a34b8a7b.md
 
 ---
@@ -11,12 +11,12 @@ Subject: [PATCH 08/12] add contribution b/a34b8a7b.md
 
 diff --git a/b/a34b8a7b.md b/b/a34b8a7b.md
 new file mode 100644
-index 0000000..8791ac9
+index 0000000..3a0c2ae
 --- /dev/null
 +++ b/b/a34b8a7b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a34b8a7b1 Angenommen, das stimmt, dann bleibt die Frage, was auf der anderen Seite der Waage liegt.
 +
