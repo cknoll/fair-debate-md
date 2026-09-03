@@ -131,10 +131,11 @@ leaving the repo claiming a source it no longer came from.
 
 Surfaced while rewriting the `d00-explanatory-example-debate` fixture, whose text
 mentions a lot of contribution keys and therefore hits the case in almost every
-sentence. Concerns `SpanAdder.convert_soup_to_final_html()` in `core.py` (called with
-`prettify=True` from `MDProcessor.convert()`, ~line 394).
+sentence. Concerns `SpanAdder.convert_soup_to_final_html()` in `core.py`, called with
+`prettify=True` from `MDProcessor.get_html_with_segments()` (~line 408, reached via
+`convert()`).
 
-- [] **inline elements get a space before the following punctuation.**
+- [ ] **inline elements get a space before the following punctuation.**
   `soup.prettify()` puts every tag on a line of its own, and the browser renders that
   line break as a space. Source:
 
@@ -152,11 +153,36 @@ sentence. Concerns `SpanAdder.convert_soup_to_final_html()` in `core.py` (called
   comma. The same happens after `<em>`/`<strong>` and before a full stop. Affects every
   debate, not just this fixture.
 
-  Worth knowing before touching it: the rendered segment text is what
-  `get_rendered_word_offsets()` (`references.py`) aligns raw words against, and its
-  docstring names prettify-injected whitespace explicitly as one of the cases the global
-  alignment is built to survive. Removing that whitespace should make its job easier
-  rather than harder, but it shifts the offsets of every existing segment, and some
-  tests in `test_word_offsets.py` compare offsets literally. Also to be checked: whether
-  anything besides readability of the delivered html depends on `prettify` at all -- if
-  not, dropping it may be cheaper than post-processing it away.
+  The defect is one step wider than "a space before punctuation": the whitespace is
+  injected at *every* inline tag boundary, so it also cuts a word that markup splits.
+  `**wichtig**e` is delivered as `wichtig\n   \n   e` and read aloud as "wichtig e".
+
+  Second reporter, same artefact: `fair-debate-web/todo_notes.md`, section "feature
+  2026-08-31: allow images in contributions", trap 2 -- an `<img>` immediately before
+  `.` or `,` shows as "symbol .". That is why the glyphs there were placed where a space
+  follows anyway and the german sentences were reworded rather than merely punctuated;
+  that note defers the actual fix to this item.
+
+  Blast radius, measured rather than assumed: `final_html` is computed per request
+  (`base/views.py` takes `ddl.final_html` into the `segmented_html` template variable)
+  and is stored neither in a content repo nor in the database. Changing it therefore
+  moves no contribution key, no segment key and no commit hash -- this is a rendering
+  change, not a content change, and it needs no fixture rebuild.
+
+  Worth knowing before touching it:
+
+  - The rendered segment text is what `get_rendered_word_offsets()` (`references.py`)
+    aligns raw words against, and its docstring names prettify-injected whitespace
+    explicitly as one of the cases the global alignment is built to survive. Removing
+    that whitespace should make its job easier rather than harder, but it shifts the
+    offsets of every segment. Most of `test_word_offsets.py` compares *sliced text* and
+    would survive; `test_bold_crossing_tag_boundary_mid_word_is_exact` asserts the
+    prettified string literally and has to be rewritten.
+  - `tests/test_md_handling.py` compares against prettified expectations (~line 377 plus
+    the `txt1_segmented_html*.html` files under `tests/testdata/`).
+  - There is already a precedent for repairing prettify's damage rather than avoiding
+    it: the `_strip_me_` attribute, set in `convert_code_placeholders()` and removed in
+    `decode_strip_me_tags()`, exists solely to undo the whitespace prettify injects
+    *inside* a `<code>` tag. What is still open is the whitespace *outside* it.
+  - To be checked: whether anything besides readability of the delivered html depends on
+    `prettify` at all -- if not, dropping it may be cheaper than post-processing it away.
