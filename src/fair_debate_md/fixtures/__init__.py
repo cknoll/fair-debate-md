@@ -12,7 +12,7 @@ TEST_REPO1_DIR = pjoin(TEST_REPO_HOST_DIR, "d1-lorem_ipsum")
 # Which of the fixture debates may appear on a public instance.
 #
 # Everything under `repos/` exists for the test suites, and none of it can be deleted --
-# every one of the eleven is named by tests in this package or in the web app. But a
+# every one of the fifteen is named by tests in this package or in the web app. But a
 # deployment used to roll out all of them and load the *test* database fixture as its
 # initial data, which put `d1-lorem_ipsum` and three debates literally named
 # "test_debate" on the landing page of the public instance.
