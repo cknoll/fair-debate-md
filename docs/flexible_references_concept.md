@@ -61,6 +61,18 @@ too (inherited by descendants): `a5-7b2c1_3-5d` is valid.
   file several replies with *overlapping* references (`a7b`, `a5-7b` and `a7_2-3b` may coexist).
   This is allowed; moderating redundant replies is a matter of debate culture, not of the
   key system.
+- **Canonical form:** overlap is allowed, *equivalence* is not. A word reference covering
+  every word of its segment says exactly what the plain segment reference says, so it is not
+  a form of its own: `a1_1-7b` on a seven-word segment **is** `a1b` and has to be written
+  that way (`a1_1b` likewise, on a one-word segment). `references.canonical_reference_key`
+  performs the fold; `validate_reference(..., require_canonical=True)` refuses the
+  unfolded spelling.
+
+  Without the fold, the rule "one answer per (segment, party)" is decided by the *spelling*
+  rather than by the statement: in `d31-ice-cream` a party selected the whole sentence with
+  the mouse (→ `a1_1-7a`) and then clicked the same segment (→ `a1a`), and had answered the
+  same seven words twice. Note the asymmetry to overlap: `a7_1-3b` and `a7_4-8b` are two
+  statements about two different pieces of text and stay two keys.
 
 ## Word tokenizer (FROZEN specification)
 
@@ -110,7 +122,13 @@ obtain word data from the backend.
 
 - referenced segments (range start and anchor) must exist in the parent contribution;
 - word positions must not exceed the word count of the target segment;
-- for range/word references a missing parent contribution is a hard error.
+- for range/word references a missing parent contribution is a hard error;
+- with `require_canonical=True`: a word reference spanning the whole segment is refused
+  (see *Canonical form* above). This is **off by default on purpose**. Validation runs on
+  every repo the loader opens, and a rule that was not in force when a contribution was
+  written must not make an existing debate unreadable; the callers that mint a *new* key --
+  the platform (`ShowDebateView._settle_contribution_key`) and the fixture builder
+  (`debate_builder`) -- switch it on, so the non-canonical form cannot enter a repo.
 
 Plain references keep the legacy behavior (silently ignored orphans). Syntactically invalid
 keys (e.g. degenerate ranges) fail `is_valid_key`; files with such names are ignored by the
@@ -126,7 +144,11 @@ All in `fair_debate_md.references` (re-exported via `fair_debate_md.core`):
 - `get_anchor_segment_key(ctb_key)` / `get_first_referenced_segment_key(ctb_key)` /
   `get_parent_contribution_key(ctb_key)`.
 - `get_segment_source(md, segment_key)` / `get_segment_words(md, segment_key)`.
-- `validate_reference(ctb_key, parent_md, code_contents=None)`.
+- `validate_reference(ctb_key, parent_md, code_contents=None, require_canonical=False)`.
+- `canonical_reference_key(ctb_key, parent_md, code_contents=None) -> str` — folds a
+  full-span word reference into the plain segment reference; every other key unchanged.
+  Only the *last* unit is folded: the inner units are the identity of contributions that
+  already exist.
 
 ## Rendered HTML (what the frontend gets)
 

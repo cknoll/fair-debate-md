@@ -12,6 +12,7 @@ import fair_debate_md as fdmd
 from fair_debate_md import references
 from fair_debate_md.references import (
     parse_key_unit,
+    canonical_reference_key,
     decompose_key,
     is_valid_key,
     get_anchor_segment_key,
@@ -224,6 +225,65 @@ class TestValidateReference:
             validate_reference("a2_2-6b", self.MD1)
         with pytest.raises(ValueError, match="exceeds"):
             validate_reference("a3_2b", self.MD1)
+
+    def test_full_span_word_ref_is_tolerated_by_default(self):
+        # the loader opens existing repos with this function; a rule that was not
+        # in force when a contribution was written must not make a debate unreadable
+        validate_reference("a1_1-3b", self.MD1)
+
+    def test_full_span_word_ref_refused_when_canonical_form_required(self):
+        with pytest.raises(ValueError, match="write it as 'a1b'"):
+            validate_reference("a1_1-3b", self.MD1, require_canonical=True)
+        # one-word segment, single-word reference
+        with pytest.raises(ValueError, match="write it as 'a3b'"):
+            validate_reference("a3_1b", self.MD1, require_canonical=True)
+
+    def test_partial_word_ref_survives_the_canonical_requirement(self):
+        validate_reference("a2_2-5b", self.MD1, require_canonical=True)
+        validate_reference("a2_1-3b", self.MD1, require_canonical=True)
+        validate_reference("a1-3b", self.MD1, require_canonical=True)
+
+
+class TestCanonicalReferenceKey:
+    """
+    A word reference covering the whole segment is a second spelling of the plain
+    segment reference. It has to be folded, otherwise a party can answer the same
+    segment twice -- once by clicking it, once by selecting all of its words --
+    and the "one answer per (segment, party)" rule is decided by the spelling
+    rather than by the statement.
+    """
+
+    MD1 = "::a1 First sentence here. ::a2 Second statement has five words. ::a3 Third."
+
+    def test_full_span_word_range_folds_to_plain_reference(self):
+        assert canonical_reference_key("a1_1-3b", self.MD1) == "a1b"
+        assert canonical_reference_key("a2_1-5b", self.MD1) == "a2b"
+
+    def test_single_word_reference_to_a_one_word_segment_folds(self):
+        assert canonical_reference_key("a3_1b", self.MD1) == "a3b"
+
+    def test_partial_word_reference_is_left_alone(self):
+        # not starting at word 1
+        assert canonical_reference_key("a2_2-5b", self.MD1) == "a2_2-5b"
+        # not reaching the last word
+        assert canonical_reference_key("a2_1-3b", self.MD1) == "a2_1-3b"
+        # a lone word position in a multi-word segment
+        assert canonical_reference_key("a2_1b", self.MD1) == "a2_1b"
+
+    def test_keys_without_a_word_reference_are_unchanged(self):
+        assert canonical_reference_key("a1b", self.MD1) == "a1b"
+        assert canonical_reference_key("a1-3b", self.MD1) == "a1-3b"
+        assert canonical_reference_key("a", self.MD1) == "a"
+
+    def test_only_the_last_unit_is_folded(self):
+        # the inner unit "a1_1-3" is the identity of an existing contribution and
+        # must survive untouched, however the new reference is spelled
+        parent_md = "::a1_1-3b1 Two more words."
+        assert canonical_reference_key("a1_1-3b1_1-3c", parent_md) == "a1_1-3b1c"
+
+    def test_unresolvable_key_is_returned_unchanged(self):
+        # validate_reference is the place that reports this, with a better message
+        assert canonical_reference_key("a99_1-3b", self.MD1) == "a99_1-3b"
 
 
 def _write_debate(tmp_path, files: dict):
