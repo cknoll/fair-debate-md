@@ -1,0 +1,24 @@
+From 8d516a00f2a85750b8cc5ba80b786fabacc04b62 Mon Sep 17 00:00:00 2001
+From: party_j <d30-many-parties_j@fair-debate-users.org>
+Date: Mon, 16 Dec 2024 10:45:00 +0100
+Subject: [PATCH 11/43] add contribution j/a13j.md
+
+---
+ j/a13j.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 j/a13j.md
+
+diff --git a/j/a13j.md b/j/a13j.md
+new file mode 100644
+index 0000000..2b7b427
+--- /dev/null
++++ b/j/a13j.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a13j1 Placeholder contribution 09, party j, answering a13 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

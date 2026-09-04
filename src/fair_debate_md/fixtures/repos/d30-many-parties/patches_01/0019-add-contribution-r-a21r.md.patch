@@ -1,0 +1,24 @@
+From 383a7912e4be25c4c66ed2e99221a059e797808b Mon Sep 17 00:00:00 2001
+From: party_r <d30-many-parties_r@fair-debate-users.org>
+Date: Mon, 16 Dec 2024 19:25:00 +0100
+Subject: [PATCH 19/43] add contribution r/a21r.md
+
+---
+ r/a21r.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 r/a21r.md
+
+diff --git a/r/a21r.md b/r/a21r.md
+new file mode 100644
+index 0000000..9a94636
+--- /dev/null
++++ b/r/a21r.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a21r1 Placeholder contribution 17, party r, answering a21 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -1,0 +1,24 @@
+From 2ed13b1d222353b46d3f64699137631d26380db0 Mon Sep 17 00:00:00 2001
+From: party_e <d30-many-parties_e@fair-debate-users.org>
+Date: Sun, 15 Dec 2024 19:20:00 +0100
+Subject: [PATCH 06/43] add contribution e/a8e.md
+
+---
+ e/a8e.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 e/a8e.md
+
+diff --git a/e/a8e.md b/e/a8e.md
+new file mode 100644
+index 0000000..c8ec432
+--- /dev/null
++++ b/e/a8e.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a8e1 Placeholder contribution 04, party e, answering a8 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

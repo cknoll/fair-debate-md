@@ -1,0 +1,24 @@
+From a90ecf867a14608e5a9045e4fe8fa56d78a1958a Mon Sep 17 00:00:00 2001
+From: party_t <d30-many-parties_t@fair-debate-users.org>
+Date: Mon, 16 Dec 2024 21:35:00 +0100
+Subject: [PATCH 21/43] add contribution t/a23t.md
+
+---
+ t/a23t.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 t/a23t.md
+
+diff --git a/t/a23t.md b/t/a23t.md
+new file mode 100644
+index 0000000..16be343
+--- /dev/null
++++ b/t/a23t.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a23t1 Placeholder contribution 19, party t, answering a23 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

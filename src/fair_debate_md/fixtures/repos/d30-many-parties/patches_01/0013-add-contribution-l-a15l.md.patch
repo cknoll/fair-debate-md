@@ -1,0 +1,24 @@
+From f761df979484d893d95022075c6efa912f82f3bc Mon Sep 17 00:00:00 2001
+From: party_l <d30-many-parties_l@fair-debate-users.org>
+Date: Mon, 16 Dec 2024 12:55:00 +0100
+Subject: [PATCH 13/43] add contribution l/a15l.md
+
+---
+ l/a15l.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 l/a15l.md
+
+diff --git a/l/a15l.md b/l/a15l.md
+new file mode 100644
+index 0000000..44dc1a8
+--- /dev/null
++++ b/l/a15l.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a15l1 Placeholder contribution 11, party l, answering a15 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

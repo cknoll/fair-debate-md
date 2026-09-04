@@ -1,0 +1,24 @@
+From 22258b2403182caba1b3eb2eabf24ced1346142b Mon Sep 17 00:00:00 2001
+From: party_v <d30-many-parties_v@fair-debate-users.org>
+Date: Tue, 17 Dec 2024 09:45:00 +0100
+Subject: [PATCH 23/43] add contribution v/a25v.md
+
+---
+ v/a25v.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 v/a25v.md
+
+diff --git a/v/a25v.md b/v/a25v.md
+new file mode 100644
+index 0000000..9a8ffb1
+--- /dev/null
++++ b/v/a25v.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a25v1 Placeholder contribution 21, party v, answering a25 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -1,0 +1,24 @@
+From a18c564bfd00647beec68df05c6bc2433f998e3d Mon Sep 17 00:00:00 2001
+From: party_x <d30-many-parties_x@fair-debate-users.org>
+Date: Tue, 17 Dec 2024 11:55:00 +0100
+Subject: [PATCH 25/43] add contribution x/a27x.md
+
+---
+ x/a27x.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 x/a27x.md
+
+diff --git a/x/a27x.md b/x/a27x.md
+new file mode 100644
+index 0000000..d803362
+--- /dev/null
++++ b/x/a27x.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a27x1 Placeholder contribution 23, party x, answering a27 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -111,6 +111,17 @@ with its own `dNN` key, not a variant of another one:
   argued about in the specification -- see `docs/flexible_references_concept.md`. Its
   second paragraph says that it is constructed and what for, because its topic is trivial
   on purpose and cannot say it.
+- `d30-many-parties__plain/source.md` -- english, and the only fixture that is pure
+  scaffolding: twenty-five parties, 42 contributions, one root segment carrying ten
+  answers and a spine reaching level 5, so that the party legend overflows and deep
+  nesting can be judged. Every sentence is a numbered placeholder and says which party
+  wrote it, which segment it answers and at what level -- there is nothing to read, and
+  the second segment of the root says so. It was a patch-only collection until 2026-09-04
+  and could not be given a source before that: `build-debate-repo` resolves an anchor by
+  quoting the answered sentence, and the old lorem window wrapped after nineteen words, so
+  four pairs of root sentences were identical and ten anchors would have matched several
+  segments. Making the sentences distinct is what unlocked it; the answer structure is
+  unchanged, the keys moved by one.
 - `d33-wachstum-klimaschutz__plain/source.md` -- german, and the only fixture with real
   argumentative content: three students argue out whether economic growth and climate
   protection are compatible, after listening to a radio debate on the question. The root
@@ -128,22 +139,15 @@ every inserted sentence forced a rename cascade, only two parties were possible,
 deployment had to special-case the debate, and the patches here had silently fallen behind
 the sources.
 
-`d30-many-parties` is a demo debate too since 2026-09-04, but it has **no source here**
-and cannot get one: `build-debate-repo` resolves an anchor by quoting the answered
-sentence, and d30's lorem ipsum repeats itself (its old a2 and a21 are the same sentence,
-and so are three more pairs), so ten of its anchors would match several segments and the
-build would abort. It stays what it has always been, a collection of patches, and the
-introduction it gained was put in by a one-off script that replayed the patches and moved
-every root index up by three. If it ever needs another edit, that is the shape of the job
--- or give it text whose sentences are distinct and write the source properly.
-
 The party names are not decoration: the web app carries a user account under each of them
 and gives the party that account (`tests/testdata/fixtures01.json`), which is what lets the
 frontend show a name instead of the "no account here" marker. d31 and d32 use the platform's
 `testuser_1`, `testuser_2`, ... for this, the rest their own speaking role names. So the two
 sides have to agree -- renaming a party here without adding the matching account over there
 puts the marker back. d30 is the deliberate exception: only its first three parties hold an
-account, so it keeps the "no account here" case demonstrable, and its introduction says so.
+account (`testuser_1`..`testuser_3`), so it keeps the "no account here" case demonstrable,
+and its introduction says so. Its remaining parties are called `party_d`..`party_y` --
+a name that is nobody's account, which is the honest thing for a party that has none.
 
 
 ## Removed: the debate-specific build scripts

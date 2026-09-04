@@ -1,0 +1,24 @@
+From 2f1e3d7c306fb3a640fd93471b13841d3d61b17a Mon Sep 17 00:00:00 2001
+From: party_h <d30-many-parties_h@fair-debate-users.org>
+Date: Tue, 17 Dec 2024 19:30:00 +0100
+Subject: [PATCH 32/43] add contribution h/a7h.md
+
+---
+ h/a7h.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 h/a7h.md
+
+diff --git a/h/a7h.md b/h/a7h.md
+new file mode 100644
+index 0000000..306b28c
+--- /dev/null
++++ b/h/a7h.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a7h1 Placeholder contribution 30, party h, answering a7 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

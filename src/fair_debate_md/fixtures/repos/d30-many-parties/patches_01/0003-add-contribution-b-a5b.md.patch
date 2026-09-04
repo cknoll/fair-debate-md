@@ -1,0 +1,24 @@
+From 8b579fa62e0958e5212748ca81f60467edbed598 Mon Sep 17 00:00:00 2001
+From: testuser_2 <d30-many-parties_b@fair-debate-users.org>
+Date: Sun, 15 Dec 2024 16:05:00 +0100
+Subject: [PATCH 03/43] add contribution b/a5b.md
+
+---
+ b/a5b.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 b/a5b.md
+
+diff --git a/b/a5b.md b/b/a5b.md
+new file mode 100644
+index 0000000..fab5f99
+--- /dev/null
++++ b/b/a5b.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a5b1 Placeholder contribution 01, party b, answering a5 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -1,0 +1,24 @@
+From 5b2c14c237975b795df6d36041f105c7ac229680 Mon Sep 17 00:00:00 2001
+From: testuser_3 <d30-many-parties_c@fair-debate-users.org>
+Date: Sun, 15 Dec 2024 17:10:00 +0100
+Subject: [PATCH 04/43] add contribution c/a6c.md
+
+---
+ c/a6c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 c/a6c.md
+
+diff --git a/c/a6c.md b/c/a6c.md
+new file mode 100644
+index 0000000..6e0f8ff
+--- /dev/null
++++ b/c/a6c.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a6c1 Placeholder contribution 02, party c, answering a6 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

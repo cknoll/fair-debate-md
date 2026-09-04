@@ -1,0 +1,24 @@
+From 49eb9633714f9a3b4204c6afafcb1642a796eecd Mon Sep 17 00:00:00 2001
+From: party_n <d30-many-parties_n@fair-debate-users.org>
+Date: Mon, 16 Dec 2024 15:05:00 +0100
+Subject: [PATCH 15/43] add contribution n/a17n.md
+
+---
+ n/a17n.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 n/a17n.md
+
+diff --git a/n/a17n.md b/n/a17n.md
+new file mode 100644
+index 0000000..5849697
+--- /dev/null
++++ b/n/a17n.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a17n1 Placeholder contribution 13, party n, answering a17 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

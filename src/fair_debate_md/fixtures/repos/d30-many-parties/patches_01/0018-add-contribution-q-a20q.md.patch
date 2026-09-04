@@ -1,0 +1,24 @@
+From 013a568a31ec5ea0bccfd05b6fd94bc1f7edfe52 Mon Sep 17 00:00:00 2001
+From: party_q <d30-many-parties_q@fair-debate-users.org>
+Date: Mon, 16 Dec 2024 18:20:00 +0100
+Subject: [PATCH 18/43] add contribution q/a20q.md
+
+---
+ q/a20q.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 q/a20q.md
+
+diff --git a/q/a20q.md b/q/a20q.md
+new file mode 100644
+index 0000000..f278d1a
+--- /dev/null
++++ b/q/a20q.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a20q1 Placeholder contribution 16, party q, answering a20 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

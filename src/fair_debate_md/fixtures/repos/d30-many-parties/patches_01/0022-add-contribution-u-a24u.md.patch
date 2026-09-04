@@ -1,0 +1,24 @@
+From 5f0573468d446fad5005657fe228bf018a317d94 Mon Sep 17 00:00:00 2001
+From: party_u <d30-many-parties_u@fair-debate-users.org>
+Date: Tue, 17 Dec 2024 08:40:00 +0100
+Subject: [PATCH 22/43] add contribution u/a24u.md
+
+---
+ u/a24u.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 u/a24u.md
+
+diff --git a/u/a24u.md b/u/a24u.md
+new file mode 100644
+index 0000000..60be7ad
+--- /dev/null
++++ b/u/a24u.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a24u1 Placeholder contribution 20, party u, answering a24 as a level 1 reply.
+\ No newline at end of file
+-- 
+2.39.5
+

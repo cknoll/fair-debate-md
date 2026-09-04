@@ -206,6 +206,9 @@ class TestVersionDispatch:
 # layout. They have no source to be rebuilt from either (see dev_notes.md, "repo
 # provenance"), so there is nothing here that could go stale. Everything else is opted in
 # by default, so a fixture added later is covered without anyone remembering to add it.
+#
+# d30-many-parties left this set on 2026-09-04: it was given a `source.md` and is built
+# like the rest now, so it is covered by the test below rather than excused from it.
 _HAND_AUTHORED_COLLECTIONS = frozenset(
     [
         "d02-test_debate",
@@ -214,7 +217,6 @@ _HAND_AUTHORED_COLLECTIONS = frozenset(
         "d05-hidden_test_debate",
         "d06-private_test_debate",
         "d1-lorem_ipsum",
-        "d30-many-parties",
     ]
 )
 

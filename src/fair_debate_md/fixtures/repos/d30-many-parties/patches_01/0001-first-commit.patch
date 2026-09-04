@@ -1,24 +1,156 @@
-From 9ab00f450cfc2b09cd78ceb7d8cb6471d72b50b4 Mon Sep 17 00:00:00 2001
+From b4ac8ffbbf0b630af6135cd3072bb0c49d5c0cba Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
-Date: Sun, 15 Dec 2024 11:03:24 +0000
+Date: Sun, 15 Dec 2024 12:00:00 +0100
 Subject: [PATCH 01/43] first commit
 
 ---
- README.md | 5 +++++
- 1 file changed, 5 insertions(+)
+ README.md      | 120 +++++++++++++++++++++++++++++++++++++++++++++++++
+ REPO_INFO.yaml |   9 ++++
+ 2 files changed, 129 insertions(+)
  create mode 100644 README.md
+ create mode 100644 REPO_INFO.yaml
 
 diff --git a/README.md b/README.md
 new file mode 100644
-index 0000000..409cbeb
+index 0000000..5b14941
 --- /dev/null
 +++ b/README.md
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,120 @@
 +# Debate "d30-many-parties"
 +
-+This repository contains statements which are part of a formalized debate.
++This repository holds the contributions of one debate on Fair Debate, one plain
++markdown file per contribution. The platform renders the debate by reading these files --
++they are the content itself, not an export of it.
 +
-+Visit <debate_url> to view this debate and <background_url> for background information.
++It was published at https://fair-debate.invalid/d/d30-many-parties. If that address no longer answers, the debate may have
++moved or the instance may be gone; the repository in your hands is unaffected either way.
++Background on the project: https://fair-debate.invalid/about
++
++## Where this comes from
++
++`REPO_INFO.yaml`, next to this file, says what made the repository. Its `kind` field
++distinguishes the two cases, and the difference matters for how much the fingerprints
++below are worth:
++
++- **`kind: opened`** -- a debate that people held. The repository was created once and
++  grew by appending, so its history is the history of the debate. Everything described
++  below applies to it without reservation.
++- **`kind: built`** -- a demonstration piece, generated from a single source document.
++  Its whole history is regenerated whenever that source changes: the authors, the dates
++  and every fingerprint are then replaced, and the previous ones are gone. The file names
++  the source and the date of the build, so at least the replacement is datable. A
++  fingerprint you noted from such a debate can disappear without anything having gone
++  wrong.
++
++## Why this repository exists
++
++A platform that keeps debates in its own database can change them, and nobody outside can
++tell. In contrast on Fair Debate every contribution is a commit, every commit carries a
++fingerprint computed over all the preceding ones, and every commit is signed by the platform.
++Altering an old contribution changes its fingerprint and everyone after it. The fingerprints
++make manipulation detectable while the signatures can prove that a commit history is "official"
++(and not just staged by somebody who falsely accuses the platform of manipulation).
++
++That is what your copy is for. You do not have to do anything with it. Having it is the
++point. It is only needed as reinsurance to detect and prove manipulation.
++
++## How to check it
++
++Cloning this repository was the important step. From here on it is one command, run
++whenever you come back to the debate.
++
++    git pull --ff-only
++
++If the debate only grew since your last visit, this fast-forwards silently: new
++contributions, nothing else. If the history was rewritten, the command refuses to do
++anything and says so twice.
++
++    + abc1234...def5678  main -> origin/main  (forced update)
++    fatal: Not possible to fast-forward, aborting.
++
++`--ff-only` is what turns a routine update into a check. A plain `git pull` would try to
++merge the two versions into one and could bury the difference in a merge commit.
++
++So you do not have to note fingerprints anywhere or remember to compare anything. Keeping
++the clone and pulling from it is the whole procedure.
++
++### When it refuses
++
++Your own branch is untouched, so you are now holding **both** versions -- and that, not the
++warning, is the valuable part. What you had is still in `main`, what the platform serves
++now is in `origin/main`, and
++
++    git range-diff main...origin/main
++
++lists which commits differ and how. Together with the signatures on both sides this is
++evidence rather than suspicion: a platform that only ever appends cannot produce two signed
++histories that contradict each other. Which of the two is the "real" one does not even
++matter for that argument.
++
++A rewrite is not automatically an attack. Contributions sometimes have to be removed for
++organisational or legal reasons, and that cannot be done any other way. What separates the
++two cases is whether the event was announced and explained on the debate's integrity page,
++and whether the rest of the history still matches commit for commit.
++
++### Checking the signatures
++
++A different question, and a separate command -- `git pull` verifies nothing, it only
++compares the shape of the history.
++
++    git -c gpg.ssh.allowedSignersFile=./allowed_signers log --show-signature
++
++`Good "git" signature` on every commit means each one was made by whoever holds the key in
++`allowed_signers`, which is part of the first commit of this repository. A clone therefore
++carries everything it needs to verify itself, with nothing to install and nobody to ask.
++
++### Without a clone
++
++If you only noted fingerprints from the integrity page,
++
++    git log --format="%H  %ci"
++
++lists every commit with its fingerprint and time, newest first; look for the value you
++noted. Present means nothing before it was altered, missing means the history was
++rewritten. That route needs you to have written something down at the right moment, which
++is why the clone is the better one -- but it keeps working after the platform is gone.
++
++## What this does not prove
++
++- **Who wrote a contribution.** The commits are created and signed by the platform, not by
++  the authors. A fingerprint shows that a text has not changed since it was published, not
++  who wrote it.
++- **That the key belongs to who it claims.** It is the platform's own key, handed out by
++  the platform. What it does give you is that the *same* key signed everything you have --
++  so two contradictory histories signed by it convict whoever holds it.
++- **That nothing was ever removed.** A contribution may have to disappear for legal
++  reasons. Doing that means rewriting the history, which breaks the chain visibly; such an
++  event is meant to be announced and explained on the debate's integrity page.
++
++## Work in progress
++
++The integrity concept behind this repository is still being built, and no independent
++expert has reviewed it. Two gaps worth naming, so you do not have to find them yourself:
++
++- There is **no procedure for renewing the signing key** yet. If the key ever changes,
++  nothing here says how old signatures relate to the new one. This is a solvable issue but
++  details need to be specified.
++- There is no public mirror and no external archive yet. The only independent copies of
++  this history are the ones readers keep. Yours is one of them.
+diff --git a/REPO_INFO.yaml b/REPO_INFO.yaml
+new file mode 100644
+index 0000000..6128076
+--- /dev/null
++++ b/REPO_INFO.yaml
+@@ -0,0 +1,9 @@
++# What made this repository. See README.md, section "Where this comes from".
++# `kind: built` means the history is regenerated whenever the source changes;
++# `kind: opened` means the debate grew into this repo by appending.
++kind: built
++date: '2026-09-04T11:42:50+00:00'
++fdmd_version: 0.10.3
++source:
++  path: d30-many-parties__plain/source.md
++  sha256: 867baf548f367c5c16cee04683b58064d07367029c557eb7e1e60305e28b890f
 -- 
 2.39.5
 
