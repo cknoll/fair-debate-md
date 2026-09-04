@@ -37,8 +37,7 @@ def _make_debate_repo(host_dir, debate_key="d-hashes"):
     A repo in the shape the web app creates: one initial commit with repo-level
     files, then contributions added through `commit_ctb*`.
 
-    Returns the repo directory. Note that `repo_handling.create_repo` chdirs into
-    the new repo; the caller is expected to run inside a tmp dir anyway.
+    Returns the repo directory.
     """
     fdmd.repo_handling.create_repo(host_dir, debate_key, initial_files={"README.md": "# test\n"})
     repo_dir = pjoin(host_dir, debate_key)

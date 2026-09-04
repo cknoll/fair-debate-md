@@ -263,7 +263,21 @@ def rollout_patches(repo_dir: str, patch_dir: str, start=0, limit=None,
     prepare_repo_for_serving(repo_dir)
 
 
-@utils.preserve_cwd
+def add_to_index(repo, path: str):
+    """
+    Stage one file, addressed by absolute path.
+
+    Not `repo.index.add()`, although that is the obvious call: GitPython's index writer
+    chdirs into the working tree for the duration (`git.index.util.set_git_working_dir`)
+    and then `lstat`s the file through a *relative* path. Both are process-global, so two
+    threads staging files in two different repos can make each other look at the wrong
+    directory. `git add` gets the working directory as an argument of its own subprocess
+    and cannot be disturbed that way.
+    """
+
+    repo.git.add(path)
+
+
 def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, str] = None):
     """
     :param repo_host_dir:   str; absolute path
@@ -274,6 +288,18 @@ def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, st
     a repo unpacked by `rollout_patches()` carry the same text. It used to be rendered from
     a django template in the web app, which is how every existing repo ended up saying
     "Visit <debate_url>" -- the placeholders were filled with their own names.
+
+    Everything here addresses the repo by absolute path and nothing changes the process's
+    working directory. That is a requirement, not a style choice: the platform calls this
+    from a request handler, and a web server may well run two of those at once. The
+    earlier version did `os.chdir(repo_dir)`, then `os.system("git init")` and
+    `open(fname, "w")` relative to it -- process-global state that a second thread
+    silently redirects. Measured with two threads, one of the two repos came out broken;
+    with eight, all eight did: `git init` running in a *foreign* directory, two of them
+    colliding in the same one ("could not lock config file"), files written next to the
+    wrong repo. What reached the caller were unrelated-looking errors deep in git
+    ("unable to create temporary file", "Reference at 'HEAD' does not exist"), which is
+    why this cost a debugging session before it was found.
     """
 
     if initial_files is None:
@@ -290,24 +316,25 @@ def create_repo(repo_host_dir: str, debate_key: str, initial_files: dict[str, st
 
     # raise an error if directory already exists
     os.makedirs(repo_dir)
-    os.chdir(repo_dir)
     if not os.path.isdir(pjoin(repo_dir, ".git")):
-        os.system("git init")
+        # `git init <dir>` rather than a chdir plus a bare `git init`: the target is then
+        # part of the command instead of being implied by process state
+        subprocess.run(["git", "init", "--quiet", repo_dir], capture_output=True, timeout=30, check=True)
 
     repo = git.Repo(repo_dir)
     apply_platform_identity(repo_dir)
 
     for fname, content in initial_files.items():
-        with open(fname, "w") as fp:
+        with open(pjoin(repo_dir, fname), "w") as fp:
             fp.write(content)
-        repo.index.add(fname)
+        add_to_index(repo, pjoin(repo_dir, fname))
 
     # into the initial commit, next to the README: that commit carries repo metadata and
     # no debate content yet, so this is where a file describing the repo belongs. It also
     # means readers get it from the very first commit onwards instead of finding it added
     # somewhere in the middle of a debate's history.
     if write_allowed_signers(repo_dir):
-        repo.index.add(ALLOWED_SIGNERS_FILENAME)
+        add_to_index(repo, pjoin(repo_dir, ALLOWED_SIGNERS_FILENAME))
 
     msg = "first commit"
     author = get_author(name="fair debate system")

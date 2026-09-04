@@ -828,7 +828,7 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
     for ctb in ctb_list:
         write_ctb_to_file(repo_dir, ctb)
 
-        repo.index.add(ctb.fpath)
+        repo_handling.add_to_index(repo, ctb.fpath)
         rel_paths.append(ctb.fpath.replace(repo_dir, "")[1:])
 
     if len(ctb_list) == 1:
