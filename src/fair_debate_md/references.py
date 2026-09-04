@@ -29,6 +29,15 @@ is *anchored* at the (single) last referenced segment -- "a5-7b" is anchored
 at segment "a7", "a7_4-8b" at "a7". The anchor determines where the
 contribution is attached in the rendered tree.
 
+Canonical form: a word reference that covers *every* word of its segment says
+exactly what the plain segment reference says, so it is not a form of its own --
+"a1_1-7b" on a seven-word segment a1 is written "a1b". `canonical_reference_key`
+folds the equivalent spelling away and `validate_reference(..., require_canonical=True)`
+refuses it, so that a party cannot answer one segment twice by spelling the same
+reference two ways. Partial overlap stays allowed on purpose: a party that
+answered "a5-8" may still answer "a5", and "a7_1-3" and "a7_4-8" are two
+statements about two different pieces of text.
+
 Word tokenizer (FROZEN SPECIFICATION)
 -------------------------------------
 
@@ -274,7 +283,96 @@ def get_segment_words(md_with_real_keys: str, segment_key: str) -> list[str]:
     return get_segment_source(md_with_real_keys, segment_key).split()
 
 
-def validate_reference(ctb_key: str, parent_md_with_real_keys: str, code_contents: dict = None):
+def _resolve_code_placeholders(parent_md_with_real_keys: str, code_contents: dict = None) -> str:
+    """
+    The parent's markdown with its code placeholders put back, i.e. the text word
+    positions are counted against (relevant for not-yet-committed contributions,
+    whose source still carries the placeholders).
+    """
+    md_src = parent_md_with_real_keys
+    if code_contents:
+        for placeholder, content in code_contents.items():
+            md_src = md_src.replace(placeholder, content)
+    return md_src
+
+
+def _last_reference_unit(ctb_key: str) -> tuple[KeyUnit, str] | None:
+    """
+    The unit of `ctb_key` that names what is answered, together with the key
+    prefix its segment numbers are counted in ("a5-7b2c1_3-5d" -> the unit
+    "c1_3-5" and the prefix "a5-7b2c"). None if there is nothing to resolve:
+    an opening contribution, or a plain reference, which needs no parent text.
+    """
+    parts = decompose_key(ctb_key)
+    if len(parts) < 2:
+        return None
+    ref_unit = parse_key_unit(parts[-2])
+    if not (ref_unit.is_segment_range or ref_unit.has_word_ref):
+        return None
+    return ref_unit, "".join(parts[:-2]) + ref_unit.token
+
+
+def _is_full_span_word_ref(ref_unit: KeyUnit, n_words: int) -> bool:
+    """
+    Whether `ref_unit`'s word reference covers every word of its segment, i.e.
+    states what the plain segment reference already states. True for "a1_1-7" on
+    a seven-word segment, and for "a1_1" on a one-word segment.
+    """
+    if not ref_unit.has_word_ref or ref_unit.word_start != 1:
+        return False
+    last_word = ref_unit.word_end if ref_unit.word_end is not None else ref_unit.word_start
+    return last_word == n_words
+
+
+def canonical_reference_key(
+    ctb_key: str, parent_md_with_real_keys: str, code_contents: dict = None
+) -> str:
+    """
+    Return `ctb_key` with a full-span word reference folded into the plain
+    segment reference it is equivalent to ("a1_1-7a" -> "a1a" when segment a1 has
+    seven words). Every other key is returned unchanged.
+
+    Motivation: the rule "one answer per (segment, party)" is enforced by the key
+    -- one key, one file, one answer. A word reference spanning the whole segment
+    is a *different key* for the *same statement*, so without this fold a party
+    could answer the same segment twice by selecting all of its words instead of
+    clicking the segment (exactly what happened in d31-ice-cream: "a1_1-7a" next
+    to "a1a"). Reference-scoped overlap is deliberately kept: partial word
+    references and segment ranges name different pieces of text and stay distinct.
+
+    Only the last unit is folded. The inner units are the identity of
+    contributions that already exist and must never be rewritten.
+
+    An unresolvable key (segment missing from the parent) is returned unchanged;
+    `validate_reference` is the place that reports it, with a better message.
+    """
+    resolved = _last_reference_unit(ctb_key)
+    if resolved is None:
+        return ctb_key
+    ref_unit, prefix = resolved
+    if not ref_unit.has_word_ref:
+        return ctb_key
+
+    md_src = _resolve_code_placeholders(parent_md_with_real_keys, code_contents)
+    segment_key = f"{prefix}{ref_unit.seg_start}"
+    try:
+        n_words = len(get_segment_words(md_src, segment_key))
+    except ValueError:
+        return ctb_key
+    if not _is_full_span_word_ref(ref_unit, n_words):
+        return ctb_key
+
+    parts = decompose_key(ctb_key)
+    parts[-2] = f"{ref_unit.token}{ref_unit.seg_start}"
+    return "".join(parts)
+
+
+def validate_reference(
+    ctb_key: str,
+    parent_md_with_real_keys: str,
+    code_contents: dict = None,
+    require_canonical: bool = False,
+):
     """
     Validate the reference encoded in the last reference unit of `ctb_key`
     against the parent contribution's markdown source. Only range and word
@@ -284,21 +382,25 @@ def validate_reference(ctb_key: str, parent_md_with_real_keys: str, code_content
                             original content (relevant for not-yet-committed
                             contributions whose source still contains
                             placeholders)
+    :param require_canonical:
+                            also refuse a reference that is merely a second
+                            spelling of a simpler one (a word reference covering
+                            the whole segment, see `canonical_reference_key`).
+                            Off by default *on purpose*: this runs on every repo
+                            the loader opens, and a rule that was not in force
+                            when a contribution was written must not make an
+                            existing debate unreadable. Callers that mint a NEW
+                            key -- the platform and the fixture builder -- pass
+                            True, so the non-canonical form cannot enter a repo
+                            in the first place.
 
     Raises ValueError with a descriptive message on inconsistency.
     """
-    parts = decompose_key(ctb_key)
-    if len(parts) < 2:
+    resolved = _last_reference_unit(ctb_key)
+    if resolved is None:
         return
-    ref_unit = parse_key_unit(parts[-2])
-    if not (ref_unit.is_segment_range or ref_unit.has_word_ref):
-        return
-
-    prefix = "".join(parts[:-2]) + ref_unit.token
-    md_src = parent_md_with_real_keys
-    if code_contents:
-        for placeholder, content in code_contents.items():
-            md_src = md_src.replace(placeholder, content)
+    ref_unit, prefix = resolved
+    md_src = _resolve_code_placeholders(parent_md_with_real_keys, code_contents)
 
     for seg_num in sorted({ref_unit.seg_start, ref_unit.anchor_segment_number}):
         marker = f"::{prefix}{seg_num}"
@@ -317,6 +419,14 @@ def validate_reference(ctb_key: str, parent_md_with_real_keys: str, code_content
             msg = (
                 f"invalid reference '{ctb_key}': word position {last_word} exceeds "
                 f"the word count ({len(words)}) of segment '{segment_key}'"
+            )
+            raise ValueError(msg)
+        if require_canonical and _is_full_span_word_ref(ref_unit, len(words)):
+            canonical = canonical_reference_key(ctb_key, parent_md_with_real_keys, code_contents)
+            msg = (
+                f"invalid reference '{ctb_key}': the word reference covers all "
+                f"{len(words)} words of segment '{segment_key}' and therefore says what "
+                f"the plain segment reference says -- write it as '{canonical}'"
             )
             raise ValueError(msg)
 

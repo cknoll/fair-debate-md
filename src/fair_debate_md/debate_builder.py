@@ -576,7 +576,10 @@ def build_debate_repo(
                 # the same check the loader runs on every repo it opens, run here so that
                 # a broken reference cannot reach a patch collection in the first place
                 references.validate_reference(
-                    ctb_key, segments[references.get_parent_contribution_key(ctb_key)].md)
+                    ctb_key,
+                    segments[references.get_parent_contribution_key(ctb_key)].md,
+                    require_canonical=True,
+                )
             except ValueError as err:
                 raise SystemExit(f"the reference of '{label}' is inconsistent: {err}")
 
