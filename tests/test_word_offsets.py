@@ -654,10 +654,10 @@ class TestWordOffsetsD32OverlappingRefsEndToEnd:
     Group 3 (T3): end-to-end proof against a real reference in the
     `d32-overlapping-refs` fixture (see
     `src/fair_debate_md/fixtures/repo-preparation/d32-overlapping-refs__plain/source.md`).
-    Contributions "a7_7-12f" and "a7_10-16g" both carry a 1-based,
-    end-inclusive word-range reference into segment "a7" (see
+    Contributions "a9_7-12f" and "a9_10-16g" both carry a 1-based,
+    end-inclusive word-range reference into segment "a9" (see
     `references.parse_key_unit` / `tests/test_references.py`). Slicing
-    `word_offsets["a7"]` at that range must reproduce exactly the phrase
+    `word_offsets["a9"]` at that range must reproduce exactly the phrase
     the fixture's own build script printed as the reference's resolved
     text.
     """
@@ -665,8 +665,8 @@ class TestWordOffsetsD32OverlappingRefsEndToEnd:
     @pytest.mark.parametrize(
         "ctb_key, expected_phrase",
         [
-            ("a7_7-12f", "cost us maybe sixty euros once,"),
-            ("a7_10-16g", "sixty euros once, take up less space,"),
+            ("a9_7-12f", "cost us maybe sixty euros once,"),
+            ("a9_10-16g", "sixty euros once, take up less space,"),
         ],
     )
     def test_word_range_reference_resolves_to_expected_phrase(
@@ -676,8 +676,8 @@ class TestWordOffsetsD32OverlappingRefsEndToEnd:
         ref_unit = parse_key_unit(decompose_key(ctb_key)[-2])
         assert ref_unit.has_word_ref, ctb_key
 
-        text = _segment_texts(ddl)["a7"]
-        pairs = _pairs(ddl.word_offsets["a7"])
+        text = _segment_texts(ddl)["a9"]
+        pairs = _pairs(ddl.word_offsets["a9"])
         # word range is 1-based, end-inclusive, see references.KeyUnit
         selected = pairs[ref_unit.word_start - 1 : ref_unit.word_end]
 

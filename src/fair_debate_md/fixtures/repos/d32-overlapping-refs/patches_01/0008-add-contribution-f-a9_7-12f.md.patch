@@ -1,0 +1,24 @@
+From 2924fb51df8c53dda49600812709b969091e474b Mon Sep 17 00:00:00 2001
+From: testuser_6 <d32-overlapping-refs_f@fair-debate-users.org>
+Date: Tue, 7 Apr 2026 11:30:00 +0200
+Subject: [PATCH 08/10] add contribution f/a9_7-12f.md
+
+---
+ f/a9_7-12f.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 f/a9_7-12f.md
+
+diff --git a/f/a9_7-12f.md b/f/a9_7-12f.md
+new file mode 100644
+index 0000000..203c88c
+--- /dev/null
++++ b/f/a9_7-12f.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a9_7-12f1 Sixty euros buys a kettle and a press, but not a grinder, and pre-ground coffee in a press is worse than the capsules we are complaining about. ::a9_7-12f2 The honest figure is closer to a hundred and forty.
+\ No newline at end of file
+-- 
+2.39.5
+

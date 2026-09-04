@@ -1,0 +1,24 @@
+From c1312e0ef6418e326c3bb2a4a9ff1b8037af655e Mon Sep 17 00:00:00 2001
+From: testuser_3 <d32-overlapping-refs_c@fair-debate-users.org>
+Date: Mon, 6 Apr 2026 15:10:00 +0200
+Subject: [PATCH 04/10] add contribution c/a6c.md
+
+---
+ c/a6c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 c/a6c.md
+
+diff --git a/c/a6c.md b/c/a6c.md
+new file mode 100644
+index 0000000..27f3d6f
+--- /dev/null
++++ b/c/a6c.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a6c1 Twice a year is not what I remember. ::a6c2 It has been repaired once since I joined, and that took two days, not a week.
+\ No newline at end of file
+-- 
+2.39.5
+

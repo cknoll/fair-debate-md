@@ -1,0 +1,24 @@
+From 24465da4aff1a1a6163564af52ea6305ac4cd82d Mon Sep 17 00:00:00 2001
+From: testuser_7 <d32-overlapping-refs_g@fair-debate-users.org>
+Date: Tue, 7 Apr 2026 14:45:00 +0200
+Subject: [PATCH 09/10] add contribution g/a9_10-16g.md
+
+---
+ g/a9_10-16g.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 g/a9_10-16g.md
+
+diff --git a/g/a9_10-16g.md b/g/a9_10-16g.md
+new file mode 100644
+index 0000000..9b33b70
+--- /dev/null
++++ b/g/a9_10-16g.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a9_10-16g1 The space claim is the one I would question. ::a9_10-16g2 A press needs a grinder, a kettle and somewhere to put the used grounds, and that is more counter space than the machine occupies, not less.
+\ No newline at end of file
+-- 
+2.39.5
+

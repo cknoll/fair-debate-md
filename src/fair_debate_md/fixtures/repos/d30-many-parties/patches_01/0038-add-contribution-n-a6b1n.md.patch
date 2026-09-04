@@ -1,0 +1,20 @@
+From da9b08e92b4a477adfaca7cf1eea236d47a18df3 Mon Sep 17 00:00:00 2001
+From: Fixture Builder <fixture@fair-debate.local>
+Date: Wed, 29 Jul 2026 17:41:09 +0200
+Subject: [PATCH 38/43] add contribution n/a6b1n.md
+
+---
+ n/a6b1n.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 n/a6b1n.md
+
+diff --git a/n/a6b1n.md b/n/a6b1n.md
+new file mode 100644
+index 0000000..346dda4
+--- /dev/null
++++ b/n/a6b1n.md
+@@ -0,0 +1 @@
++::a6b1n1 Party n answers segment a6b1 (level 2). Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+-- 
+2.39.5
+

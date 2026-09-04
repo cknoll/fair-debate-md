@@ -1,0 +1,24 @@
+From c92aa198fe5926d163a3d3400ba470ca45ed8404 Mon Sep 17 00:00:00 2001
+From: testuser_2 <d32-overlapping-refs_b@fair-debate-users.org>
+Date: Mon, 6 Apr 2026 18:25:00 +0200
+Subject: [PATCH 05/10] add contribution b/a7b.md
+
+---
+ b/a7b.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 b/a7b.md
+
+diff --git a/b/a7b.md b/b/a7b.md
+new file mode 100644
+index 0000000..67b9a98
+--- /dev/null
++++ b/b/a7b.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a7b1 On this one point I have to concede more than I did above. ::a7b2 The recycling claim on the packaging is genuinely misleading, and that is a reason to change something, though not necessarily the machine.
+\ No newline at end of file
+-- 
+2.39.5
+

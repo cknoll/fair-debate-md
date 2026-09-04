@@ -1,0 +1,26 @@
+From 0fa987225ab1401ba884eee9f3dfb2d28b2dad3a Mon Sep 17 00:00:00 2001
+From: testuser_4 <d32-overlapping-refs_d@fair-debate-users.org>
+Date: Mon, 6 Apr 2026 22:00:00 +0200
+Subject: [PATCH 06/10] add contribution d/a7-10d.md
+
+---
+ d/a7-10d.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 d/a7-10d.md
+
+diff --git a/d/a7-10d.md b/d/a7-10d.md
+new file mode 100644
+index 0000000..2dc2557
+--- /dev/null
++++ b/d/a7-10d.md
+@@ -0,0 +1,6 @@
++---
++splitter_version: 2
++---
++::a7-10d1 The passage from the recycling point through to the kettle proposal moves much faster than it admits. ::a7-10d2 Two of these sentences are complaints about the current machine and two are claims about the replacement, and they are presented as if the first pair established the second.
++
++::a7-10d3 I do not think anyone disputes that the capsules are wasteful. ::a7-10d4 What I dispute is that a press is the obvious consequence, and that is exactly the step that gets no argument here.
+\ No newline at end of file
+-- 
+2.39.5
+

@@ -1,0 +1,24 @@
+From 5ec91d9c4b30b2978d0314d6c07d555f461dcf7f Mon Sep 17 00:00:00 2001
+From: testuser_8 <d32-overlapping-refs_h@fair-debate-users.org>
+Date: Tue, 7 Apr 2026 18:10:00 +0200
+Subject: [PATCH 10/10] add contribution h/a5-8b1-2h.md
+
+---
+ h/a5-8b1-2h.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 h/a5-8b1-2h.md
+
+diff --git a/h/a5-8b1-2h.md b/h/a5-8b1-2h.md
+new file mode 100644
+index 0000000..0066518
+--- /dev/null
++++ b/h/a5-8b1-2h.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a5-8b1-2h1 Both of these sentences rest on the same move, so I will answer them together. ::a5-8b1-2h2 Calling four objections "not independent" does not dispose of them; it only says they share a cause. ::a5-8b1-2h3 A shared cause is a reason to expect that one decision fixes several of them, which is an argument for replacing the machine, not for keeping it.
+\ No newline at end of file
+-- 
+2.39.5
+
