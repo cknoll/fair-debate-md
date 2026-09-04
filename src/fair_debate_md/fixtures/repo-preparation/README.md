@@ -7,6 +7,13 @@ Every build writes its patches to `../repos/<debate-key>/patches_01/`, which is 
 `fdmd unpack-repos` picks them up. Updating a fixture therefore means: run the build,
 commit the changed patches, and re-run `fdmd unpack-repos ./content_repos` in the web app.
 
+One step further if the edit **added or removed a contribution**: the web app states the
+contribution count of every fixture debate by hand, in `tests/testdata/fixtures01.json`,
+and nothing over here can see that it went stale. Run
+`manage.py initializefixtures --refresh-fixture-counts` there, or the count silently
+disagrees with the repo until somebody else's test run says so. It has happened three
+times; see that repo's backlog item `i-n-committed-stale-guard`.
+
 
 ## `fdmd build-debate-repo` -- one file in, one debate repo out
 
