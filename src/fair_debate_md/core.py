@@ -405,7 +405,14 @@ class MDProcessor(MDHandler):
                 contribution_childs=self.contribution_childs,
             )
 
-            res: str = sa.add_spans_for_keys(prettify=True)
+            # prettify=False deliberately: `soup.prettify()` puts every tag on a line
+            # of its own, and a browser renders that line break as a space -- which put a
+            # space before punctuation ("the key `a` .") and even cut a word that inline
+            # markup splits ("**wichtig**e" -> "wichtig e"). See dev_notes.md, section
+            # "whitespace around inline elements". The block structure of the delivered
+            # html is unaffected: the newlines between `<div class="p_level0">` blocks
+            # come from the markdown converter, not from prettify.
+            res: str = sa.add_spans_for_keys(prettify=False)
         else:
             res = ""
 
@@ -708,11 +715,11 @@ class DebateDirLoader:
         Coordinate system (the critical contract, see also T2 report): each
         offset pair indexes into the segment's `.get_text()` as extracted
         from `self.final_html` -- i.e. the *actually delivered* HTML, after
-        `SpanAdder.add_spans_for_keys(prettify=True)`. This is, by construction,
+        `SpanAdder.add_spans_for_keys(prettify=False)`. This is, by construction,
         the same string a browser exposes as
-        `document.getElementById(segment_key).textContent`, regardless of
-        what prettify() does to whitespace: we never assume a coordinate
-        system, we parse the delivered string itself.
+        `document.getElementById(segment_key).textContent`. The coordinate
+        system is never assumed, it is read off the delivered string itself --
+        which is what let the prettify switch flip without touching this code.
 
         Raw words come exclusively from `references.get_segment_words()`
         (the frozen tokenizer spec), looked up against the `md_with_real_keys`

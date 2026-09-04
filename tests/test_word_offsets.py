@@ -210,17 +210,25 @@ class TestWordOffsetsMarkupIntegration:
 
     def test_bold_crossing_tag_boundary_mid_word_is_exact(self, tmp_path):
         """
-        Regression test for T2b: under `prettify=True` (the actually
-        delivered rendering, kept unchanged by orchestrator decision),
-        BeautifulSoup's prettify inserts whitespace at *every* tag boundary,
-        including inside inline markup. For "**wichtig**e" this splits the
-        rendered "wichtige" into "wichtig" + injected whitespace + "e". The
-        frozen contract requires this to be ONE non-empty, contiguous
-        interval spanning the whole range (injected whitespace included),
-        and the two following words must keep correct, non-null intervals
-        (no cascade). This replaces the former
-        `test_bold_crossing_tag_boundary_mid_word_is_a_known_limitation`,
+        Regression test for T2b: "**wichtig**e" is ONE raw word that renders
+        across two inline tags (`<strong>wichtig</strong>e`), so it must map
+        to ONE non-empty, contiguous interval, and the two following words
+        must keep correct, non-null intervals (no cascade). This replaces the
+        former `test_bold_crossing_tag_boundary_mid_word_is_a_known_limitation`,
         which documented exactly this defect instead of the fix.
+
+        History worth keeping, because it is what the alignment was built for:
+        until fdmd 0.10.0 the delivered html was prettified, which injected
+        whitespace at *every* tag boundary and split the rendered "wichtige"
+        into "wichtig" + whitespace + "e" -- the interval had to span that
+        whitespace and the assertions below read
+        `text == "\\n\\n    wichtig\\n   \\n   e stuff follows.\\n  "` and
+        `_slices(...) == ["wichtig\\n   \\n   e", ...]`. Dropping prettify
+        removed the injected whitespace, so the word is now contiguous in the
+        rendered text as well. The *contract* is unchanged; only the string it
+        is measured against got simpler. Nothing in `get_rendered_word_offsets`
+        was touched to make this pass, which is the point: it aligns against
+        the delivered string rather than assuming a coordinate system.
         """
         ddl = self._load(tmp_path, "::a1 **wichtig**e stuff follows.\n", "test-wo-wichtig")
         soup = BeautifulSoup(ddl.final_html, "html.parser")
@@ -229,8 +237,8 @@ class TestWordOffsetsMarkupIntegration:
         words = get_segment_words(ddl.tree["a"].md_with_real_keys, "a1")
         assert words == ["**wichtig**e", "stuff", "follows."]
         assert len(offsets) == 2 * len(words)
-        assert text == "\n\n    wichtig\n   \n   e stuff follows.\n  "
-        assert _slices(text, offsets) == ["wichtig\n   \n   e", "stuff", "follows."]
+        assert text == " wichtige stuff follows."
+        assert _slices(text, offsets) == ["wichtige", "stuff", "follows."]
 
     def test_link_url_does_not_bleed_into_next_word(self, tmp_path):
         """
@@ -631,8 +639,14 @@ class TestWordOffsetsKnownNonExactCategories:
         assert len(pairs) == len(words)
 
         start, end = pairs[8]
-        assert (start, end) == (67, 67)
+        # 64 rather than the 67 of fdmd < 0.10.0: the delivered html is no longer
+        # prettified, so the segment text carries three fewer injected whitespace
+        # characters before this point. The relation asserted right below is what the
+        # docstring actually claims -- the literal only pins the coordinate system.
+        assert (start, end) == (64, 64)
+        assert (start, end) == (pairs[7][1], pairs[7][1])
         assert text[start:end] == ""
+        assert text[: pairs[7][1]].endswith("consequat.")
 
 
 class TestWordOffsetsD32OverlappingRefsEndToEnd:

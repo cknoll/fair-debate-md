@@ -131,11 +131,10 @@ leaving the repo claiming a source it no longer came from.
 
 Surfaced while rewriting the `d00-explanatory-example-debate` fixture, whose text
 mentions a lot of contribution keys and therefore hits the case in almost every
-sentence. Concerns `SpanAdder.convert_soup_to_final_html()` in `core.py`, called with
-`prettify=True` from `MDProcessor.get_html_with_segments()` (~line 408, reached via
-`convert()`).
+sentence. Concerned `SpanAdder.convert_soup_to_final_html()` in `core.py`, which
+`MDProcessor.get_html_with_segments()` called with `prettify=True` until fdmd 0.10.0.
 
-- [ ] **inline elements get a space before the following punctuation.**
+- [x] **inline elements get a space before the following punctuation.**
   `soup.prettify()` puts every tag on a line of its own, and the browser renders that
   line break as a space. Source:
 
@@ -169,7 +168,53 @@ sentence. Concerns `SpanAdder.convert_soup_to_final_html()` in `core.py`, called
   moves no contribution key, no segment key and no commit hash -- this is a rendering
   change, not a content change, and it needs no fixture rebuild.
 
-  Worth knowing before touching it:
+  *Done 2026-09-04 in fdmd 0.10.0.* `prettify=False` at the single call site in
+  `MDProcessor.get_html_with_segments()` -- the whole defect was that one keyword. The
+  option considered against it (keep prettify, strip the injected whitespace again
+  afterwards) was dropped because it needs a heuristic to tell "this line break means a
+  space" from "this one means nothing", which is exactly the information prettify has
+  already thrown away, and because every newly allowed inline tag would have to be
+  taught to it -- `img` had just become the second reporter that way.
+
+  The readability that prettify was there for turns out to be mostly preserved: the
+  newlines between `<div class="p_level0">` blocks come from the markdown converter, so
+  the delivered html is one line per block, not one line per document.
+
+  What the change actually moved, measured against the regenerated `txt1` fixture: 34
+  segments, every key identical, exactly one segment's rendered text different -- the
+  fix itself (`Adipisci sit adipisci non est .` -> `... est.`). No repo, no database and
+  no reference key is involved, as expected: a reference such as `a7_7-12f` counts *word
+  indices* from the markdown, and only the character offsets derived from them move.
+  Those are computed per request and reach the frontend in the same response as the html
+  they index into (`data-word_offsets` in `main_show_debate.html`, read by `core.js`), so
+  the two cannot disagree.
+
+  Three tests here had to follow, all of them for the same reason -- they asserted the
+  prettified string literally: the expectation in `test_030__get_html_with_segments`
+  (which round-tripped its expected value through `prettify()` and no longer needs to)
+  plus the regenerated `tests/testdata/txt1_segmented_html.html`;
+  `test_bold_crossing_tag_boundary_mid_word_is_exact`, whose contract is unchanged while
+  the string it measures against got simpler (`"wichtig\n   \n   e"` -> `"wichtige"`);
+  and `test_thematic_break_word_maps_to_null_interval`, where the null interval sits at
+  64 instead of 67. Nothing in `get_rendered_word_offsets()` was touched to make any of
+  them pass, which is worth recording: it aligns against the delivered string instead of
+  assuming a coordinate system, and that is what let the switch flip.
+
+  Five more in **fair-debate-web** (`test_backend.py` `test_030`/`test_061`/`test_062`,
+  `test_frontend.py` `test_g032`/`test_g120`), same cause, and they are the reason that
+  repo's `requirements.txt` now asks for `fair_debate_md>=0.10.0`: its tests describe the
+  unprettified rendering and would fail against an older fdmd. Worth noting how they read
+  before -- `"This is a level 1\n     <strong>\n      answer\n     </strong>\n     from a
+  unittest."` -- an expectation nobody could have written down as *intended* output. That
+  a whole suite had normalized the defect into its expectations is the better argument
+  for fixing it at the source than any single rendering was.
+
+  Left as it is: `_strip_me_` in `convert_code_placeholders()` /
+  `decode_strip_me_tags()`. With prettify gone it has nothing left to repair, but it is
+  harmless and it is the safety net if anyone ever turns prettify back on. Removing it
+  is a separate, purely cosmetic change.
+
+  Worth knowing, and what the fix had to respect:
 
   - The rendered segment text is what `get_rendered_word_offsets()` (`references.py`)
     aligns raw words against, and its docstring names prettify-injected whitespace
@@ -184,5 +229,7 @@ sentence. Concerns `SpanAdder.convert_soup_to_final_html()` in `core.py`, called
     it: the `_strip_me_` attribute, set in `convert_code_placeholders()` and removed in
     `decode_strip_me_tags()`, exists solely to undo the whitespace prettify injects
     *inside* a `<code>` tag. What is still open is the whitespace *outside* it.
-  - To be checked: whether anything besides readability of the delivered html depends on
-    `prettify` at all -- if not, dropping it may be cheaper than post-processing it away.
+  - The open question "does anything besides readability depend on `prettify`?" was
+    answered by measurement rather than by reading: flipping the flag broke 3 of 238
+    tests, none of which tested readability. That is what made the cheap route the
+    right one.

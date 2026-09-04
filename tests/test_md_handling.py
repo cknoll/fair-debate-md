@@ -370,12 +370,12 @@ class TestMDHandling(unittest.TestCase):
 
         # test simple string
         _, res = fdmd.core._convert_plain_md_to_segmented_html("foo bar")
+        # no prettify round-trip on the expectation any more: the delivered html is
+        # serialized without `soup.prettify()` since fdmd 0.10.0, so the expected string
+        # is simply what is expected (see dev_notes.md, "whitespace around inline
+        # elements"). The literal below is what a prettify round-trip used to normalize
+        # this string *back* to, which is why it is unchanged.
         res_expected = '<div class="p_level0"><span class="segment" id="a1"> foo bar</span></div>'
-
-        # we do conversion twice because the backend currently does so
-        # (to handle inline code-tags with _strip_me_ attribute)
-        res_expected = str(BeautifulSoup(res_expected, "html.parser").prettify())
-        res_expected = str(BeautifulSoup(res_expected, "html.parser"))
         self.assertEqual(res, res_expected)
 
         # test full file
