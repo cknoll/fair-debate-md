@@ -21,7 +21,14 @@ from bs4 import BeautifulSoup, element
 #   1 -- every splitter character splits, regardless of what follows it.
 #   2 -- a splitter only splits when whitespace follows (or it ends the text); a dot
 #        directly after a digit does not split at all; `\@` immediately before a splitter
-#        forces a split that the rules would otherwise suppress.
+#        forces a split that the rules would otherwise suppress, and `\~` suppresses one
+#        that the rules would otherwise make.
+#
+# `\~` was added to version 2 (2026-09-04) instead of opening a version 3. It is a pure
+# extension: no text that already claims version 2 contains the sequence, so the number
+# still promises what it promised, and nothing has been handed out that would say
+# otherwise. That reasoning is allowed while the project is undeployed and it is the
+# user's call to make -- see `CLAUDE.md`, section "Splitter syntax version".
 SPLITTER_SYNTAX_VERSION = 2
 
 # What a contribution without any recorded version was created under: everything written
@@ -31,32 +38,57 @@ DEFAULT_SPLITTER_SYNTAX_VERSION = 1
 # characters which end a sentence / segment
 SENTENCE_SPLITTERS = (".", "!", "?", ":")
 
-# Force-split marker (syntax version 2+): written directly in front of a splitter, it
-# makes that splitter split even where the rules would suppress it -- the only way to end
-# a segment on a number ("... bis Ende 2026\@. Jede Verwaesserung ..."), and it also
-# breaks a strong abbreviation ("... z.B\@. Der naechste Satz.").
+# Split markers (syntax version 2+). Both are written directly in front of a splitter and
+# decide that one splitter against the rules:
+#
+#   * `\@` FORCES a split the rules suppress. The only way to end a segment on a number
+#     ("... bis Ende 2026\@. Jede Verwaesserung ..."), and it breaks a strong abbreviation
+#     too ("... z.B\@. Der naechste Satz.").
+#   * `\~` SUPPRESSES a split the rules make. For the abbreviation the tables below do not
+#     know ("Prof\~. Mueller", "Abb\~. 3", "gem\~. Paragraph 3"). Those tables cannot be
+#     complete in any language, and every entry added to them is one more reason for a
+#     real sentence end not to split -- so an escape hatch per occurrence is the better
+#     answer than an ever longer list.
 #
 # Why this spelling: LaTeX solves the same problem with `\@.`, with the same meaning, so
 # the notation reads correctly to anyone who has met it there. Two alternatives were
 # tried against the real pipeline and are not merely worse but unusable: `18\.` loses its
 # backslash in python-markdown, so at segmentation time it is indistinguishable from a
-# plain dot, and `18.\ ` moves the backslash into the *following* segment.
+# plain dot, and `18.\ ` moves the backslash into the *following* segment. That second
+# finding is also why `\~` stands in front of the splitter although LaTeX's counterparts
+# (`Dr.~Smith`, `etc.\ `) stand behind it: a marker behind the splitter would land in the
+# next segment. What survives of the analogy is the `~`, which is the tie in both.
 #
-# The marker stays in the stored `.md`: it is what lets the recorded segmentation be
+# Since both markers have to touch the splitter, at most one of them can apply to it --
+# so there is no precedence between them to define.
+#
+# The markers stay in the stored `.md`: they are what lets the recorded segmentation be
 # re-checked against the text (see `tests/test_splitter_versions.py`), and a reader of the
-# raw repo can see why a segment ends there. It is removed when the text is rendered
-# (`MDProcessor.get_html_with_segments`), so it never shows up in the debate. It carries
-# no whitespace and therefore does not shift any word position -- the frozen word
+# raw repo can see why a segment ends where it does. They are removed when the text is
+# rendered (`MDProcessor.get_html_with_segments`), so they never show up in the debate.
+# They carry no whitespace and therefore do not shift any word position -- the frozen word
 # tokenizer counts `2026\@.` as the single word it already counted as `2026.`.
 FORCE_SPLIT_MARKER = "\\@"
-_FORCE_SPLIT_RE = re.compile(
-    re.escape(FORCE_SPLIT_MARKER) + r"(?=[" + re.escape("".join(SENTENCE_SPLITTERS)) + r"])"
+SUPPRESS_SPLIT_MARKER = "\\~"
+SPLIT_MARKERS = (FORCE_SPLIT_MARKER, SUPPRESS_SPLIT_MARKER)
+
+# `_split_v2` reads exactly this many characters back to see which marker (if any) touches
+# the splitter, so the two must be equally wide.
+MARKER_LEN = len(FORCE_SPLIT_MARKER)
+assert all(len(marker) == MARKER_LEN for marker in SPLIT_MARKERS)
+
+_SPLIT_MARKER_RE = re.compile(
+    "(?:"
+    + "|".join(re.escape(marker) for marker in SPLIT_MARKERS)
+    + r")(?=["
+    + re.escape("".join(SENTENCE_SPLITTERS))
+    + r"])"
 )
 
 
-def strip_force_split_markers(text: str) -> str:
-    """Remove every force-split marker that is in effect, i.e. that precedes a splitter."""
-    return _FORCE_SPLIT_RE.sub("", text)
+def strip_split_markers(text: str) -> str:
+    """Remove every split marker that is in effect, i.e. that precedes a splitter."""
+    return _SPLIT_MARKER_RE.sub("", text)
 
 
 # Abbreviations whose trailing dot practically never ends a sentence.
@@ -223,7 +255,7 @@ def split_text_into_segments(text: str, splitter_version: int = None) -> list[st
     version numbers (``v12.3``) do NOT cause a split.
 
     Version 1 splits at every other splitter character, whatever follows it.
-    Version 2 adds the two rules in `_split_v2` and the `\\@` escape.
+    Version 2 adds the two rules in `_split_v2` and the `\\@` / `\\~` escapes.
     """
     if not text:
         return []
@@ -294,14 +326,23 @@ def _split_v2(text: str) -> list[str]:
     * `FORCE_SPLIT_MARKER` directly in front of a splitter overrides all of
       that, including the abbreviation tables. It is the opt-in for the rare
       sentence that really does end on a number.
+
+    * `SUPPRESS_SPLIT_MARKER` directly in front of a splitter is the opposite:
+      that splitter does not split, whatever the rules say. It is the opt-out
+      for the abbreviation the tables do not know ("Prof\\~. Mueller") -- they
+      never will know all of them.
     """
-    marker_len = len(FORCE_SPLIT_MARKER)
     split_after = []
     for i, ch in enumerate(text):
         if ch not in SENTENCE_SPLITTERS:
             continue
 
-        if text[max(0, i - marker_len) : i] != FORCE_SPLIT_MARKER:
+        marker = text[max(0, i - MARKER_LEN) : i]
+
+        if marker == SUPPRESS_SPLIT_MARKER:
+            continue
+
+        if marker != FORCE_SPLIT_MARKER:
             text_rest = text[i + 1 :]
             if text_rest and not text_rest[0].isspace():
                 continue

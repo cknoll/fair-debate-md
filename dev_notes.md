@@ -54,8 +54,17 @@ prose; the gender-inclusive-colon case below was contributed by the user. Items 
   `TestStoredSegmentationIsReproducible` re-checks, and it tells a reader of the raw repo
   why the segment ends there) and is removed in `MDProcessor.get_html_with_segments()`,
   so it never reaches the debate. It carries no whitespace, so it shifts no word position.
-  Not built, and not needed so far: the opposite marker, one that *suppresses* a split
-  the rules do make (LaTeX's `\ `). Worth adding only when a text actually wants it.
+  The opposite marker followed on 2026-09-04: **`\~` directly in front of a splitter
+  suppresses** a split the rules do make -- "Prof\~. Mueller", "Abb\~. 3". The trigger was
+  not a text that wanted it but the realisation that the abbreviation tables cannot be
+  completed: they are hand-written per language, and every entry added to them is also a
+  new reason for a real sentence end not to split. `\~` shares every property of `\@`
+  (glued to the splitter, stripped at render, no whitespace, works before all four
+  splitters), and because both have to touch the splitter, at most one of them can apply
+  -- there is no precedence to define. It stands *in front of* the splitter although
+  LaTeX's counterparts (`Dr.~Smith`, `etc.\ `) stand behind it, for the reason found
+  above: a marker behind the splitter lands in the next segment.
+  It did **not** raise the syntax version, see below.
 
 - [x] **(3) persist the splitter-syntax version per contribution.**
   → done (2026-09-02): `SPLITTER_SYNTAX_VERSION` in `key_management.py`, written as

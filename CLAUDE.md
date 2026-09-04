@@ -54,4 +54,11 @@ change that would renumber an existing repo fails there, naming the repo it woul
 Fixtures whose text was written by hand rather than by the splitter are listed and
 excused in that file.
 
+A purely additive rule may stay inside the current version instead of opening a new one --
+`\~` (2026-09-04) was added to version 2 this way, because no text that already claimed
+version 2 contained the sequence, and nothing has been deployed that would state the old
+meaning elsewhere. Before the first release a climbing version number costs more
+credibility than it buys precision. Whether a change is additive enough for this is **the
+user's decision, not the implementer's** -- propose it, do not assume it.
+
 Background: `dev_notes.md`, section "splitter syntax".

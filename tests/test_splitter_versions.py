@@ -24,8 +24,9 @@ from fair_debate_md.key_management import (
     DEFAULT_SPLITTER_SYNTAX_VERSION,
     FORCE_SPLIT_MARKER,
     SPLITTER_SYNTAX_VERSION,
+    SUPPRESS_SPLIT_MARKER,
     split_text_into_segments,
-    strip_force_split_markers,
+    strip_split_markers,
 )
 
 
@@ -123,7 +124,7 @@ class TestForceSplitMarker:
     def test_it_is_inert_where_no_splitter_follows(self):
         text = "Eine Adresse wie foo\\@bar bleibt unberührt."
         assert split_text_into_segments(text, 2) == [text]
-        assert strip_force_split_markers(text) == text
+        assert strip_split_markers(text) == text
 
     def test_the_segments_still_concatenate_to_the_input(self):
         """The invariant the whole segmentation rests on: nothing is dropped while
@@ -176,6 +177,84 @@ class TestForceSplitMarker:
         assert words[-1] == "2026\\@."
         start, end = offsets[-2], offsets[-1]
         assert rendered[start:end] == "2026."
+
+
+class TestSuppressSplitMarker:
+    """
+    The opt-out, and the counterpart of `\\@`: the abbreviation tables cannot be complete
+    in any language, so a text needs a way to say "this one is not a sentence end" without
+    waiting for its abbreviation to be added to `key_management.py`.
+    """
+
+    def test_it_suppresses_a_split_the_rules_would_make(self):
+        """"Prof." is not in the tables, and putting every title, unit and legal
+        abbreviation there is not a plan -- each entry is also one more reason for a real
+        sentence end not to split."""
+        text = "Prof\\~. Müller hat es gesagt."
+        assert split_text_into_segments(text, 2) == [text]
+
+    def test_it_works_in_front_of_every_splitter(self):
+        """Uniform with `\\@`, and one rule less to remember."""
+        assert split_text_into_segments("Wirklich\\~? Ja.", 2) == ["Wirklich\\~? Ja."]
+        assert split_text_into_segments("Was\\~! Nein.", 2) == ["Was\\~! Nein."]
+        assert split_text_into_segments("Titel\\~: Untertitel.", 2) == ["Titel\\~: Untertitel."]
+
+    def test_it_only_counts_when_it_touches_the_splitter(self):
+        """Both markers have to be glued to their splitter. That is what makes them
+        mutually exclusive, so there is no precedence between them to define."""
+        assert split_text_into_segments("Prof\\~ . Müller kam.", 2) == [
+            "Prof\\~ .",
+            " Müller kam.",
+        ]
+
+    def test_it_is_inert_where_no_splitter_follows(self):
+        text = "Die Tilde \\~ steht hier für sich."
+        assert split_text_into_segments(text, 2) == [text]
+        assert strip_split_markers(text) == text
+
+    def test_the_segments_still_concatenate_to_the_input(self):
+        text = "Prof\\~. Müller hat es gesagt. Danach war Ruhe."
+        assert "".join(split_text_into_segments(text, 2)) == text
+
+    def test_it_survives_into_the_stored_markdown_but_not_into_the_html(self):
+        """Same contract as `\\@`: it stays in the repo, where it is what
+        `TestStoredSegmentationIsReproducible` re-checks and what tells a human reader why
+        the segment does *not* end there, and it never reaches the debate."""
+        mdp = MDProcessor("Prof\\~. Müller hat es gesagt. Danach war Ruhe.")
+        mdp.convert()
+
+        assert SUPPRESS_SPLIT_MARKER in mdp.md_with_real_keys
+        assert mdp.get_keys() == ["::a1", "::a2"]
+
+        assert SUPPRESS_SPLIT_MARKER not in mdp.segmented_html
+        assert "Prof. Müller" in mdp.segmented_html
+
+    def test_it_does_not_shift_any_word_position(self):
+        """The word tokenizer is frozen (`docs/flexible_references_concept.md`). The
+        marker carries no whitespace, so `Prof\\~.` is one word just as `Prof.` was."""
+        marked = MDProcessor("Prof\\~. Müller kam.")
+        marked.convert()
+        plain = MDProcessor("Profx Müller kam.")
+        plain.convert()
+
+        words_marked = references.get_segment_words(marked.md_with_real_keys, "a1")
+        words_plain = references.get_segment_words(plain.md_with_real_keys, "a1")
+        assert len(words_marked) == len(words_plain)
+        assert words_marked[0] == "Prof\\~."
+
+    def test_a_word_carrying_it_still_aligns_with_its_rendered_form(self):
+        """Word references are highlighted by aligning the *raw* words against the
+        *rendered* text, and the marker exists in only one of the two."""
+        mdp = MDProcessor("Prof\\~. Müller hat es gesagt.")
+        mdp.convert()
+
+        words = references.get_segment_words(mdp.md_with_real_keys, "a1")
+        rendered = BeautifulSoup(mdp.segmented_html, "html.parser").find(id="a1").get_text()
+        offsets = references.get_rendered_word_offsets(rendered, words)
+
+        assert words[0] == "Prof\\~."
+        start, end = offsets[0], offsets[1]
+        assert rendered[start:end] == "Prof."
 
 
 class TestVersionDispatch:

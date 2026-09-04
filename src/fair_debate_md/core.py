@@ -20,7 +20,7 @@ from .key_management import (
     DEFAULT_SPLITTER_SYNTAX_VERSION,
     SPLITTER_SYNTAX_VERSION,
     ProtoKeyAdder,
-    strip_force_split_markers,
+    strip_split_markers,
 )
 from .md_handling import MDHandler, KeyAdder, convert_tabs_to_spaces  # noqa: F401 (re-exported)
 from .references import (  # noqa: F401 (re-exported)
@@ -390,12 +390,12 @@ class MDProcessor(MDHandler):
         # only here we should resolve placeholders
         html_src = self._md_to_html(self.md_with_real_keys)
 
-        # The force-split markers have done their work when the `::aN` keys were
-        # materialized; they stay in the stored `.md` (see `FORCE_SPLIT_MARKER`) but must
+        # The split markers have done their work when the `::aN` keys were
+        # materialized; they stay in the stored `.md` (see `SPLIT_MARKERS`) but must
         # not reach the reader. Removing them here and not earlier is what keeps them in
         # the repo. Code blocks are placeholders at this point and are restored further
         # down in `SpanAdder.convert_code_placeholders`, so their content is untouched.
-        html_src = strip_force_split_markers(html_src)
+        html_src = strip_split_markers(html_src)
 
         if len(html_src) > 0:
             sa = SpanAdder(
