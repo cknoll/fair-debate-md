@@ -5,14 +5,23 @@ build artifact of it.
 
 Every build writes its patches to `../repos/<debate-key>/patches_01/`, which is where
 `fdmd unpack-repos` picks them up. Updating a fixture therefore means: run the build,
-commit the changed patches, and re-run `fdmd unpack-repos ./content_repos` in the web app.
+commit the changed patches, and roll them out in the web app with
+`manage.py initializefixtures --refresh-fixture-counts`.
 
-One step further if the edit **added or removed a contribution**: the web app states the
-contribution count of every fixture debate by hand, in `tests/testdata/fixtures01.json`,
-and nothing over here can see that it went stale. Run
-`manage.py initializefixtures --refresh-fixture-counts` there, or the count silently
-disagrees with the repo until somebody else's test run says so. It has happened three
-times; see that repo's backlog item `i-n-committed-stale-guard`.
+Not the bare `fdmd unpack-repos ./content_repos`, even though it writes to the same
+directory (`REPO_HOST_DIR`). The management command runs inside django, so `base/apps.py`
+has handed that instance's committer identity, signing key and public URLs to
+fair_debate_md before anything is unpacked. The CLI gets this package's defaults instead:
+commits unsigned, no `allowed_signers`, and a README in every repo pointing at
+`fair-debate.invalid`. Neither the CLI nor the resulting repo says so, which is why
+`deployment/deploy.py` warns about it at its own call site.
+
+The flag is the second half of the job, and it matters when the edit **added or removed a
+contribution**: the web app states each fixture debate's contribution count by hand in
+`tests/testdata/fixtures01.json`, nothing over here can see it go stale, and it has
+drifted silently three times. Without the flag the command reports the drift instead of
+repairing it; see that repo's backlog item `i-n-committed-stale-guard` for why that is
+the default.
 
 
 ## `fdmd build-debate-repo` -- one file in, one debate repo out
