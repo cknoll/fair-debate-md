@@ -1,0 +1,24 @@
+From 493cf29e3b24ec0b39cf28400522d679767e5be8 Mon Sep 17 00:00:00 2001
+From: testuser_10 <d31-ice-cream_j@fair-debate-users.org>
+Date: Wed, 4 Mar 2026 18:20:00 +0100
+Subject: [PATCH 14/27] add contribution j/a10h2j.md
+
+---
+ j/a10h2j.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 j/a10h2j.md
+
+diff --git a/j/a10h2j.md b/j/a10h2j.md
+new file mode 100644
+index 0000000..acfcbea
+--- /dev/null
++++ b/j/a10h2j.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a10h2j1 The sweetcorn comparison is unfair to chocolate. ::a10h2j2 Nobody is claiming that it is the tinned option; good chocolate ice cream is a made thing, not a preserved one.
+\ No newline at end of file
+-- 
+2.39.5
+

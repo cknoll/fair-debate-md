@@ -1,0 +1,24 @@
+From dbe363851a5d4398be5a3f4e9fc6ce28d468294e Mon Sep 17 00:00:00 2001
+From: testuser_3 <d31-ice-cream_c@fair-debate-users.org>
+Date: Mon, 2 Mar 2026 15:10:00 +0100
+Subject: [PATCH 04/27] add contribution c/a5c.md
+
+---
+ c/a5c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 c/a5c.md
+
+diff --git a/c/a5c.md b/c/a5c.md
+new file mode 100644
+index 0000000..065936f
+--- /dev/null
++++ b/c/a5c.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a5c1 Nobody in this thread has said what "best" is supposed to mean. ::a5c2 Until that happens we are all just listing our own preferences with extra steps.
+\ No newline at end of file
+-- 
+2.39.5
+

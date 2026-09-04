@@ -1,6 +1,5 @@
-From 07c75a74d350bb42739cbce9e439e9b715a2e180 Mon Sep 17 00:00:00 2001
-From: fair debate user d32-overlapping-refs b
- <d32-overlapping-refs_b@fair-debate-users.org>
+From a55fcb34f018205e82202e8dbea47792e7c94128 Mon Sep 17 00:00:00 2001
+From: testuser_2 <d32-overlapping-refs_b@fair-debate-users.org>
 Date: Mon, 6 Apr 2026 11:40:00 +0200
 Subject: [PATCH 03/10] add contribution b/a3-6b.md
 
@@ -11,12 +10,12 @@ Subject: [PATCH 03/10] add contribution b/a3-6b.md
 
 diff --git a/b/a3-6b.md b/b/a3-6b.md
 new file mode 100644
-index 0000000..2e2d109
+index 0000000..603d521
 --- /dev/null
 +++ b/b/a3-6b.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a3-6b1 Taken together these four points are weaker than they look, because they are not four independent arguments. ::a3-6b2 Cost, breakage, packaging and taste all follow from the same decision to buy the cheapest capsule machine on the market, and none of them says anything about capsule machines as such.
 +

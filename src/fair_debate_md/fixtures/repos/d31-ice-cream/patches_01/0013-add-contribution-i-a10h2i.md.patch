@@ -1,0 +1,24 @@
+From 278662d89c484567399b1bf22b57f7a0bff2dbf8 Mon Sep 17 00:00:00 2001
+From: testuser_9 <d31-ice-cream_i@fair-debate-users.org>
+Date: Wed, 4 Mar 2026 15:05:00 +0100
+Subject: [PATCH 13/27] add contribution i/a10h2i.md
+
+---
+ i/a10h2i.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 i/a10h2i.md
+
+diff --git a/i/a10h2i.md b/i/a10h2i.md
+new file mode 100644
+index 0000000..da89089
+--- /dev/null
++++ b/i/a10h2i.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a10h2i1 Comparing ice cream to asparagus is a category error, and I say that as someone who agrees with your conclusion.
+\ No newline at end of file
+-- 
+2.39.5
+

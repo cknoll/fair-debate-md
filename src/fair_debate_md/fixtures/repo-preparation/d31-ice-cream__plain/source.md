@@ -2,16 +2,16 @@
 debate_key: d31-ice-cream
 language: en
 parties:
-  a: fair debate user d31-ice-cream a
-  b: fair debate user d31-ice-cream b
-  c: fair debate user d31-ice-cream c
-  d: fair debate user d31-ice-cream d
-  e: fair debate user d31-ice-cream e
-  f: fair debate user d31-ice-cream f
-  g: fair debate user d31-ice-cream g
-  h: fair debate user d31-ice-cream h
-  i: fair debate user d31-ice-cream i
-  j: fair debate user d31-ice-cream j
+  a: testuser_1
+  b: testuser_2
+  c: testuser_3
+  d: testuser_4
+  e: testuser_5
+  f: testuser_6
+  g: testuser_7
+  h: testuser_8
+  i: testuser_9
+  j: testuser_10
 first_commit: 2026-03-01T18:00:00+01:00
 hours_between_contributions: [3, 5]
 active_hours: [8, 22]
@@ -20,6 +20,8 @@ active_hours: [8, 22]
 <!-- !!== label=root party=a ==== -->
 
 # The best ice cream flavour is chocolate
+
+This is a constructed debate, made to demonstrate and test the platform for the case of many participating parties and a great depth of answers.
 
 Every summer the same argument breaks out in our office kitchen, and every summer it ends without anyone changing their mind. I would like to make the case properly this time. Chocolate is the best ice cream flavour, and the reasons for it are not purely a matter of taste. A flavour can be judged by three things, namely whether it is reliable, whether it combines well with others, and whether it survives the walk home from the shop. Chocolate wins on all three counts, and I will take them in turn.
 

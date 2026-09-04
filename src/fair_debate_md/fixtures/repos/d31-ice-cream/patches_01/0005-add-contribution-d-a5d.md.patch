@@ -1,0 +1,24 @@
+From 146be73b2d9515ce2e42d5da028d1562939009d5 Mon Sep 17 00:00:00 2001
+From: testuser_4 <d31-ice-cream_d@fair-debate-users.org>
+Date: Mon, 2 Mar 2026 18:40:00 +0100
+Subject: [PATCH 05/27] add contribution d/a5d.md
+
+---
+ d/a5d.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 d/a5d.md
+
+diff --git a/d/a5d.md b/d/a5d.md
+new file mode 100644
+index 0000000..35fda16
+--- /dev/null
++++ b/d/a5d.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a5d1 I am broadly on your side, but I think you are defending the wrong thing. ::a5d2 What you actually describe is not chocolate but cocoa content: ::a5d3 a dark chocolate sorbet and a milk chocolate cream have almost nothing in common except the word on the label. ::a5d4 If the claim is that chocolate is best, it should survive being made precise, and I do not think it does. ::a5d5 Pick a version and defend that one.
+\ No newline at end of file
+-- 
+2.39.5
+

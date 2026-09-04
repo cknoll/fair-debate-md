@@ -1,6 +1,5 @@
-From a2c0f8a52678af99a9a3a6ed277980460a83f620 Mon Sep 17 00:00:00 2001
-From: fair debate user d32-overlapping-refs d
- <d32-overlapping-refs_d@fair-debate-users.org>
+From 92f1ad133b4c6ea753fb86a7165b607644690059 Mon Sep 17 00:00:00 2001
+From: testuser_4 <d32-overlapping-refs_d@fair-debate-users.org>
 Date: Mon, 6 Apr 2026 21:40:00 +0200
 Subject: [PATCH 06/10] add contribution d/a5-8d.md
 
@@ -11,12 +10,12 @@ Subject: [PATCH 06/10] add contribution d/a5-8d.md
 
 diff --git a/d/a5-8d.md b/d/a5-8d.md
 new file mode 100644
-index 0000000..0930fd8
+index 0000000..347f595
 --- /dev/null
 +++ b/d/a5-8d.md
 @@ -0,0 +1,6 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a5-8d1 The passage from the recycling point through to the kettle proposal moves much faster than it admits. ::a5-8d2 Two of these sentences are complaints about the current machine and two are claims about the replacement, and they are presented as if the first pair established the second.
 +

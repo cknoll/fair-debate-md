@@ -1,0 +1,24 @@
+From f3072898938596eea3b4e90addcd3c3b506039de Mon Sep 17 00:00:00 2001
+From: testuser_5 <d31-ice-cream_e@fair-debate-users.org>
+Date: Tue, 3 Mar 2026 08:05:00 +0100
+Subject: [PATCH 06/27] add contribution e/a5b2e.md
+
+---
+ e/a5b2e.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 e/a5b2e.md
+
+diff --git a/e/a5b2e.md b/e/a5b2e.md
+new file mode 100644
+index 0000000..f84d043
+--- /dev/null
++++ b/e/a5b2e.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a5b2e1 The scoreboard objection is fair, but it cuts both ways. ::a5b2e2 Any argument about a "best" flavour has to fix its criteria first, and there is no neutral place to stand while doing it. ::a5b2e3 What would you propose instead, a criterion that strawberry satisfies and chocolate does not? ::a5b2e4 I suspect that list is shorter than you would like it to be.
+\ No newline at end of file
+-- 
+2.39.5
+

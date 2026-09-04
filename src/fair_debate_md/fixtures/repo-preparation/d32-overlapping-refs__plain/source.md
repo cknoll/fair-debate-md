@@ -2,14 +2,14 @@
 debate_key: d32-overlapping-refs
 language: en
 parties:
-  a: fair debate user d32-overlapping-refs a
-  b: fair debate user d32-overlapping-refs b
-  c: fair debate user d32-overlapping-refs c
-  d: fair debate user d32-overlapping-refs d
-  e: fair debate user d32-overlapping-refs e
-  f: fair debate user d32-overlapping-refs f
-  g: fair debate user d32-overlapping-refs g
-  h: fair debate user d32-overlapping-refs h
+  a: testuser_1
+  b: testuser_2
+  c: testuser_3
+  d: testuser_4
+  e: testuser_5
+  f: testuser_6
+  g: testuser_7
+  h: testuser_8
 first_commit: 2026-04-05T19:00:00+02:00
 hours_between_contributions: [3, 5]
 active_hours: [8, 22]

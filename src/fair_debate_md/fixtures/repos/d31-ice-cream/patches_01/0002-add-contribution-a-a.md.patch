@@ -1,29 +1,31 @@
-From 3bd79bd3960737a0b61a68e62562b16af7b3361e Mon Sep 17 00:00:00 2001
-From: fair debate user d31-ice-cream a <d31-ice-cream_a@fair-debate-users.org>
+From 0b56cdac33bb27607d05ee5062d086daada66991 Mon Sep 17 00:00:00 2001
+From: testuser_1 <d31-ice-cream_a@fair-debate-users.org>
 Date: Mon, 2 Mar 2026 08:00:00 +0100
 Subject: [PATCH 02/27] add contribution a/a.md
 
 ---
- a/a.md | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ a/a.md | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..6ddcb56
+index 0000000..8be55d6
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,10 @@
+@@ -0,0 +1,12 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +# ::a1 The best ice cream flavour is chocolate
 +
-+::a2 Every summer the same argument breaks out in our office kitchen, and every summer it ends without anyone changing their mind. ::a3 I would like to make the case properly this time. ::a4 Chocolate is the best ice cream flavour, and the reasons for it are not purely a matter of taste. ::a5 A flavour can be judged by three things, namely whether it is reliable, whether it combines well with others, and whether it survives the walk home from the shop. ::a6 Chocolate wins on all three counts, and I will take them in turn.
++::a2 This is a constructed debate, made to demonstrate and test the platform for the case of many participating parties and a great depth of answers.
 +
-+::a7 Reliability first. ::a8 A scoop of chocolate tastes roughly the same in a cheap corner shop and in an expensive gelateria, which is emphatically not true of strawberry. ::a9 Strawberry depends entirely on the fruit, and outside of about six weeks in early summer that fruit simply is not there. ::a10 Pistachio has the opposite problem. ::a11 When it is good it is extraordinary, but most of what is sold as pistachio is dyed almond paste. ::a12 Chocolate has a floor that the other flavours do not have.
++::a3 Every summer the same argument breaks out in our office kitchen, and every summer it ends without anyone changing their mind. ::a4 I would like to make the case properly this time. ::a5 Chocolate is the best ice cream flavour, and the reasons for it are not purely a matter of taste. ::a6 A flavour can be judged by three things, namely whether it is reliable, whether it combines well with others, and whether it survives the walk home from the shop. ::a7 Chocolate wins on all three counts, and I will take them in turn.
 +
-+::a13 The second point is about combination. ::a14 Chocolate sits next to almost anything without fighting it, which is why it ends up in every mixed cup that leaves the counter. ::a15 The third point is the most practical one. ::a16 Chocolate melts slowly and stays edible, whereas a fruit sorbet turns into coloured water within minutes. ::a17 I am aware that none of this will convince the vanilla faction, but I would at least like to hear a better argument than "vanilla goes with everything".
++::a8 Reliability first. ::a9 A scoop of chocolate tastes roughly the same in a cheap corner shop and in an expensive gelateria, which is emphatically not true of strawberry. ::a10 Strawberry depends entirely on the fruit, and outside of about six weeks in early summer that fruit simply is not there. ::a11 Pistachio has the opposite problem. ::a12 When it is good it is extraordinary, but most of what is sold as pistachio is dyed almond paste. ::a13 Chocolate has a floor that the other flavours do not have.
++
++::a14 The second point is about combination. ::a15 Chocolate sits next to almost anything without fighting it, which is why it ends up in every mixed cup that leaves the counter. ::a16 The third point is the most practical one. ::a17 Chocolate melts slowly and stays edible, whereas a fruit sorbet turns into coloured water within minutes. ::a18 I am aware that none of this will convince the vanilla faction, but I would at least like to hear a better argument than "vanilla goes with everything".
 \ No newline at end of file
 -- 
 2.39.5

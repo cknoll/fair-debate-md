@@ -102,7 +102,8 @@ with its own `dNN` key, not a variant of another one:
 - `d31-ice-cream__plain/source.md` -- english, and a toy topic on purpose (which ice cream
   flavour is best), so that its content never distracts from what it is for: judging
   frontend decisions about nesting. Ten parties, 26 contributions, only five root segments
-  answered, one spine reaching level 8.
+  answered, one spine reaching level 8. Its second segment says so in the text, because a
+  reader who meets the debate on the public instance has no other way to learn it.
 - `d32-overlapping-refs__plain/source.md` -- english, the reference fixture: a toy dispute
   about the office coffee machine whose replies deliberately overlap. It is the only
   fixture using `answers_from`/`answers_to` and `answers_words`, and it exists so that the
@@ -124,6 +125,13 @@ contribution, with the anchor encoded in the file name (`b/a14b.md` = segment 14
 every inserted sentence forced a rename cascade, only two parties were possible, the
 deployment had to special-case the debate, and the patches here had silently fallen behind
 the sources.
+
+The party names are not decoration: the web app carries a user account under each of them
+and gives the party that account (`tests/testdata/fixtures01.json`), which is what lets the
+frontend show a name instead of the "no account here" marker. d31 and d32 use the platform's
+`testuser_1`, `testuser_2`, ... for this, the rest their own speaking role names. So the two
+sides have to agree -- renaming a party here without adding the matching account over there
+puts the marker back.
 
 
 ## Removed: the debate-specific build scripts

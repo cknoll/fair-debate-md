@@ -1,6 +1,5 @@
-From ec26b4bcd9e1db32097e0317567fcba6a02d1e17 Mon Sep 17 00:00:00 2001
-From: fair debate user d32-overlapping-refs a
- <d32-overlapping-refs_a@fair-debate-users.org>
+From fc2cad57fc87b39d2d5b4ea0a4d4859bdc37aae5 Mon Sep 17 00:00:00 2001
+From: testuser_1 <d32-overlapping-refs_a@fair-debate-users.org>
 Date: Mon, 6 Apr 2026 08:00:00 +0200
 Subject: [PATCH 02/10] add contribution a/a.md
 
@@ -11,12 +10,12 @@ Subject: [PATCH 02/10] add contribution a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..65b857f
+index 0000000..de9961c
 --- /dev/null
 +++ b/a/a.md
 @@ -0,0 +1,8 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +# ::a1 The office coffee machine should go
 +

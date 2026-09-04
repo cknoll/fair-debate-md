@@ -1,0 +1,24 @@
+From c72206513c7f961fb971e97b8886ed7c61801630 Mon Sep 17 00:00:00 2001
+From: testuser_3 <d31-ice-cream_c@fair-debate-users.org>
+Date: Thu, 5 Mar 2026 18:25:00 +0100
+Subject: [PATCH 18/27] add contribution c/a15c.md
+
+---
+ c/a15c.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 c/a15c.md
+
+diff --git a/c/a15c.md b/c/a15c.md
+new file mode 100644
+index 0000000..8c7b9de
+--- /dev/null
++++ b/c/a15c.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a15c1 This is the point I want to push back on hardest, because I think it is backwards. ::a15c2 Chocolate ends up in every mixed cup because it is the default, and being the default is not the same as combining well. ::a15c3 Ask what it actually adds next to lemon, or next to a good yoghurt sorbet, and the honest answer is that it flattens both. ::a15c4 What you are calling compatibility is mostly dominance.
+\ No newline at end of file
+-- 
+2.39.5
+

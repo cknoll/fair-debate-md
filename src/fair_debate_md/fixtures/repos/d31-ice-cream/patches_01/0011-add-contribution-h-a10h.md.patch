@@ -1,0 +1,24 @@
+From dd25818a53c2702f1ba9ed6afb1b7d9ea2191020 Mon Sep 17 00:00:00 2001
+From: testuser_8 <d31-ice-cream_h@fair-debate-users.org>
+Date: Wed, 4 Mar 2026 08:45:00 +0100
+Subject: [PATCH 11/27] add contribution h/a10h.md
+
+---
+ h/a10h.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 h/a10h.md
+
+diff --git a/h/a10h.md b/h/a10h.md
+new file mode 100644
+index 0000000..fe3ecb1
+--- /dev/null
++++ b/h/a10h.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a10h1 The seasonality argument proves less than it appears to. ::a10h2 Almost every ingredient worth eating is seasonal, and we do not conclude from this that asparagus is worse than tinned sweetcorn. ::a10h3 A flavour that is spectacular in season and merely acceptable out of it is not thereby beaten by one that is the same mediocre thing all year round. ::a10h4 If anything, the yearly wait is part of why it tastes the way it does.
+\ No newline at end of file
+-- 
+2.39.5
+

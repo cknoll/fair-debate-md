@@ -1,6 +1,5 @@
-From 36704233b1111a9515e2d81210d4d5c282dc62e0 Mon Sep 17 00:00:00 2001
-From: fair debate user d32-overlapping-refs c
- <d32-overlapping-refs_c@fair-debate-users.org>
+From 7a6839ba7b90487a7c7063b3d14eb1e96fb71f39 Mon Sep 17 00:00:00 2001
+From: testuser_3 <d32-overlapping-refs_c@fair-debate-users.org>
 Date: Mon, 6 Apr 2026 14:50:00 +0200
 Subject: [PATCH 04/10] add contribution c/a4c.md
 
@@ -11,12 +10,12 @@ Subject: [PATCH 04/10] add contribution c/a4c.md
 
 diff --git a/c/a4c.md b/c/a4c.md
 new file mode 100644
-index 0000000..4451919
+index 0000000..cd4d226
 --- /dev/null
 +++ b/c/a4c.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a4c1 Twice a year is not what I remember. ::a4c2 It has been repaired once since I joined, and that took two days, not a week.
 \ No newline at end of file

@@ -1,4 +1,4 @@
-From fbbb9694f8066d5bb3d3ddff2c12fc699e7978e3 Mon Sep 17 00:00:00 2001
+From d957144d58374552e3f31521fa5bf8e1b0264a98 Mon Sep 17 00:00:00 2001
 From: fair debate system <fair_debate_system@fair-debate-users.org>
 Date: Sun, 1 Mar 2026 18:00:00 +0100
 Subject: [PATCH 01/27] first commit
@@ -138,7 +138,7 @@ index 0000000..2ce0d4e
 +  this history are the ones readers keep. Yours is one of them.
 diff --git a/REPO_INFO.yaml b/REPO_INFO.yaml
 new file mode 100644
-index 0000000..f75bb98
+index 0000000..8eeccc9
 --- /dev/null
 +++ b/REPO_INFO.yaml
 @@ -0,0 +1,9 @@
@@ -146,11 +146,11 @@ index 0000000..f75bb98
 +# `kind: built` means the history is regenerated whenever the source changes;
 +# `kind: opened` means the debate grew into this repo by appending.
 +kind: built
-+date: '2026-09-02T14:09:59+00:00'
-+fdmd_version: 0.9.0
++date: '2026-09-04T08:08:51+00:00'
++fdmd_version: 0.10.1
 +source:
 +  path: d31-ice-cream__plain/source.md
-+  sha256: b98a137d99c823560ff4e9548e0f34be3b7656b0c46993529820c366fd2cebd9
++  sha256: 5fd53eaf3539310ccb3bd16ce8aea0d23201cf593c4d061768725a1854bd2c6f
 -- 
 2.39.5
 

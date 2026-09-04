@@ -1,6 +1,5 @@
-From e025139ada6104908eac37c0f858ca42a9da8505 Mon Sep 17 00:00:00 2001
-From: fair debate user d32-overlapping-refs b
- <d32-overlapping-refs_b@fair-debate-users.org>
+From bbbd65770bfeb67c64665d5e9ae42b052a1d3da7 Mon Sep 17 00:00:00 2001
+From: testuser_2 <d32-overlapping-refs_b@fair-debate-users.org>
 Date: Mon, 6 Apr 2026 18:05:00 +0200
 Subject: [PATCH 05/10] add contribution b/a5b.md
 
@@ -11,12 +10,12 @@ Subject: [PATCH 05/10] add contribution b/a5b.md
 
 diff --git a/b/a5b.md b/b/a5b.md
 new file mode 100644
-index 0000000..076c911
+index 0000000..6b36817
 --- /dev/null
 +++ b/b/a5b.md
 @@ -0,0 +1,4 @@
 +---
-+splitter_version: 1
++splitter_version: 2
 +---
 +::a5b1 On this one point I have to concede more than I did above. ::a5b2 The recycling claim on the packaging is genuinely misleading, and that is a reason to change something, though not necessarily the machine.
 \ No newline at end of file

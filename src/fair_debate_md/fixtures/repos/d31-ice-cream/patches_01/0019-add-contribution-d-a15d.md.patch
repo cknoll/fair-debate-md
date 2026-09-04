@@ -1,0 +1,24 @@
+From 7697bdee07e7bc1f73239731c0aad7bc9da6d62e Mon Sep 17 00:00:00 2001
+From: testuser_4 <d31-ice-cream_d@fair-debate-users.org>
+Date: Thu, 5 Mar 2026 21:35:00 +0100
+Subject: [PATCH 19/27] add contribution d/a15d.md
+
+---
+ d/a15d.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 d/a15d.md
+
+diff --git a/d/a15d.md b/d/a15d.md
+new file mode 100644
+index 0000000..f76c3e2
+--- /dev/null
++++ b/d/a15d.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a15d1 Every mixed cup I have ever seen also contains vanilla, which by this reasoning would make vanilla the best flavour.
+\ No newline at end of file
+-- 
+2.39.5
+

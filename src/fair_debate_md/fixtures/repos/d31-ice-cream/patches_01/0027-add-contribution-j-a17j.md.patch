@@ -1,0 +1,24 @@
+From 854ee11d8a2696c12ac464460d5aa5bbd4d72523 Mon Sep 17 00:00:00 2001
+From: testuser_10 <d31-ice-cream_j@fair-debate-users.org>
+Date: Sat, 7 Mar 2026 15:05:00 +0100
+Subject: [PATCH 27/27] add contribution j/a17j.md
+
+---
+ j/a17j.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 j/a17j.md
+
+diff --git a/j/a17j.md b/j/a17j.md
+new file mode 100644
+index 0000000..9444c3e
+--- /dev/null
++++ b/j/a17j.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a17j1 The melting argument is the only one here that can actually be tested, so I tested it. ::a17j2 Two scoops, same cup, same table on the balcony, twenty-five degrees: ::a17j3 the chocolate held its shape for about eleven minutes, the raspberry sorbet for four. ::a17j4 That is a real difference and it does match your claim. ::a17j5 It is also the least interesting property I can imagine ranking a dessert by.
+\ No newline at end of file
+-- 
+2.39.5
+

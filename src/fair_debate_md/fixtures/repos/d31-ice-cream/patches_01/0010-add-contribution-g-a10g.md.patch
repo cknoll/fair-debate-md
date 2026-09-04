@@ -1,0 +1,24 @@
+From 61e18980d38d6e888c9f22790403150e7c2c4c44 Mon Sep 17 00:00:00 2001
+From: testuser_7 <d31-ice-cream_g@fair-debate-users.org>
+Date: Tue, 3 Mar 2026 21:10:00 +0100
+Subject: [PATCH 10/27] add contribution g/a10g.md
+
+---
+ g/a10g.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 g/a10g.md
+
+diff --git a/g/a10g.md b/g/a10g.md
+new file mode 100644
+index 0000000..5c06a0e
+--- /dev/null
++++ b/g/a10g.md
+@@ -0,0 +1,4 @@
++---
++splitter_version: 2
++---
++::a10g1 Six weeks is generous; around here it is closer to three.
+\ No newline at end of file
+-- 
+2.39.5
+
