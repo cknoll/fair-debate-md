@@ -11,7 +11,7 @@ git clones and bundles. A repo therefore states which software segmented its tex
 built its history. That statement is only worth something if the number actually moves
 when the behaviour does.
 
-Bump it in the same commit as the change that earns it:
+Grades:
 
 - **patch** -- fixes that cannot change how existing text is segmented or how a repo is
   laid out;
@@ -19,6 +19,17 @@ Bump it in the same commit as the change that earns it:
   old repo would notice as "this was made by something newer";
 - **major** -- a change to the splitter syntax or to the repo layout, i.e. something that
   makes an old repo's content and a new build of the same source disagree.
+
+**Bump in the merge commit into `develop`, never in a feature branch.** The number
+depends on the order branches arrive, which a branch cannot know -- and two branches
+picking the same number merge *without* a conflict, so nothing catches it. A branch
+states what it earns as a commit trailer instead:
+
+    Version-Bump: minor
+
+The merge takes the highest trailer of what it brings in, raises the number from the one
+`develop` currently has, edits `release.py` in the merge commit itself, and says so:
+`Merge branch '...' into develop (bump version to 0.15.0)`.
 
 While the library is at 0.x, read the last rule as **minor** instead: the statement a
 reader needs about segmentation is `splitter_version`, which is per contribution and
