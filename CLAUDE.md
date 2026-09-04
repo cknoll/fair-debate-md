@@ -20,16 +20,17 @@ Grades:
 - **major** -- a change to the splitter syntax or to the repo layout, i.e. something that
   makes an old repo's content and a new build of the same source disagree.
 
-**Bump in the merge commit into `develop`, never in a feature branch.** The number
+**Bump on `develop` right after the merge, never in a feature branch.** The number
 depends on the order branches arrive, which a branch cannot know -- and two branches
 picking the same number merge *without* a conflict, so nothing catches it. A branch
 states what it earns as a commit trailer instead:
 
     Version-Bump: minor
 
-The merge takes the highest trailer of what it brings in, raises the number from the one
-`develop` currently has, edits `release.py` in the merge commit itself, and says so:
-`Merge branch '...' into develop (bump version to 0.15.0)`.
+The merge itself stays clean: a merge commit carrying a change of its own is an "evil
+merge", and it cannot be amended once pushed. Immediately after it, take the highest
+trailer of what came in, raise the number from the one `develop` has, and commit that
+alone: `chore(version): bump to 0.15.0 for <what earned it>`.
 
 While the library is at 0.x, read the last rule as **minor** instead: the statement a
 reader needs about segmentation is `splitter_version`, which is per contribution and
