@@ -81,8 +81,10 @@ with its own `dNN` key, not a variant of another one:
   pointed to (english).
 - `d01-erklaerende-beispieldebatte__plain/source.md` -- its german counterpart. Same
   structure and the same anchor points, so the two produce almost the same contribution
-  keys; only the integrity contribution has more segments in german, which moves `a27b38c`
-  to `a27b41c`. It addresses the reader informally ("du"), like the german interface does.
+  keys; only the integrity contribution has more segments in german, which moves `a32b38c`
+  to `a32b41c`. Both carry eleven contributions since 2026-09-06, when their FAQ block moved
+  to the web app's `/faq` page and the guide: interface documentation and project status
+  age badly inside a built repo, and the debates still show every feature without it. It addresses the reader informally ("du"), like the german interface does.
   A *debate* is a "Debatte" here, and so is it in the interface: the german texts were
   changed over from "Diskussion" on 2026-09-01, by the user's decision. Keep new german
   sources on "Debatte"; a compound that does not name the platform object (the standing

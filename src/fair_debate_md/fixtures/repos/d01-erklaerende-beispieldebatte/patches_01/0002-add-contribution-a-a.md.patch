@@ -1,20 +1,20 @@
-From cfd77e4d12c48130a5525057d17e3972fca00879 Mon Sep 17 00:00:00 2001
+From c715a8b045694121754963a6f596163f75303e05 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Erkl=C3=A4rer?=
  <d01-erklaerende-beispieldebatte_a@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 17:00:00 +0200
-Subject: [PATCH 02/20] add contribution a/a.md
+Subject: [PATCH 02/12] add contribution a/a.md
 
 ---
- a/a.md | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ a/a.md | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..47b83f4
+index 0000000..3c1312a
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,32 @@
 +---
 +splitter_version: 2
 +---
@@ -33,7 +33,7 @@ index 0000000..47b83f4
 +- ::a23 `a` ist die Partei, die die Debatte eröffnet, hier also ich.
 +- ::a24 `b` ist die Partei, die als erste antwortet.
 +- ::a25 `c` ist die Partei, die als zweite antwortet.
-+- ::a26 Weitere Parteien setzen das Alphabet fort und darüber hinaus (siehe unten).
++- ::a26 Weitere Parteien setzen das Alphabet fort.
 +
 +::a27 Eine Partei kann auch ein eigenes Segment beantworten. ::a28 So lässt sich ein Nachtrag in die Debatte einbringen, ohne das bereits Veröffentlichte umzuschreiben.
 +
@@ -42,21 +42,11 @@ index 0000000..47b83f4
 +1. ::a31 Dauerhafte Antworten im Kontext.
 +2. ::a32 Beweisbare Integrität der Inhalte.
 +
-+::a33 Wenn du diese beiden Eigenschaften verstanden hast, kannst du Fair Debate schon recht gut benutzen. ::a34 Es gibt allerdings noch einige Einzelheiten, die dich interessieren könnten.
++::a33 Wenn du diese beiden Eigenschaften verstanden hast, kannst du Fair Debate schon recht gut benutzen.
 +
-+::a35 Das Format allein macht allerdings noch keine gute Debatte. ::a36 Wer hier schreibt, verpflichtet sich auf sechs Regeln — unter anderem darauf, sich klarzumachen, dass man sich irren kann, Beschreibung von Bewertung zu trennen und eigene Fehler zu korrigieren. ::a37 Der vollständige Text steht als _Selbstverpflichtung zu konstruktiver Diskussionskultur_ unter [/rules](/rules/).
++::a34 Das Format allein macht allerdings noch keine gute Debatte. ::a35 Wer hier schreibt, verpflichtet sich auf sechs Regeln — unter anderem darauf, sich klarzumachen, dass man sich irren kann, Beschreibung von Bewertung zu trennen und eigene Fehler zu korrigieren. ::a36 Der vollständige Text steht als _Selbstverpflichtung zu konstruktiver Diskussionskultur_ unter [/rules](/rules/).
 +
-+## ::a38 Häufige Fragen
-+
-+::a39 Jede dieser Fragen wird weiter unten in einer eigenen Antwort behandelt — was zugleich vorführt, was diese Plattform tut.
-+
-+- ::a40 Was passiert, wenn mehr Parteien an der Debatte teilnehmen, als das Alphabet Buchstaben hat?
-+- ::a41 Können mehrere Segmente oder Teile von Segmenten beantwortet werden?
-+- ::a42 Wie lässt sich die Integrität einer Debatte prüfen, also die Abwesenheit von Manipulation?
-+- ::a43 Wozu dienen Signatur und Fingerabdruck, und was leistet welches davon?
-+- ::a44 Wie wird die Plattform moderiert?
-+- ::a45 Wie sammelt das Projekt Rückmeldungen?
-+- ::a46 Kann man das Projekt unterstützen?
++::a37 Wie die Oberfläche bedient wird und was beim Schreiben zu beachten ist, steht in der Dokumentation unter [/docs](/docs/). ::a38 Fragen zur Plattform und zum Projekt, etwa zur Moderation oder dazu, wie man es unterstützen kann, beantwortet die Seite [/faq](/faq/).
 \ No newline at end of file
 -- 
 2.39.5

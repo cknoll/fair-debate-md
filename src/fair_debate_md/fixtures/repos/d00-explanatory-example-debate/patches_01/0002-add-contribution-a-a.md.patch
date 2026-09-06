@@ -1,19 +1,19 @@
-From d1ab6b01ab347fea8bd05fecfec622fc8b6a128f Mon Sep 17 00:00:00 2001
+From 0813ecd54a317a49ce492dab59b8991fe700e0de Mon Sep 17 00:00:00 2001
 From: Explainer <d00-explanatory-example-debate_a@fair-debate-users.org>
 Date: Mon, 24 Aug 2026 16:00:00 +0200
-Subject: [PATCH 02/20] add contribution a/a.md
+Subject: [PATCH 02/12] add contribution a/a.md
 
 ---
- a/a.md | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ a/a.md | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
  create mode 100644 a/a.md
 
 diff --git a/a/a.md b/a/a.md
 new file mode 100644
-index 0000000..24a6c5d
+index 0000000..4025269
 --- /dev/null
 +++ b/a/a.md
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,32 @@
 +---
 +splitter_version: 2
 +---
@@ -32,7 +32,7 @@ index 0000000..24a6c5d
 +- ::a23 `a` is the party that opens the debate, which here is me.
 +- ::a24 `b` is the first party to answer.
 +- ::a25 `c` is the second party to answer.
-+- ::a26 Further parties continue the alphabet and beyond (see below).
++- ::a26 Further parties continue the alphabet.
 +
 +::a27 A party may also answer a segment of its own. ::a28 That is how a later addition can be introduced to the debate instead of rewriting what was already published.
 +
@@ -41,21 +41,11 @@ index 0000000..24a6c5d
 +1. ::a31 Persistent in-context answers.
 +2. ::a32 Provable integrity of the content data.
 +
-+::a33 If you have understood those main features you can use Fair Debate pretty well. ::a34 However, there are some more details you might be interested in.
++::a33 If you have understood those main features you can use Fair Debate pretty well.
 +
-+::a35 The format alone, though, does not make a debate a good one. ::a36 Everybody who writes here commits themselves to six rules — among them keeping in mind that one may be wrong, separating description from judgement, and correcting one's own mistakes. ::a37 The full text is published as the _self-commitment to a constructive debate culture_ at [/rules](/rules/).
++::a34 The format alone, though, does not make a debate a good one. ::a35 Everybody who writes here commits themselves to six rules — among them keeping in mind that one may be wrong, separating description from judgement, and correcting one's own mistakes. ::a36 The full text is published as the _self-commitment to a constructive debate culture_ at [/rules](/rules/).
 +
-+## ::a38 FAQ
-+
-+::a39 Each of these is answered below, in an answer of its own — which is at the same time a small demonstration of what this platform does.
-+
-+- ::a40 What happens if more parties join the debate than there are letters in the alphabet?
-+- ::a41 Is it possible to answer multiple segments or parts of segments?
-+- ::a42 How can the integrity of a debate (i.e. the absence of manipulation) be checked?
-+- ::a43 What do the signature and the fingerprint each achieve?
-+- ::a44 How is the platform moderated?
-+- ::a45 How does the project collect feedback?
-+- ::a46 Is it possible to help the project?
++::a37 How the interface is used and what to keep in mind while writing is documented at [/docs](/docs/). ::a38 Questions about the platform and the project, such as moderation or how to support it, are answered at [/faq](/faq/).
 \ No newline at end of file
 -- 
 2.39.5
