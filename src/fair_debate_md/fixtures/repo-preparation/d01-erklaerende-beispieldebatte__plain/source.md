@@ -27,7 +27,7 @@ An einer Debatte können mehrere Parteien (Benutzerkonten) teilnehmen. Parteien 
 - `a` ist die Partei, die die Debatte eröffnet, hier also ich.
 - `b` ist die Partei, die als erste antwortet.
 - `c` ist die Partei, die als zweite antwortet.
-- Weitere Parteien setzen das Alphabet fort und darüber hinaus (siehe unten).
+- Weitere Parteien setzen das Alphabet fort.
 
 Eine Partei kann auch ein eigenes Segment beantworten. So lässt sich ein Nachtrag in die Debatte einbringen, ohne das bereits Veröffentlichte umzuschreiben.
 
@@ -36,21 +36,11 @@ Zwei Eigenschaften unterscheiden diese Plattform von einem gewöhnlichen Komment
 1. Dauerhafte Antworten im Kontext.
 2. Beweisbare Integrität der Inhalte.
 
-Wenn du diese beiden Eigenschaften verstanden hast, kannst du Fair Debate schon recht gut benutzen. Es gibt allerdings noch einige Einzelheiten, die dich interessieren könnten.
+Wenn du diese beiden Eigenschaften verstanden hast, kannst du Fair Debate schon recht gut benutzen.
 
 Das Format allein macht allerdings noch keine gute Debatte. Wer hier schreibt, verpflichtet sich auf sechs Regeln — unter anderem darauf, sich klarzumachen, dass man sich irren kann, Beschreibung von Bewertung zu trennen und eigene Fehler zu korrigieren. Der vollständige Text steht als *Selbstverpflichtung zu konstruktiver Diskussionskultur* unter [/rules](/rules/).
 
-## Häufige Fragen
-
-Jede dieser Fragen wird weiter unten in einer eigenen Antwort behandelt — was zugleich vorführt, was diese Plattform tut.
-
-- Was passiert, wenn mehr Parteien an der Debatte teilnehmen, als das Alphabet Buchstaben hat?
-- Können mehrere Segmente oder Teile von Segmenten beantwortet werden?
-- Wie lässt sich die Integrität einer Debatte prüfen, also die Abwesenheit von Manipulation?
-- Wozu dienen Signatur und Fingerabdruck, und was leistet welches davon?
-- Wie wird die Plattform moderiert?
-- Wie sammelt das Projekt Rückmeldungen?
-- Kann man das Projekt unterstützen?
+Wie die Oberfläche bedient wird und was beim Schreiben zu beachten ist, steht in der Dokumentation unter [/docs](/docs/). Fragen zur Plattform und zum Projekt, etwa zur Moderation oder dazu, wie man es unterstützen kann, beantwortet die Seite [/faq](/faq/).
 
 <!-- !!== label=b-intro party=b answers="`b` ist die Partei, die als erste antwortet" ==== -->
 
@@ -161,43 +151,3 @@ Zurzeit gibt es die folgenden Schwachstellen.
 <!-- !!== label=a-selfreply party=a answers="Eine Partei kann auch ein eigenes Segment beantworten" ==== -->
 
 Das hier ist so ein Fall. Der Beitrag stammt von Partei `a` und beantwortet ein Segment von Partei `a`, und die Plattform kennzeichnet ihn als Selbstantwort, damit ihn niemand für den einer anderen Partei hält. Der nützliche Fall ist nicht diese Vorführung, sondern die Richtigstellung. Ein Nachtrag oder das Eingeständnis eines Fehlers landet unmittelbar neben dem Satz, um den es geht, statt weit darunter, wo ihn niemand sieht, der das Ursprüngliche liest.
-
-<!-- !!== label=b-faq-alphabet party=b answers="mehr Parteien an der Debatte teilnehmen, als das Alphabet Buchstaben hat" ==== -->
-
-Die Buchstaben laufen einfach weiter. Nach `z` gehen die Bezeichner zweistellig weiter, mit `aa`, `ab` und so fort, in der Reihenfolge des Beitritts. Es gibt also keine Obergrenze im Schlüsselsystem, und ein Schlüssel wie `a5aa` ist ein ganz gewöhnlicher Schlüssel — Partei `aa` antwortet auf Segment 5 des Eröffnungsbeitrags. In der Praxis wird eine Debatte mit 26 aktiven Parteien allerdings andere Probleme zuerst haben.
-
-<!-- !!== label=b-faq-references party=b answers="Können mehrere Segmente oder Teile von Segmenten beantwortet werden?" ==== -->
-
-Beides ist möglich, und der Schlüssel sagt, was gemeint ist. Eine Folge zusammenhängender Segmente wird `a5-7b` geschrieben, zu lesen als Partei `b` beantwortet die Segmente 5 bis 7 des Beitrags `a`. Einzelne Wörter innerhalb eines Segments werden `a7_4-8b` geschrieben, also die Wörter 4 bis 8 des Segments `a7`. Gezählt wird dabei auf der Textdatei im Repository, nicht auf der dargestellten Seite, und die Zählregel ist bewusst einfach und unveränderlich. So kann jeder durch Lesen der Datei nachprüfen, worauf eine Wortangabe zeigt, ohne der Plattform glauben zu müssen.
-
-<!-- !!== label=a-faq-integrity party=a answers="Wie lässt sich die Integrität einer Debatte prüfen" ==== -->
-
-Jeder Beitrag trägt ein kleines Lupensymbol ![](/static/img/integrity-magnifier.svg) als Link zur Integritätsseite seiner Debatte. Diese Seite listet den Fingerabdruck jedes Commits auf, nennt den Signaturschlüssel der Plattform, gibt das ganze Repository als git-Klon heraus und erklärt im Einzelnen, wie sich Fingerabdrücke und Signaturen prüfen lassen. Das Repository trägt dieselbe Anleitung in seiner eigenen README, eine Kopie davon erklärt sich also selbst.
-
-Die kurze Antwort lautet, dass du das Repository einmal klonst und bei jeder Rückkehr `git pull --ff-only` ausführst. Neue Beiträge kommen kommentarlos an; bei einer umgeschriebenen Vorgeschichte verweigert der Befehl den Dienst und sagt das auch. Umschreiben ist nicht automatisch ein Angriff, denn Beiträge müssen gelegentlich aus organisatorischen oder rechtlichen Gründen entfernt werden. Unsichtbar ist es aber nie, und ein solcher Vorgang soll auf der Integritätsseite angekündigt und begründet werden.
-
-<!-- !!== label=a-faq-signature party=a answers="Wozu dienen Signatur und Fingerabdruck" ==== -->
-
-Sie lösen zwei verschiedene Probleme, und keines von beiden ersetzt das andere.
-
-Der **Fingerabdruck** beantwortet die Frage, *ob sich etwas verändert hat*. Er wird aus dem Inhalt eines Commits und dem Fingerabdruck des vorhergehenden berechnet. Wird ein alter Beitrag nachträglich geändert, ändern sich alle Fingerabdrücke ab dieser Stelle, und die Kette passt nicht mehr zu der, die du vorher gesehen hast. Eine Veränderung wird dadurch zuverlässig sichtbar. Welche der beiden Fassungen die veröffentlichte ist, sagt der Fingerabdruck aber nicht.
-
-Die **Signatur** beantwortet die Frage, *wer dafür einsteht*. Mit ihr bezeugt die Plattform, dass genau diese Fassung die von ihr veröffentlichte ist. Ohne sie könntest du unterschiedliche Fingerabdrücke zwar (für dich) feststellen, aber gegenüber anderen nicht nachweisen. Es würde Behauptung gegen Behauptung stehen. Mit Signatur hältst du eine Aussage der Plattform in der Hand, die sie nicht mehr zurücknehmen kann.
-
-Erst zusammen ergeben sie ein Beweismittel: Der Fingerabdruck macht eine Veränderung sichtbar, die Signatur macht sie zurechenbar. Ausführlicher steht das im Beitrag über die beweisbare Integrität.
-
-<!-- !!== label=a-faq-moderation party=a answers="Wie wird die Plattform moderiert?" ==== -->
-
-Eine Debatte hat drei Stufen der Auffindbarkeit. *Öffentlich* bedeutet gelistet und für alle lesbar, *versteckt* bedeutet nur über den Link lesbar und nirgends gelistet, *privat* bedeutet nur für die Teilnehmenden und die Moderation lesbar. Die Auffindbarkeit einer Debatte zu ändern kann die Zustimmung sowohl der Moderation als auch der Teilnehmenden erfordern. Öffentliche Beiträge neuer Konten starten zum Beispiel versteckt und müssen von der Moderation freigegeben werden. Und eine öffentliche Debatte kann nur dann auf privat gestellt werden, wenn alle Parteien zustimmen oder die Moderation es durchsetzt. Andernfalls könnte eine Partei, die eine Auseinandersetzung verloren hat, eine Debatte einfach aus der Öffentlichkeit tilgen. Teile davon werden noch gebaut. Heute wird eine Moderationsentscheidung über die Verwaltungsoberfläche getroffen.
-
-<!-- !!== label=a-faq-feedback party=a answers="Wie sammelt das Projekt Rückmeldungen?" ==== -->
-
-Über die [Kontaktseite](/contact/) dieser Website, die auf die Betreuung des Projekts und auf das öffentliche Quelltext-Repository verweist, wo sich Fehlermeldungen und Vorschläge einreichen lassen. Ein Rückmeldeformular innerhalb der Plattform selbst gibt es noch nicht.
-
-<!-- !!== label=a-faq-help party=a answers="Kann man das Projekt unterstützen?" ==== -->
-
-Ja. Verbesserungsvorschläge und Ideen sind immer willkommen. Benutze die Plattform für echte Auseinandersetzungen und melde, wo sie dir im Weg stand. Beachte allerdings, dass die Plattform sich vorbehält zu moderieren, was öffentlich sichtbar wird — siehe die Frage zur Moderation. Darüber hinaus ist der Quelltext öffentlich, und die Möglichkeiten reichen vom Beheben eines Tippfehlers in genau diesen Texten bis zum Prüfen des Integritätskonzepts.
-
-<!-- !!== label=c-key-corruption party=c answers="Mit Signatur hältst du eine Aussage der Plattform in der Hand, die sie nicht mehr zurücknehmen kann." ==== -->
-
-Wenn man es genau nimmt, stimmt das so nicht. Es kann immer noch vorkommen, dass der Signatur-Schlüssel in die falschen Hände gerät, z.B. durch menschliche Fehler oder Sicherheitslücken im Grundsystem (worauf die Plattform keinen Einfluss hat). Dann kann es zwei widersprüchliche *signierte* Fingerabdrücke geben. Welcher davon der echte ist, lässt sich in dem Fall nicht mehr entscheiden. Aber dass etwas schiefgegangen ist, ist sehr wohl feststellbar, denn zwei gültige Signaturen über einander widersprechende Fassungen kann es im Normalbetrieb nicht geben. Außerdem ist für einen böswilligen Akteur der Aufwand, diesen Zustand herbeizuführen, ungleich höher als bei einem System ohne öffentliche Versionsverwaltung. Dort genügt es, als Betreiber still zu manipulieren oder als Nutzer eine Manipulation einfach zu behaupten. Und das ist bei den heute verbreiteten Foren und Blogs der Normalfall.

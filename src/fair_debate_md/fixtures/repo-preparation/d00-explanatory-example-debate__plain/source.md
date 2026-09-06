@@ -27,7 +27,7 @@ Multiple parties (users) can participate in a debate. Parties are identified by 
 - `a` is the party that opens the debate, which here is me.
 - `b` is the first party to answer.
 - `c` is the second party to answer.
-- Further parties continue the alphabet and beyond (see below).
+- Further parties continue the alphabet.
 
 A party may also answer a segment of its own. That is how a later addition can be introduced to the debate instead of rewriting what was already published.
 
@@ -36,21 +36,11 @@ Two main features set this platform apart from an ordinary comment section or fo
 1. Persistent in-context answers.
 2. Provable integrity of the content data.
 
-If you have understood those main features you can use Fair Debate pretty well. However, there are some more details you might be interested in.
+If you have understood those main features you can use Fair Debate pretty well.
 
 The format alone, though, does not make a debate a good one. Everybody who writes here commits themselves to six rules — among them keeping in mind that one may be wrong, separating description from judgement, and correcting one's own mistakes. The full text is published as the *self-commitment to a constructive debate culture* at [/rules](/rules/).
 
-## FAQ
-
-Each of these is answered below, in an answer of its own — which is at the same time a small demonstration of what this platform does.
-
-- What happens if more parties join the debate than there are letters in the alphabet?
-- Is it possible to answer multiple segments or parts of segments?
-- How can the integrity of a debate (i.e. the absence of manipulation) be checked?
-- What do the signature and the fingerprint each achieve?
-- How is the platform moderated?
-- How does the project collect feedback?
-- Is it possible to help the project?
+How the interface is used and what to keep in mind while writing is documented at [/docs](/docs/). Questions about the platform and the project, such as moderation or how to support it, are answered at [/faq](/faq/).
 
 <!-- !!== label=b-intro party=b answers="`b` is the first party to answer" ==== -->
 
@@ -161,43 +151,3 @@ Currently there are the following weak points:
 <!-- !!== label=a-selfreply party=a answers="A party may also answer a segment of its own" ==== -->
 
 This is one. It was written by party `a` and answers a segment of party `a`, and the platform marks it as a self-answer so that nobody mistakes it for somebody else's. The useful case is not this demonstration but the correction. An addition or an admission of error ends up right next to the sentence it concerns, instead of somewhere far below where nobody reading the original will see it.
-
-<!-- !!== label=b-faq-alphabet party=b answers="more parties join the debate than there are letters in the alphabet" ==== -->
-
-The letters simply keep going. After `z` the tokens continue with two letters, `aa`, `ab` and so on, in the order in which the parties joined. So there is no upper limit built into the key system, and a key like `a5aa` is a perfectly ordinary key — party `aa` answering segment 5 of the opening contribution. In practice a debate with 26 active parties will have other problems first.
-
-<!-- !!== label=b-faq-references party=b answers="Is it possible to answer multiple segments or parts of segments?" ==== -->
-
-Both are possible, and the key says which one is meant. A range of consecutive segments is written `a5-7b`, which reads as party `b` answering segments 5 to 7 of contribution `a`. Single words inside one segment are written `a7_4-8b`, meaning words 4 to 8 of segment `a7`. Words are counted on the plain text file in the repository, not on the rendered page, and the counting rule is deliberately simple and frozen. That way anyone can verify what a word reference points at by reading the file, without trusting the platform to tell them.
-
-<!-- !!== label=a-faq-integrity party=a answers="How can the integrity of a debate" ==== -->
-
-Every contribution carries a small ![magnifier](/static/img/integrity-magnifier.svg) symbol that leads to the integrity page of its debate. That page lists the fingerprint of every commit, names the signing key of the platform, hands out the whole repository as a git clone, and gives details on how to check fingerprints and signatures. The repository carries the same instructions in its own README, so a copy of it explains itself.
-
-The short answer is that you clone the repository once and run `git pull --ff-only` whenever you come back. New contributions arrive without comment; a rewritten history makes the command refuse and say so. Rewriting is not automatically an attack, since contributions occasionally have to be removed for organisational or legal reasons, but it is never invisible, and such an event is meant to be announced and explained on the integrity page.
-
-<!-- !!== label=a-faq-signature party=a answers="What do the signature and the fingerprint each achieve" ==== -->
-
-They solve two different problems, and neither replaces the other.
-
-The **fingerprint** answers the question *whether something has changed*. It is computed from the content of a commit and from the fingerprint of the preceding one. If an old contribution is altered afterwards, every fingerprint from that point on changes, and the chain no longer matches the one you saw before. A change thus becomes reliably visible. Which of the two versions is the published one, however, the fingerprint does not say.
-
-The **signature** answers the question *who vouches for it*. With it the platform testifies that this very version is the one it published. Without it you could tell differing fingerprints apart for yourself, but you could not demonstrate them to anyone else. It would be claim against claim. With a signature you hold a statement of the platform's own, and it cannot take that back.
-
-Only together do the two amount to evidence: the fingerprint makes a change visible, the signature makes it attributable. The contribution on provable integrity spells this out in more detail.
-
-<!-- !!== label=a-faq-moderation party=a answers="How is the platform moderated?" ==== -->
-
-A debate has three visibility levels: *public* (listed and readable by everyone), *hidden* (readable only with the link, listed nowhere) and *private* (readable only by the participants and moderators). Changing the visibility of a debate might require approval both from moderators and participants. E.g. public contributions of new users start hidden and have to be approved by a moderator; and a public debate can only be taken private if all parties agree (or if a moderator enforces it). Otherwise a party which lost an argument could simply "erase" a debate from the public record. Parts of this are still being built. Today a moderation decision is made through the administration.
-
-<!-- !!== label=a-faq-feedback party=a answers="How does the project collect feedback?" ==== -->
-
-Through the [contact page](/contact/) of this site, which points to the maintainer and to the public source repository, where issues and suggestions can be filed. There is no feedback form inside the platform itself yet.
-
-<!-- !!== label=a-faq-help party=a answers="Is it possible to help the project?" ==== -->
-
-Yes. We are always interested in improvement suggestions and ideas. Use the platform for real discussions and report where it got in the way. However, note that the platform reserves the right to moderate what becomes publicly visible — see the question about moderation. Beyond that the source code is public, and the ways in range from fixing a typo in these very texts to reviewing the integrity concept.
-
-<!-- !!== label=c-key-corruption party=c answers="With a signature you hold a statement of the platform's own, and it cannot take that back." ==== -->
-
-Strictly speaking, that is not quite true. The signing key can still end up in the wrong hands, e.g. through human error or through a security hole in the underlying system (which the platform has no influence over). There can then be two contradicting *signed* fingerprints. Which of them is the real one is no longer decidable in that case. But that something went wrong is very much detectable, because two valid signatures over contradicting versions cannot occur in normal operation. Besides, for a malicious actor the effort of bringing that situation about is far higher than on a system without a public version history. There it is enough to alter something quietly as the operator, or to simply claim an alteration as a user. And with the forums and blogs in common use today, that is the normal case.
