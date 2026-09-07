@@ -61,3 +61,33 @@ def test_live_publication_records_the_splitter_version():
 
     assert fm["splitter_version"] == SPLITTER_SYNTAX_VERSION
     assert body.startswith("::a1b1 Hello world.")
+
+
+def test_key_with_traversal_is_refused_before_anything_is_written():
+    """
+    A contribution key decides the path this function writes to, so a key holding `../`
+    escapes the repository -- and the escape does not stop at the project directory.
+
+    Reachable from the web platform until 2026-09-07 (security audit S1): the key is
+    assembled there from a hidden form field, and the platform's own validation had a gap
+    for exactly the keys that leave the tree. The platform closed that gap; this checks
+    the second line, which lives here because this is the function that writes and it has
+    other callers (the builder, the CLI).
+
+    Both halves matter: nothing is written, and no directory is left behind either -- the
+    check runs before `makedirs`, which would otherwise create the escaped path.
+    """
+    import pytest
+
+    with tempfile.TemporaryDirectory() as tmp:
+        repo_dir = os.path.join(tmp, "repo")
+        os.makedirs(repo_dir)
+        outside = os.path.join(tmp, "OUTSIDE")
+
+        ctb = DBContribution(ctb_key="../../OUTSIDEa", body="whatever\n")
+        with pytest.raises(ValueError, match="outside the repository"):
+            write_ctb_to_file(repo_dir, ctb)
+
+        assert not os.path.exists(f"{outside}.md")
+        assert os.listdir(tmp) == ["repo"], "a directory was created outside the repo"
+        assert os.listdir(repo_dir) == [], "something was created inside the repo"

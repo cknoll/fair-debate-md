@@ -852,8 +852,30 @@ def write_ctb_to_file(repo_dir: str, ctb: DBContribution):
     ctb.author_role = get_last_token(ctb.ctb_key)
 
     dir_path = pjoin(repo_dir, ctb.author_role)
+    fpath = pjoin(dir_path, f"{ctb.ctb_key}.md")
+
+    # The key decides the path, so a key carrying `../` writes outside the repository --
+    # and the escape does not stop at the project directory. That was reachable from the
+    # web platform until 2026-09-07 (its security audit, S1): the key is assembled there
+    # from a hidden form field, and the platform's own validation had a gap for exactly
+    # the keys that leave the tree.
+    #
+    # The platform closed that gap; this stays as the second line, because this is the
+    # function that actually writes, it has other callers (the builder, the CLI), and a
+    # path escape is the kind of bug that comes back through a new one.
+    #
+    # Both paths are checked, and both BEFORE `makedirs`: the role token is the last
+    # letter run of the key, so a key like `../../elsewhere_a` keeps `dir_path` inside the
+    # repo and breaks out only in the file name. Checking early also means a refused key
+    # leaves nothing behind.
+    repo_prefix = os.path.realpath(repo_dir) + os.sep
+    for candidate in (dir_path, fpath):
+        if not os.path.realpath(candidate).startswith(repo_prefix):
+            msg = f"Contribution key {ctb.ctb_key!r} would write outside the repository"
+            raise ValueError(msg)
+
     os.makedirs(dir_path, exist_ok=True)
-    ctb.fpath = pjoin(dir_path, f"{ctb.ctb_key}.md")
+    ctb.fpath = fpath
 
     if os.path.exists(ctb.fpath):
         msg = f"File unexpectedly already exists: {ctb.fpath}"
