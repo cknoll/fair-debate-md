@@ -95,6 +95,27 @@ def test_commit_ctb_list_returns_one_hash_shared_by_all_contributions(tmp_path):
     assert hashes["a2b"] == sha
 
 
+def test_commit_ctb_list_refuses_an_empty_list(tmp_path):
+    """
+    Nothing to commit is the caller's decision to make, not ours. Before 2026-09-09 the
+    empty list crashed with an `UnboundLocalError` deep inside the function -- the web
+    platform hit that whenever a participant published "all" with nothing pending.
+    """
+    host_dir = str(tmp_path)
+    repo_dir = _make_debate_repo(host_dir)
+    head_before = _head(repo_dir)
+
+    with pytest.raises(ValueError, match="no contributions to commit"):
+        fdmd.commit_ctb_list(host_dir, "d-hashes", [])
+
+    # refused before anything was written: no commit, no staged leftovers
+    assert _head(repo_dir) == head_before
+    res = subprocess.run(
+        ["git", "status", "--porcelain"], cwd=repo_dir, check=True, capture_output=True, text=True
+    )
+    assert res.stdout == ""
+
+
 def test_contribution_commit_hashes_maps_every_contribution(tmp_path):
     host_dir = str(tmp_path)
     _make_debate_repo(host_dir)

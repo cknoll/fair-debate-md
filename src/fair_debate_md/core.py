@@ -815,7 +815,17 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
     Note that *all* contributions of one call end up in *one* commit and thus share the
     same hash. That is intended (they are published in one action), but it means the hash
     does not identify a single contribution -- see `contribution_commit_hashes`.
+
+    An empty list is refused. There is no commit to make from it, and the function
+    promises to return the hash of one -- what an empty selection means is the caller's
+    decision, not something the library can guess. Until 2026-09-09 such a call ran
+    through and died at `ctb.author_role` below on a loop variable that was never bound;
+    on the web platform that was a 500 for every participant who published "all" with
+    nothing pending.
     """
+
+    if not ctb_list:
+        raise ValueError("no contributions to commit")
 
     repo_dir = pjoin(repo_host_dir, debate_key)
     repo = git.Repo(repo_dir)
@@ -837,7 +847,10 @@ def commit_ctb_list(repo_host_dir: str, debate_key: str, ctb_list: list[DBContri
         contributions = "\n".join(rel_paths)
         msg = f"add contributions:\n{contributions}"
 
-    author = repo_handling.get_author(debate_key, ctb.author_role)
+    # One commit carries one author: the contributions of a call are published in one
+    # action by one party, so any of them names the role. Taken from the list explicitly
+    # rather than from the loop variable above, which only happened to still be bound.
+    author = repo_handling.get_author(debate_key, ctb_list[-1].author_role)
     commit_sha = repo_handling.commit_index(repo, repo_dir, msg, author)
 
     # keep the repo cloneable over HTTP; a stale server info would make a clone deliver an
